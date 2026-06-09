@@ -6,6 +6,8 @@
   --color-brand-black: #000000;
   --color-brand-white: #FFFFFF;
 
+  /* Fallback stacks — overridden at runtime by next/font/google CSS variables on <html>.
+     See src/app/layout.tsx. Do not rename without updating both files. */
   --font-display: "Bricolage Grotesque", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
 
