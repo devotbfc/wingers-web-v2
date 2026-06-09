@@ -2,7 +2,7 @@
 
 > Living index of every route, component, env var, and data file in the repo. Update after each phase. Keeps Claude Code aware of what already exists so it doesn't accidentally duplicate.
 
-Last updated: **Day 0 (pre-build)**
+Last updated: **2026-06-09 (Phase 0 complete)**
 
 ---
 
@@ -110,21 +110,21 @@ Last updated: **Day 0 (pre-build)**
 ### `src/lib/locations/`
 | File | Status | Notes |
 |---|---|---|
-| `types.ts` | TODO | `Location` interface |
+| `types.ts` | ✓ Phase 0 | `Location`, `OrderProviderName`, `OpeningHours*`, `LocationAddress`, `LocationGeo` interfaces |
 | `locations-data.ts` | TODO | Two records: MK + NN |
 | `index.ts` | TODO | Barrel + `getLocationBySlug()` |
 
 ### `src/lib/menu/`
 | File | Status | Notes |
 |---|---|---|
-| `types.ts` | TODO | `MenuCategory`, `MenuItem` interfaces |
+| `types.ts` | ✓ Phase 0 | `MenuCategory`, `MenuItem` interfaces |
 | `menu-data.ts` | TODO | Categories: wings, tenders, burgers, sides, sauces, drinks |
 | `index.ts` | TODO | Barrel + helpers |
 
 ### `src/lib/order/`
 | File | Status | Notes |
 |---|---|---|
-| `types.ts` | TODO | `OrderProvider` interface |
+| `types.ts` | ✓ Phase 0 | `OrderProvider` interface |
 | `providers/deliverect.ts` | TODO | MK |
 | `providers/toast.ts` | TODO | NN |
 | `providers/pushpull-hub.ts` | TODO | Stub for future |
@@ -208,7 +208,7 @@ All vars must be in `.env.example` (committed) with placeholder values + comment
 
 | Phase | Branch | PR | Merged | Verified |
 |---|---|---|---|---|
-| 0 — Setup | `main` (initial commit) | — | — | — |
+| 0 — Setup | `main` | — | ✓ | Pending Benson visual verify |
 | A — Brand foundation | `feat/brand-foundation` | — | — | — |
 | B — Homepage | `feat/homepage` | — | — | — |
 | C — Menu | `feat/menu` | — | — | — |
