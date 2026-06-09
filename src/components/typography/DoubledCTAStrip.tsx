@@ -32,7 +32,7 @@ export function DoubledCTAStrip({ items, className }: DoubledCTAStripProps) {
         if (item.href) {
           return (
             <a
-              key={i}
+              key={item.text}
               href={item.href}
               className="block hover:opacity-80 transition-opacity"
             >
@@ -41,7 +41,7 @@ export function DoubledCTAStrip({ items, className }: DoubledCTAStripProps) {
           );
         }
 
-        return <div key={i}>{heading}</div>;
+        return <div key={item.text}>{heading}</div>;
       })}
     </section>
   );
