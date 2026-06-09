@@ -1,7 +1,7 @@
-import type { Location } from "@/lib/locations/types";
+import type { Location, OrderProviderName } from "@/lib/locations/types";
 
 export interface OrderProvider {
-  name: "Deliverect" | "Toast" | "PushPullHub";
+  name: OrderProviderName;
   getOrderUrl(location: Location): string;
   isAvailable(location: Location): boolean;
 }

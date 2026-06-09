@@ -26,6 +26,8 @@ export interface LocationGeo {
   longitude: number;
 }
 
+export type OrderProviderName = "Deliverect" | "Toast" | "PushPullHub";
+
 export interface Location {
   slug: string;
   lastUpdated: string;
@@ -34,7 +36,7 @@ export interface Location {
   phone: string;
   geo: LocationGeo;
   openingHours: OpeningHours;
-  orderProvider: "Deliverect" | "Toast" | "PushPullHub";
+  orderProvider: OrderProviderName;
   deliveryRadius?: string;
   parking?: string;
   accessibility?: string;
