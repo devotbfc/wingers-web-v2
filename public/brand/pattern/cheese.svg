@@ -1,0 +1,5 @@
+﻿<!-- TODO: replace placeholder asset -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="80" fill="none" stroke="#000000" stroke-width="6"/>
+  <text x="100" y="110" font-family="sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#000000">CHEESE</text>
+</svg>
