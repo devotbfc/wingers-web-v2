@@ -13,3 +13,42 @@
 
   --tracking-display: -0.03em;
 }
+
+/* DoubledHeading pseudo-element shadow effect
+   --dh-fill: foreground colour (main text)
+   --dh-shadow: offset shadow colour (::before layer)
+   --dh-offset: em-based offset distance */
+@layer components {
+  .doubled-heading {
+    position: relative;
+    color: var(--dh-fill, var(--color-brand-pink));
+    display: inline-block;
+  }
+
+  .doubled-heading::before {
+    content: attr(data-text);
+    position: absolute;
+    top: var(--dh-offset, 0.08em);
+    left: var(--dh-offset, 0.08em);
+    color: var(--dh-shadow, var(--color-brand-red));
+    z-index: -1;
+    pointer-events: none;
+    user-select: none;
+    white-space: pre;
+  }
+
+  .marquee-track {
+    animation: marquee-scroll 60s linear infinite;
+  }
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation-play-state: paused;
+  }
+}
