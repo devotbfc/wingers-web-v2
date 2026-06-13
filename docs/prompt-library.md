@@ -80,6 +80,9 @@ Plan and build, in one PR on branch feat/brand-foundation:
 7. DO NOT wire any of these into real pages yet. Phase B does that.
 
 Output the plan first. Visual verification at /dev/components on Vercel preview before merge.
+
+Brand assets are in public/brand/logo/ and public/brand/pattern/. Inventory both directories with ls before referencing any file path in components. Do not assume filenames — verify each one exists.
+
 ```
 
 ---
