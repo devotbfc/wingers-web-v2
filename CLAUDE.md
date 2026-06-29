@@ -238,7 +238,7 @@ CLAUDE.md                      # This file
 **Palette** (Tailwind tokens in `globals.css`):
 ```css
 @theme {
-  --color-brand-pink: #f8aaff;
+  --color-brand-pink: #FF6FB5;
   --color-brand-red:  #FF2D2D;
   --color-brand-black: #000000;
   --color-brand-white: #FFFFFF;

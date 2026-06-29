@@ -55,7 +55,7 @@ Future of Flavours.
 ### Primary
 | Role | Name | Hex | Tailwind |
 |---|---|---|---|
-| Primary 1 | Hot Pink | `#f8aaff` | `brand-pink` |
+| Primary 1 | Hot Pink | `#FF6FB5` | `brand-pink` |
 | Primary 2 | Sauce Red | `#FF2D2D` | `brand-red` |
 | Neutral dark | Black | `#000000` | `brand-black` |
 | Neutral light | White | `#FFFFFF` | `brand-white` |
@@ -66,7 +66,7 @@ In `src/styles/globals.css`:
 @import "tailwindcss";
 
 @theme {
-  --color-brand-pink: #f8aaff;
+  --color-brand-pink: #FF6FB5;
   --color-brand-red: #FF2D2D;
   --color-brand-black: #000000;
   --color-brand-white: #FFFFFF;
@@ -78,11 +78,24 @@ In `src/styles/globals.css`:
 }
 ```
 
+### Base system — white-primary
+White is the default page background. Black is the default text colour. Energy comes from oversized pink (`#FF6FB5`) blocks, red (`#FF2D2D`) type, and food photography sitting on a white canvas.
+
+Black-canvas sections are **explicit and reserved** — opt in via the `.section-dark` utility (defined in `src/styles/globals.css`). Only these sections are dark:
+
+- **Hero** — the home-page hero loop and any equivalent page-opening hero
+- **CTA strips** — full-width "Order now / Find us" bands between sections
+- **Footer** — site-wide footer
+
+Everything else (menu, locations, about, FAQ, body content, cards) sits on white with black text. Dark sections are the punctuation, not the page.
+
 ### Combinations
-- **Pink on red** and **red on pink** are signature high-impact pairings — used for marquees, hero overlays, doubled headlines, and Big CTA strips.
-- **Black on white** = readable base for body copy.
-- **White on red** = bold section breaks.
-- **Pink on black** = premium feel for menu spotlights.
+- **Black on white** — the default base. All body copy, menu items, location info, FAQs, and standard sections.
+- **Pink on red** and **red on pink** — signature high-impact pairings. Used for marquees, doubled headlines, and CTA strip type.
+- **Red on white** — section accent type, oversized headlines on white sections.
+- **Pink on black** — premium feel inside dark sections (hero, CTA strip, footer) for menu spotlights and headline fills.
+- **White on black** — base inside `.section-dark` (hero / CTA / footer).
+- **White on red** — bold full-bleed section breaks between white-bg sections.
 
 ### Bans
 - No gradients (with the rare exception of subtle radial pink → red glows behind hero photos)

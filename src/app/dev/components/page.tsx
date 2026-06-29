@@ -16,8 +16,8 @@ const POSTER = "/brand/logo/wingers-lockup-pink.svg";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="p-8 border-b border-white/10">
-      <p className="text-white/40 font-body text-xs uppercase tracking-widest mb-6">{title}</p>
+    <section className="p-8 border-b border-brand-black/10">
+      <p className="text-brand-black/50 font-body text-xs uppercase tracking-widest mb-6">{title}</p>
       {children}
     </section>
   );
@@ -25,7 +25,39 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function ComponentsDevPage() {
   return (
-    <main className="bg-brand-black min-h-screen">
+    <main className="bg-brand-white min-h-screen">
+
+      <section className="p-8 border-b border-brand-black/10">
+        <p className="text-brand-black/50 font-body text-xs uppercase tracking-widest mb-6">
+          Context preview — white-primary base + .section-dark example
+        </p>
+        <div className="grid md:grid-cols-2 gap-0 rounded overflow-hidden">
+          <div className="bg-brand-white p-10">
+            <p className="text-brand-black/50 font-body text-xs uppercase tracking-widest mb-4">
+              Default (white base, black text)
+            </p>
+            <DoubledHeading
+              text="DIP IT."
+              as="p"
+              fillColor="brand-pink"
+              shadowColor="brand-red"
+              className="text-5xl font-display font-extrabold uppercase tracking-display"
+            />
+          </div>
+          <div className="section-dark p-10">
+            <p className="text-brand-white/50 font-body text-xs uppercase tracking-widest mb-4">
+              .section-dark (hero / CTA / footer)
+            </p>
+            <DoubledHeading
+              text="BITE IT."
+              as="p"
+              fillColor="brand-pink"
+              shadowColor="brand-red"
+              className="text-5xl font-display font-extrabold uppercase tracking-display"
+            />
+          </div>
+        </div>
+      </section>
 
       <Section title="BrandLogo — all 8 variants">
         <div className="flex flex-wrap gap-6 items-center">

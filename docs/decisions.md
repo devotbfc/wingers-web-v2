@@ -101,7 +101,7 @@ Motion only. GSAP is banned. If Claude Code installs GSAP, the install is revert
 ## ADR-006 — Pink + red palette (deliberate divergence from brand book)
 
 **Date**: 2026-06-07
-**Status**: Accepted
+**Status**: Superseded by ADR-015 (2026-06-29) — palette role + pink hex revised
 
 ### Context
 The official brand book (by designer aanu) specifies pink + ultramarine blue (`#2123e0`). The website diverges to pink + sauce red (`#FF2D2D`) because red better evokes wings, sauce, and heat — and creates a stronger appetite signal.
@@ -288,3 +288,28 @@ The `loyalty_signups` table has RLS enabled with NO public policies. Only the se
 ---
 
 > Add new ADRs below this line. Format: `## ADR-NNN — Title` → Date, Status → Context, Decision, Consequences.
+
+---
+
+## ADR-015 — White-primary palette + corrected pink hex
+
+**Date**: 2026-06-29
+**Status**: Accepted (supersedes ADR-006)
+
+### Context
+Two related issues with the foundation palette:
+
+1. The original ADR-006 set the website palette as pink + red + black + white but didn't specify a default base. The build defaulted to black-primary, which the owner finds too dark for a food brand — black reads premium for tech and fashion but suppresses appetite signals for buttermilk fried chicken. Photography and the pink/red duotone both pop harder on white.
+2. The pink token was set to `#f8aaff`, which reads cool/purple on screen and doesn't match the actual Wingers logo pink. Correct value is `#FF6FB5` (warm pink), confirmed against the logo file.
+
+### Decision
+1. **White is the default page background. Black is the default text colour.** Dramatic sections — hero, CTA strips, footer — opt in to a dark canvas via the `.section-dark` utility (defined in `src/styles/globals.css` `@layer components`), which sets bg-black + text-white. Dark sections are explicit, not the default.
+2. **Brand pink is `#FF6FB5`, not `#f8aaff`.** The `--color-brand-pink` token is updated, and every `#f8aaff` occurrence in `src/`, `public/`, `docs/`, and `CLAUDE.md` is replaced with `#FF6FB5`.
+
+Pink + red duotone remains the signature combination. No blue, no gradients, no new colours.
+
+### Consequences
+- White-primary base feels more appetising and premium; pink/red blocks and food photography carry more visual weight against white.
+- Dark sections retain Gen Z edge where it earns its place — hero, CTA, footer — without flooding the whole site.
+- Pink correction is a one-time token + asset sweep (6 occurrences). No components hardcode the hex; everything pulls from `--color-brand-pink` except the placeholder SVGs, which are repainted in this same change.
+- ADR-006 is superseded but its core point (red over the brand book's ultramarine) still stands and is restated here.
