@@ -54,7 +54,7 @@ export function NavBar() {
     >
       <nav
         aria-label="Primary"
-        className="flex items-center justify-between gap-6 px-4 md:px-8 h-16 md:h-20"
+        className="flex items-center justify-between gap-6 px-4 md:px-8 h-20 md:h-24"
       >
         <Link
           href="/"
@@ -66,7 +66,7 @@ export function NavBar() {
             type="mark"
             width={48}
             height={48}
-            className="h-10 w-10 md:h-12 md:w-12"
+            className="h-12 w-12 md:h-14 md:w-14"
           />
         </Link>
 
