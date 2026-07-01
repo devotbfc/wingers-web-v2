@@ -16,6 +16,8 @@ interface BrandButtonProps {
   className?: string;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
+  target?: React.HTMLAttributeAnchorTarget;
+  rel?: string;
 }
 
 const variantClasses: Record<BrandButtonVariant, string> = {
@@ -42,6 +44,8 @@ export function BrandButton({
   className,
   disabled,
   type = "button",
+  target,
+  rel,
 }: BrandButtonProps) {
   const classes = cn(
     "font-display font-bold uppercase tracking-wide transition-colors",
@@ -53,7 +57,9 @@ export function BrandButton({
   if (href) {
     return (
       <Button asChild className={classes} disabled={disabled}>
-        <a href={href}>{children}</a>
+        <a href={href} target={target} rel={rel}>
+          {children}
+        </a>
       </Button>
     );
   }
