@@ -208,6 +208,7 @@ CLAUDE.md                      # This file
 - **Tailwind class ordering**: layout → spacing → typography → colour → state (`hover:` / `focus:` last).
 - **No inline styles.** Use Tailwind. Custom values via `@theme` tokens or arbitrary values `[h-[420px]]`.
 - **Test page**: `src/app/dev/components/page.tsx` renders every brand component in every variant. Add new components here BEFORE wiring into real pages.
+  - Scope: this is for reusable PRIMITIVES in `src/components/brand/`, `src/components/media/`, and `src/components/typography/` only. Page-level compositions in `src/components/sections/` (NavBar, HeroSection, etc.) are verified on the real route, not on the dev page.
 
 ### Data conventions
 - Menu and locations are TypeScript `as const` arrays in `src/lib/*/data.ts`.

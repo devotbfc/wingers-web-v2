@@ -37,13 +37,12 @@
   .doubled-heading::before {
     content: attr(data-text);
     position: absolute;
-    top: var(--dh-offset, 0.08em);
-    left: var(--dh-offset, 0.08em);
+    inset: 0;
+    transform: translate(var(--dh-offset, 0.08em), var(--dh-offset, 0.08em));
     color: var(--dh-shadow, var(--color-brand-red));
     z-index: -1;
     pointer-events: none;
     user-select: none;
-    white-space: pre;
   }
 
   .marquee-track {
