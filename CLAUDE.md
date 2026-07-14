@@ -1,275 +1,119 @@
-# Wingers Website — CLAUDE.md
+# CLAUDE.md — Wingers Web v2
 
-> **Mandatory reading for every Claude Code session.** Read this file in full before writing any code, suggesting any architecture, or installing any dependency. If a request conflicts with anything below, push back before complying.
+Marketing site for **Wingers**, UK halal buttermilk fried chicken. Two sites: Milton Keynes + Northampton. Operated by The Big Flavour Ltd.
 
----
-
-## 1. Project context
-
-Wingers is a UK buttermilk fried chicken brand with two operational locations:
-
-- **Milton Keynes** — 25 Darin Court, Crownhill, MK8 0AD
-  - Orders via Deliverect Direct: `https://wingers-mk.deliverectdirect.com/`
-- **Northampton** — 2 Drapery, NN1 2ET
-  - Orders via Toast Online Ordering: `https://order.toasttab.com/online/wingers-northampton`
-
-This is a **marketing + discovery site**. Customers order on the external platform appropriate to the location (Deliverect for MK, Toast for Northampton). We do not own the cart in this build.
-
-Loyalty signups capture emails into Supabase + Mailchimp for the future loyalty programme.
-
-Future state (NOT in this build): a custom cart + loyalty system on Push Pull Hub (PPH) that sends orders to Toast POS for both locations. The website is designed with hooks so that future migration is a config change, not a refactor.
+Repo: `devotbfc/wingers-web-v2` (public) · Local: `C:\Users\marka\projects\wingers-web-v2` · Deploy: Vercel → `wingers-web-v2.vercel.app` (DNS cutover to `wingers.co` post-launch).
 
 ---
 
-## 2. Primary goals (priority order — refer back when in doubt)
+## Stack (locked)
 
-1. **AI search discoverability.** The site must be quotable by Google Gemini, ChatGPT search, Perplexity, Claude, etc. This is a first-class concern that shapes information architecture, content depth, and rendering strategy — not a head-tag afterthought.
-2. **Mobile UX.** Most customers arrive on mobile from social. Design and test mobile-first at 375px width.
-3. **Conversion to external order platforms.** Every page provides a clear, fast path to Deliverect (MK) or Toast (Northampton).
-4. **Email capture for future loyalty.** Every page can capture a signup. Forms write to Supabase (source of truth) and Mailchimp (marketing list).
+Next.js 16 App Router + Turbopack + TypeScript strict. Tailwind v4 (`@theme` block in `globals.css`, no config file). Motion for animation — **never install GSAP**. shadcn/ui as needed. React Hook Form + Zod + sonner. Supabase (EU) for loyalty signups. PostHog EU + Sentry. Sanity CMS deferred to Phase 2.
 
 ---
 
-## 3. Stack (locked — do not deviate without writing an ADR in `docs/decisions.md`)
+## Workflow rules (non-negotiable)
 
-| Layer | Choice | Notes |
+1. **Plan mode mandatory** for any change touching 3+ files.
+2. One phase = one branch = one PR = one merge. **Never** run the finishing-a-development-branch workflow until I confirm visually on a Vercel preview. (Build 1 had three premature "completions".)
+3. **Inventory before you reference.** `ls` the actual folder contents before writing any code that references an asset path. Never assume a filename.
+4. **No unsolicited dependency installs.** If it wasn't asked for, revert it.
+5. **Locations single source of truth:** `src/lib/locations/` (`types.ts` + `locations-data.ts` + `index.ts` barrel). Never create a parallel locations file — a duplicate broke production in build 1.
+6. Naming: lowercase `locations` export, `Location` type. No `LOCATIONS`/`locations` drift.
+7. **Brand tokens only** — no raw hex in components.
+8. Server Components by default; `"use client"` only where genuinely interactive.
+9. Every `next/image` has `width`/`height`/`sizes`. `priority` only above the fold.
+10. UK English. Brand voice per `docs/brand.md`.
+11. Conventional Commits. Squash merge. One open PR at a time.
+12. OG images are **static PNGs in `public/og/`** — never dynamic `ImageResponse` (ADR-014: Edge font loading failed repeatedly).
+13. **Mobile-first**: design and verify at 375px before desktop. Mobile is not a stacked list of the desktop — see "Mobile rhythm" below.
+14. Resolve merge conflicts locally via Claude Code — never the GitHub web editor.
+
+---
+
+## Brand tokens
+
+| Token | Hex | Role |
 |---|---|---|
-| Framework | Next.js 16 App Router + Turbopack | TypeScript strict |
-| Styling | Tailwind v4 | `@theme` block in `globals.css`. No `tailwind.config.js`. |
-| Components | shadcn/ui (Radix) | Add primitives as needed, never bulk-install |
-| Animation | Motion (Framer) | NO GSAP — heavier, rejected |
-| Forms | React Hook Form + Zod | Toast notifications via sonner |
-| Hosting | Vercel | Hobby plan, public repo |
-| Database | Supabase (EU region) | Loyalty signups, future auth |
-| Email marketing | Mailchimp | Dual-write from signup API |
-| Email transactional | Resend (Phase 2) | Post-launch |
-| Auth | Supabase Auth (Phase 2) | When loyalty app needs login |
-| CMS | None now, Sanity (Phase 2) | Typed local data in `src/lib/` until then |
-| Ordering | Deliverect (MK) + Toast (NN) | Abstracted via `OrderProvider` interface |
-| Analytics | None at launch, PostHog (Phase 2) | Skip to save launch time |
-| Errors | None at launch, Sentry (Phase 2) | Skip to save launch time |
+| `brand-pink` | `#FF6FB5` | Primary — warm hot pink, matches the logo |
+| `brand-red` | `#FF2D2D` | Secondary — sauce red |
+| `brand-black` | `#000000` | Dark sections only |
+| `brand-white` | `#FFFFFF` | Base / dominant |
+
+**Palette law: white-primary.** The site is predominantly white. Exactly **three** dark sections are permitted, and they create the rhythm `dark hero → white body → dark close`:
+
+1. Hero
+2. Big CTA strip
+3. Footer
+
+Everything else is white-based with pink or red as the accent — one accent dominates per section. **No blue. No `#f8aaff`. No gradients**, with a single exception: a subtle radial pink→red glow permitted behind a hero food photo.
+
+**Type:** Bricolage Grotesque (display — ExtraBold 800 hero, Bold 700 sections, tracking -0.02 to -0.04em) + Inter (body — 400, line-height 1.5). Both via `next/font/google`.
+
+**Voice:** "Future of Flavours. Dip It. Bite It. Love It." · "Best wings in the game" · "Get stuck in" (primary CTA) · "Become a Winger" (loyalty) · "Friends with Benefits" (email list) · "You're in." (confirmations). Confident, direct, sensory, British. No apologies, no puns, no emoji in product copy. ALL CAPS only in headline lockups.
 
 ---
 
-## 4. AI SEO requirements (non-negotiable, baked in from Phase 1)
+## Signature devices (the things that make it Wingers, not a template)
 
-Every page must satisfy ALL of the following or it does not ship.
+Reuse these — do not invent new ones per section:
 
-### Rendering
-- **Static rendering** wherever possible. No client-side data fetching for primary content. Use `generateStaticParams` on every dynamic route.
-- **No JS-blocked content.** All text, headings, images, schema must render in the initial HTML response.
-- Semantic HTML: real `<h1>` → `<h6>` hierarchy, `<section>`, `<article>`, `<nav>`, `<main>`, `<ul>`, `<dl>` as appropriate.
-
-### Structured data (JSON-LD, one `<script type="application/ld+json">` per concept per page)
-| Route | Schemas |
-|---|---|
-| `/` | `Organization` + `Restaurant` (with `hasMenu`, `servesCuisine`, `priceRange`) |
-| `/menu` | `Menu` containing `MenuSection[]` containing `MenuItem[]` |
-| `/locations` | `ItemList` of `LocalBusiness` |
-| `/locations/[slug]` | `Restaurant` + `LocalBusiness` (with `address`, `geo`, `openingHoursSpecification`, `telephone`, `hasMenu`) |
-| `/about` | `AboutPage` + `Organization` reference |
-| `/faq` and per-page FAQs | `FAQPage` |
-| All pages | `BreadcrumbList` |
-
-Implement helpers in `src/lib/seo/structured-data.ts`. One function per schema. Render via `<script type="application/ld+json" dangerouslySetInnerHTML>`.
-
-### Meta tags (every route via `generateMetadata` or static `metadata` export)
-- `<title>`: 50–60 characters, primary keyword + brand
-- `<meta name="description">`: 110–160 characters, action-oriented, location-aware where relevant
-- Canonical URL
-- OpenGraph: type, title, description, image (static PNG per route), url, siteName
-- Twitter: card=summary_large_image, title, description, image
-
-### Repo-root crawler files
-- `public/llms.txt` — pointer file following https://llmstxt.org/ spec
-- `public/robots.txt` is auto-generated by `app/robots.ts` and MUST explicitly allow these bots: `GPTBot`, `Google-Extended`, `anthropic-ai`, `ClaudeBot`, `PerplexityBot`, `OAI-SearchBot`, `Googlebot`, `Bingbot`, `Applebot-Extended`
-- `app/sitemap.ts` — includes every static and dynamic route
-
-### Content depth
-LLMs reward self-contained, semantically dense content. Every primary page must answer obvious questions a user/LLM would ask, on the page itself, in prose:
-- **Home**: who we are, where we are, what makes us different, how to order
-- **Locations**: full address, postcode, opening hours per day, phone, parking, payment methods, accessibility, dietary options, signature dishes available, ordering platform, delivery radius
-- **Menu**: every item has name, description (one sentence), allergens, calorie/spice indicator where known
-- **About**: founding story, sourcing approach, what "buttermilk fried" means, halal/dietary status
-- **FAQ**: at least 10 Q&A pairs covering allergens, ordering, delivery, vegan, halal, opening hours, payment, loyalty, group bookings, locations
-
-### Static OG images (NOT dynamic generation — see ADR-011)
-Designer (or you in Canva) exports 1200×630 PNGs to `public/og/`. Per-route reference in metadata. No `ImageResponse`, no Edge runtime, no font loading.
+- **DoubledHeading** — single element + `::before` pseudo-element via `data-text`, **em-based offsets** (0.06em display / 0.04em section) so wrapping is identical and the offset scales with font size. **Never** two absolutely-positioned copies.
+- **MarqueeLockup** — pure CSS infinite marquee, pause on hover, 60s default.
+- **DoubledCTAStrip** — oversized stacked doubled links, hover flips colour.
+- **OrderTrigger + OrderSlideUp** — bottom-anchored thumb-zone pill, slide-up panel listing both locations.
+- Oversized decorative wordmark bleeding off-canvas in the footer.
 
 ---
 
-## 5. Workflow rules (non-negotiable)
+## Mobile rhythm (Rule 13, expanded)
 
-### Plan mode is mandatory
-Any change touching **3 or more files** MUST be planned first. Write the plan in chat, wait for explicit "go" from Benson, THEN execute. If you skip plan mode on a multi-file change, you have violated this rule.
+Mobile must not collapse into a monotonous single-column same-height list. Enforce:
 
-### One phase = one branch = one PR = one merge
-- Do NOT run any "finishing", "auto-complete", "wrap up", or `finishing-a-development-branch` style action until Benson has visually verified the deploy on a Vercel preview URL.
-- If you believe a phase is done, post the preview URL and **STOP**. Wait for Benson to type "verified" or equivalent.
-- One PR open at a time. If PR #2 is waiting on review, do not start PR #3 on a branch from `main` — it will conflict.
-
-### File existence verification
-Before writing code that references any file (image, font, video, data file), run `ls` (or `view` on the folder) and confirm the file exists at the exact path with the exact name. Do NOT assume filenames. If you assume a filename and it doesn't exist, you have violated this rule.
-
-### No unsolicited dependency installs
-If a feature can be built with the existing dependency tree, build it that way. If a new dependency is needed, propose it in plan mode and wait for approval. Reject suggestions to add libraries that duplicate existing capability (e.g. GSAP when Motion is installed).
-
-### Conventional Commits + branch naming
-- Commits: `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `perf:`, `test:`. No other prefixes.
-- Branches: `feat/<scope>`, `fix/<scope>`, `chore/<scope>`, `docs/<scope>`. Kebab-case scope.
-- PRs: squash merge. Title follows conventional commit format.
-
-### Single source of truth rules
-- Locations: `src/lib/locations/locations-data.ts`. Never create a second file.
-- Menu: `src/lib/menu/menu-data.ts`. Never create a second file.
-- Brand tokens: `src/styles/globals.css` `@theme` block. Never hardcode hex values in components.
-- Order URLs: derived from `src/lib/order/providers/*` — never hardcode Deliverect/Toast URLs in components.
-
-### Git config (set on Day 0 — see `SETUP.md`)
-- `user.email` matches the GitHub account owning the repo
-- `core.editor` set to `notepad` (Windows) to avoid the Vim trap
+- Varied block heights and asymmetric offsets between stacked cards.
+- Full-bleed edge-to-edge media on at least one section per screen-and-a-half of scroll.
+- Horizontal scroll-snap rails (not vertical stacks) for anything that is a set of 3+ peers.
+- Thumb-zone CTAs, min-height 44px, order pill reads "ORDER" under 640px / "ORDER NOW" above.
+- LCP under 2.5s, Lighthouse mobile 90+.
 
 ---
 
-## 6. Do-not-touch list
+## Ordering (hard constraint)
 
-- `next.config.ts` — only edit with explicit instruction
-- `.env.local` — never commit, never modify outside Vercel dashboard guidance
-- `public/brand/` contents — managed by Benson, do not add/remove/rename
-- `src/lib/locations/locations-data.ts` and `src/lib/menu/menu-data.ts` — single source of truth, do not duplicate
+Two platforms, permanently:
 
----
+| Site | Platform | URL |
+|---|---|---|
+| Milton Keynes | Deliverect Direct | `https://wingers-mk.deliverectdirect.com/` |
+| Northampton | Toast | `https://order.toasttab.com/online/wingers-northampton` |
 
-## 7. Conventions
+The website is **discovery + handoff**. **Never build a native cart** — Deliverect and Toast own the carts. All order CTAs go through the `OrderProvider` interface, never a hardcoded URL, so PushPull Hub can swap in later (ADR).
 
-### File structure
-```
-src/
-  app/                         # App Router routes
-    (marketing)/               # Public site route group
-    api/
-      loyalty/
-        signup/route.ts        # Dual-write to Supabase + Mailchimp
-      contact/route.ts
-    sitemap.ts
-    robots.ts
-    opengraph-image.png        # Default OG (static)
-  components/
-    brand/                     # BrandLogo, BrandButton, MarqueeLockup, BrandPattern
-    typography/                # DoubledHeading, DoubledCTAStrip
-    media/                     # VideoCard, ImageCarousel, ScrollReveal, HoverImage
-    sections/                  # HeroSection, CategoryGrid, LocationsSection, etc.
-    forms/                     # LoyaltySignupForm, ContactForm
-    ui/                        # shadcn/ui primitives
-  lib/
-    locations/                 # types.ts, locations-data.ts, index.ts
-    menu/                      # types.ts, menu-data.ts, index.ts
-    order/
-      types.ts                 # OrderProvider interface
-      providers/
-        deliverect.ts
-        toast.ts
-        pushpull-hub.ts        # Stub for future
-        index.ts               # getProviderForLocation()
-    seo/
-      structured-data.ts       # JSON-LD generators
-      metadata.ts              # generateMetadata helpers
-    supabase/
-      client.ts                # Browser client
-      server.ts                # Server-only client with service role
-    mailchimp/
-      client.ts                # Server-only Mailchimp API wrapper
-  styles/
-    globals.css                # Tailwind + brand tokens
-public/
-  brand/
-    logo/
-    pattern/
-    photos/
-    videos/
-  og/                          # Static OG PNGs, 1200×630
-  llms.txt
-  favicon.ico
-docs/
-  brand.md
-  decisions.md
-  master-registry.md
-  prompt-library.md
-  migration-guide.md
-PHASE_PLAN.md
-SETUP.md
-CLAUDE.md                      # This file
-```
-
-### Component conventions
-- **Server Components by default.** Mark `"use client"` only when component uses hooks, browser APIs, or event handlers.
-- **Named exports only** for components, no `export default`.
-- **Explicit prop interfaces** when 3+ fields. Use `type` for unions, `interface` for objects.
-- **Tailwind class ordering**: layout → spacing → typography → colour → state (`hover:` / `focus:` last).
-- **No inline styles.** Use Tailwind. Custom values via `@theme` tokens or arbitrary values `[h-[420px]]`.
-- **Test page**: `src/app/dev/components/page.tsx` renders every brand component in every variant. Add new components here BEFORE wiring into real pages.
-  - Scope: this is for reusable PRIMITIVES in `src/components/brand/`, `src/components/media/`, and `src/components/typography/` only. Page-level compositions in `src/components/sections/` (NavBar, HeroSection, etc.) are verified on the real route, not on the dev page.
-
-### Data conventions
-- Menu and locations are TypeScript `as const` arrays in `src/lib/*/data.ts`.
-- Every record has `slug` (kebab-case) and `lastUpdated` (ISO date string).
-- Type interfaces designed to be Sanity-migration-ready — flat field names, no nested embedded objects beyond one level.
+**Hours:**
+- MK: Mon–Tue 16:30–21:30 · Wed–Fri 16:30–22:00 · Sat–Sun 12:00–22:00
+- Northampton: Mon–Tue 11:30–20:00 · Wed–Sun 11:30–22:00
 
 ---
 
-## 8. Critical pitfalls (from previous build, do not repeat)
+## AI search (first-class requirement)
 
-1. **Never use `next/font/google` inside Edge runtime `ImageResponse`** — fails silently. We use STATIC PNG OG images instead (ADR-011).
-2. **`NEXT_PUBLIC_APP_URL`** must be set correctly in Vercel from Day 0. Audit on every deploy. Default to the Vercel preview URL until domain cutover.
-3. **Never create a parallel `locations-data.ts` or `menu-data.ts`** — always import from `src/lib/locations/` or `src/lib/menu/`.
-4. **Never commit images over 2MB** — compress through TinyPNG.com first. Configure git pre-commit hook to reject if possible.
-5. **Always use `next/image`** for raster images. No raw `<img>` tags.
-6. **One open PR at a time.** Stacking PRs broke the previous build's mergeability.
-7. **Local Git author email must match GitHub account.** Set via `git config user.email` on Day 0.
+The site must be answerable by ChatGPT / Gemini / Perplexity, not just Google:
 
----
-
-## 9. Brand voice quick-reference
-
-**Tagline**: Dip It. Bite It. Love It.
-**Promise**: Future of Flavours.
-
-**Voice**: Confident, direct, sensory, British. No apologies, no corny puns, no emoji in product copy. UK spelling (flavour not flavor), UK references (takeaway not takeout, postcode not ZIP).
-
-**Palette** (Tailwind tokens in `globals.css`):
-```css
-@theme {
-  --color-brand-pink: #FF6FB5;
-  --color-brand-red:  #FF2D2D;
-  --color-brand-black: #000000;
-  --color-brand-white: #FFFFFF;
-}
-```
-
-**Type**:
-- Display: Bricolage Grotesque (800/700/500, tracking -0.02 to -0.04em)
-- Body: Inter (400/500/600, normal tracking, line-height 1.5)
-
-Full brand details in `docs/brand.md`.
+- Semantic HTML, one `<h1>` per page, real headings — not styled divs.
+- JSON-LD on every relevant route: `Restaurant` + `LocalBusiness` per location (with `openingHoursSpecification`, `geo`, `hasMenu`, `servesCuisine`, `paymentAccepted`), `Menu`/`MenuItem` on `/menu`, `FAQPage` where FAQs exist, `Organization` sitewide.
+- Plain-language answer paragraphs near the top of each page ("Wingers is a halal buttermilk fried chicken shop in Milton Keynes and Northampton…") — crawlable text, not text baked into images.
+- `sitemap.ts` + `robots.ts` maintained. Privacy/Terms `noindex`.
 
 ---
 
-## 10. When to ask vs. when to act
+## Assets
 
-**ASK** before doing any of these:
-- Installing a new dependency
-- Changing the stack (any item in §3)
-- Modifying any file in the do-not-touch list (§6)
-- Restructuring folders
-- Changing brand tokens
-- Making more than 3 files of changes (plan mode required)
+`public/brand/logo/` · `public/brand/pattern/` · `public/brand/photos/{hero,wings,tenders,burgers,sides,sauces,lifestyle,behind-scenes,locations/*}` · `public/brand/videos/` · `public/og/`
 
-**ACT** without asking on:
-- Bug fixes in a single file
-- Adding new components matching established conventions
-- Adding new routes that follow the structure
-- Adding new data records to existing data files (with `lastUpdated` set)
-- Writing tests
-- Updating docs to reflect what was built
+Compression: everything **under 1MB** before commit (TinyPNG). Video via HandBrake: 1080p H.264, no audio, RF 24, Web Optimized, 3–5MB target. Placeholders carry `data-todo="assets"` so they're greppable.
 
-When unsure, ask.
+---
+
+## Do not touch
+
+`.env.local` · `package-lock.json` (except via npm) · anything in `public/brand/` without asking · `src/lib/locations/` structure.
