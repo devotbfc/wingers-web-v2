@@ -31,7 +31,7 @@ export function ImageCarousel({ images, className }: ImageCarouselProps) {
             src={img.src}
             alt={img.alt}
             fill
-            className="object-cover rounded"
+            className="object-cover"
           />
         </div>
       ))}

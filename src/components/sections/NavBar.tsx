@@ -47,9 +47,7 @@ export function NavBar() {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-40 transition-colors duration-200",
-        scrolled
-          ? "bg-brand-white border-b border-brand-black/10"
-          : "bg-transparent"
+        scrolled ? "bg-brand-white" : "bg-transparent"
       )}
     >
       <nav
@@ -119,10 +117,10 @@ export function NavBar() {
         <SheetContent
           side="right"
           showCloseButton={false}
-          className="bg-brand-black text-brand-white border-l-2 border-brand-pink w-full sm:max-w-sm p-0"
+          className="bg-brand-black text-brand-white w-full sm:max-w-sm p-0"
         >
           <SheetTitle className="sr-only">Navigation</SheetTitle>
-          <div className="flex items-center justify-between h-16 px-4 border-b border-brand-white/10">
+          <div className="flex items-center justify-between h-16 px-4">
             <BrandLogo
               variant="pink"
               type="mark"

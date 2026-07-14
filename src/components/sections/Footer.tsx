@@ -87,7 +87,7 @@ export function Footer() {
           </FooterColumn>
         </div>
 
-        <div className="mt-14 flex items-center justify-center border-t border-brand-white/10 pt-10">
+        <div className="mt-14 flex items-center justify-center pt-10">
           <p className="font-body text-xs font-semibold uppercase tracking-[0.35em] text-brand-pink">
             Milton Keynes · Northampton
           </p>
@@ -105,7 +105,7 @@ export function Footer() {
         />
       </div>
 
-      <div className="border-t border-brand-white/10">
+      <div>
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-6 md:flex-row md:items-center md:justify-between md:px-8">
           <p className="font-body text-xs text-brand-white/60">
             © {year} The Big Flavour Ltd. All rights reserved.

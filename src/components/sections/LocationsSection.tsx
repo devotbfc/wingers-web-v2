@@ -29,14 +29,17 @@ export function LocationsSection() {
         </div>
 
         <div className="mt-10 md:mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
-          {LOCATIONS.map((loc) => {
+          {LOCATIONS.map((loc, i) => {
             const orderUrl = getProviderForLocation(loc).getOrderUrl(loc);
+            const isFirst = i === 0;
             return (
               <article
                 key={loc.slug}
-                className="flex flex-col overflow-hidden border border-brand-black/10 bg-brand-white"
+                className={`flex flex-col overflow-hidden bg-brand-white ${isFirst ? "mr-8 md:mr-0" : "ml-8 md:ml-0"}`}
               >
-                <div className="relative aspect-[4/3] bg-brand-pink">
+                <div
+                  className={`relative bg-brand-pink ${isFirst ? "aspect-[4/3]" : "aspect-square"}`}
+                >
                   <div className="absolute inset-0 flex items-center justify-center opacity-20">
                     <BrandLogo
                       variant="white"

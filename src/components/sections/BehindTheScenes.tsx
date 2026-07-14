@@ -5,7 +5,11 @@
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { DoubledHeading } from "@/components/typography/DoubledHeading";
 
-const PLACEHOLDER_TILES = [0, 1, 2];
+const PLACEHOLDER_TILES = [
+  { aspect: "aspect-[4/5]" },
+  { aspect: "aspect-square" },
+  { aspect: "aspect-video" },
+] as const;
 
 export function BehindTheScenes() {
   return (
@@ -29,11 +33,11 @@ export function BehindTheScenes() {
           </p>
         </div>
 
-        <div className="mt-10 md:mt-14 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
-          {PLACEHOLDER_TILES.map((i) => (
+        <div className="mt-10 md:mt-14 flex gap-4 overflow-x-auto snap-x snap-mandatory -mx-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:px-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible">
+          {PLACEHOLDER_TILES.map((tile, i) => (
             <div
               key={i}
-              className="relative aspect-video overflow-hidden bg-brand-pink"
+              className={`relative overflow-hidden bg-brand-pink snap-start shrink-0 w-[78%] md:w-auto ${tile.aspect}`}
             >
               <div className="absolute inset-0 flex items-center justify-center opacity-20">
                 <BrandLogo

@@ -49,8 +49,8 @@ export function LifestyleSection() {
           </p>
         </div>
 
-        <div className="mt-10 md:mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-6">
-          <div className="relative overflow-hidden aspect-[4/5] sm:col-span-2 md:row-span-2 md:aspect-auto md:min-h-[520px] bg-brand-black">
+        <div className="mt-10 md:mt-14 grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 md:grid-cols-3 md:gap-6">
+          <div className="relative overflow-hidden aspect-[4/5] col-span-2 md:row-span-2 md:aspect-auto md:min-h-[520px] bg-brand-black -mx-4 sm:mx-0">
             <Image
               src="/brand/photos/lifestyle/Gemini_Generated_Image_51gnjs51gnjs51gn.jpg"
               alt="Friends sharing Wingers boxes"

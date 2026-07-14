@@ -40,7 +40,7 @@ export function LoyaltySignupForm() {
   }
 
   const inputClasses =
-    "h-12 w-full rounded-none border-2 border-brand-black bg-brand-white px-4 font-body text-base text-brand-black placeholder:text-brand-black/40 focus-visible:ring-0 focus-visible:border-brand-black shadow-none";
+    "h-12 w-full rounded-none border-0 bg-brand-white px-4 font-body text-base text-brand-black placeholder:text-brand-black/40 focus-visible:ring-0 shadow-none";
 
   return (
     <Form {...form}>

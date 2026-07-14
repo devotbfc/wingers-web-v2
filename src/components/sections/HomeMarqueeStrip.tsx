@@ -23,7 +23,7 @@ const ITEMS = [
 
 export function HomeMarqueeStrip() {
   return (
-    <section className="bg-brand-white py-8 md:py-10 border-y border-brand-black/5">
+    <section className="bg-brand-white py-8 md:py-10">
       <MarqueeLockup items={ITEMS} itemClassName="text-brand-red" />
     </section>
   );
