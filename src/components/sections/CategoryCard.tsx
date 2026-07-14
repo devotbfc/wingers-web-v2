@@ -7,6 +7,7 @@ interface CategoryCardProps {
   imageSrc: string;
   imageAlt: string;
   href: string;
+  aspect?: string;
   className?: string;
 }
 
@@ -15,28 +16,21 @@ export function CategoryCard({
   imageSrc,
   imageAlt,
   href,
+  aspect = "aspect-[4/5]",
   className,
 }: CategoryCardProps) {
   return (
-    <Link
-      href={href}
-      className={cn(
-        "group relative block overflow-hidden aspect-[4/5] md:aspect-[3/4] bg-brand-black",
-        className
-      )}
-    >
-      <Image
-        src={imageSrc}
-        alt={imageAlt}
-        fill
-        sizes="(min-width: 768px) 33vw, 100vw"
-        className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-gradient-to-t from-brand-black/70 via-brand-black/20 to-transparent"
-      />
-      <h3 className="absolute bottom-0 left-0 right-0 p-6 md:p-8 font-display font-extrabold uppercase tracking-tight leading-none text-brand-white text-[clamp(2.5rem,7vw,5rem)]">
+    <Link href={href} className={cn("group block", className)}>
+      <div className={cn("relative overflow-hidden bg-brand-black", aspect)}>
+        <Image
+          src={imageSrc}
+          alt={imageAlt}
+          fill
+          sizes="(min-width: 768px) 33vw, 78vw"
+          className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+        />
+      </div>
+      <h3 className="bg-brand-black px-6 py-4 md:px-8 md:py-5 font-display font-extrabold uppercase leading-none tracking-tight text-brand-white text-[clamp(1.5rem,4vw,2.5rem)]">
         {title}
       </h3>
     </Link>

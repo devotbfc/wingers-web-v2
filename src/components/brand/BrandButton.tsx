@@ -24,7 +24,7 @@ const variantClasses: Record<BrandButtonVariant, string> = {
   primary:
     "bg-brand-red text-brand-white hover:bg-brand-pink hover:text-brand-black border-0 rounded-none shadow-none",
   secondary:
-    "border-2 border-brand-red text-brand-red bg-transparent hover:bg-brand-red hover:text-brand-white rounded-none shadow-none",
+    "bg-brand-pink text-brand-black hover:bg-brand-white hover:text-brand-black border-0 rounded-none shadow-none",
   ghost:
     "text-brand-red bg-transparent hover:text-brand-pink hover:bg-transparent underline rounded-none shadow-none",
 };

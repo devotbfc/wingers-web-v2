@@ -63,12 +63,7 @@ export function HeroSection() {
 
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
           <OrderTriggerButton size="lg">Order</OrderTriggerButton>
-          <BrandButton
-            href="/locations"
-            variant="secondary"
-            size="lg"
-            className="border-brand-white text-brand-white hover:bg-brand-white hover:text-brand-black"
-          >
+          <BrandButton href="/locations" variant="secondary" size="lg">
             Find a location
           </BrandButton>
         </div>

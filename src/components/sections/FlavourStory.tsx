@@ -41,7 +41,10 @@ export function FlavourStory() {
           </p>
         </div>
 
-        <ImageCarousel images={SAUCE_PLACEHOLDERS} className="mt-10 md:mt-14" />
+        <ImageCarousel
+          images={SAUCE_PLACEHOLDERS}
+          className="mt-10 md:mt-14 -mx-4 md:mx-0"
+        />
       </div>
     </section>
   );

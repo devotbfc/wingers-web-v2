@@ -19,7 +19,7 @@ export function OrderPanel() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent
         side="bottom"
-        className="h-auto max-h-[85vh] border-t-2 border-brand-black bg-brand-white text-brand-black"
+        className="h-auto max-h-[85vh] bg-brand-white text-brand-black"
       >
         <SheetHeader className="px-6 pt-6 pb-2">
           <SheetTitle className="font-display text-2xl md:text-3xl font-extrabold uppercase tracking-tight text-brand-black">
@@ -36,7 +36,7 @@ export function OrderPanel() {
             return (
               <li
                 key={loc.slug}
-                className="flex flex-col gap-4 border-2 border-brand-black p-5"
+                className="flex flex-col gap-4 bg-brand-pink text-brand-black p-5"
               >
                 <div className="flex flex-col gap-1">
                   <h3 className="font-display text-xl font-extrabold uppercase tracking-tight text-brand-black">
