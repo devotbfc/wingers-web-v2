@@ -27,8 +27,12 @@ export function BrandLogo({
   alt = "Wingers",
 }: BrandLogoProps) {
   const dims = DEFAULT_DIMENSIONS[type];
-  // TODO: replace placeholder asset at public/brand/logo/wingers-{type}-{variant}.svg
-  const src = `/brand/logo/wingers-${type}-${variant}.svg`;
+  const src =
+    variant === "pink"
+      ? type === "lockup"
+        ? "/brand/logo/wingers-logo-pink.png"
+        : "/brand/logo/wingers-mark.png"
+      : `/brand/logo/wingers-${type}-${variant}.svg`;
 
   return (
     <Image
