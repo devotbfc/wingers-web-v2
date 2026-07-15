@@ -1,9 +1,17 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { BrandButton } from "@/components/brand/BrandButton";
 import { useOrderPanel } from "@/components/sections/order-panel";
-import { getItemPrice, isItemAvailable, type LocationSlug, type MenuItem } from "@/lib/menu";
+import {
+  ALLERGEN_LABELS,
+  getAllergenInfoForItem,
+  getItemPrice,
+  isItemAvailable,
+  type LocationSlug,
+  type MenuItem,
+} from "@/lib/menu";
 import { cn } from "@/lib/utils";
 
 const TILE_COLORS = [
@@ -88,6 +96,9 @@ export function MenuCard({ item, locationSlug }: MenuCardProps) {
   const available = isItemAvailable(item, locationSlug);
   const tileColor = tileColorFor(item.slug);
   const hasPhoto = Boolean(item.image);
+  const allergenInfo = getAllergenInfoForItem(item);
+  const containsLabels = allergenInfo?.contains.map((a) => ALLERGEN_LABELS[a]) ?? [];
+  const tracesLabels = allergenInfo?.traces.map((a) => ALLERGEN_LABELS[a]) ?? [];
 
   return (
     <article className="flex h-full flex-col bg-brand-white">
@@ -146,11 +157,31 @@ export function MenuCard({ item, locationSlug }: MenuCardProps) {
           {item.spiceLevel ? <SpiceLevel level={item.spiceLevel} /> : null}
         </div>
 
-        <p className="mt-auto text-[10px] uppercase tracking-[0.18em] text-brand-black/50">
-          {item.allergens.length > 0
-            ? `Allergens: ${item.allergens.join(" · ")}`
-            : "No declared allergens"}
-        </p>
+        <div className="mt-auto space-y-1">
+          {allergenInfo ? (
+            <>
+              <p className="text-[10px] uppercase tracking-[0.18em] text-brand-black/70">
+                {containsLabels.length > 0
+                  ? `Contains: ${containsLabels.join(" · ")}`
+                  : "No declared allergens"}
+              </p>
+              {tracesLabels.length > 0 && (
+                <p className="text-[10px] normal-case tracking-normal text-brand-black/45">
+                  May contain traces of {tracesLabels.join(", ")}.
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="text-[10px] uppercase tracking-[0.18em] text-brand-black/50">
+              <Link
+                href="/allergies"
+                className="underline decoration-brand-black/30 underline-offset-2 hover:decoration-brand-black"
+              >
+                See allergen guide
+              </Link>
+            </p>
+          )}
+        </div>
 
         <BrandButton
           variant="primary"

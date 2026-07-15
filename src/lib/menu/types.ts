@@ -42,7 +42,12 @@ export interface MenuItem {
   description: string;
   categorySlug: CategorySlug;
   priceGbp: Record<LocationSlug, number>;
-  allergens: Allergen[];
+  /**
+   * References an AllergenItem.slug in src/lib/menu/allergen-data.ts.
+   * Single source of truth for allergens — never store contains/traces here.
+   * Unset when no printed-guide entry exists (e.g. plain drinks).
+   */
+  allergenSlug?: string;
   calories?: number;
   spiceLevel?: 0 | 1 | 2 | 3;
   isVegan?: boolean;
@@ -53,7 +58,7 @@ export interface MenuItem {
   imageAlt?: string;
   unavailableAt?: LocationSlug[];
   /** Flags data that still needs to be replaced before launch. Greppable. */
-  dataTodo?: "content" | "price" | "both";
+  dataTodo?: readonly ("content" | "price" | "allergens")[];
 }
 
 export interface MenuCategory {
