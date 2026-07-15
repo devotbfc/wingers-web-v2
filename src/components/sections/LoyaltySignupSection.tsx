@@ -1,7 +1,13 @@
 import { LoyaltySignupForm } from "@/components/forms/LoyaltySignupForm";
 import { DoubledHeading } from "@/components/typography/DoubledHeading";
 
-export function LoyaltySignupSection() {
+interface LoyaltySignupSectionProps {
+  source?: "homepage" | "loyalty_page";
+}
+
+export function LoyaltySignupSection({
+  source = "homepage",
+}: LoyaltySignupSectionProps) {
   return (
     <section
       aria-labelledby="loyalty-heading"
@@ -28,7 +34,7 @@ export function LoyaltySignupSection() {
               box. No spam, ever.
             </p>
 
-            <LoyaltySignupForm />
+            <LoyaltySignupForm source={source} />
           </div>
         </div>
       </div>
