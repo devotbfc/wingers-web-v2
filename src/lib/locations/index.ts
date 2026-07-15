@@ -10,6 +10,23 @@ export type {
   OrderProviderName,
 } from "./types";
 
+export {
+  dayKeys,
+  dayLabels,
+  dayShort,
+  formatHm,
+  formatRange,
+  getHoursForDay,
+  getLondonNowParts,
+  getNextOpening,
+  getTodayHours,
+  isOpenNow,
+  parseHm,
+} from "./hours";
+export type { DayKey, LondonNowParts, NextOpening } from "./hours";
+
+export { getDirectionsUrl } from "./maps";
+
 export const LOCATIONS = LOCATIONS_DATA;
 
 export function getLocationBySlug(slug: string): Location | undefined {
