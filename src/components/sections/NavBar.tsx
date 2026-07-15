@@ -87,7 +87,7 @@ export function NavBar() {
           <li>
             <button
               type="button"
-              onClick={openPanel}
+              onClick={() => openPanel()}
               className={cn(
                 "font-display font-bold uppercase tracking-wide text-sm px-5 h-10 transition-colors",
                 scrolled
