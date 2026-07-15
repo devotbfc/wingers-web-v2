@@ -9,6 +9,7 @@ interface OrderTriggerButtonProps {
   variant?: "primary" | "secondary" | "ghost";
   size?: "sm" | "md" | "lg";
   className?: string;
+  preferredLocationSlug?: string;
 }
 
 export function OrderTriggerButton({
@@ -16,13 +17,14 @@ export function OrderTriggerButton({
   variant = "primary",
   size = "md",
   className,
+  preferredLocationSlug,
 }: OrderTriggerButtonProps) {
   const { openPanel } = useOrderPanel();
   return (
     <BrandButton
       variant={variant}
       size={size}
-      onClick={openPanel}
+      onClick={() => openPanel(preferredLocationSlug)}
       className={className}
     >
       {children}

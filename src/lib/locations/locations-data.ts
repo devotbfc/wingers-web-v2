@@ -1,20 +1,29 @@
-import type { Location } from "./types";
+import type { Location, OpeningHours } from "./types";
 
-const closed = { open: "00:00", close: "00:00", closed: true } as const;
-const placeholderHours = {
-  monday: closed,
-  tuesday: closed,
-  wednesday: closed,
-  thursday: closed,
-  friday: closed,
-  saturday: closed,
-  sunday: closed,
+const mkHours: OpeningHours = {
+  monday: { open: "16:30", close: "21:30" },
+  tuesday: { open: "16:30", close: "21:30" },
+  wednesday: { open: "16:30", close: "22:00" },
+  thursday: { open: "16:30", close: "22:00" },
+  friday: { open: "16:30", close: "22:00" },
+  saturday: { open: "12:00", close: "22:00" },
+  sunday: { open: "12:00", close: "22:00" },
+};
+
+const northamptonHours: OpeningHours = {
+  monday: { open: "11:30", close: "20:00" },
+  tuesday: { open: "11:30", close: "20:00" },
+  wednesday: { open: "11:30", close: "22:00" },
+  thursday: { open: "11:30", close: "22:00" },
+  friday: { open: "11:30", close: "22:00" },
+  saturday: { open: "11:30", close: "22:00" },
+  sunday: { open: "11:30", close: "22:00" },
 };
 
 export const LOCATIONS_DATA: readonly Location[] = [
   {
     slug: "milton-keynes",
-    lastUpdated: "2026-06-29",
+    lastUpdated: "2026-07-15",
     name: "Wingers Milton Keynes",
     address: {
       street: "25 Darin Court",
@@ -24,12 +33,12 @@ export const LOCATIONS_DATA: readonly Location[] = [
     },
     phone: "",
     geo: { latitude: 0, longitude: 0 },
-    openingHours: placeholderHours,
+    openingHours: mkHours,
     orderProvider: "Deliverect",
   },
   {
     slug: "northampton",
-    lastUpdated: "2026-06-29",
+    lastUpdated: "2026-07-15",
     name: "Wingers Northampton",
     address: {
       street: "2 Drapery",
@@ -39,7 +48,7 @@ export const LOCATIONS_DATA: readonly Location[] = [
     },
     phone: "",
     geo: { latitude: 0, longitude: 0 },
-    openingHours: placeholderHours,
+    openingHours: northamptonHours,
     orderProvider: "Toast",
   },
 ] as const;
