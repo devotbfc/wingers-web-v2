@@ -53,7 +53,7 @@ function CategoryRail({
   return (
     <nav
       aria-label="Menu categories"
-      className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 pb-1 md:mx-0 md:flex-wrap md:justify-center md:overflow-visible md:px-0"
+      className="-mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:flex-wrap md:justify-center md:overflow-visible md:px-0"
     >
       {CATEGORIES.map((cat) => {
         const active = value === cat.slug;
