@@ -272,7 +272,7 @@ Skip PostHog and Sentry for v1 launch. Add in Phase 2 with a proper event taxono
 ## ADR-014 — `loyalty_signups` writes are server-side only
 
 **Date**: 2026-06-07
-**Status**: Accepted
+**Status**: Superseded by ADR-016 (2026-07-15)
 
 ### Context
 Supabase has Row Level Security (RLS) for client-side writes, but exposing the table to the client requires careful RLS policy design. For v1, simpler to write server-side only.
@@ -313,3 +313,28 @@ Pink + red duotone remains the signature combination. No blue, no gradients, no 
 - Dark sections retain Gen Z edge where it earns its place — hero, CTA, footer — without flooding the whole site.
 - Pink correction is a one-time token + asset sweep (6 occurrences). No components hardcode the hex; everything pulls from `--color-brand-pink` except the placeholder SVGs, which are repainted in this same change.
 - ADR-006 is superseded but its core point (red over the brand book's ultramarine) still stands and is restated here.
+
+---
+
+## ADR-016 — Loyalty writes use anon key + INSERT-only RLS (supersedes ADR-014)
+
+**Date**: 2026-07-15
+**Status**: Accepted (supersedes ADR-014)
+
+### Context
+ADR-014 mandated that `loyalty_signups` writes go through `SUPABASE_SERVICE_ROLE_KEY` from a server-only route handler, with no public RLS policies. That works but forces a service-role key into the app's runtime environment. Any misconfiguration (a leaked build artefact, a stray log line, a debug endpoint) exposes full DB access.
+
+The safer default is to keep no service-role key in the deployed app at all. Supabase's anon key is designed to be public — its safety comes from Row Level Security. If RLS is set up correctly, the anon key can only do what the policies explicitly allow.
+
+### Decision
+1. The app uses only `NEXT_PUBLIC_SUPABASE_ANON_KEY` — the service-role key is never referenced anywhere in the codebase or Vercel runtime env.
+2. `loyalty_signups` has RLS enabled with exactly one policy: `for insert to anon with check (true)`. No SELECT, UPDATE, or DELETE policies exist for `anon` or `authenticated`, so those actions are denied by default.
+3. Signups happen from a Next.js Server Action (`src/app/actions/loyalty.ts`) using the anon-key client — server-side execution keeps the honeypot check, Zod validation, IP rate-limit, and duplicate-email swallow inside our trust boundary, without needing an elevated DB role.
+4. Admin reads happen in the Supabase dashboard SQL editor (service role) — never from the app.
+
+### Consequences
+- Blast radius of the deployed app is smaller: worst case a leaked build lets someone sign up rows, not read them.
+- No `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` or Vercel for this app.
+- If a future feature needs client-side reads (a "you're on the list" check, a member-only page), we add a scoped SELECT policy for that specific case — not a blanket service-role fallback.
+- Unique-email violations are swallowed server-side and returned as success, so the response cannot be used to enumerate the list.
+- ADR-014 is superseded but its intent (writes are gate-kept) still stands — the gate is now the RLS policy rather than the service-role key.
