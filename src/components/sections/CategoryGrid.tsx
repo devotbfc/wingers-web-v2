@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { CategoryCard } from "./CategoryCard";
 
-// TODO(routes): /menu/[category] pages don't exist yet — 404 expected until Phase B
 const CATEGORIES = [
   {
     title: "Wings",
