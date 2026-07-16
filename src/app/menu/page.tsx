@@ -5,13 +5,18 @@ import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
 import { OrderPanelProvider } from "@/components/sections/order-panel/order-panel-context";
 import { LOCATIONS } from "@/lib/locations";
-import { CATEGORIES, MENU, type MenuItem } from "@/lib/menu";
+import {
+  MENU_ITEMS,
+  MENU_SECTIONS,
+  isCurrentLE,
+  type MenuItem,
+} from "@/lib/menu";
 import { MenuShell } from "./MenuShell";
 
 export const metadata: Metadata = {
   title: "Menu — Wingers Buttermilk Fried Chicken",
   description:
-    "Halal buttermilk fried chicken in Milton Keynes and Northampton. Wings, tenders, burgers, loaded fries and sides — prices and availability differ per shop.",
+    "Halal buttermilk fried chicken in Milton Keynes and Northampton. Wings, boneless, tenders, burgers, loaded fries, mac & cheese, shakes, cookies and more — prices and availability differ per shop.",
   alternates: { canonical: "/menu" },
   openGraph: {
     title: "The Wingers Menu",
@@ -22,13 +27,53 @@ export const metadata: Metadata = {
   },
 };
 
+function locationCode(slug: string): "MK" | "NN" {
+  return slug === "milton-keynes" ? "MK" : "NN";
+}
+
+function priceForOffer(item: MenuItem, slug: string): string | null {
+  const code = locationCode(slug);
+  const direct = code === "MK" ? item.priceMK : item.priceNN;
+  if (direct != null) return direct.toFixed(2);
+  if (item.fromPrice != null) return item.fromPrice.toFixed(2);
+  return null;
+}
+
+function menuItemJsonLd(item: MenuItem) {
+  const offers = LOCATIONS.map((loc) => {
+    const price = priceForOffer(item, loc.slug);
+    const code = locationCode(loc.slug);
+    const inStock = item.unavailableAt !== code;
+    return {
+      "@type": "Offer",
+      ...(price != null && { price, priceCurrency: "GBP" }),
+      availability: inStock
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+      areaServed: loc.name,
+    };
+  });
+
+  const base: Record<string, unknown> = {
+    "@type": "MenuItem",
+    name: item.name,
+    ...(item.description && { description: item.description }),
+    offers,
+  };
+
+  if (item.halal) base.suitableForDiet = "https://schema.org/HalalDiet";
+  if (item.vegetarian) base.suitableForDiet = "https://schema.org/VegetarianDiet";
+
+  return base;
+}
+
 function buildMenuJsonLd() {
-  const sections = CATEGORIES.map((category) => {
-    const items = MENU.filter((item) => item.categorySlug === category.slug);
+  const currentItems = MENU_ITEMS.filter((i) => isCurrentLE(i));
+  const sections = MENU_SECTIONS.map((section) => {
+    const items = currentItems.filter((i) => i.sectionSlug === section.slug);
     return {
       "@type": "MenuSection",
-      name: category.name,
-      description: category.description,
+      name: section.name,
       hasMenuItem: items.map((item) => menuItemJsonLd(item)),
     };
   }).filter((section) => section.hasMenuItem.length > 0);
@@ -42,37 +87,6 @@ function buildMenuJsonLd() {
     inLanguage: "en-GB",
     hasMenuSection: sections,
   };
-}
-
-function menuItemJsonLd(item: MenuItem) {
-  const offers = LOCATIONS.map((loc) => {
-    const slug = loc.slug as keyof typeof item.priceGbp;
-    const price = item.priceGbp[slug];
-    const inStock = !item.unavailableAt?.includes(slug);
-    return {
-      "@type": "Offer",
-      price: price.toFixed(2),
-      priceCurrency: "GBP",
-      availability: inStock
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
-      areaServed: loc.name,
-    };
-  });
-
-  const base: Record<string, unknown> = {
-    "@type": "MenuItem",
-    name: item.name,
-    description: item.description,
-    offers,
-  };
-
-  if (item.isHalal) base.suitableForDiet = "https://schema.org/HalalDiet";
-  if (item.isVegan) base.suitableForDiet = "https://schema.org/VeganDiet";
-  else if (item.isVegetarian)
-    base.suitableForDiet = "https://schema.org/VegetarianDiet";
-
-  return base;
 }
 
 export default function MenuPage() {
@@ -94,9 +108,10 @@ export default function MenuPage() {
             />
             <p className="mt-4 max-w-2xl font-body text-base leading-relaxed text-brand-black/75 md:text-lg">
               Wingers serves halal buttermilk fried chicken across Milton Keynes
-              and Northampton. Wings, tenders, burgers, loaded fries and sides —
-              every item is halal-certified. Prices and availability vary by
-              shop; pick yours below.
+              and Northampton. Wings, boneless, tenders, burgers, loaded fries,
+              mac and cheese, sides, shakes and cookies — every item is
+              halal-certified. Prices and availability vary by shop; pick yours
+              below.
             </p>
           </div>
         </section>

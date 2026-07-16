@@ -13,7 +13,7 @@ export interface MenuItem {
   slug: string;
   name: string;
   sectionSlug: string;
-  sectionName: string;
+  sectionName?: string;
   product?: string;            // Wings | Boneless | Tenders (variant items only)
   flavourSlug?: string;
   fromPrice?: number | null;   // 'from £X' for size-priced items

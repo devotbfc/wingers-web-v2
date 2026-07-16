@@ -1,15 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { BrandButton } from "@/components/brand/BrandButton";
 import { useOrderPanel } from "@/components/sections/order-panel";
 import {
   ALLERGEN_LABELS,
-  getAllergenInfoForItem,
-  getItemPrice,
-  isItemAvailable,
-  type LocationSlug,
+  getPriceLabel,
+  isCurrentLE,
+  isItemAvailableAt,
+  toMenuLocationCode,
   type MenuItem,
 } from "@/lib/menu";
 import { cn } from "@/lib/utils";
@@ -57,62 +56,79 @@ function CheckMark({ className }: { className?: string }) {
 
 function SpiceLevel({ level }: { level: number }) {
   if (level <= 0) return null;
+  const clamped = Math.min(5, Math.max(0, Math.round(level)));
   return (
     <span
       className="inline-flex items-center gap-0.5 text-brand-red"
-      aria-label={`Spice level ${level} of 3`}
-      title={`Spice level ${level} of 3`}
+      aria-label={`Spice level ${clamped} of 5`}
+      title={`Spice level ${clamped} of 5`}
     >
-      {Array.from({ length: level }).map((_, i) => (
+      {Array.from({ length: clamped }).map((_, i) => (
         <Flame key={i} className="size-4" />
       ))}
     </span>
   );
 }
 
-function HalalBadge() {
+function Chip({
+  children,
+  className,
+  title,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  title?: string;
+}) {
   return (
     <span
-      className="inline-flex items-center gap-1 bg-brand-black px-2.5 py-1 leading-none text-brand-white"
-      aria-label="Halal certified"
-      title="Halal"
+      title={title}
+      className={cn(
+        "inline-flex items-center gap-1 px-2.5 py-1 font-display text-[10px] font-bold uppercase leading-none tracking-wide",
+        className
+      )}
     >
-      <CheckMark className="size-3" />
-      <span className="font-display text-[10px] uppercase tracking-wide">
-        Halal
-      </span>
+      {children}
     </span>
   );
 }
 
 interface MenuCardProps {
   item: MenuItem;
-  locationSlug: LocationSlug;
+  locationSlug: string;
+  variant?: "standard" | "past";
 }
 
-export function MenuCard({ item, locationSlug }: MenuCardProps) {
+export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardProps) {
   const { openPanel } = useOrderPanel();
-  const price = getItemPrice(item, locationSlug);
-  const available = isItemAvailable(item, locationSlug);
+  const code = toMenuLocationCode(locationSlug);
+  const priceLabel = getPriceLabel(item, code);
+  const available = isItemAvailableAt(item, code) && variant !== "past";
   const tileColor = tileColorFor(item.slug);
-  const hasPhoto = Boolean(item.image);
-  const allergenInfo = getAllergenInfoForItem(item);
-  const containsLabels = allergenInfo?.contains.map((a) => ALLERGEN_LABELS[a]) ?? [];
-  const tracesLabels = allergenInfo?.traces.map((a) => ALLERGEN_LABELS[a]) ?? [];
+  const hasPhoto = Boolean(item.photo);
+  const currentLE = item.limitedEdition && isCurrentLE(item) && variant !== "past";
+  const isPast = variant === "past";
+  const containsLabels = item.contains.map((a) => ALLERGEN_LABELS[a]);
+  const tracesLabels = item.traces.map((a) => ALLERGEN_LABELS[a]);
+  const sizeList = item.sizes?.map((s) => s.size) ?? [];
 
   return (
-    <article className="flex h-full flex-col bg-brand-white">
+    <article
+      className={cn(
+        "flex h-full flex-col bg-brand-white",
+        isPast && "opacity-60 grayscale"
+      )}
+    >
       <div
         className={cn(
           "relative aspect-square w-full overflow-hidden",
           !hasPhoto && tileColor
         )}
-        data-todo={hasPhoto ? "assets" : undefined}
+        data-todo={hasPhoto ? undefined : "assets"}
       >
         {hasPhoto ? (
           <Image
-            src={item.image!}
-            alt={item.imageAlt ?? item.name}
+            src={item.photo!}
+            alt={item.name}
             fill
             sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
             className="object-cover"
@@ -124,10 +140,10 @@ export function MenuCard({ item, locationSlug }: MenuCardProps) {
             </span>
           </div>
         )}
-        {!available && (
+        {!available && !isPast && (
           <div className="absolute inset-0 flex items-center justify-center bg-brand-white/85">
-            <span className="font-display text-2xl font-extrabold uppercase tracking-tight text-brand-black">
-              Sold out
+            <span className="font-display text-xl font-extrabold uppercase tracking-tight text-brand-black text-center px-4 text-balance">
+              Not at this shop
             </span>
           </div>
         )}
@@ -138,60 +154,68 @@ export function MenuCard({ item, locationSlug }: MenuCardProps) {
           <h3 className="font-display text-2xl font-extrabold uppercase leading-[0.95] tracking-tight text-balance text-brand-black">
             {item.name}
           </h3>
-          <span className="shrink-0 font-display text-2xl font-extrabold leading-[0.95] tracking-tight tabular-nums text-brand-black">
-            £{price.toFixed(2)}
-          </span>
-        </div>
-
-        <p className="font-body text-sm leading-6 text-brand-black/70 line-clamp-2">
-          {item.description}
-        </p>
-
-        <div className="flex flex-wrap items-center gap-2">
-          {item.isSignature && (
-            <span className="bg-brand-pink px-2.5 py-1 font-display text-[11px] font-bold uppercase leading-none tracking-wide text-brand-black">
-              Signature
+          {priceLabel && (
+            <span className="shrink-0 font-display text-xl font-extrabold leading-[0.95] tracking-tight tabular-nums text-brand-black">
+              {priceLabel}
             </span>
           )}
-          {item.isHalal && <HalalBadge />}
-          {item.spiceLevel ? <SpiceLevel level={item.spiceLevel} /> : null}
+        </div>
+
+        {item.description && (
+          <p className="font-body text-sm leading-6 text-brand-black/70 line-clamp-3">
+            {item.description}
+          </p>
+        )}
+
+        {sizeList.length > 0 && (
+          <p className="font-body text-xs uppercase tracking-[0.14em] text-brand-black/55">
+            {sizeList.join(" · ")}
+          </p>
+        )}
+
+        <div className="flex flex-wrap items-center gap-2">
+          {item.signature && (
+            <Chip className="bg-brand-pink text-brand-black">Signature</Chip>
+          )}
+          {currentLE && (
+            <Chip className="bg-brand-red text-brand-white">Limited</Chip>
+          )}
+          {item.halal && (
+            <Chip className="bg-brand-black text-brand-white" title="Halal">
+              <CheckMark className="size-3" />
+              Halal
+            </Chip>
+          )}
+          {item.vegetarian && (
+            <Chip className="bg-brand-black text-brand-white">V</Chip>
+          )}
+          <SpiceLevel level={item.spice} />
         </div>
 
         <div className="mt-auto space-y-1">
-          {allergenInfo ? (
-            <>
-              <p className="text-[10px] uppercase tracking-[0.18em] text-brand-black/70">
-                {containsLabels.length > 0
-                  ? `Contains: ${containsLabels.join(" · ")}`
-                  : "No declared allergens"}
-              </p>
-              {tracesLabels.length > 0 && (
-                <p className="text-[10px] normal-case tracking-normal text-brand-black/45">
-                  May contain traces of {tracesLabels.join(", ")}.
-                </p>
-              )}
-            </>
-          ) : (
-            <p className="text-[10px] uppercase tracking-[0.18em] text-brand-black/50">
-              <Link
-                href="/allergies"
-                className="underline decoration-brand-black/30 underline-offset-2 hover:decoration-brand-black"
-              >
-                See allergen guide
-              </Link>
+          <p className="text-[10px] uppercase tracking-[0.18em] text-brand-black/70">
+            {containsLabels.length > 0
+              ? `Contains: ${containsLabels.join(" · ")}`
+              : "No declared allergens"}
+          </p>
+          {tracesLabels.length > 0 && (
+            <p className="text-[10px] normal-case tracking-normal text-brand-black/45">
+              May contain traces of {tracesLabels.join(", ")}.
             </p>
           )}
         </div>
 
-        <BrandButton
-          variant="primary"
-          size="md"
-          disabled={!available}
-          onClick={() => openPanel(locationSlug)}
-          className="w-full justify-center"
-        >
-          {available ? "Order" : "Unavailable"}
-        </BrandButton>
+        {!isPast && (
+          <BrandButton
+            variant="primary"
+            size="md"
+            disabled={!available}
+            onClick={() => openPanel(locationSlug)}
+            className="w-full justify-center"
+          >
+            {available ? "Order" : "Unavailable"}
+          </BrandButton>
+        )}
       </div>
     </article>
   );
