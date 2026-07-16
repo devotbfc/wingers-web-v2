@@ -1,34 +1,32 @@
-import { BehindTheScenes } from "@/components/sections/BehindTheScenes";
-import { BigCTAStrip } from "@/components/sections/BigCTAStrip";
-import { CategoryGrid } from "@/components/sections/CategoryGrid";
-import { FlavourStory } from "@/components/sections/FlavourStory";
 import { Footer } from "@/components/sections/Footer";
-import { HeroSection } from "@/components/sections/HeroSection";
-import { HomeMarqueeStrip } from "@/components/sections/HomeMarqueeStrip";
-import { LifestyleSection } from "@/components/sections/LifestyleSection";
-import { LocationsSection } from "@/components/sections/LocationsSection";
 import { LoyaltySignupSection } from "@/components/sections/LoyaltySignupSection";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
 import { OrderPanelProvider } from "@/components/sections/order-panel/order-panel-context";
+import { BackToTopButton } from "@/components/sections/home-v2/BackToTopButton";
+import { FlavourLabTeaser } from "@/components/sections/home-v2/FlavourLabTeaser";
+import { Hero } from "@/components/sections/home-v2/Hero";
+import { SaucePanel } from "@/components/sections/home-v2/SaucePanel";
+import { StatementPanel } from "@/components/sections/home-v2/StatementPanel";
+import { TheGoods } from "@/components/sections/home-v2/TheGoods";
+import { TwoSpots } from "@/components/sections/home-v2/TwoSpots";
 
 export default function Home() {
   return (
     <OrderPanelProvider>
       <NavBar />
       <main>
-        <HeroSection />
-        <HomeMarqueeStrip />
-        <CategoryGrid />
-        <FlavourStory />
-        <BehindTheScenes />
-        <LocationsSection />
-        <LifestyleSection />
-        <LoyaltySignupSection />
-        <BigCTAStrip />
+        <Hero />
+        <StatementPanel />
+        <TheGoods />
+        <SaucePanel />
+        <TwoSpots />
+        <FlavourLabTeaser />
+        <LoyaltySignupSection source="homepage" />
       </main>
       <Footer />
       <OrderPanel />
+      <BackToTopButton />
     </OrderPanelProvider>
   );
 }
