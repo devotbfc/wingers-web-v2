@@ -1,38 +1,62 @@
-import { ALLERGEN_ITEMS, type AllergenItem } from "./allergen-data";
-import { CATEGORIES, MENU } from "./menu-data";
-import type { CategorySlug, LocationSlug, MenuItem } from "./types";
+import {
+  FLAVOUR_SHOWCASE,
+  MENU_ITEMS,
+  MENU_SECTIONS,
+  isCurrentLE,
+  type FlavourShowcaseItem,
+  type MenuItem,
+  type MenuSize,
+} from "./menu-data";
 
-export type {
-  Allergen,
-  CategorySlug,
-  LocationSlug,
-  MenuCategory,
-  MenuItem,
-} from "./types";
+export {
+  FLAVOUR_SHOWCASE,
+  MENU_ITEMS,
+  MENU_SECTIONS,
+  isCurrentLE,
+};
+export type { FlavourShowcaseItem, MenuItem, MenuSize };
 
-export type { AllergenItem } from "./allergen-data";
-
-export { CATEGORIES, MENU };
+export type { Allergen, AllergenItem } from "./allergen-data";
 export { ALLERGEN_ITEMS, UK_ALLERGENS } from "./allergen-data";
 export { ALLERGENS_ORDERED, ALLERGEN_LABELS } from "./allergen-labels";
 
-export function getItemsByCategory(categorySlug: CategorySlug): readonly MenuItem[] {
-  return MENU.filter((item) => item.categorySlug === categorySlug);
+/** MK = Milton Keynes, NN = Northampton — the codes menu-data uses for per-location fields. */
+export type MenuLocationCode = "MK" | "NN";
+
+/**
+ * Bridges the site-wide Location.slug ('milton-keynes' | 'northampton') to the
+ * two-letter codes menu-data uses (priceMK/priceNN, unavailableAt: 'MK'|'NN').
+ */
+export function toMenuLocationCode(locationSlug: string): MenuLocationCode {
+  return locationSlug === "milton-keynes" ? "MK" : "NN";
 }
 
-export function getItemPrice(item: MenuItem, locationSlug: LocationSlug): number {
-  return item.priceGbp[locationSlug];
+/** Human section label, derived from MENU_SECTIONS when the item omits sectionName. */
+export function getSectionName(item: MenuItem): string {
+  if (item.sectionName) return item.sectionName;
+  const section = MENU_SECTIONS.find((s) => s.slug === item.sectionSlug);
+  return section?.name ?? item.sectionSlug;
 }
 
-export function isItemAvailable(item: MenuItem, locationSlug: LocationSlug): boolean {
-  return !item.unavailableAt?.includes(locationSlug);
+/** Direct price for a location — null if the item isn't priced there. */
+export function getPriceFor(item: MenuItem, code: MenuLocationCode): number | null {
+  return code === "MK" ? item.priceMK : item.priceNN;
+}
+
+/** True unless the item is explicitly marked unavailable at this location. */
+export function isItemAvailableAt(item: MenuItem, code: MenuLocationCode): boolean {
+  return item.unavailableAt !== code;
 }
 
 /**
- * Returns the AllergenItem referenced by menu item's allergenSlug, or null when
- * the item has no printed-guide entry (e.g. plain drinks) or the slug is unknown.
+ * Choose the price to display on the card:
+ *  - if item has priceMK/priceNN, use that location's value ("£X.XX")
+ *  - else if item has fromPrice (wings/boneless/tenders), show "from £X.XX"
+ *  - else return null (no price surfaced)
  */
-export function getAllergenInfoForItem(item: MenuItem): AllergenItem | null {
-  if (!item.allergenSlug) return null;
-  return ALLERGEN_ITEMS.find((a) => a.slug === item.allergenSlug) ?? null;
+export function getPriceLabel(item: MenuItem, code: MenuLocationCode): string | null {
+  const direct = getPriceFor(item, code);
+  if (direct != null) return `£${direct.toFixed(2)}`;
+  if (item.fromPrice != null) return `from £${item.fromPrice.toFixed(2)}`;
+  return null;
 }
