@@ -109,7 +109,10 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
   const isPast = variant === "past";
   const containsLabels = item.contains.map((a) => ALLERGEN_LABELS[a]);
   const tracesLabels = item.traces.map((a) => ALLERGEN_LABELS[a]);
-  const sizeList = item.sizes?.map((s) => s.size) ?? [];
+  const sizeList =
+    item.sizes?.map((s) =>
+      s.size.replace(/^(wings|boneless|tenders)\s+/i, "")
+    ) ?? [];
 
   return (
     <article
@@ -155,21 +158,22 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
             {item.name}
           </h3>
           {priceLabel && (
-            <span className="shrink-0 font-display text-xl font-extrabold leading-[0.95] tracking-tight tabular-nums text-brand-black">
-              {priceLabel}
-            </span>
+            <div className="flex shrink-0 flex-col items-end gap-1">
+              <span className="font-display text-xl font-extrabold leading-[0.95] tracking-tight tabular-nums text-brand-black">
+                {priceLabel}
+              </span>
+              {sizeList.length > 0 && (
+                <span className="font-body text-[11px] uppercase tracking-[0.14em] whitespace-nowrap text-brand-black/50">
+                  {sizeList.join(" · ")}
+                </span>
+              )}
+            </div>
           )}
         </div>
 
         {item.description && (
           <p className="font-body text-sm leading-6 text-brand-black/70 line-clamp-3">
             {item.description}
-          </p>
-        )}
-
-        {sizeList.length > 0 && (
-          <p className="font-body text-xs uppercase tracking-[0.14em] text-brand-black/55">
-            {sizeList.join(" · ")}
           </p>
         )}
 
@@ -193,13 +197,13 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
         </div>
 
         <div className="mt-auto space-y-1">
-          <p className="text-[10px] uppercase tracking-[0.18em] text-brand-black/70">
+          <p className="text-[9px] uppercase tracking-[0.18em] text-brand-black/70">
             {containsLabels.length > 0
               ? `Contains: ${containsLabels.join(" · ")}`
               : "No declared allergens"}
           </p>
           {tracesLabels.length > 0 && (
-            <p className="text-[10px] normal-case tracking-normal text-brand-black/45">
+            <p className="text-[9px] normal-case tracking-normal text-brand-black/45">
               May contain traces of {tracesLabels.join(", ")}.
             </p>
           )}
