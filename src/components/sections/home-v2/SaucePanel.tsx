@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type React from "react";
@@ -23,7 +24,16 @@ export function SaucePanel() {
       <div
         aria-hidden="true"
         className="absolute inset-x-0 bottom-0 h-2/3 w-full bg-brand-red md:inset-y-0 md:left-auto md:right-0 md:h-full md:w-2/3"
-      />
+      >
+        <Image
+          src="/brand/photos/placeholders/P01.png"
+          alt=""
+          fill
+          sizes="(min-width: 768px) 66vw, 100vw"
+          className="object-cover"
+          data-photo-slot="P01"
+        />
+      </div>
 
       {/* Bottom scrim for legibility */}
       <div

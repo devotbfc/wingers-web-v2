@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface SauceEdgeAccentProps {
   className?: string;
 }
@@ -17,6 +19,15 @@ export function SauceEdgeAccent({ className }: SauceEdgeAccentProps) {
         opacity: 0.35,
         mixBlendMode: "screen",
       }}
-    />
+    >
+      <Image
+        src="/brand/photos/placeholders/P08.png"
+        alt=""
+        fill
+        sizes="50vw"
+        className="object-cover"
+        data-photo-slot="P08"
+      />
+    </div>
   );
 }

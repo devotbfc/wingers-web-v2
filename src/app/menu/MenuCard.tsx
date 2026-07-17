@@ -24,6 +24,23 @@ function tileColorFor(slug: string): string {
   return TILE_COLORS[sum % TILE_COLORS.length];
 }
 
+const SECTION_PHOTO_SLOT: Record<string, string> = {
+  "wings-boneless-tenders": "P13",
+  "chicken-burgers": "P14",
+  "beef-burgers": "P15",
+  "fries-loaded": "P16",
+  "chicken-loaded-fries": "P17",
+  "mac-and-cheese": "P18",
+  sides: "P19",
+  "platters-combos": "P20",
+  dips: "P21",
+  shakes: "P22",
+  churros: "P23",
+  "nyc-cookies": "P24",
+  coolers: "P25",
+  kids: "P26",
+};
+
 function Flame({ className }: { className?: string }) {
   return (
     <svg
@@ -105,6 +122,7 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
   const available = isItemAvailableAt(item, code) && variant !== "past";
   const tileColor = tileColorFor(item.slug);
   const hasPhoto = Boolean(item.photo);
+  const sectionPhotoSlot = hasPhoto ? undefined : SECTION_PHOTO_SLOT[item.sectionSlug];
   const currentLE = item.limitedEdition && isCurrentLE(item) && variant !== "past";
   const isPast = variant === "past";
   const containsLabels = item.contains.map((a) => ALLERGEN_LABELS[a]);
@@ -137,11 +155,23 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
             className="object-cover"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center p-6">
-            <span className="font-display text-[clamp(2rem,10vw,3rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-center text-balance">
-              {item.name}
-            </span>
-          </div>
+          <>
+            <div className="flex h-full w-full items-center justify-center p-6">
+              <span className="font-display text-[clamp(2rem,10vw,3rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-center text-balance">
+                {item.name}
+              </span>
+            </div>
+            {sectionPhotoSlot && (
+              <Image
+                src={`/brand/photos/placeholders/${sectionPhotoSlot}.png`}
+                alt=""
+                fill
+                sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+                className="object-cover opacity-35 mix-blend-multiply"
+                data-photo-slot={sectionPhotoSlot}
+              />
+            )}
+          </>
         )}
         {!available && !isPast && (
           <div className="absolute inset-0 flex items-center justify-center bg-brand-white/85">
