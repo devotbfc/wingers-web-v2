@@ -3,7 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { BrandButton } from "@/components/brand/BrandButton";
 import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTriggerButton";
-import type { Flavour } from "@/lib/flavours";
+import { suggestDipFor, type Flavour } from "@/lib/flavours";
 import { HeatFlames } from "./FlameIcon";
 
 interface WheelResultProps {
@@ -13,6 +13,7 @@ interface WheelResultProps {
 
 export function WheelResult({ winner, onSpinAgain }: WheelResultProps) {
   const reduce = useReducedMotion();
+  const dip = winner ? suggestDipFor(winner) : null;
   return (
     <div className="mt-8 w-full max-w-lg" aria-live="polite">
       <AnimatePresence mode="wait">
@@ -42,6 +43,12 @@ export function WheelResult({ winner, onSpinAgain }: WheelResultProps) {
             {winner.shortDescription && (
               <p className="mx-auto mt-4 max-w-md font-body text-base leading-relaxed text-brand-white/80">
                 {winner.shortDescription}
+              </p>
+            )}
+            {dip && (
+              <p className="mt-4 font-display text-[11px] font-bold uppercase tracking-[0.3em] text-brand-pink/70">
+                Pair it with:{" "}
+                <span className="text-brand-white">{dip.name}</span>
               </p>
             )}
             <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">

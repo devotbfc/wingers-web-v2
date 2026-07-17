@@ -2,20 +2,12 @@
 
 import { useCallback, useRef, useState } from "react";
 import { useReducedMotion } from "motion/react";
-import { CORE_FLAVOURS, LE_FLAVOURS, type Flavour } from "@/lib/flavours";
+import { SPINNABLE_FLAVOURS, type Flavour } from "@/lib/flavours";
 import { Wheel, computeTargetRotation } from "./Wheel";
 import { WheelResult } from "./WheelResult";
+import { SauceEdgeAccent } from "./SauceEdgeAccent";
 
-const SEGMENTS: Flavour[] = [
-  ...CORE_FLAVOURS,
-  ...LE_FLAVOURS.filter((f) => f.shortDescription),
-];
-
-if (process.env.NODE_ENV !== "production" && SEGMENTS.length !== 13) {
-  console.warn(
-    `[FlavourLab] Expected 13 wheel segments, got ${SEGMENTS.length}. Update SEGMENTS filter.`
-  );
-}
+const SEGMENTS = SPINNABLE_FLAVOURS;
 
 export function SpinTheWheel() {
   const reduce = useReducedMotion();
@@ -77,7 +69,9 @@ export function SpinTheWheel() {
         }}
       />
 
-      <div className="mx-auto flex max-w-6xl flex-col items-center px-4 md:px-8">
+      <SauceEdgeAccent className="absolute right-0 top-6 z-0 h-14 w-40 md:top-10 md:h-20 md:w-56" />
+
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-4 md:px-8">
         <p className="font-display text-[11px] font-bold uppercase tracking-[0.35em] text-brand-pink/80">
           Can&rsquo;t decide?
         </p>
