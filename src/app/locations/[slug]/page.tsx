@@ -25,7 +25,8 @@ import {
   type Location,
 } from "@/lib/locations";
 
-const SITE_URL = "https://wingers-web-v2.vercel.app";
+const SITE_URL =
+  process.env.NEXT_PUBLIC_APP_URL ?? "https://wingers-web-v2.vercel.app";
 
 interface RouteParams {
   slug: string;
@@ -58,6 +59,9 @@ export async function generateMetadata({
       description,
       url: canonical,
       type: "website",
+      images: [
+        { url: `/og/${location.slug}.png`, width: 1200, height: 630 },
+      ],
     },
   };
 }
