@@ -59,7 +59,7 @@ export default function FlavourLabPage() {
   return (
     <OrderPanelProvider>
       <NavBar />
-      <main>
+      <main className="bg-lab-black text-brand-white">
         <FlavourLabHero />
         <SpinTheWheel />
         <FlavourGrid />

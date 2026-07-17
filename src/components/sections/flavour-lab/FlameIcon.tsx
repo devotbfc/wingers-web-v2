@@ -39,7 +39,11 @@ export function HeatFlames({ heat, className, size = "sm" }: HeatFlamesProps) {
         <FlameIcon
           key={i}
           filled={i < heat}
-          className={`${dim} ${i < heat ? "text-brand-red" : "text-brand-black/25"}`}
+          className={`${dim} ${
+            i < heat
+              ? "text-brand-red drop-shadow-[0_0_4px_rgba(255,45,45,0.7)]"
+              : "text-brand-white/25"
+          }`}
         />
       ))}
     </span>
