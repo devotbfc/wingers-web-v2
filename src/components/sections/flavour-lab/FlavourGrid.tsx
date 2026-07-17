@@ -25,16 +25,18 @@ export function FlavourGrid() {
 
   return (
     <section
-      className="bg-brand-white py-16 md:py-24"
+      className="py-16 md:py-24"
       aria-label="All flavours"
     >
       <div className="mx-auto max-w-6xl px-4 md:px-8">
         <DoubledHeading
           text="ALL FLAVOURS"
           as="h2"
+          fillColor="brand-white"
+          shadowColor="brand-pink"
           className="font-display text-[clamp(2.5rem,7vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-tight"
         />
-        <p className="mt-4 max-w-xl font-body text-base leading-relaxed text-brand-black/75">
+        <p className="mt-4 max-w-xl font-body text-base leading-relaxed text-brand-white/60">
           Twenty-four flavours in the Lab — ten permanent, fourteen limited-edition drops.
         </p>
 
@@ -57,7 +59,7 @@ export function FlavourGrid() {
           </LayoutGroup>
 
           {filtered.length === 0 && (
-            <p className="mt-6 text-center font-body text-base text-brand-black/70">
+            <p className="mt-6 text-center font-body text-base text-brand-white/60">
               No flavours match. Turn the heat up or switch type.
             </p>
           )}

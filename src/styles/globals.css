@@ -6,6 +6,10 @@
   --color-brand-black: #000000;
   --color-brand-white: #FFFFFF;
 
+  /* Near-black used only by the /flavour-lab neon inversion. Not part of
+     the white-primary system — do not use elsewhere. */
+  --color-lab-black: #0A0A0A;
+
   /* Fallback stacks — overridden at runtime by next/font/google CSS variables on <html>.
      See src/app/layout.tsx. Do not rename without updating both files. */
   --font-display: "Bricolage Grotesque", system-ui, sans-serif;
@@ -82,8 +86,76 @@
   to { transform: translateX(-50%); }
 }
 
+/* Flavour Lab neon utilities — scoped to /flavour-lab.
+   text-shadow is normally banned by docs/brand.md but authorised here as
+   the Lab is the one playful zone allowed to invert to dark. */
+@layer utilities {
+  .neon-pink {
+    text-shadow:
+      0 0 4px rgba(255, 111, 181, 0.9),
+      0 0 12px rgba(255, 111, 181, 0.7),
+      0 0 28px rgba(255, 111, 181, 0.5);
+  }
+
+  .neon-red {
+    text-shadow:
+      0 0 4px rgba(255, 45, 45, 0.9),
+      0 0 12px rgba(255, 45, 45, 0.7),
+      0 0 28px rgba(255, 45, 45, 0.5);
+  }
+
+  .glow-edge-pink {
+    box-shadow:
+      0 0 0 1px rgba(255, 111, 181, 0.5),
+      0 0 14px rgba(255, 111, 181, 0.35),
+      inset 0 0 18px rgba(255, 111, 181, 0.08);
+  }
+
+  .glow-edge-red {
+    box-shadow:
+      0 0 0 1px rgba(255, 45, 45, 0.5),
+      0 0 14px rgba(255, 45, 45, 0.35),
+      inset 0 0 18px rgba(255, 45, 45, 0.08);
+  }
+
+  .animate-glow-ring {
+    animation: lab-pulse-ring 3s ease-in-out infinite;
+  }
+
+  .animate-flicker {
+    animation: lab-flicker 4s ease-in-out infinite;
+  }
+}
+
+@keyframes lab-pulse-ring {
+  0%, 100% {
+    box-shadow:
+      0 0 0 2px rgba(255, 111, 181, 0.6),
+      0 0 30px rgba(255, 111, 181, 0.4),
+      0 0 60px rgba(255, 45, 45, 0.25);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px rgba(255, 45, 45, 0.7),
+      0 0 45px rgba(255, 45, 45, 0.5),
+      0 0 90px rgba(255, 111, 181, 0.35);
+  }
+}
+
+@keyframes lab-flicker {
+  0%, 92%, 100% { opacity: 1; }
+  93% { opacity: 0.4; }
+  94% { opacity: 1; }
+  96% { opacity: 0.6; }
+  97% { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee-track {
     animation-play-state: paused;
+  }
+  .animate-glow-ring,
+  .animate-flicker {
+    animation: none;
   }
 }

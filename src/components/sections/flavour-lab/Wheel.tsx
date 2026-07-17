@@ -17,8 +17,9 @@ const CY = 110;
 
 const PALETTE = [
   { fill: "var(--color-brand-pink)", text: "var(--color-brand-black)" },
+  { fill: "var(--color-lab-black)", text: "var(--color-brand-white)" },
   { fill: "var(--color-brand-red)", text: "var(--color-brand-white)" },
-  { fill: "var(--color-brand-white)", text: "var(--color-brand-black)" },
+  { fill: "var(--color-lab-black)", text: "var(--color-brand-white)" },
 ] as const;
 
 function polar(angleDeg: number, radius: number) {
@@ -50,8 +51,13 @@ export function Wheel({
         className="absolute inset-0 -z-10 blur-3xl"
         style={{
           background:
-            "radial-gradient(circle at 50% 55%, color-mix(in oklab, var(--color-brand-pink) 60%, transparent) 0%, color-mix(in oklab, var(--color-brand-red) 30%, transparent) 45%, transparent 70%)",
+            "radial-gradient(circle at 50% 55%, rgba(255,111,181,0.55) 0%, rgba(255,45,45,0.3) 45%, transparent 70%)",
         }}
+      />
+
+      <div
+        aria-hidden="true"
+        className="animate-glow-ring pointer-events-none absolute inset-2 rounded-full"
       />
 
       <div
@@ -60,13 +66,14 @@ export function Wheel({
         style={{
           borderLeft: "16px solid transparent",
           borderRight: "16px solid transparent",
-          borderTop: "26px solid var(--color-brand-red)",
+          borderTop: "26px solid var(--color-brand-pink)",
+          filter: "drop-shadow(0 0 8px rgba(255,111,181,0.9))",
         }}
       />
 
       <svg
         viewBox="0 0 220 220"
-        className="h-full w-full drop-shadow-[0_10px_40px_rgba(0,0,0,0.15)]"
+        className="h-full w-full"
         role="img"
         aria-label={`Flavour wheel with ${segments.length} flavours`}
       >
@@ -96,7 +103,7 @@ export function Wheel({
                 <path
                   d={`M ${CX} ${CY} L ${p1.x} ${p1.y} A ${R} ${R} 0 0 1 ${p2.x} ${p2.y} Z`}
                   fill={palette.fill}
-                  stroke="var(--color-brand-black)"
+                  stroke="rgba(0,0,0,0.4)"
                   strokeWidth={0.5}
                 />
                 <text
@@ -110,6 +117,7 @@ export function Wheel({
                   dominantBaseline="middle"
                   transform={`rotate(${rot} ${labelPos.x} ${labelPos.y})`}
                   className="font-display uppercase"
+                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}
                 >
                   {labelFor(seg.name)}
                 </text>
@@ -122,19 +130,21 @@ export function Wheel({
           cx={CX}
           cy={CY}
           r="22"
-          fill="var(--color-brand-black)"
-          stroke="var(--color-brand-white)"
+          fill="var(--color-lab-black)"
+          stroke="var(--color-brand-pink)"
           strokeWidth="2"
+          style={{ filter: "drop-shadow(0 0 8px rgba(255,111,181,0.9))" }}
         />
         <text
           x={CX}
           y={CY}
           textAnchor="middle"
           dominantBaseline="central"
-          fill="var(--color-brand-white)"
+          fill="var(--color-brand-pink)"
           fontSize="8"
           fontWeight="800"
           className="font-display uppercase pointer-events-none"
+          style={{ textShadow: "0 0 6px rgba(255,111,181,0.9)" }}
         >
           {spinning ? "…" : "SPIN"}
         </text>

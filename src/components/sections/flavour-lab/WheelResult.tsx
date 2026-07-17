@@ -23,24 +23,24 @@ export function WheelResult({ winner, onSpinAgain }: WheelResultProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={reduce ? undefined : { opacity: 0, y: -8 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="border-2 border-brand-black bg-brand-white p-6 text-center md:p-8"
+            className="glow-edge-pink rounded-2xl border border-brand-pink/40 bg-brand-pink/[0.06] p-6 text-center backdrop-blur-sm md:p-8"
           >
-            <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
+            <p className="font-display text-xs font-bold uppercase tracking-[0.35em] text-brand-pink/80">
               The Lab picked
             </p>
-            <h3 className="mt-2 font-display text-3xl font-extrabold uppercase leading-[0.95] tracking-tight text-brand-black md:text-5xl">
+            <h3 className="neon-pink mt-2 font-display text-3xl font-extrabold uppercase leading-[0.95] tracking-tight text-brand-pink md:text-5xl">
               {winner.name}
             </h3>
             <div className="mt-3 flex items-center justify-center gap-3">
               <HeatFlames heat={winner.heat} size="md" />
               {winner.limitedEdition && (
-                <span className="border border-brand-red bg-brand-white px-2 py-0.5 font-display text-[10px] font-bold uppercase tracking-[0.2em] text-brand-red">
+                <span className="rounded-full border border-brand-pink/60 px-2 py-0.5 font-display text-[10px] font-bold uppercase tracking-[0.2em] text-brand-pink">
                   Limited Edition
                 </span>
               )}
             </div>
             {winner.shortDescription && (
-              <p className="mx-auto mt-4 max-w-md font-body text-base leading-relaxed text-brand-black/80">
+              <p className="mx-auto mt-4 max-w-md font-body text-base leading-relaxed text-brand-white/80">
                 {winner.shortDescription}
               </p>
             )}

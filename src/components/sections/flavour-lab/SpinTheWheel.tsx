@@ -65,20 +65,29 @@ export function SpinTheWheel() {
   return (
     <section
       ref={sectionRef}
-      className="bg-brand-white py-16 md:py-24"
+      className="relative overflow-hidden py-16 md:py-24"
       aria-labelledby="spin-the-wheel-heading"
     >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            "radial-gradient(700px circle at 50% 50%, rgba(255,111,181,0.10), transparent 60%)",
+        }}
+      />
+
       <div className="mx-auto flex max-w-6xl flex-col items-center px-4 md:px-8">
-        <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
+        <p className="font-display text-[11px] font-bold uppercase tracking-[0.35em] text-brand-pink/80">
           Can&rsquo;t decide?
         </p>
         <h2
           id="spin-the-wheel-heading"
-          className="mt-2 text-center font-display text-[clamp(2.5rem,7vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-black"
+          className="mt-2 text-center font-display text-[clamp(2.5rem,7vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-white"
         >
-          Spin the wheel
+          Spin the <span className="neon-pink text-brand-pink">wheel</span>
         </h2>
-        <p className="mt-3 max-w-md text-center font-body text-base leading-relaxed text-brand-black/70">
+        <p className="mt-3 max-w-md text-center font-body text-base leading-relaxed text-brand-white/60">
           Let the Lab pick your flavour. Thirteen sauces and rubs, ready to go.
         </p>
 
