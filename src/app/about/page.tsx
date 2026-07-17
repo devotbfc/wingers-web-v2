@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
@@ -29,6 +30,7 @@ interface Stage {
   copy: string;
   tile: string;
   align: StageAlign;
+  photoSlot: string;
 }
 
 const STAGES: readonly Stage[] = [
@@ -38,6 +40,7 @@ const STAGES: readonly Stage[] = [
     copy: "Every bird sits in buttermilk for a full 24 hours. Tender the whole way through, seasoned to the bone.",
     tile: "bg-brand-pink",
     align: "start",
+    photoSlot: "P04",
   },
   {
     n: "02",
@@ -45,6 +48,7 @@ const STAGES: readonly Stage[] = [
     copy: "Hand-tossed in seasoned flour until the crust turns craggy. No machines, no shortcuts.",
     tile: "bg-brand-red",
     align: "end",
+    photoSlot: "P05",
   },
   {
     n: "03",
@@ -52,6 +56,7 @@ const STAGES: readonly Stage[] = [
     copy: "Dropped in fresh oil and fried to order. Golden, loud, crunchy — never sitting under a lamp.",
     tile: "bg-brand-black",
     align: "start",
+    photoSlot: "P06",
   },
 ];
 
@@ -174,8 +179,17 @@ export default function AboutPage() {
                   data-todo="assets"
                   role="img"
                   aria-label={`Photo placeholder — ${stage.label.toLowerCase()} stage`}
-                  className={`mt-8 md:mt-12 w-full aspect-[4/3] md:aspect-[21/9] ${stage.tile}`}
-                />
+                  className={`relative mt-8 md:mt-12 w-full aspect-[4/3] md:aspect-[21/9] ${stage.tile}`}
+                >
+                  <Image
+                    src={`/brand/photos/placeholders/${stage.photoSlot}.png`}
+                    alt=""
+                    fill
+                    sizes="100vw"
+                    className="object-cover"
+                    data-photo-slot={stage.photoSlot}
+                  />
+                </div>
               </article>
             );
           })}
@@ -213,8 +227,17 @@ export default function AboutPage() {
             data-todo="assets"
             role="img"
             aria-label="Photo placeholder — team behind the counter"
-            className="min-h-[70svh] w-full bg-brand-black"
-          />
+            className="relative min-h-[70svh] w-full bg-brand-black"
+          >
+            <Image
+              src="/brand/photos/placeholders/P07.png"
+              alt=""
+              fill
+              sizes="100vw"
+              className="object-cover"
+              data-photo-slot="P07"
+            />
+          </div>
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-8 px-4 text-center">
             <DoubledHeading
               as="p"

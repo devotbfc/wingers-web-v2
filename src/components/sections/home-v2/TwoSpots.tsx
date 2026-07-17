@@ -1,8 +1,14 @@
+import Image from "next/image";
 import { MapPin } from "lucide-react";
 import type React from "react";
 import { LocationOpenBadge } from "@/components/locations/LocationOpenBadge";
 import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTriggerButton";
 import { LOCATIONS, type Location } from "@/lib/locations";
+
+const PHOTO_SLOT_BY_SLUG: Record<string, string> = {
+  "milton-keynes": "P02",
+  northampton: "P03",
+};
 
 type SpotTheme = {
   panelBg: string;
@@ -57,6 +63,7 @@ function headlineDoubledStyle(bodyText: string): React.CSSProperties {
 function SpotBlock({ spot }: { spot: Location }) {
   const theme = THEME_BY_SLUG[spot.slug] ?? DEFAULT_THEME;
   const headlineText = spot.name.toUpperCase();
+  const photoSlot = PHOTO_SLOT_BY_SLUG[spot.slug];
 
   return (
     <div className="flex flex-col lg:flex-row">
@@ -64,7 +71,18 @@ function SpotBlock({ spot }: { spot: Location }) {
         data-todo="assets"
         className={`relative aspect-[4/3] w-full ${theme.photoFallbackBg} lg:aspect-auto lg:h-auto lg:w-1/2`}
         aria-hidden="true"
-      />
+      >
+        {photoSlot && (
+          <Image
+            src={`/brand/photos/placeholders/${photoSlot}.png`}
+            alt=""
+            fill
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="object-cover"
+            data-photo-slot={photoSlot}
+          />
+        )}
+      </div>
 
       <div
         className={`${theme.panelBg} ${theme.bodyText} w-full overflow-hidden px-6 py-12 lg:w-1/2 lg:px-12 lg:py-20`}

@@ -42,11 +42,6 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     images: ["/og/default.png"],
   },
-  icons: {
-    icon: "/icon.png",
-    shortcut: "/favicon.ico",
-    apple: "/apple-icon.png",
-  },
   manifest: "/manifest.webmanifest",
 };
 
