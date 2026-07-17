@@ -18,6 +18,7 @@ export const metadata: Metadata = {
       "Free wings on your birthday, first dibs on new sauces, member-only drops. Halal buttermilk fried chicken in Milton Keynes and Northampton.",
     url: "/loyalty",
     type: "website",
+    images: [{ url: "/og/loyalty.png", width: 1200, height: 630 }],
   },
 };
 

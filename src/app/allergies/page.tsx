@@ -15,6 +15,15 @@ export const metadata: Metadata = {
   title: "Allergens — Wingers Menu",
   description:
     "Full allergen matrix for all 95 items on the Wingers menu — wings, tenders, burgers, loaded fries, sides, sauces, shakes, churros, kids meals and coolers. Contains and may-contain-traces listed separately for every one of the 14 UK statutory allergens.",
+  alternates: { canonical: "/allergies" },
+  openGraph: {
+    title: "Allergens — Wingers Menu",
+    description:
+      "Full allergen matrix for every item on the Wingers menu. UK 14 statutory allergens listed per item.",
+    url: "/allergies",
+    type: "website",
+    images: [{ url: "/og/allergies.png", width: 1200, height: 630 }],
+  },
 };
 
 type SectionGroup = {

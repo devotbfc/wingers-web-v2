@@ -12,6 +12,15 @@ export const metadata: Metadata = {
   title: "Contact Wingers",
   description:
     "Get in touch with Wingers — halal buttermilk fried chicken in Milton Keynes and Northampton. Send us a message or find your nearest shop.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact Wingers",
+    description:
+      "Get in touch — feedback, press, partnerships. Halal buttermilk fried chicken in Milton Keynes and Northampton.",
+    url: "/contact",
+    type: "website",
+    images: [{ url: "/og/contact.png", width: 1200, height: 630 }],
+  },
 };
 
 export default function ContactPage() {
