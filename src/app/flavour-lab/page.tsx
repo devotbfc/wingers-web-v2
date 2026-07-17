@@ -8,8 +8,10 @@ import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTrigg
 import { DipsSection } from "@/components/sections/flavour-lab/DipsSection";
 import { FlavourGrid } from "@/components/sections/flavour-lab/FlavourGrid";
 import { FlavourLabHero } from "@/components/sections/flavour-lab/FlavourLabHero";
+import { IncomingDropsSection } from "@/components/sections/flavour-lab/IncomingDropsSection";
+import { PastDropsSection } from "@/components/sections/flavour-lab/PastDropsSection";
 import { SpinTheWheel } from "@/components/sections/flavour-lab/SpinTheWheel";
-import { CORE_FLAVOURS, LE_FLAVOURS } from "@/lib/flavours";
+import { SPINNABLE_FLAVOURS } from "@/lib/flavours";
 
 // data-todo="assets" — static OG image /og/flavour-lab.png pending per ADR-014.
 export const metadata: Metadata = {
@@ -28,10 +30,7 @@ export const metadata: Metadata = {
 };
 
 function buildFlavourLabJsonLd() {
-  const described = [
-    ...CORE_FLAVOURS,
-    ...LE_FLAVOURS.filter((f) => f.shortDescription),
-  ];
+  const described = SPINNABLE_FLAVOURS;
 
   return {
     "@context": "https://schema.org",
@@ -63,7 +62,9 @@ export default function FlavourLabPage() {
         <FlavourLabHero />
         <SpinTheWheel />
         <FlavourGrid />
+        <IncomingDropsSection />
         <DipsSection />
+        <PastDropsSection />
 
         <section className="section-dark py-20 md:py-28">
           <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 text-center md:px-8">

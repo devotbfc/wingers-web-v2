@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { LayoutGroup } from "motion/react";
 import { DoubledHeading } from "@/components/typography/DoubledHeading";
-import { FLAVOURS } from "@/lib/flavours";
+import { SPINNABLE_FLAVOURS } from "@/lib/flavours";
 import { FlavourFilters } from "./FlavourFilters";
 import { FlavourCard } from "./FlavourCard";
 
@@ -15,7 +15,7 @@ export function FlavourGrid() {
 
   const filtered = useMemo(
     () =>
-      FLAVOURS.filter((f) => {
+      SPINNABLE_FLAVOURS.filter((f) => {
         if (f.heat > heatMax) return false;
         if (typeFilter === "all") return true;
         return f.type === typeFilter;
@@ -37,7 +37,7 @@ export function FlavourGrid() {
           className="font-display text-[clamp(2.5rem,7vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-tight"
         />
         <p className="mt-4 max-w-xl font-body text-base leading-relaxed text-brand-white/60">
-          Twenty-four flavours in the Lab — ten permanent, fourteen limited-edition drops.
+          Ten permanent sauces and rubs plus limited-edition drops with a story. See what&rsquo;s incoming below.
         </p>
 
         <div className="mt-10">
@@ -47,7 +47,7 @@ export function FlavourGrid() {
             typeFilter={typeFilter}
             onTypeChange={setTypeFilter}
             resultCount={filtered.length}
-            totalCount={FLAVOURS.length}
+            totalCount={SPINNABLE_FLAVOURS.length}
           />
 
           <LayoutGroup>
