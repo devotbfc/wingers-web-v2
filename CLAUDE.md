@@ -18,8 +18,8 @@ Next.js 16 App Router + Turbopack + TypeScript strict. Tailwind v4 (`@theme` blo
 2. One phase = one branch = one PR = one merge. **Never** run the finishing-a-development-branch workflow until I confirm visually on a Vercel preview. (Build 1 had three premature "completions".)
 3. **Inventory before you reference.** `ls` the actual folder contents before writing any code that references an asset path. Never assume a filename.
 4. **No unsolicited dependency installs.** If it wasn't asked for, revert it.
-5. **Locations single source of truth:** `src/lib/locations/` (`types.ts` + `locations-data.ts` + `index.ts` barrel). Never create a parallel locations file — a duplicate broke production in build 1.
-6. Naming: lowercase `locations` export, `Location` type. No `LOCATIONS`/`locations` drift.
+5. **Locations single source of truth:** `src/lib/locations/` — `types.ts`, `locations-data.ts`, `hours.ts`, `maps.ts`, and the `index.ts` barrel. The barrel is the single import surface. Never create a parallel locations file — a duplicate broke production in build 1.
+6. Naming: uppercase `LOCATIONS` export, `Location` type. Don't introduce a lowercase parallel.
 7. **Brand tokens only** — no raw hex in components.
 8. Server Components by default; `"use client"` only where genuinely interactive.
 9. Every `next/image` has `width`/`height`/`sizes`. `priority` only above the fold.
@@ -39,6 +39,7 @@ Next.js 16 App Router + Turbopack + TypeScript strict. Tailwind v4 (`@theme` blo
 | `brand-red` | `#FF2D2D` | Secondary — sauce red |
 | `brand-black` | `#000000` | Dark sections only |
 | `brand-white` | `#FFFFFF` | Base / dominant |
+| `lab-black` | `#0A0A0A` | Flavour Lab only — neon inversion base, not part of the white-primary system |
 
 **Palette law: white-primary.** The site is predominantly white. Exactly **three** dark sections are permitted, and they create the rhythm `dark hero → white body → dark close`:
 
@@ -46,7 +47,7 @@ Next.js 16 App Router + Turbopack + TypeScript strict. Tailwind v4 (`@theme` blo
 2. Big CTA strip
 3. Footer
 
-Everything else is white-based with pink or red as the accent — one accent dominates per section. **No blue. No `#f8aaff`. No gradients**, with a single exception: a subtle radial pink→red glow permitted behind a hero food photo.
+Everything else is white-based with pink or red as the accent — one accent dominates per section. **No blue. No `#f8aaff`. No decorative gradients.** Exceptions: (a) the hero radial pink→red glow behind a food photo, (b) dark-to-transparent legibility scrims over photography where text sits, (c) the Flavour Lab neon zone.
 
 **Type:** Bricolage Grotesque (display — ExtraBold 800 hero, Bold 700 sections, tracking -0.02 to -0.04em) + Inter (body — 400, line-height 1.5). Both via `next/font/google`.
 

@@ -367,8 +367,6 @@ export const DIPS: Dip[] = [
 
 // Wheel + grid use flavours that have stories (core + active LE).
 export const SPINNABLE_FLAVOURS = FLAVOURS.filter(f => f.status === "core" || f.status === "active");
-export const CORE_FLAVOURS = FLAVOURS.filter(f => f.status === "core");
-export const ACTIVE_LE = FLAVOURS.filter(f => f.status === "active");
 export const INCOMING_LE = FLAVOURS.filter(f => f.status === "incoming");
 export const PAST_DROPS = FLAVOURS.filter(f => f.status === "past");
 

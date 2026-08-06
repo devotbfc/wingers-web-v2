@@ -208,7 +208,6 @@ export default function AboutPage() {
             </h2>
             <div
               className="mt-6 space-y-4 font-body text-base md:text-lg leading-relaxed text-brand-white/80"
-              data-todo="copy"
             >
               <p>
                 All chicken served at Wingers is halal. Certificates are held at

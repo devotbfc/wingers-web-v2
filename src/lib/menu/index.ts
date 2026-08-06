@@ -31,15 +31,8 @@ export function toMenuLocationCode(locationSlug: string): MenuLocationCode {
   return locationSlug === "milton-keynes" ? "MK" : "NN";
 }
 
-/** Human section label, derived from MENU_SECTIONS when the item omits sectionName. */
-export function getSectionName(item: MenuItem): string {
-  if (item.sectionName) return item.sectionName;
-  const section = MENU_SECTIONS.find((s) => s.slug === item.sectionSlug);
-  return section?.name ?? item.sectionSlug;
-}
-
 /** Direct price for a location — null if the item isn't priced there. */
-export function getPriceFor(item: MenuItem, code: MenuLocationCode): number | null {
+function getPriceFor(item: MenuItem, code: MenuLocationCode): number | null {
   return code === "MK" ? item.priceMK : item.priceNN;
 }
 
