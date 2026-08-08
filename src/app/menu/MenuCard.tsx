@@ -41,6 +41,18 @@ const SECTION_PHOTO_SLOT: Record<string, string> = {
   kids: "P26",
 };
 
+const REAL_SECTION_PHOTO_SRC: Record<string, string> = {
+  P13: "/brand/photos/real/P13.jpg",
+  P15: "/brand/photos/real/P15.jpg",
+  P16: "/brand/photos/real/P16.jpg",
+  P17: "/brand/photos/real/P17.jpg",
+  P18: "/brand/photos/real/P18.jpg",
+  P21: "/brand/photos/real/P21.png",
+  P22: "/brand/photos/real/P22.jpg",
+  P24: "/brand/photos/real/P24.jpg",
+  P25: "/brand/photos/real/P25.jpg",
+};
+
 function Flame({ className }: { className?: string }) {
   return (
     <svg
@@ -123,6 +135,10 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
   const tileColor = tileColorFor(item.slug);
   const hasPhoto = Boolean(item.photo);
   const sectionPhotoSlot = hasPhoto ? undefined : SECTION_PHOTO_SLOT[item.sectionSlug];
+  const sectionOverlaySrc = sectionPhotoSlot
+    ? REAL_SECTION_PHOTO_SRC[sectionPhotoSlot] ??
+      `/brand/photos/placeholders/${sectionPhotoSlot}.png`
+    : undefined;
   const currentLE = item.limitedEdition && isCurrentLE(item) && variant !== "past";
   const isPast = variant === "past";
   const containsLabels = item.contains.map((a) => ALLERGEN_LABELS[a]);
@@ -161,9 +177,9 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
                 {item.name}
               </span>
             </div>
-            {sectionPhotoSlot && (
+            {sectionPhotoSlot && sectionOverlaySrc && (
               <Image
-                src={`/brand/photos/placeholders/${sectionPhotoSlot}.png`}
+                src={sectionOverlaySrc}
                 alt=""
                 fill
                 sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"

@@ -4,13 +4,12 @@ interface SauceEdgeAccentProps {
   className?: string;
 }
 
-// Placeholder sauce-cut motif — swap background-image for a real /brand/photos/sauces/*.jpg
-// close-up once available; keep clip-path + data-todo hook so it's greppable.
+// Sauce-cut motif: a diagonal sliver of the real sauce close-up over a
+// pink→red gradient wash. Clip-path exposes only the top-right slice.
 export function SauceEdgeAccent({ className }: SauceEdgeAccentProps) {
   return (
     <div
       aria-hidden="true"
-      data-todo="assets"
       className={`pointer-events-none hidden sm:block ${className ?? ""}`}
       style={{
         clipPath: "polygon(28% 0, 100% 0, 100% 100%, 0 100%)",
@@ -21,7 +20,7 @@ export function SauceEdgeAccent({ className }: SauceEdgeAccentProps) {
       }}
     >
       <Image
-        src="/brand/photos/placeholders/P08.png"
+        src="/brand/photos/real/P08.png"
         alt=""
         fill
         sizes="50vw"

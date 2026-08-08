@@ -15,19 +15,17 @@ export function SaucePanel() {
   return (
     <section
       aria-labelledby="sauce-heading"
-      data-todo="assets"
       className="relative h-[100svh] min-h-[640px] w-full overflow-hidden bg-brand-pink"
     >
-      {/* Placeholder composition — the red block stands in for the sauce photo
-          until public/brand/photos/sauces/ is populated. Hard-cropped rectangle,
-          no shadow, no rounding. */}
+      {/* Red block sits under the sauce photo as a hard-cropped fallback if the
+          image fails to load. Hard-cropped rectangle, no shadow, no rounding. */}
       <div
         aria-hidden="true"
         className="absolute inset-x-0 bottom-0 h-2/3 w-full bg-brand-red md:inset-y-0 md:left-auto md:right-0 md:h-full md:w-2/3"
       >
         <Image
-          src="/brand/photos/placeholders/P01.png"
-          alt=""
+          src="/brand/photos/real/P01.png"
+          alt="Glossy red sauce pouring across a wing close-up"
           fill
           sizes="(min-width: 768px) 66vw, 100vw"
           className="object-cover"
