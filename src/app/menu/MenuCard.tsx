@@ -41,6 +41,18 @@ const SECTION_PHOTO_SLOT: Record<string, string> = {
   kids: "P26",
 };
 
+const REAL_SECTION_PHOTO_SRC: Record<string, string> = {
+  P13: "/brand/photos/real/P13.jpg",
+  P15: "/brand/photos/real/P15.jpg",
+  P16: "/brand/photos/real/P16.jpg",
+  P17: "/brand/photos/real/P17.jpg",
+  P18: "/brand/photos/real/P18.jpg",
+  P21: "/brand/photos/real/P21.png",
+  P22: "/brand/photos/real/P22.jpg",
+  P24: "/brand/photos/real/P24.jpg",
+  P25: "/brand/photos/real/P25.jpg",
+};
+
 function Flame({ className }: { className?: string }) {
   return (
     <svg
@@ -123,6 +135,16 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
   const tileColor = tileColorFor(item.slug);
   const hasPhoto = Boolean(item.photo);
   const sectionPhotoSlot = hasPhoto ? undefined : SECTION_PHOTO_SLOT[item.sectionSlug];
+  const sectionRealPhotoSrc = sectionPhotoSlot
+    ? REAL_SECTION_PHOTO_SRC[sectionPhotoSlot]
+    : undefined;
+  const hasSectionPhoto = Boolean(sectionRealPhotoSrc);
+  const sectionPlaceholderSrc =
+    sectionPhotoSlot && !hasSectionPhoto
+      ? `/brand/photos/placeholders/${sectionPhotoSlot}.png`
+      : undefined;
+  const showRealImage = hasPhoto || hasSectionPhoto;
+  const tileImageSrc = hasPhoto ? item.photo! : sectionRealPhotoSrc;
   const currentLE = item.limitedEdition && isCurrentLE(item) && variant !== "past";
   const isPast = variant === "past";
   const containsLabels = item.contains.map((a) => ALLERGEN_LABELS[a]);
@@ -142,17 +164,18 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
       <div
         className={cn(
           "relative aspect-square w-full overflow-hidden",
-          !hasPhoto && tileColor
+          !showRealImage && tileColor
         )}
-        data-todo={hasPhoto ? undefined : "assets"}
+        data-todo={showRealImage ? undefined : "assets"}
       >
-        {hasPhoto ? (
+        {showRealImage ? (
           <Image
-            src={item.photo!}
+            src={tileImageSrc!}
             alt={item.name}
             fill
             sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
             className="object-cover"
+            data-photo-slot={hasSectionPhoto ? sectionPhotoSlot : undefined}
           />
         ) : (
           <>
@@ -161,9 +184,9 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
                 {item.name}
               </span>
             </div>
-            {sectionPhotoSlot && (
+            {sectionPlaceholderSrc && (
               <Image
-                src={`/brand/photos/placeholders/${sectionPhotoSlot}.png`}
+                src={sectionPlaceholderSrc}
                 alt=""
                 fill
                 sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"

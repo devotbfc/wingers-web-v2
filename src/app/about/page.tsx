@@ -33,6 +33,18 @@ interface Stage {
   photoSlot: string;
 }
 
+const REAL_STAGE_SRC: Record<string, string> = {
+  P04: "/brand/photos/real/P04.png",
+  P05: "/brand/photos/real/P05.png",
+  P06: "/brand/photos/real/P06.png",
+};
+
+const REAL_STAGE_ALT: Record<string, string> = {
+  P04: "Hands lowering raw chicken into a buttermilk brine bath",
+  P05: "Chicken hand-tossed in seasoned flour, craggy crust forming",
+  P06: "Chicken pieces dropping into hot oil, steam rising",
+};
+
 const STAGES: readonly Stage[] = [
   {
     n: "01",
@@ -176,14 +188,16 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <div
-                  data-todo="assets"
                   role="img"
-                  aria-label={`Photo placeholder — ${stage.label.toLowerCase()} stage`}
+                  aria-label={`${stage.label.toLowerCase()} stage`}
                   className={`relative mt-8 md:mt-12 w-full aspect-[4/3] md:aspect-[21/9] ${stage.tile}`}
                 >
                   <Image
-                    src={`/brand/photos/placeholders/${stage.photoSlot}.png`}
-                    alt=""
+                    src={
+                      REAL_STAGE_SRC[stage.photoSlot] ??
+                      `/brand/photos/placeholders/${stage.photoSlot}.png`
+                    }
+                    alt={REAL_STAGE_ALT[stage.photoSlot] ?? ""}
                     fill
                     sizes="100vw"
                     className="object-cover"
