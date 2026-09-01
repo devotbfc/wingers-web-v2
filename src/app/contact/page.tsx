@@ -6,17 +6,19 @@ import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
 import { OrderPanelProvider } from "@/components/sections/order-panel/order-panel-context";
 import { LOCATIONS } from "@/lib/locations";
-import { ContactForm } from "./ContactForm";
+
+const CONTACT_PHONE = "01908 755800";
+const CONTACT_EMAIL = "hi@wingers.co";
 
 export const metadata: Metadata = {
   title: "Contact Wingers",
   description:
-    "Get in touch with Wingers — halal buttermilk fried chicken in Milton Keynes and Northampton. Send us a message or find your nearest shop.",
+    "Get in touch with Wingers — halal buttermilk fried chicken in Milton Keynes and Northampton. Call, email, or find your nearest shop.",
   alternates: { canonical: "/contact" },
   openGraph: {
     title: "Contact Wingers",
     description:
-      "Get in touch — feedback, press, partnerships. Halal buttermilk fried chicken in Milton Keynes and Northampton.",
+      "Call, email, or drop in. Feedback, press, partnerships — halal buttermilk fried chicken in Milton Keynes and Northampton.",
     url: "/contact",
     type: "website",
     images: [{ url: "/og/contact.png", width: 1200, height: 630 }],
@@ -39,22 +41,51 @@ export default function ContactPage() {
               className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,10vw,7rem)]"
             />
             <p className="mt-6 max-w-2xl font-body text-lg md:text-xl leading-relaxed text-brand-black">
-              Feedback, press, partnerships, or just want to say hi — send us a
-              message and we&rsquo;ll get back to you. For orders, use the
-              Order button up top.
+              Feedback, press, or partnerships — give us a ring, drop us an
+              email, or come find us. For orders, use the Order button up top.
             </p>
           </div>
         </section>
 
         <section
-          aria-labelledby="contact-form-heading"
-          className="bg-brand-pink py-16 md:py-24"
+          aria-labelledby="reach-us-heading"
+          className="bg-brand-white py-16 md:py-24"
         >
-          <div className="mx-auto max-w-3xl px-4 md:px-8">
-            <h2 id="contact-form-heading" className="sr-only">
-              Contact form
+          <div className="mx-auto max-w-6xl px-4 md:px-8">
+            <h2
+              id="reach-us-heading"
+              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
+            >
+              How to reach us.
             </h2>
-            <ContactForm />
+            <dl className="mt-10 grid gap-10 md:grid-cols-2">
+              <div className="border-t-2 border-brand-black pt-6">
+                <dt className="font-body text-sm font-semibold uppercase tracking-widest text-brand-red">
+                  Phone
+                </dt>
+                <dd className="mt-3">
+                  <a
+                    href={`tel:${CONTACT_PHONE.replace(/\s+/g, "")}`}
+                    className="font-display text-2xl md:text-3xl font-bold text-brand-black underline underline-offset-4 hover:text-brand-red transition-colors"
+                  >
+                    {CONTACT_PHONE}
+                  </a>
+                </dd>
+              </div>
+              <div className="border-t-2 border-brand-black pt-6">
+                <dt className="font-body text-sm font-semibold uppercase tracking-widest text-brand-red">
+                  Email
+                </dt>
+                <dd className="mt-3">
+                  <a
+                    href={`mailto:${CONTACT_EMAIL}`}
+                    className="font-display text-2xl md:text-3xl font-bold text-brand-black underline underline-offset-4 hover:text-brand-red transition-colors break-all"
+                  >
+                    {CONTACT_EMAIL}
+                  </a>
+                </dd>
+              </div>
+            </dl>
           </div>
         </section>
 

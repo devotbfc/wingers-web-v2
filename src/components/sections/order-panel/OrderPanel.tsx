@@ -78,6 +78,8 @@ export function OrderPanel() {
                 </div>
                 <BrandButton
                   href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   variant={isPreferred ? "secondary" : "primary"}
                   size="lg"
                   className="w-full justify-center"
