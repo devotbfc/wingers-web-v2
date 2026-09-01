@@ -92,6 +92,15 @@ export function LocationCard({
           <span className="block">{location.address.postcode}</span>
         </address>
 
+        {location.phone && (
+          <a
+            href={`tel:${location.phone.replace(/\s+/g, "")}`}
+            className="relative z-10 -mt-2 inline-block w-fit font-body text-base text-brand-black underline underline-offset-4 hover:text-brand-red transition-colors"
+          >
+            {location.phone}
+          </a>
+        )}
+
         <div className="relative z-10 mt-auto grid grid-cols-2 gap-3 pt-2">
           <OrderTriggerButton
             preferredLocationSlug={location.slug}
