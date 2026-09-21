@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Inter } from "next/font/google";
+import { Suspense } from "react";
 import { Toaster } from "sonner";
+import { ConsentProvider } from "@/components/consent/ConsentProvider";
+import { ConsentBanner } from "@/components/consent/ConsentBanner";
+import { MetaPixel } from "@/components/analytics/MetaPixel";
+import { PixelPageView } from "@/components/analytics/PixelPageView";
 import "@/styles/globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -56,7 +61,16 @@ export default function RootLayout({
       className={`${bricolage.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        {children}
+        <ConsentProvider pixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID ?? ""}>
+          {children}
+          <ConsentBanner />
+          <MetaPixel />
+          {/* Suspense is required: useSearchParams inside PixelPageView would
+              otherwise force the whole root into client rendering / dynamic bailout. */}
+          <Suspense fallback={null}>
+            <PixelPageView />
+          </Suspense>
+        </ConsentProvider>
         <Toaster richColors position="bottom-center" />
       </body>
     </html>

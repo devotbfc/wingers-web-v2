@@ -7,6 +7,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 
 import { signupLoyalty } from "@/app/actions/loyalty";
+import { track } from "@/lib/analytics/meta-pixel";
 import { BrandButton } from "@/components/brand/BrandButton";
 import {
   Form,
@@ -49,6 +50,7 @@ export function LoyaltySignupForm({
       });
 
       if (result.ok) {
+        track("Lead");
         toast.success("You're in.", {
           description: "Watch your inbox for Wingers drops.",
         });
