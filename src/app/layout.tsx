@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, Inter } from "next/font/google";
 import { Suspense } from "react";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/next";
 import { ConsentProvider } from "@/components/consent/ConsentProvider";
 import { ConsentBanner } from "@/components/consent/ConsentBanner";
 import { MetaPixel } from "@/components/analytics/MetaPixel";
@@ -71,6 +72,7 @@ export default function RootLayout({
             <PixelPageView />
           </Suspense>
         </ConsentProvider>
+        <Analytics />
         <Toaster richColors position="bottom-center" />
       </body>
     </html>

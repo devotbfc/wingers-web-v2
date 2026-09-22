@@ -20,6 +20,9 @@ next-env.d.ts
 # Git worktrees (local)
 .worktrees/
 
+# Local backups (originals kept during re-encode reviews)
+.backups/
+
 # OS
 .DS_Store
 Thumbs.db

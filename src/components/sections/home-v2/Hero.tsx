@@ -3,9 +3,9 @@ import { BrandButton } from "@/components/brand/BrandButton";
 import { VideoHero } from "@/components/media/VideoHero";
 import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTriggerButton";
 
-const HERO_VIDEO_SRC = "/brand/videos/hero-loop.mp4";
-const HERO_POSTER_SRC =
-  "/brand/photos/hero/Gemini_Generated_Image_cts8w2cts8w2cts8.png";
+const HERO_VIDEO_MP4 = "/brand/videos/hero-loop.mp4";
+const HERO_VIDEO_WEBM = "/brand/videos/hero-loop.webm";
+const HERO_POSTER_SRC = "/brand/photos/hero/hero-poster.webp";
 
 const HEADLINE_LINES = ["DIP IT.", "BITE IT.", "LOVE IT."] as const;
 
@@ -22,7 +22,8 @@ export function Hero() {
       className="section-dark relative h-[100svh] min-h-[640px] w-full overflow-hidden"
     >
       <VideoHero
-        src={HERO_VIDEO_SRC}
+        mp4Src={HERO_VIDEO_MP4}
+        webmSrc={HERO_VIDEO_WEBM}
         poster={HERO_POSTER_SRC}
         className="absolute inset-0 h-full w-full"
       />
