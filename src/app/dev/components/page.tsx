@@ -11,7 +11,9 @@ import { ScrollReveal } from "@/components/media/ScrollReveal";
 import { HoverImage } from "@/components/media/HoverImage";
 import type React from "react";
 
-const VIDEO = "/brand/videos/hero-loop.mp4";
+const VIDEO_MP4 = "/brand/videos/hero-loop.mp4";
+const VIDEO_WEBM = "/brand/videos/hero-loop.webm";
+const VIDEO = VIDEO_MP4;
 const POSTER = "/brand/logo/wingers-lockup-pink.svg";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -135,7 +137,7 @@ export default function ComponentsDevPage() {
       </Section>
 
       <Section title="VideoHero — autoplay loop with overlay (h-96)">
-        <VideoHero src={VIDEO} poster={POSTER} className="h-96 rounded overflow-hidden">
+        <VideoHero mp4Src={VIDEO_MP4} webmSrc={VIDEO_WEBM} poster={POSTER} className="h-96 rounded overflow-hidden">
           <div className="flex flex-col items-center justify-center h-96 gap-4">
             <DoubledHeading
               text="DIP IT. BITE IT. LOVE IT."

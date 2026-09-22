@@ -41,7 +41,6 @@ export function BrandLogo({
       width={width ?? dims.width}
       height={height ?? dims.height}
       className={cn("object-contain", className)}
-      unoptimized
     />
   );
 }
