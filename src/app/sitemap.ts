@@ -8,18 +8,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    { path: "/", priority: 1.0 },
-    { path: "/menu", priority: 0.9 },
-    { path: "/locations", priority: 0.9 },
-    { path: "/flavour-lab", priority: 0.8 },
-    { path: "/loyalty", priority: 0.7 },
-    { path: "/about", priority: 0.6 },
-    { path: "/allergies", priority: 0.6 },
-    { path: "/contact", priority: 0.5 },
-  ].map(({ path, priority }) => ({
+    { path: "/", priority: 1.0, changeFrequency: "monthly" as const },
+    { path: "/menu", priority: 0.9, changeFrequency: "monthly" as const },
+    { path: "/locations", priority: 0.9, changeFrequency: "monthly" as const },
+    { path: "/flavour-lab", priority: 0.8, changeFrequency: "monthly" as const },
+    { path: "/loyalty", priority: 0.7, changeFrequency: "monthly" as const },
+    { path: "/about", priority: 0.6, changeFrequency: "monthly" as const },
+    { path: "/allergies", priority: 0.6, changeFrequency: "monthly" as const },
+    { path: "/contact", priority: 0.5, changeFrequency: "monthly" as const },
+    { path: "/privacy", priority: 0.3, changeFrequency: "yearly" as const },
+  ].map(({ path, priority, changeFrequency }) => ({
     url: `${SITE_URL}${path}`,
     lastModified: now,
-    changeFrequency: "monthly" as const,
+    changeFrequency,
     priority,
   }));
 

@@ -378,5 +378,5 @@ No `<noscript>` fallback img. No `@vercel/analytics` install in this PR (Rule 4 
 
 ### Follow-ups
 1. ~~Install `@vercel/analytics` and mount it in the root layout.~~ **Done 2026-09-22.** `<Analytics />` mounts outside `<ConsentProvider>` in `src/app/layout.tsx`. Vercel Web Analytics is cookieless (session hash only, no persistent tracking cookies) — it sits outside the PECR/GDPR consent gate.
-2. Add a footer "Cookie settings" link that reopens the consent banner, so users can change their mind. Also required in the privacy copy.
+2. ~~Add a footer "Cookie settings" link that reopens the consent banner, so users can change their mind. Also required in the privacy copy.~~ **Done 2026-09-23.** `src/components/consent/CookieSettingsLink.tsx` clears `wingers_consent` from `localStorage` and reloads; the banner reappears because `ConsentProvider`'s `useSyncExternalStore` snapshot falls back to `"unknown"` when the key is absent. Privacy policy documents the mechanism under "Advertising measurement (Meta Pixel)".
 3. Fire the Purchase event server-side from PushPull Hub via the Meta Conversions API, deduped against the browser pixel on `event_id`. This ADR sets up the browser half of that pair.
