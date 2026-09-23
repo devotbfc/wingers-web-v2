@@ -1,5 +1,17 @@
-import { LoyaltySignupForm } from "@/components/forms/LoyaltySignupForm";
+import dynamic from "next/dynamic";
 import { DoubledHeading } from "@/components/typography/DoubledHeading";
+
+const LoyaltySignupForm = dynamic(
+  () =>
+    import("@/components/forms/LoyaltySignupForm").then(
+      (m) => m.LoyaltySignupForm,
+    ),
+  {
+    loading: () => (
+      <div aria-hidden="true" className="mt-8 h-64 md:h-32" />
+    ),
+  },
+);
 
 interface LoyaltySignupSectionProps {
   source?: "homepage" | "loyalty_page";
