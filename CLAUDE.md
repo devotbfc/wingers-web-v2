@@ -103,7 +103,7 @@ The site must be answerable by ChatGPT / Gemini / Perplexity, not just Google:
 - Semantic HTML, one `<h1>` per page, real headings — not styled divs.
 - JSON-LD on every relevant route: `Restaurant` + `LocalBusiness` per location (with `openingHoursSpecification`, `geo`, `hasMenu`, `servesCuisine`, `paymentAccepted`), `Menu`/`MenuItem` on `/menu`, `FAQPage` where FAQs exist, `Organization` sitewide.
 - Plain-language answer paragraphs near the top of each page ("Wingers is a halal buttermilk fried chicken shop in Milton Keynes and Northampton…") — crawlable text, not text baked into images.
-- `sitemap.ts` + `robots.ts` maintained. Privacy/Terms `noindex`.
+- `sitemap.ts` + `robots.ts` maintained. Privacy is indexable (real policy published); Terms remains `noindex` until real ToS copy lands.
 
 ---
 

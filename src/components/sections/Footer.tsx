@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/brand/BrandLogo";
+import { CookieSettingsLink } from "@/components/consent/CookieSettingsLink";
 import { LOCATIONS } from "@/lib/locations";
 import { getProviderForLocation } from "@/lib/order/providers";
 
@@ -110,7 +111,7 @@ export function Footer() {
       <div>
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-6 md:flex-row md:items-center md:justify-between md:px-8">
           <p className="font-body text-xs text-brand-white/60">
-            © {year} The Big Flavour Ltd. All rights reserved.
+            © {year} The Big Flavour Co Limited. All rights reserved.
           </p>
           <ul className="flex gap-6">
             <li>
@@ -128,6 +129,9 @@ export function Footer() {
               >
                 Terms
               </Link>
+            </li>
+            <li>
+              <CookieSettingsLink />
             </li>
           </ul>
         </div>
