@@ -6,11 +6,13 @@ import { useOrderPanel } from "@/components/sections/order-panel";
 import {
   ALLERGEN_LABELS,
   getPriceLabel,
+  getPriceValue,
   isCurrentLE,
   isItemAvailableAt,
   toMenuLocationCode,
   type MenuItem,
 } from "@/lib/menu";
+import { track } from "@/lib/analytics/meta-pixel";
 import { cn } from "@/lib/utils";
 
 const TILE_COLORS = [
@@ -131,6 +133,7 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
   const { openPanel } = useOrderPanel();
   const code = toMenuLocationCode(locationSlug);
   const priceLabel = getPriceLabel(item, code);
+  const priceValue = getPriceValue(item, code);
   const available = isItemAvailableAt(item, code) && variant !== "past";
   const tileColor = tileColorFor(item.slug);
   const hasPhoto = Boolean(item.photo);
@@ -267,7 +270,19 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
             variant="primary"
             size="md"
             disabled={!available}
-            onClick={() => openPanel(locationSlug)}
+            onClick={() => {
+              const params: Record<string, unknown> = {
+                content_ids: [item.slug],
+                content_name: item.name,
+                content_type: "product",
+              };
+              if (priceValue != null) {
+                params.value = priceValue;
+                params.currency = "GBP";
+              }
+              track("ViewContent", params);
+              openPanel(locationSlug);
+            }}
             className="w-full justify-center"
           >
             {available ? "Order" : "Unavailable"}

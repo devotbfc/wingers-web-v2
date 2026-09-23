@@ -253,7 +253,7 @@ Launch new site on Vercel preview URL (e.g. `wingers-web-v2.vercel.app`). Set `N
 ## ADR-013 — No analytics or error tracking at launch
 
 **Date**: 2026-06-07
-**Status**: Accepted (revisit Phase 2)
+**Status**: Superseded by ADR-017 (2026-09-20)
 
 ### Context
 PostHog and Sentry are valuable but cost setup time we don't have in a 1–3 day window. Previous build set up PostHog env vars but never defined events — the data would have been useless anyway.
@@ -338,3 +338,45 @@ The safer default is to keep no service-role key in the deployed app at all. Sup
 - If a future feature needs client-side reads (a "you're on the list" check, a member-only page), we add a scoped SELECT policy for that specific case — not a blanket service-role fallback.
 - Unique-email violations are swallowed server-side and returned as success, so the response cannot be used to enumerate the list.
 - ADR-014 is superseded but its intent (writes are gate-kept) still stands — the gate is now the RLS policy rather than the service-role key.
+
+---
+
+## ADR-017 — Meta Pixel added (browser side, consent-gated)
+
+**Date**: 2026-09-20
+**Status**: Accepted (supersedes ADR-013)
+
+### Context
+Meta ads are currently **paused** and will stay paused until Purchase is measurable end-to-end via the Conversions API from PushPull Hub. To unpause, ad measurement needs the browser half in place so PPH's server-side twin has something to dedupe against. Purchase itself happens off-site (Deliverect Direct for MK, Toast for Northampton) — the browser pixel can only cover the top of the funnel and the click hand-off.
+
+ADR-013 previously said "Vercel Web Analytics is enabled as a minimal baseline." That was inaccurate — `@vercel/analytics` was never installed. This ADR resets the picture honestly.
+
+### Decision
+Meta Pixel loaded browser-side via `next/script` `strategy="afterInteractive"`, gated on:
+1. `NEXT_PUBLIC_META_PIXEL_ID` being set (missing env = silent no-op, no consent banner shown).
+2. Explicit user consent (UK PECR) via a small localStorage-backed banner (`wingers_consent` = `"accepted" | "rejected"`).
+
+Events fired browser-side, each with a `crypto.randomUUID()` `event_id` passed as fbq's `eventID` option so PushPull Hub can send the same ID via CAPI and dedupe:
+- `PageView` on every App Router route change (via `usePathname` + `useSearchParams` inside a `Suspense` boundary).
+- `ViewContent` on the per-card Order button click on `/menu` (opens the OrderPanel; `content_ids=[item.slug]`, `content_name`, `value`, `currency=GBP`).
+- `InitiateCheckout` on the outbound Deliverect/Toast link click inside `OrderPanel` (`content_category` = `"mk"` or `"nth"`, `destination` = final URL).
+- `Lead` on loyalty signup success.
+
+`fbclid` handling (consent-gated):
+- `?fbclid=<val>` on the current URL → written to `_fbc` cookie as `fb.1.<ts>.<val>` (90-day, SameSite=Lax) only if consent is accepted.
+- Outbound Order URL gets `fbclid` appended (from URL param or `_fbc` cookie) only if consent is accepted. If consent is rejected or unknown, the outbound URL is clean — the click identifier is treated as non-essential tracking metadata, same as the pixel itself.
+
+No `<noscript>` fallback img. No `@vercel/analytics` install in this PR (Rule 4 — no unsolicited deps).
+
+### Consequences
+- The site now has real ad measurement for PageView / ViewContent / Lead / InitiateCheckout, ready for PPH to fire the Purchase twin via CAPI.
+- One non-essential cookie (`_fbc`) is written, only after consent. Consent choice persists in localStorage across visits.
+- PostHog and Sentry remain deferred (ADR-013's other deferrals still hold — this ADR only reverses the "no analytics at launch" part).
+- Vercel Web Analytics is still **not** wired, correcting ADR-013's inaccurate claim. Listed as a follow-up below and must land before DNS cutover.
+- All fbq calls are safe no-ops when the pixel isn't loaded (env missing or consent not granted), so touching `track()` from any component is always safe.
+- Root cause of the initial banner-not-showing failure was pasted HTML inside `.env.local`, not code — `.env` parsing is strict and stray content silently blanks keys.
+
+### Follow-ups
+1. Install `@vercel/analytics` and mount it in the root layout. The site currently has no analytics of any kind — ADR-013's baseline claim was wrong. Must land before DNS cutover to `wingers.co`.
+2. Add a footer "Cookie settings" link that reopens the consent banner, so users can change their mind. Also required in the privacy copy.
+3. Fire the Purchase event server-side from PushPull Hub via the Meta Conversions API, deduped against the browser pixel on `event_id`. This ADR sets up the browser half of that pair.

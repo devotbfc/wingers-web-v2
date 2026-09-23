@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import {
   Sheet,
   SheetContent,
@@ -8,13 +9,32 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { BrandButton } from "@/components/brand/BrandButton";
+import { useConsent } from "@/components/consent/ConsentProvider";
 import { LOCATIONS } from "@/lib/locations";
 import { getProviderForLocation } from "@/lib/order/providers";
+import { track } from "@/lib/analytics/meta-pixel";
+import {
+  appendFbclidToUrl,
+  readFbcCookie,
+  readFbclidFromUrl,
+} from "@/lib/analytics/fbclid";
 import { cn } from "@/lib/utils";
 import { useOrderPanel } from "./order-panel-context";
 
 export function OrderPanel() {
   const { open, setOpen, preferredLocationSlug } = useOrderPanel();
+  const { status: consentStatus } = useConsent();
+
+  // fbclid gate on consent (PECR — click identifier is non-essential tracking).
+  // useMemo keyed on consentStatus: recomputes on the "unknown" → "accepted"
+  // flip (which is the point at which the read becomes valid), then caches for
+  // the lifetime of this OrderPanel instance. OrderPanel is per-page, so a nav
+  // to a new page remounts and re-reads. The read is SSR-safe via guards inside
+  // readFbclidFromUrl / readFbcCookie.
+  const fbclid = useMemo<string | null>(() => {
+    if (consentStatus !== "accepted") return null;
+    return readFbclidFromUrl() ?? readFbcCookie();
+  }, [consentStatus]);
 
   const orderedLocations = preferredLocationSlug
     ? [...LOCATIONS].sort((a, b) => {
@@ -41,7 +61,9 @@ export function OrderPanel() {
         <ul className="grid gap-4 px-6 pb-8 md:grid-cols-2">
           {orderedLocations.map((loc) => {
             const provider = getProviderForLocation(loc);
-            const href = provider.getOrderUrl(loc);
+            const rawHref = provider.getOrderUrl(loc);
+            const href = appendFbclidToUrl(rawHref, fbclid);
+            const site = loc.slug === "milton-keynes" ? "mk" : "nth";
             const isPreferred = loc.slug === preferredLocationSlug;
             return (
               <li
@@ -83,6 +105,12 @@ export function OrderPanel() {
                   variant={isPreferred ? "secondary" : "primary"}
                   size="lg"
                   className="w-full justify-center"
+                  onClick={() =>
+                    track("InitiateCheckout", {
+                      content_category: site,
+                      destination: href,
+                    })
+                  }
                 >
                   Order via {provider.name}
                 </BrandButton>

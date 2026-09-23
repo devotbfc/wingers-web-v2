@@ -166,7 +166,7 @@ When prompted:
 Verify:
 ```bash
 npm run dev
-# Open http://localhost:3000 — Next.js welcome screen should render
+# Open http://localhost:3006 — Next.js welcome screen should render
 # Ctrl+C to stop
 ```
 

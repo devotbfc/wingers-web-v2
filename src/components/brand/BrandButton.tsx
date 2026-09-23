@@ -57,7 +57,7 @@ export function BrandButton({
   if (href) {
     return (
       <Button asChild className={classes} disabled={disabled}>
-        <a href={href} target={target} rel={rel}>
+        <a href={href} target={target} rel={rel} onClick={onClick}>
           {children}
         </a>
       </Button>

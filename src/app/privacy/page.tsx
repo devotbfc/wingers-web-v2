@@ -45,6 +45,10 @@ export default function PrivacyPage() {
               </a>
               .
             </p>
+            {/* TODO(benson): Meta Pixel + cookies section — copy required.
+                Cover: what Meta Pixel does, what data leaves the browser,
+                _fbc cookie purpose + 90-day retention, how to opt out
+                (reject at banner or clear cookies), link to Meta's data policy. */}
           </div>
         </section>
       </main>

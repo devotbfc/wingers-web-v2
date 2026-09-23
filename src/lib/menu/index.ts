@@ -53,3 +53,11 @@ export function getPriceLabel(item: MenuItem, code: MenuLocationCode): string | 
   if (item.fromPrice != null) return `from £${item.fromPrice.toFixed(2)}`;
   return null;
 }
+
+/** Numeric price for analytics (Meta Pixel ViewContent value). Same resolution order as getPriceLabel. */
+export function getPriceValue(item: MenuItem, code: MenuLocationCode): number | null {
+  const direct = getPriceFor(item, code);
+  if (direct != null) return direct;
+  if (item.fromPrice != null) return item.fromPrice;
+  return null;
+}
