@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { Footer } from "@/components/sections/Footer";
 import { LoyaltySignupSection } from "@/components/sections/LoyaltySignupSection";
 import { NavBar } from "@/components/sections/NavBar";
-import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
 import { OrderPanelProvider } from "@/components/sections/order-panel/order-panel-context";
+
+const OrderPanel = dynamic(() =>
+  import("@/components/sections/order-panel/OrderPanel").then(
+    (m) => m.OrderPanel,
+  ),
+);
 import { BackToTopButton } from "@/components/sections/home-v2/BackToTopButton";
 import { FlavourLabTeaser } from "@/components/sections/home-v2/FlavourLabTeaser";
 import { Hero } from "@/components/sections/home-v2/Hero";
