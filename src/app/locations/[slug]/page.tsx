@@ -1,9 +1,4 @@
-// TODO(location-photography): swap the colored-tile hero fallback for a
-// full-bleed <Image /> once public/brand/photos/locations/{slug}/ contains
-// real exterior/interior shots.
-
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BrandButton } from "@/components/brand/BrandButton";
@@ -28,11 +23,6 @@ import {
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://wingers-web-v2.vercel.app";
-
-const HERO_PHOTO_SLOT_BY_SLUG: Record<string, string> = {
-  "milton-keynes": "P11",
-  northampton: "P12",
-};
 
 interface RouteParams {
   slug: string;
@@ -128,18 +118,18 @@ export default async function LocationDetailPage({ params }: RouteProps) {
   const directionsUrl = getDirectionsUrl(location);
   const shortName = location.name.replace(/^Wingers\s+/i, "");
   const jsonLd = buildLocationJsonLd(location);
-  const heroPhotoSlot = HERO_PHOTO_SLOT_BY_SLUG[location.slug];
+  const heroBg =
+    location.slug === "milton-keynes" ? "bg-brand-red" : "bg-brand-pink";
 
   return (
     <OrderPanelProvider>
       <NavBar />
       <main>
         <section
-          data-todo="assets"
           className="section-dark relative isolate flex min-h-[78dvh] flex-col justify-end overflow-hidden"
         >
           <div
-            className="absolute inset-0 -z-20 bg-brand-pink"
+            className={`absolute inset-0 -z-20 ${heroBg}`}
             aria-hidden="true"
           >
             <div className="absolute inset-0 flex items-center justify-center opacity-15">
@@ -152,17 +142,6 @@ export default async function LocationDetailPage({ params }: RouteProps) {
               />
             </div>
           </div>
-          {heroPhotoSlot && (
-            <Image
-              src={`/brand/photos/placeholders/${heroPhotoSlot}.png`}
-              alt=""
-              fill
-              sizes="100vw"
-              priority
-              className="-z-[15] object-cover"
-              data-photo-slot={heroPhotoSlot}
-            />
-          )}
           <div
             aria-hidden="true"
             className="absolute inset-0 -z-10 bg-brand-black/55"

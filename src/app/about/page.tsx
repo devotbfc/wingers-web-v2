@@ -237,20 +237,9 @@ export default function AboutPage() {
             Get stuck in
           </h2>
           <div
-            data-todo="assets"
-            role="img"
-            aria-label="Photo placeholder — team behind the counter"
+            aria-hidden="true"
             className="relative min-h-[70svh] w-full bg-brand-black"
-          >
-            <Image
-              src="/brand/photos/placeholders/P07.png"
-              alt=""
-              fill
-              sizes="100vw"
-              className="object-cover"
-              data-photo-slot="P07"
-            />
-          </div>
+          />
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-8 px-4 text-center">
             <DoubledHeading
               as="p"

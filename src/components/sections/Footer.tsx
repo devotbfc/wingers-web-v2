@@ -98,14 +98,9 @@ export function Footer() {
       </div>
 
       <div className="px-4 pb-10 md:px-8" aria-hidden="true">
-        <BrandLogo
-          type="lockup"
-          variant="white"
-          width={1440}
-          height={200}
-          className="w-full h-auto opacity-90"
-          alt=""
-        />
+        <p className="font-display font-extrabold text-brand-white uppercase tracking-tight leading-[0.85] text-[clamp(6rem,20vw,20rem)] text-center">
+          WINGERS
+        </p>
       </div>
 
       <div>

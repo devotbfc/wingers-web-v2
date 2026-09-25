@@ -1,7 +1,3 @@
-// TODO(location-photography): swap the colored-tile fallback for <Image />
-// once public/brand/photos/locations/{slug}/ contains real shopfront shots.
-
-import Image from "next/image";
 import Link from "next/link";
 import { BrandButton } from "@/components/brand/BrandButton";
 import { BrandLogo } from "@/components/brand/BrandLogo";
@@ -10,11 +6,6 @@ import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTrigg
 import { getDirectionsUrl, type Location } from "@/lib/locations";
 import { cn } from "@/lib/utils";
 import { LocationOpenBadge } from "./LocationOpenBadge";
-
-const CARD_PHOTO_SLOT_BY_SLUG: Record<string, string> = {
-  "milton-keynes": "P09",
-  northampton: "P10",
-};
 
 interface LocationCardProps {
   location: Location;
@@ -30,7 +21,8 @@ export function LocationCard({
   const href = `/locations/${location.slug}`;
   const directionsUrl = getDirectionsUrl(location);
   const shortName = location.name.replace(/^Wingers\s+/i, "");
-  const photoSlot = CARD_PHOTO_SLOT_BY_SLUG[location.slug];
+  const mediaBg =
+    location.slug === "milton-keynes" ? "bg-brand-red" : "bg-brand-pink";
 
   return (
     <article
@@ -46,9 +38,9 @@ export function LocationCard({
       />
 
       <div
-        data-todo="assets"
         className={cn(
-          "relative overflow-hidden bg-brand-pink",
+          "relative overflow-hidden",
+          mediaBg,
           mediaAspect === "4/3" ? "aspect-[4/3]" : "aspect-[3/4]",
         )}
       >
@@ -61,16 +53,6 @@ export function LocationCard({
             className="h-32 w-32 md:h-40 md:w-40"
           />
         </div>
-        {photoSlot && (
-          <Image
-            src={`/brand/photos/placeholders/${photoSlot}.png`}
-            alt=""
-            fill
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className="object-cover"
-            data-photo-slot={photoSlot}
-          />
-        )}
         <div className="absolute left-4 top-4 z-10">
           <LocationOpenBadge location={location} size="lg" />
         </div>
