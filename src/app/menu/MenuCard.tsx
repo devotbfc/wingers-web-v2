@@ -142,10 +142,6 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
     ? REAL_SECTION_PHOTO_SRC[sectionPhotoSlot]
     : undefined;
   const hasSectionPhoto = Boolean(sectionRealPhotoSrc);
-  const sectionPlaceholderSrc =
-    sectionPhotoSlot && !hasSectionPhoto
-      ? `/brand/photos/placeholders/${sectionPhotoSlot}.png`
-      : undefined;
   const showRealImage = hasPhoto || hasSectionPhoto;
   const tileImageSrc = hasPhoto ? item.photo! : sectionRealPhotoSrc;
   const currentLE = item.limitedEdition && isCurrentLE(item) && variant !== "past";
@@ -167,9 +163,9 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
       <div
         className={cn(
           "relative aspect-square w-full overflow-hidden",
-          !showRealImage && tileColor
+          !showRealImage && tileColor,
+          hasPhoto && "bg-brand-black"
         )}
-        data-todo={showRealImage ? undefined : "assets"}
       >
         {showRealImage ? (
           <Image
@@ -181,23 +177,11 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
             data-photo-slot={hasSectionPhoto ? sectionPhotoSlot : undefined}
           />
         ) : (
-          <>
-            <div className="flex h-full w-full items-center justify-center p-6">
-              <span className="font-display text-[clamp(2rem,10vw,3rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-center text-balance">
-                {item.name}
-              </span>
-            </div>
-            {sectionPlaceholderSrc && (
-              <Image
-                src={sectionPlaceholderSrc}
-                alt=""
-                fill
-                sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
-                className="object-cover opacity-35 mix-blend-multiply"
-                data-photo-slot={sectionPhotoSlot}
-              />
-            )}
-          </>
+          <div className="flex h-full w-full items-center justify-center p-6">
+            <span className="font-display text-[clamp(2rem,10vw,3rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-center text-balance">
+              {item.name}
+            </span>
+          </div>
         )}
         {!available && !isPast && (
           <div className="absolute inset-0 flex items-center justify-center bg-brand-white/85">
@@ -209,17 +193,17 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
       </div>
 
       <div className="flex flex-1 flex-col gap-3 p-4 md:p-5">
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between md:gap-3">
           <h3 className="font-display text-2xl font-extrabold uppercase leading-[0.95] tracking-tight text-balance text-brand-black">
             {item.name}
           </h3>
           {priceLabel && (
-            <div className="flex shrink-0 flex-col items-end gap-1">
+            <div className="flex shrink-0 flex-col items-start gap-1 md:items-end">
               <span className="font-display text-xl font-extrabold leading-[0.95] tracking-tight tabular-nums text-brand-black">
                 {priceLabel}
               </span>
               {sizeList.length > 0 && (
-                <span className="font-body text-[11px] uppercase tracking-[0.14em] whitespace-nowrap text-brand-black/50">
+                <span className="font-body text-[11px] uppercase tracking-[0.14em] whitespace-normal md:whitespace-nowrap text-brand-black/50">
                   {sizeList.join(" · ")}
                 </span>
               )}

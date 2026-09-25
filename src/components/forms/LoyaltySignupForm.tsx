@@ -96,7 +96,7 @@ export function LoyaltySignupForm({
                 <Input
                   type="email"
                   autoComplete="email"
-                  placeholder="you@wingers.club"
+                  placeholder="you@wingers.co"
                   className={inputClasses}
                   {...field}
                 />

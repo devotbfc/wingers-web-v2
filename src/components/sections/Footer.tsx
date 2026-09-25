@@ -8,7 +8,7 @@ const EXPLORE_LINKS = [
   { label: "Menu", href: "/menu" },
   { label: "Locations", href: "/locations" },
   { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact", href: "/locations" },
   { label: "Allergies", href: "/allergies" },
   { label: "FAQ", href: "/faq" },
 ];
@@ -23,7 +23,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer role="contentinfo" className="section-dark">
+    <footer id="site-footer" role="contentinfo" className="section-dark">
       <div className="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-20">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-4">
           <div className="md:col-span-1">
@@ -98,14 +98,9 @@ export function Footer() {
       </div>
 
       <div className="px-4 pb-10 md:px-8" aria-hidden="true">
-        <BrandLogo
-          type="lockup"
-          variant="white"
-          width={1440}
-          height={200}
-          className="w-full h-auto opacity-90"
-          alt=""
-        />
+        <p className="font-display font-extrabold text-brand-white uppercase tracking-tight leading-[0.85] text-[clamp(6rem,20vw,20rem)] text-center">
+          WINGERS
+        </p>
       </div>
 
       <div>
