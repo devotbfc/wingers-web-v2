@@ -209,17 +209,17 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
       </div>
 
       <div className="flex flex-1 flex-col gap-3 p-4 md:p-5">
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between md:gap-3">
           <h3 className="font-display text-2xl font-extrabold uppercase leading-[0.95] tracking-tight text-balance text-brand-black">
             {item.name}
           </h3>
           {priceLabel && (
-            <div className="flex shrink-0 flex-col items-end gap-1">
+            <div className="flex shrink-0 flex-col items-start gap-1 md:items-end">
               <span className="font-display text-xl font-extrabold leading-[0.95] tracking-tight tabular-nums text-brand-black">
                 {priceLabel}
               </span>
               {sizeList.length > 0 && (
-                <span className="font-body text-[11px] uppercase tracking-[0.14em] whitespace-nowrap text-brand-black/50">
+                <span className="font-body text-[11px] uppercase tracking-[0.14em] whitespace-normal md:whitespace-nowrap text-brand-black/50">
                   {sizeList.join(" · ")}
                 </span>
               )}
