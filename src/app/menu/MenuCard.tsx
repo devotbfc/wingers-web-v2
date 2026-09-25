@@ -167,7 +167,8 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
       <div
         className={cn(
           "relative aspect-square w-full overflow-hidden",
-          !showRealImage && tileColor
+          !showRealImage && tileColor,
+          hasPhoto && "bg-brand-black"
         )}
         data-todo={showRealImage ? undefined : "assets"}
       >
