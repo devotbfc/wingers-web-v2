@@ -23,7 +23,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer role="contentinfo" className="section-dark">
+    <footer id="site-footer" role="contentinfo" className="section-dark">
       <div className="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-20">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-4">
           <div className="md:col-span-1">
