@@ -97,7 +97,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="px-4 pb-10 md:px-8" aria-hidden="true">
+      <div className="w-full overflow-hidden px-4 pb-10 md:px-8" aria-hidden="true">
         <p className="font-display font-extrabold text-brand-white uppercase tracking-tight leading-[0.85] text-[clamp(6rem,20vw,20rem)] text-center">
           WINGERS
         </p>
