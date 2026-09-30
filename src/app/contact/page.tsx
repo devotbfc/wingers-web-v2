@@ -7,7 +7,8 @@ import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
 import { OrderPanelProvider } from "@/components/sections/order-panel/order-panel-context";
 import { LOCATIONS } from "@/lib/locations";
 
-const CONTACT_PHONE = "01908 755800";
+const CONTACT_PHONE =
+  LOCATIONS.find((loc) => loc.slug === "milton-keynes")?.phone ?? "";
 const CONTACT_EMAIL = "hi@wingers.co";
 
 export const metadata: Metadata = {
