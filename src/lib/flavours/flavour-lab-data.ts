@@ -334,7 +334,7 @@ export const DIPS: Dip[] = [
   {
     "slug": "blue-cheese",
     "name": "Blue Cheese",
-    "shortDescription": "TODO (Benson): one-to-two-sentence blurb for Blue Cheese — fill in Wingers-FLAVOUR-STORIES.xlsx dips tab.",
+    "shortDescription": null,
     "howMade": null,
     "pairsWith": null,
     "notes": null
@@ -342,7 +342,7 @@ export const DIPS: Dip[] = [
   {
     "slug": "ranch",
     "name": "Ranch",
-    "shortDescription": "TODO (Benson): one-to-two-sentence blurb for Ranch — fill in Wingers-FLAVOUR-STORIES.xlsx dips tab.",
+    "shortDescription": null,
     "howMade": null,
     "pairsWith": null,
     "notes": null
@@ -350,7 +350,7 @@ export const DIPS: Dip[] = [
   {
     "slug": "california-sauce-mayo",
     "name": "California Sauce / Mayo",
-    "shortDescription": "TODO (Benson): one-to-two-sentence blurb for California Sauce / Mayo — fill in Wingers-FLAVOUR-STORIES.xlsx dips tab.",
+    "shortDescription": null,
     "howMade": null,
     "pairsWith": null,
     "notes": null
@@ -358,7 +358,7 @@ export const DIPS: Dip[] = [
   {
     "slug": "honey-mustard",
     "name": "Honey Mustard",
-    "shortDescription": "TODO (Benson): one-to-two-sentence blurb for Honey Mustard dip — fill in Wingers-FLAVOUR-STORIES.xlsx dips tab.",
+    "shortDescription": null,
     "howMade": null,
     "pairsWith": null,
     "notes": null
