@@ -126,7 +126,7 @@ export default async function LocationDetailPage({ params }: RouteProps) {
       <NavBar />
       <main>
         <section
-          className="section-dark relative isolate flex min-h-[78dvh] flex-col justify-end overflow-hidden"
+          className="relative isolate flex min-h-[78dvh] flex-col justify-end overflow-hidden"
         >
           <div
             className={`absolute inset-0 -z-20 ${heroBg}`}
@@ -134,7 +134,7 @@ export default async function LocationDetailPage({ params }: RouteProps) {
           >
             <div className="absolute inset-0 flex items-center justify-center opacity-15">
               <BrandLogo
-                variant="white"
+                variant="black"
                 type="mark"
                 width={640}
                 height={640}
@@ -144,28 +144,23 @@ export default async function LocationDetailPage({ params }: RouteProps) {
           </div>
           <div
             aria-hidden="true"
-            className="absolute inset-0 -z-10 bg-brand-black/55"
+            className="absolute inset-0 -z-10 bg-brand-white/85"
           />
 
           <div className="mx-auto w-full max-w-6xl px-4 pb-10 pt-24 md:pb-16 md:pt-32">
             <Link
               href="/locations"
-              className="inline-flex min-h-11 items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-white/85 transition-colors hover:text-brand-pink"
+              className="inline-flex min-h-11 items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-black/85 transition-colors hover:text-brand-red"
             >
               <span aria-hidden="true">←</span> All Shops
             </Link>
 
             <div className="mt-6 flex flex-col gap-6">
               <LocationOpenBadge location={location} size="lg" />
-              <DoubledHeading
-                as="h1"
-                text={shortName.toUpperCase()}
-                fillColor="brand-white"
-                shadowColor="brand-pink"
-                offsetEm="0.05em"
-                className="font-display text-[clamp(3rem,11vw,7rem)] font-extrabold uppercase leading-[0.85] tracking-tight"
-              />
-              <address className="font-body not-italic text-base leading-relaxed text-brand-white/85 md:text-lg">
+              <h1 className="font-display text-[clamp(3rem,11vw,7rem)] font-extrabold uppercase leading-[0.85] tracking-tight text-brand-black">
+                {shortName.toUpperCase()}
+              </h1>
+              <address className="font-body not-italic text-base leading-relaxed text-brand-black/85 md:text-lg">
                 <span className="block">{location.address.street}</span>
                 <span className="block">{location.address.city}</span>
                 <span className="block">{location.address.postcode}</span>
@@ -174,7 +169,7 @@ export default async function LocationDetailPage({ params }: RouteProps) {
               <div className="pt-2">
                 <OrderTriggerButton
                   preferredLocationSlug={location.slug}
-                  variant="secondary"
+                  variant="primary"
                   size="lg"
                   className="min-h-12 px-8"
                 >
