@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 const TILE_COLORS = [
   "bg-brand-pink text-brand-black",
   "bg-brand-red text-brand-white",
-  "bg-brand-black text-brand-white",
+  "bg-brand-pink/15 text-brand-black",
 ] as const;
 
 function tileColorFor(slug: string): string {
@@ -164,7 +164,7 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
         className={cn(
           "relative aspect-square w-full overflow-hidden",
           !showRealImage && tileColor,
-          hasPhoto && "bg-brand-black"
+          hasPhoto && "bg-brand-white"
         )}
       >
         {showRealImage ? (
@@ -225,13 +225,13 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
             <Chip className="bg-brand-red text-brand-white">Limited</Chip>
           )}
           {item.halal && (
-            <Chip className="bg-brand-black text-brand-white" title="Halal">
+            <Chip className="bg-brand-pink/15 text-brand-black" title="Halal">
               <CheckMark className="size-3" />
               Halal
             </Chip>
           )}
           {item.vegetarian && (
-            <Chip className="bg-brand-black text-brand-white">V</Chip>
+            <Chip className="bg-brand-pink/15 text-brand-black">V</Chip>
           )}
           <SpiceLevel level={item.spice} />
         </div>
