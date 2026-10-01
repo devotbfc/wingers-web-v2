@@ -59,9 +59,8 @@ Everything else is white-based with pink or red as the accent — one accent dom
 
 Reuse these — do not invent new ones per section:
 
-- **DoubledHeading** — single element + `::before` pseudo-element via `data-text`, **em-based offsets** (0.06em display / 0.04em section) so wrapping is identical and the offset scales with font size. **Never** two absolutely-positioned copies.
+- **DoubledHeading** — single element + `::before` pseudo-element via `data-text`, **em-based offsets** (0.06em display / 0.04em section) so wrapping is identical and the offset scales with font size. **Never** two absolutely-positioned copies. **Hero `<h1>` only + `/flavour-lab` zone only** (ADR-018). Every other heading uses a plain `font-display` element.
 - **MarqueeLockup** — pure CSS infinite marquee, pause on hover, 60s default.
-- **DoubledCTAStrip** — oversized stacked doubled links, hover flips colour.
 - **OrderTrigger + OrderSlideUp** — bottom-anchored thumb-zone pill, slide-up panel listing both locations.
 - Oversized decorative wordmark bleeding off-canvas in the footer.
 

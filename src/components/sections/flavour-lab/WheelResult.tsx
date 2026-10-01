@@ -48,7 +48,17 @@ export function WheelResult({ winner, onSpinAgain }: WheelResultProps) {
             {dip && (
               <p className="mt-4 font-display text-[11px] font-bold uppercase tracking-[0.3em] text-brand-pink/70">
                 Pair it with:{" "}
-                <span className="text-brand-white">{dip.name}</span>
+                <a
+                  href={`#dip-${dip.slug}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.history.replaceState(null, "", `#dip-${dip.slug}`);
+                    window.dispatchEvent(new HashChangeEvent("hashchange"));
+                  }}
+                  className="text-brand-white underline decoration-brand-pink/50 underline-offset-4 transition-colors hover:decoration-brand-white"
+                >
+                  {dip.name}
+                </a>
               </p>
             )}
             <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">

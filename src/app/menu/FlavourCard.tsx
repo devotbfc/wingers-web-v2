@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 const TILE_COLORS = [
   "bg-brand-pink text-brand-black",
   "bg-brand-red text-brand-white",
-  "bg-brand-black text-brand-white",
+  "bg-brand-pink/15 text-brand-black",
 ] as const;
 
 function tileColorFor(slug: string): string {

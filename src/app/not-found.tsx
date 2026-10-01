@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
@@ -22,14 +21,9 @@ export default function NotFound() {
             <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
               404
             </p>
-            <DoubledHeading
-              as="h1"
-              text="LOST A WING."
-              fillColor="brand-red"
-              shadowColor="brand-pink"
-              offsetEm="0.06em"
-              className="mt-4 font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,13vw,9rem)]"
-            />
+            <h1 className="mt-4 font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,13vw,9rem)] text-brand-red">
+              LOST A WING.
+            </h1>
             <p className="mt-8 max-w-2xl font-body text-lg leading-relaxed text-brand-black/80 md:text-xl">
               That page flew the coop. Head back home, or hit the menu and get
               stuck in.

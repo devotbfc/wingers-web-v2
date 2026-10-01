@@ -18,8 +18,13 @@ interface BrandButtonProps {
   type?: "button" | "submit" | "reset";
   target?: React.HTMLAttributeAnchorTarget;
   rel?: string;
+  "aria-label"?: string;
 }
 
+// ADR-018: brand-red is the only filled primary CTA colour. brand-pink is
+// permitted as a secondary fill, but never on the same screen as a red fill
+// — pair red+ghost (red text, no fill) when a secondary action sits beside
+// the primary.
 const variantClasses: Record<BrandButtonVariant, string> = {
   primary:
     "bg-brand-red text-brand-white hover:bg-brand-pink hover:text-brand-black border-0 rounded-none shadow-none",
@@ -46,6 +51,7 @@ export function BrandButton({
   type = "button",
   target,
   rel,
+  "aria-label": ariaLabel,
 }: BrandButtonProps) {
   const classes = cn(
     "font-display font-bold uppercase tracking-wide transition-colors",
@@ -57,7 +63,13 @@ export function BrandButton({
   if (href) {
     return (
       <Button asChild className={classes} disabled={disabled}>
-        <a href={href} target={target} rel={rel} onClick={onClick}>
+        <a
+          href={href}
+          target={target}
+          rel={rel}
+          onClick={onClick}
+          aria-label={ariaLabel}
+        >
           {children}
         </a>
       </Button>
@@ -70,6 +82,7 @@ export function BrandButton({
       onClick={onClick}
       disabled={disabled}
       type={type}
+      aria-label={ariaLabel}
     >
       {children}
     </Button>

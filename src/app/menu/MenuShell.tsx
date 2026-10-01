@@ -42,7 +42,7 @@ function LocationSwitcher({
               "min-h-11 px-4 font-display text-sm font-bold uppercase tracking-wide transition-colors",
               active
                 ? "bg-brand-pink text-brand-black"
-                : "bg-brand-black text-brand-white hover:bg-brand-black/85"
+                : "bg-brand-white text-brand-black border border-brand-black/15 hover:bg-brand-black/5"
             )}
           >
             {loc.name.replace(/^Wingers\s+/, "")}
@@ -82,7 +82,7 @@ function SectionRail({
               "flex min-h-11 shrink-0 snap-start items-center whitespace-nowrap px-4 font-display text-sm font-bold uppercase tracking-wide transition-colors",
               active
                 ? "bg-brand-pink text-brand-black"
-                : "bg-brand-black text-brand-white hover:bg-brand-black/85"
+                : "bg-brand-white text-brand-black border border-brand-black/15 hover:bg-brand-black/5"
             )}
           >
             {r.label}
@@ -215,11 +215,11 @@ export function MenuShell({
             </h2>
 
             {section.allUnavailableHere ? (
-              <div className="mt-6 bg-brand-black p-6 md:p-8 text-brand-white">
+              <div className="mt-6 border-l-4 border-brand-red bg-brand-pink/15 p-6 text-brand-black md:p-8">
                 <p className="font-display text-lg font-bold uppercase tracking-tight">
                   Available at {otherLocationName} only.
                 </p>
-                <p className="mt-2 font-body text-sm leading-relaxed text-brand-white/75">
+                <p className="mt-2 font-body text-sm leading-relaxed text-brand-black/70">
                   This section isn&rsquo;t on the {currentLocationName.replace(/^Wingers\s+/, "")} menu right now. Switch shops above to see it.
                 </p>
               </div>

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
@@ -29,14 +28,9 @@ export default function PrivacyPage() {
       <main>
         <section className="bg-brand-white px-4 pb-24 pt-32 md:px-8 md:pt-40">
           <div className="mx-auto max-w-3xl">
-            <DoubledHeading
-              as="h1"
-              text="PRIVACY."
-              fillColor="brand-black"
-              shadowColor="brand-pink"
-              offsetEm="0.06em"
-              className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(2.5rem,10vw,6rem)]"
-            />
+            <h1 className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(2.5rem,10vw,6rem)] text-brand-black">
+              PRIVACY.
+            </h1>
 
             <p className="mt-8 font-body text-sm uppercase tracking-widest text-brand-black/60">
               Last updated: 23 September 2026

@@ -61,8 +61,10 @@
     animation: marquee-scroll 60s linear infinite;
   }
 
-  /* Reserved for hero, CTA strips, and footer.
-     Flip the white-primary base to a black canvas with white text. */
+  /* ADR-015 + ADR-018: reserved for the four permitted dark surfaces only —
+     homepage hero, the big CTA strip (FlavourLabTeaser on the homepage),
+     footer, and the /flavour-lab zone (via bg-lab-black, see --color-lab-black
+     above). Any new use elsewhere requires a new ADR. */
   .section-dark {
     background-color: var(--color-brand-black);
     color: var(--color-brand-white);

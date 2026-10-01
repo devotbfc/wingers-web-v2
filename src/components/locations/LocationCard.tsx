@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { BrandButton } from "@/components/brand/BrandButton";
 import { BrandLogo } from "@/components/brand/BrandLogo";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTriggerButton";
 import { getDirectionsUrl, type Location } from "@/lib/locations";
 import { cn } from "@/lib/utils";
@@ -59,14 +58,9 @@ export function LocationCard({
       </div>
 
       <div className="flex flex-1 flex-col gap-4 p-6 md:p-8">
-        <DoubledHeading
-          as="h2"
-          text={shortName.toUpperCase()}
-          fillColor="brand-black"
-          shadowColor="brand-pink"
-          offsetEm="0.04em"
-          className="font-display text-[clamp(2rem,5vw,3.25rem)] font-extrabold uppercase leading-[0.9] tracking-tight"
-        />
+        <h2 className="font-display text-[clamp(2rem,5vw,3.25rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-black">
+          {shortName.toUpperCase()}
+        </h2>
 
         <address className="font-body not-italic text-base leading-relaxed text-brand-black">
           <span className="block">{location.address.street}</span>
@@ -96,7 +90,7 @@ export function LocationCard({
             href={directionsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            variant="secondary"
+            variant="ghost"
             size="lg"
             className="min-h-11 w-full justify-center"
           >

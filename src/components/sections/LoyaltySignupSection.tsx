@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 
 const LoyaltySignupForm = dynamic(
   () =>
@@ -32,14 +31,9 @@ export function LoyaltySignupSection({
               Friends with Benefits
             </p>
             <div className="mt-4">
-              <DoubledHeading
-                as="h2"
-                text="BECOME A WINGER."
-                fillColor="brand-white"
-                shadowColor="brand-black"
-                offsetEm="0.06em"
-                className="font-display font-extrabold uppercase leading-[0.9] tracking-tight text-[clamp(3rem,9vw,6.5rem)]"
-              />
+              <h2 className="font-display font-extrabold uppercase leading-[0.9] tracking-tight text-[clamp(3rem,9vw,6.5rem)] text-brand-white">
+                BECOME A WINGER.
+              </h2>
             </div>
             <p className="mt-8 max-w-2xl font-body text-lg md:text-xl leading-relaxed text-brand-black">
               First dibs on drops, offers only Wingers get, and the odd free

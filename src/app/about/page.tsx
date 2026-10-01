@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
@@ -66,7 +65,7 @@ const STAGES: readonly Stage[] = [
     n: "03",
     label: "FRY",
     copy: "Dropped in fresh oil and fried to order. Golden, loud, crunchy — never sitting under a lamp.",
-    tile: "bg-brand-black",
+    tile: "bg-brand-pink/20",
     align: "start",
     photoSlot: "P06",
   },
@@ -115,14 +114,9 @@ export default function AboutPage() {
       <main>
         <section className="flex min-h-[88svh] items-center px-4 md:px-8">
           <div className="mx-auto w-full max-w-6xl">
-            <DoubledHeading
-              as="h1"
-              text="WE ONLY DO ONE THING. PROPERLY."
-              fillColor="brand-red"
-              shadowColor="brand-pink"
-              offsetEm="0.06em"
-              className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,14vw,10rem)]"
-            />
+            <h1 className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,14vw,10rem)] text-brand-red">
+              WE ONLY DO ONE THING. PROPERLY.
+            </h1>
             <p className="mt-8 max-w-2xl font-body text-lg md:text-xl leading-relaxed text-brand-black">
               Wingers is a halal buttermilk fried chicken shop in Milton Keynes
               and Northampton. Every bird brined for 24 hours, hand-dredged, and
@@ -211,17 +205,17 @@ export default function AboutPage() {
 
         <section
           aria-labelledby="halal-heading"
-          className="section-dark py-16 md:py-24"
+          className="bg-brand-white py-16 md:py-24"
         >
           <div className="mx-auto max-w-2xl px-4 md:px-8">
             <h2
               id="halal-heading"
-              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-white"
+              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
             >
               HALAL. FACTUAL.
             </h2>
             <div
-              className="mt-6 space-y-4 font-body text-base md:text-lg leading-relaxed text-brand-white/80"
+              className="mt-6 space-y-4 font-body text-base md:text-lg leading-relaxed text-brand-black/80"
             >
               <p>
                 All chicken served at Wingers is halal. Certificates are held at
@@ -232,23 +226,17 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section aria-labelledby="close-heading" className="relative isolate">
+        <section
+          aria-labelledby="close-heading"
+          className="px-4 py-24 md:px-8 md:py-32"
+        >
           <h2 id="close-heading" className="sr-only">
             Get stuck in
           </h2>
-          <div
-            aria-hidden="true"
-            className="relative min-h-[70svh] w-full bg-brand-black"
-          />
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-8 px-4 text-center">
-            <DoubledHeading
-              as="p"
-              text="THAT'S IT."
-              fillColor="brand-white"
-              shadowColor="brand-pink"
-              offsetEm="0.06em"
-              className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,12vw,8rem)]"
-            />
+          <div className="mx-auto flex max-w-6xl flex-col items-start gap-8">
+            <p className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-brand-pink text-[clamp(3rem,12vw,8rem)]">
+              THAT&rsquo;S IT<span className="text-brand-red">.</span>
+            </p>
             <OrderTriggerButton variant="primary" size="lg">
               Get Stuck In
             </OrderTriggerButton>

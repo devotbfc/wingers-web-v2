@@ -380,3 +380,31 @@ No `<noscript>` fallback img. No `@vercel/analytics` install in this PR (Rule 4 
 1. ~~Install `@vercel/analytics` and mount it in the root layout.~~ **Done 2026-09-22.** `<Analytics />` mounts outside `<ConsentProvider>` in `src/app/layout.tsx`. Vercel Web Analytics is cookieless (session hash only, no persistent tracking cookies) — it sits outside the PECR/GDPR consent gate.
 2. ~~Add a footer "Cookie settings" link that reopens the consent banner, so users can change their mind. Also required in the privacy copy.~~ **Done 2026-09-23.** `src/components/consent/CookieSettingsLink.tsx` clears `wingers_consent` from `localStorage` and reloads; the banner reappears because `ConsentProvider`'s `useSyncExternalStore` snapshot falls back to `"unknown"` when the key is absent. Privacy policy documents the mechanism under "Advertising measurement (Meta Pixel)".
 3. Fire the Purchase event server-side from PushPull Hub via the Meta Conversions API, deduped against the browser pixel on `event_id`. This ADR sets up the browser half of that pair.
+
+---
+
+## ADR-018 — ADR-015 enforcement + CTA primary rule
+
+**Date**: 2026-10-01
+**Status**: Accepted (extends ADR-015)
+
+### Context
+Between ADR-015 (2026-06-29) and the pre-launch audit (2026-10-01), dark surfaces drifted into places ADR-015 forbade: NavBar mobile sheet, menu shell + cards (location switcher, section rail, unavailable banner, MenuCard tile rotation + photo wrapper + Halal/Vegetarian chips, FlavourCard tile rotation), homepage TwoSpots + TheGoods tiles, About (HALAL. FACTUAL. section + the THAT'S IT. close), Allergies cross-contamination box, Loyalty benefits tile, the location detail hero, and the LocationOpenBadge "Closed" state. The signature DoubledHeading device spread from the single homepage h1 to every section heading on home, menu, locations, about, allergies, loyalty, contact, privacy, terms, 404, and the locations detail — diluting its weight. MenuCard rendered allergens + "may contain" + full description simultaneously, hurting mobile scanability.
+
+Separately, both brand-red and brand-pink were being used as filled primary buttons depending on the surface, with no documented rule — so some screens shipped with a red-filled and a pink-filled CTA sitting side by side (homepage hero Order+Find Us, location card Order+Directions, location detail Directions+Call).
+
+### Decision
+1. Dark surfaces are permitted on exactly four places site-wide: homepage hero, the big CTA strip (FlavourLabTeaser), the footer, and the /flavour-lab zone (via bg-lab-black, the one playful inversion). Any new use of `.section-dark`, `bg-brand-black`, or `bg-lab-black` outside those four zones requires a new ADR.
+2. DoubledHeading is reserved for the homepage hero h1 and the /flavour-lab zone (the fourth permitted dark surface). Zero other call sites — every section heading on every other route uses a plain font-display heading. DoubledCTAStrip (which depended on DoubledHeading and was unused in production) is deleted and removed from CLAUDE.md's signature-devices list.
+3. MenuCard allergens + "may contain" sit behind a tap-to-expand "Allergens" chip (local React state). Description clamps to two lines and expands with the chip. Price + sizes + the single ORDER button stay always-visible. The chip has a ≥44px hit area via `min-h-11 py-2 -my-2` so the WCAG target size is met without changing the visible 10px label.
+4. `brand-red` is the only filled primary CTA colour. `brand-pink` is for brand accents and the secondary button variant (pink fill is still allowed, but never on the same screen as a red fill). No screen shows two filled CTA colours side by side — where a primary + secondary pair sit together, demote the secondary to the ghost variant. A full-screen overlay (mobile nav sheet) counts as its own screen; the pink Order chip there is permitted.
+
+### Consequences
+- Rolls back 18 class usages and demotes 19 DoubledHeading call sites across 20+ files (see `design/enforce-adr-015` branch commits `485da89` through `a0f0c0a` for the exact diff).
+- Flavour Lab's `bg-lab-black` is formally recorded here as the fourth permitted dark surface — previously only commented in `globals.css`, now ADR-documented. Lab also keeps DoubledHeading as a styling exception since the whole zone is the one playful inversion.
+- `globals.css` `.section-dark` comment is updated to name the four zones and the ADR-required-for-exceptions rule.
+- `BrandButton` file-level comment references this ADR so the next engineer to add a variant pair reads the rule before shipping another collision. Variant class definitions unchanged — they already encode the right colours.
+- MenuCard becomes a shorter card on mobile; density only appears when the user asks for it.
+- NavBar Order button is flattened to `brand-red` in both scrolled and top states — the previous dead ternary (pink when top, red when scrolled) landed pink Order beside the hero's red CTA on the homepage top-state.
+- Location detail hero drops its `bg-brand-black/55` scrim in favour of `bg-brand-white/85`, turning the pink/red brand base into a soft light-pink/coral canvas. The decorative BrandLogo mark swaps `variant="white"` → `variant="black"` so it still reads as a 15%-opacity watermark on light.
+- About page's dramatic "THAT'S IT." close loses its 70svh dark backdrop and collapses to a normal-flow section with left-aligned content matching the hero rhythm.

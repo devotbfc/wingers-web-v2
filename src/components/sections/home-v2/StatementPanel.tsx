@@ -1,12 +1,4 @@
-import type React from "react";
-
 const HEADLINE_LINES = ["BEST WINGS", "IN THE GAME."] as const;
-
-const DOUBLED_STYLE = {
-  "--dh-fill": "var(--color-brand-black)",
-  "--dh-shadow": "var(--color-brand-red)",
-  "--dh-offset": "0.06em",
-} as React.CSSProperties;
 
 export function StatementPanel() {
   return (
@@ -15,15 +7,13 @@ export function StatementPanel() {
         Future of Flavours
       </p>
 
-      <h2 className="text-center font-display font-extrabold leading-[0.84] tracking-tight">
+      <h2 className="text-center font-display font-extrabold leading-[0.84] tracking-tight text-brand-black">
         <span className="sr-only">Best wings in the game.</span>
         {HEADLINE_LINES.map((line) => (
           <span
             key={line}
             aria-hidden="true"
-            data-text={line}
-            className="doubled-heading block text-[clamp(3rem,18vw,11rem)]"
-            style={DOUBLED_STYLE}
+            className="block text-[clamp(3rem,18vw,11rem)]"
           >
             {line}
           </span>

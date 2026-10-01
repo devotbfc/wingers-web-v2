@@ -88,12 +88,7 @@ export function NavBar() {
             <button
               type="button"
               onClick={() => openPanel()}
-              className={cn(
-                "font-display font-bold uppercase tracking-wide text-sm px-5 h-10 transition-colors",
-                scrolled
-                  ? "bg-brand-red text-brand-white hover:bg-brand-pink hover:text-brand-black"
-                  : "bg-brand-pink text-brand-black hover:bg-brand-white"
-              )}
+              className="font-display font-bold uppercase tracking-wide text-sm px-5 h-10 transition-colors bg-brand-red text-brand-white hover:bg-brand-pink hover:text-brand-black"
             >
               Order
             </button>
@@ -117,22 +112,29 @@ export function NavBar() {
         <SheetContent
           side="right"
           showCloseButton={false}
-          className="bg-brand-black text-brand-white w-full sm:max-w-sm p-0"
+          className="bg-brand-white text-brand-black w-full sm:max-w-sm p-0"
         >
           <SheetTitle className="sr-only">Navigation</SheetTitle>
           <div className="flex items-center justify-between h-16 px-4">
-            <BrandLogo
-              variant="pink"
-              type="mark"
-              width={40}
-              height={40}
-              className="h-10 w-10"
-            />
+            <Link
+              href="/"
+              aria-label="Wingers home"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center"
+            >
+              <BrandLogo
+                variant="pink"
+                type="mark"
+                width={40}
+                height={40}
+                className="h-10 w-10"
+              />
+            </Link>
             <button
               type="button"
               aria-label="Close menu"
               onClick={() => setMobileOpen(false)}
-              className="inline-flex items-center justify-center h-10 w-10 text-brand-white"
+              className="inline-flex items-center justify-center h-10 w-10 text-brand-black"
             >
               <X className="h-6 w-6" aria-hidden="true" />
             </button>
@@ -143,7 +145,7 @@ export function NavBar() {
                 <Link
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="block font-display font-extrabold uppercase tracking-tight text-3xl text-brand-white hover:text-brand-pink transition-colors py-2"
+                  className="block font-display font-extrabold uppercase tracking-tight text-3xl text-brand-black hover:text-brand-red transition-colors py-2"
                 >
                   {link.label}
                 </Link>
@@ -153,7 +155,7 @@ export function NavBar() {
               <button
                 type="button"
                 onClick={handleOrderClick}
-                className="w-full bg-brand-pink text-brand-black font-display font-extrabold uppercase tracking-tight text-3xl py-4 hover:bg-brand-white transition-colors"
+                className="w-full bg-brand-pink text-brand-black font-display font-extrabold uppercase tracking-tight text-3xl py-4 hover:bg-brand-red hover:text-brand-white transition-colors"
               >
                 Order
               </button>

@@ -1,5 +1,4 @@
 import { MapPin } from "lucide-react";
-import type React from "react";
 import { LocationOpenBadge } from "@/components/locations/LocationOpenBadge";
 import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTriggerButton";
 import { LOCATIONS, type Location } from "@/lib/locations";
@@ -11,26 +10,29 @@ type SpotTheme = {
   directionsClasses: string;
 };
 
+const DIRECTIONS_OUTLINE =
+  "border-2 border-brand-black text-brand-black hover:bg-brand-black hover:text-brand-white";
+
 const THEME_BY_SLUG: Record<string, SpotTheme> = {
   "milton-keynes": {
     panelBg: "bg-brand-pink",
     bodyText: "text-brand-black",
     photoFallbackBg: "bg-brand-red",
-    directionsClasses: "bg-brand-black text-brand-white hover:bg-brand-black/90",
+    directionsClasses: DIRECTIONS_OUTLINE,
   },
   northampton: {
-    panelBg: "bg-brand-black",
-    bodyText: "text-brand-white",
+    panelBg: "bg-brand-white",
+    bodyText: "text-brand-black",
     photoFallbackBg: "bg-brand-pink",
-    directionsClasses: "bg-brand-white text-brand-black hover:bg-brand-white/90",
+    directionsClasses: DIRECTIONS_OUTLINE,
   },
 };
 
 const DEFAULT_THEME: SpotTheme = {
-  panelBg: "bg-brand-black",
-  bodyText: "text-brand-white",
+  panelBg: "bg-brand-white",
+  bodyText: "text-brand-black",
   photoFallbackBg: "bg-brand-pink",
-  directionsClasses: "bg-brand-white text-brand-black hover:bg-brand-white/90",
+  directionsClasses: DIRECTIONS_OUTLINE,
 };
 
 function mapsUrlFor(loc: Location): string {
@@ -40,18 +42,6 @@ function mapsUrlFor(loc: Location): string {
 
 function fullAddress(loc: Location): string {
   return `${loc.address.street}, ${loc.address.city}, ${loc.address.postcode}`;
-}
-
-function headlineDoubledStyle(bodyText: string): React.CSSProperties {
-  const fill =
-    bodyText === "text-brand-black"
-      ? "var(--color-brand-black)"
-      : "var(--color-brand-white)";
-  return {
-    "--dh-fill": fill,
-    "--dh-shadow": "var(--color-brand-red)",
-    "--dh-offset": "0.06em",
-  } as React.CSSProperties;
 }
 
 function SpotBlock({ spot }: { spot: Location }) {
@@ -71,11 +61,7 @@ function SpotBlock({ spot }: { spot: Location }) {
         <div className="flex h-full flex-col justify-center gap-6">
           <LocationOpenBadge location={spot} size="sm" />
 
-          <h3
-            data-text={headlineText}
-            className="doubled-heading block font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(2.75rem,13vw,6rem)]"
-            style={headlineDoubledStyle(theme.bodyText)}
-          >
+          <h3 className="block font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(2.75rem,13vw,6rem)]">
             {headlineText}
           </h3>
 
@@ -113,12 +99,6 @@ function SpotBlock({ spot }: { spot: Location }) {
   );
 }
 
-const TWO_SPOTS_DOUBLED_STYLE = {
-  "--dh-fill": "var(--color-brand-black)",
-  "--dh-shadow": "var(--color-brand-red)",
-  "--dh-offset": "0.06em",
-} as React.CSSProperties;
-
 export function TwoSpots() {
   return (
     <section aria-labelledby="two-spots-heading" className="bg-brand-white">
@@ -128,9 +108,7 @@ export function TwoSpots() {
         </p>
         <h2
           id="two-spots-heading"
-          data-text="TWO SPOTS."
-          className="doubled-heading block font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,16vw,7rem)]"
-          style={TWO_SPOTS_DOUBLED_STYLE}
+          className="block font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,16vw,7rem)] text-brand-black"
         >
           TWO SPOTS.
         </h2>

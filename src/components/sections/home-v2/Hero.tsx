@@ -52,17 +52,16 @@ export function Hero() {
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <OrderTriggerButton
-            variant="secondary"
+            variant="primary"
             size="lg"
             className="rounded-full"
           >
             Get Stuck In
           </OrderTriggerButton>
           <BrandButton
-            variant="primary"
+            variant="ghost"
             size="lg"
             href="/locations"
-            className="rounded-full"
           >
             Find Us
           </BrandButton>

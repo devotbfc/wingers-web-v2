@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
@@ -89,14 +88,9 @@ export default function AllergiesPage() {
       <main>
         <section className="pt-32 md:pt-40 px-4 md:px-8 pb-8">
           <div className="mx-auto max-w-6xl">
-            <DoubledHeading
-              as="h1"
-              text="ALLERGENS."
-              fillColor="brand-red"
-              shadowColor="brand-pink"
-              offsetEm="0.06em"
-              className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(2.5rem,8vw,5.5rem)]"
-            />
+            <h1 className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(2.5rem,8vw,5.5rem)] text-brand-red">
+              ALLERGENS.
+            </h1>
             <p className="mt-6 max-w-2xl font-body text-lg md:text-xl leading-relaxed text-brand-black">
               Wingers publishes allergen information for all 95 items on the
               menu. Every one of the 14 UK statutory allergens is listed per
@@ -112,12 +106,12 @@ export default function AllergiesPage() {
           <div className="mx-auto max-w-6xl">
             <aside
               role="note"
-              className="bg-brand-black text-brand-white p-6 md:p-8"
+              className="border-l-4 border-brand-red bg-brand-pink/15 p-6 text-brand-black md:p-8"
             >
+              <h3 className="mb-2 font-display font-extrabold uppercase tracking-tight text-brand-black">
+                Cross-contamination notice.
+              </h3>
               <p className="font-body text-base md:text-lg leading-relaxed">
-                <strong className="font-display font-extrabold uppercase tracking-tight">
-                  Cross-contamination notice.
-                </strong>{" "}
                 All items are prepared in kitchens that handle gluten, milk,
                 eggs, soya, sesame, peanuts, tree nuts, mustard, celery,
                 sulphites, lupin, fish, crustaceans and molluscs. We cannot

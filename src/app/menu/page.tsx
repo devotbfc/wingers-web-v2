@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
@@ -102,11 +101,9 @@ export default function MenuPage() {
             <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
               Halal Buttermilk Fried Chicken
             </p>
-            <DoubledHeading
-              text="THE MENU"
-              as="h1"
-              className="mt-2 font-display text-[clamp(3rem,10vw,7rem)] font-extrabold uppercase leading-[0.9] tracking-tight"
-            />
+            <h1 className="mt-2 font-display text-[clamp(3rem,10vw,7rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-pink">
+              THE MENU
+            </h1>
             <p className="mt-4 max-w-2xl font-body text-base leading-relaxed text-brand-black/75 md:text-lg">
               Wingers serves halal buttermilk fried chicken across Milton Keynes
               and Northampton. Wings, boneless, tenders, burgers, loaded fries,

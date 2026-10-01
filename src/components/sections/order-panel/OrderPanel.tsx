@@ -102,9 +102,10 @@ export function OrderPanel() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  variant={isPreferred ? "secondary" : "primary"}
+                  variant={isPreferred ? "primary" : "ghost"}
                   size="lg"
                   className="w-full justify-center"
+                  aria-label={`Order from ${loc.name}`}
                   onClick={() =>
                     track("InitiateCheckout", {
                       content_category: site,
@@ -112,7 +113,7 @@ export function OrderPanel() {
                     })
                   }
                 >
-                  Order via {provider.name}
+                  Order
                 </BrandButton>
               </li>
             );

@@ -5,7 +5,6 @@ import { LoyaltySignupSection } from "@/components/sections/LoyaltySignupSection
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
 import { OrderPanelProvider } from "@/components/sections/order-panel/order-panel-context";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 
 export const metadata: Metadata = {
   title: "Become a Winger — Loyalty at Wingers",
@@ -49,7 +48,7 @@ const BENEFITS: readonly Benefit[] = [
     n: "03",
     label: "MEMBER-ONLY OFFERS",
     copy: "Quiet Tuesday deals, secret combos, and the odd free box when you least expect it.",
-    tile: "bg-brand-black",
+    tile: "bg-brand-pink/20",
     align: "start",
   },
   {
@@ -71,14 +70,9 @@ export default function LoyaltyPage() {
             <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
               Friends with Benefits
             </p>
-            <DoubledHeading
-              as="h1"
-              text="THE WINGER CLUB."
-              fillColor="brand-red"
-              shadowColor="brand-pink"
-              offsetEm="0.06em"
-              className="mt-4 font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,13vw,9rem)]"
-            />
+            <h1 className="mt-4 font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,13vw,9rem)] text-brand-red">
+              THE WINGER CLUB.
+            </h1>
             <p className="mt-8 max-w-2xl font-body text-lg md:text-xl leading-relaxed text-brand-black/80">
               The Winger Club is Wingers&apos; loyalty programme for halal
               buttermilk fried chicken fans in Milton Keynes and Northampton.

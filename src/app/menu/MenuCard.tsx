@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { BrandButton } from "@/components/brand/BrandButton";
 import { useOrderPanel } from "@/components/sections/order-panel";
@@ -18,7 +19,7 @@ import { cn } from "@/lib/utils";
 const TILE_COLORS = [
   "bg-brand-pink text-brand-black",
   "bg-brand-red text-brand-white",
-  "bg-brand-black text-brand-white",
+  "bg-brand-pink/15 text-brand-black",
 ] as const;
 
 function tileColorFor(slug: string): string {
@@ -131,6 +132,7 @@ interface MenuCardProps {
 
 export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardProps) {
   const { openPanel } = useOrderPanel();
+  const [showAllergens, setShowAllergens] = useState(false);
   const code = toMenuLocationCode(locationSlug);
   const priceLabel = getPriceLabel(item, code);
   const priceValue = getPriceValue(item, code);
@@ -164,7 +166,7 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
         className={cn(
           "relative aspect-square w-full overflow-hidden",
           !showRealImage && tileColor,
-          hasPhoto && "bg-brand-black"
+          hasPhoto && "bg-brand-white"
         )}
       >
         {showRealImage ? (
@@ -212,7 +214,12 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
         </div>
 
         {item.description && (
-          <p className="font-body text-sm leading-6 text-brand-black/70 line-clamp-3">
+          <p
+            className={cn(
+              "font-body text-sm leading-6 text-brand-black/70",
+              showAllergens ? "" : "line-clamp-2"
+            )}
+          >
             {item.description}
           </p>
         )}
@@ -225,27 +232,43 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
             <Chip className="bg-brand-red text-brand-white">Limited</Chip>
           )}
           {item.halal && (
-            <Chip className="bg-brand-black text-brand-white" title="Halal">
+            <Chip className="bg-brand-pink/15 text-brand-black" title="Halal">
               <CheckMark className="size-3" />
               Halal
             </Chip>
           )}
           {item.vegetarian && (
-            <Chip className="bg-brand-black text-brand-white">V</Chip>
+            <Chip className="bg-brand-pink/15 text-brand-black">V</Chip>
           )}
           <SpiceLevel level={item.spice} />
         </div>
 
-        <div className="mt-auto space-y-1">
-          <p className="text-[9px] uppercase tracking-[0.18em] text-brand-black/70">
-            {containsLabels.length > 0
-              ? `Contains: ${containsLabels.join(" · ")}`
-              : "No declared allergens"}
-          </p>
-          {tracesLabels.length > 0 && (
-            <p className="text-[9px] normal-case tracking-normal text-brand-black/45">
-              May contain traces of {tracesLabels.join(", ")}.
-            </p>
+        <div className="mt-auto space-y-2">
+          <button
+            type="button"
+            aria-expanded={showAllergens}
+            aria-controls={`allergens-${item.slug}`}
+            onClick={() => setShowAllergens((v) => !v)}
+            className="-my-2 inline-flex min-h-11 items-center gap-1 py-2 font-body text-[10px] uppercase tracking-[0.18em] text-brand-black/70 transition-colors hover:text-brand-black"
+          >
+            Allergens
+            <span aria-hidden="true" className="font-mono text-xs leading-none">
+              {showAllergens ? "−" : "+"}
+            </span>
+          </button>
+          {showAllergens && (
+            <div id={`allergens-${item.slug}`} className="space-y-1">
+              <p className="text-[9px] uppercase tracking-[0.18em] text-brand-black/70">
+                {containsLabels.length > 0
+                  ? `Contains: ${containsLabels.join(" · ")}`
+                  : "No declared allergens"}
+              </p>
+              {tracesLabels.length > 0 && (
+                <p className="text-[9px] normal-case tracking-normal text-brand-black/45">
+                  May contain traces of {tracesLabels.join(", ")}.
+                </p>
+              )}
+            </div>
           )}
         </div>
 
