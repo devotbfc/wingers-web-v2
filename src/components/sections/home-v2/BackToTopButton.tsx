@@ -29,6 +29,7 @@ function usePrefersReducedMotion(): boolean {
 
 export function BackToTopButton() {
   const [visible, setVisible] = useState(false);
+  const [footerVisible, setFooterVisible] = useState(false);
   const shouldReduce = usePrefersReducedMotion();
 
   useEffect(() => {
@@ -50,9 +51,24 @@ export function BackToTopButton() {
     };
   }, []);
 
+  useEffect(() => {
+    const footer = document.getElementById("site-footer");
+    if (!footer) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setFooterVisible(entries[0]?.isIntersecting ?? false);
+      },
+      { rootMargin: "0px" },
+    );
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
+
   const handleClick = () => {
     window.scrollTo({ top: 0, behavior: shouldReduce ? "auto" : "smooth" });
   };
+
+  const show = visible && !footerVisible;
 
   return (
     <button
@@ -67,7 +83,7 @@ export function BackToTopButton() {
         "fixed z-40 inline-flex h-11 w-11 items-center justify-center rounded-full bg-brand-pink text-brand-black",
         "focus-visible:outline-2 focus-visible:outline-brand-black focus-visible:outline-offset-2",
         !shouldReduce && "transition-[opacity,transform] duration-200",
-        visible
+        show
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 translate-y-2 pointer-events-none"
       )}

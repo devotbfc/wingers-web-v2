@@ -5,16 +5,18 @@ import { cn } from "@/lib/utils";
 import type React from "react";
 
 interface VideoHeroProps {
-  mp4Src: string;
-  webmSrc: string;
+  mobileMp4Src: string;
+  desktopMp4Src: string;
+  desktopMediaQuery?: string;
   poster: string;
   className?: string;
   children?: React.ReactNode;
 }
 
 export function VideoHero({
-  mp4Src,
-  webmSrc,
+  mobileMp4Src,
+  desktopMp4Src,
+  desktopMediaQuery = "(min-width: 768px)",
   poster,
   className,
   children,
@@ -32,14 +34,15 @@ export function VideoHero({
 
     const attach = () => {
       if (video.querySelector("source")) return;
-      const webm = document.createElement("source");
-      webm.src = webmSrc;
-      webm.type = "video/webm";
-      const mp4 = document.createElement("source");
-      mp4.src = mp4Src;
-      mp4.type = "video/mp4";
-      video.appendChild(webm);
-      video.appendChild(mp4);
+      const desktop = document.createElement("source");
+      desktop.src = desktopMp4Src;
+      desktop.type = "video/mp4";
+      desktop.media = desktopMediaQuery;
+      const mobile = document.createElement("source");
+      mobile.src = mobileMp4Src;
+      mobile.type = "video/mp4";
+      video.appendChild(desktop);
+      video.appendChild(mobile);
       video.load();
       video.play().catch(() => {});
     };
@@ -70,7 +73,7 @@ export function VideoHero({
       window.removeEventListener("load", onLoad);
       reducedMotion.removeEventListener("change", handleReducedMotionChange);
     };
-  }, [mp4Src, webmSrc]);
+  }, [mobileMp4Src, desktopMp4Src, desktopMediaQuery]);
 
   return (
     <div className={cn("relative overflow-hidden", className)}>
