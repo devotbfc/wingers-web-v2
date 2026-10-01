@@ -49,7 +49,7 @@ const BENEFITS: readonly Benefit[] = [
     n: "03",
     label: "MEMBER-ONLY OFFERS",
     copy: "Quiet Tuesday deals, secret combos, and the odd free box when you least expect it.",
-    tile: "bg-brand-black",
+    tile: "bg-brand-pink/20",
     align: "start",
   },
   {

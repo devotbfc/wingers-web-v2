@@ -90,12 +90,15 @@ export function LocationOpenBadge({
 
   return (
     <span
-      className={cn(base, "bg-brand-black text-brand-white")}
+      className={cn(
+        base,
+        "border border-brand-black/15 bg-brand-pink/15 text-brand-black",
+      )}
       aria-live="polite"
     >
       <span
         aria-hidden="true"
-        className="h-2 w-2 rounded-full bg-brand-pink"
+        className="h-2 w-2 rounded-full bg-brand-red"
       />
       Closed{state.nextLabel ? ` · Opens ${state.nextLabel}` : ""}
     </span>

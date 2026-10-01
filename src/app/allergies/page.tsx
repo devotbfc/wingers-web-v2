@@ -112,7 +112,7 @@ export default function AllergiesPage() {
           <div className="mx-auto max-w-6xl">
             <aside
               role="note"
-              className="bg-brand-black text-brand-white p-6 md:p-8"
+              className="border-l-4 border-brand-red bg-brand-pink/15 p-6 text-brand-black md:p-8"
             >
               <p className="font-body text-base md:text-lg leading-relaxed">
                 <strong className="font-display font-extrabold uppercase tracking-tight">
