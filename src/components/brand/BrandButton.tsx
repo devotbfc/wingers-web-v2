@@ -18,6 +18,7 @@ interface BrandButtonProps {
   type?: "button" | "submit" | "reset";
   target?: React.HTMLAttributeAnchorTarget;
   rel?: string;
+  "aria-label"?: string;
 }
 
 // ADR-018: brand-red is the only filled primary CTA colour. brand-pink is
@@ -50,6 +51,7 @@ export function BrandButton({
   type = "button",
   target,
   rel,
+  "aria-label": ariaLabel,
 }: BrandButtonProps) {
   const classes = cn(
     "font-display font-bold uppercase tracking-wide transition-colors",
@@ -61,7 +63,13 @@ export function BrandButton({
   if (href) {
     return (
       <Button asChild className={classes} disabled={disabled}>
-        <a href={href} target={target} rel={rel} onClick={onClick}>
+        <a
+          href={href}
+          target={target}
+          rel={rel}
+          onClick={onClick}
+          aria-label={ariaLabel}
+        >
           {children}
         </a>
       </Button>
@@ -74,6 +82,7 @@ export function BrandButton({
       onClick={onClick}
       disabled={disabled}
       type={type}
+      aria-label={ariaLabel}
     >
       {children}
     </Button>

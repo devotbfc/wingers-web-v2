@@ -116,13 +116,20 @@ export function NavBar() {
         >
           <SheetTitle className="sr-only">Navigation</SheetTitle>
           <div className="flex items-center justify-between h-16 px-4">
-            <BrandLogo
-              variant="pink"
-              type="mark"
-              width={40}
-              height={40}
-              className="h-10 w-10"
-            />
+            <Link
+              href="/"
+              aria-label="Wingers home"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center"
+            >
+              <BrandLogo
+                variant="pink"
+                type="mark"
+                width={40}
+                height={40}
+                className="h-10 w-10"
+              />
+            </Link>
             <button
               type="button"
               aria-label="Close menu"

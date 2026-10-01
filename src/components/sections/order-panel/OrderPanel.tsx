@@ -105,6 +105,7 @@ export function OrderPanel() {
                   variant={isPreferred ? "secondary" : "primary"}
                   size="lg"
                   className="w-full justify-center"
+                  aria-label={`Order from ${loc.name}`}
                   onClick={() =>
                     track("InitiateCheckout", {
                       content_category: site,
@@ -112,7 +113,7 @@ export function OrderPanel() {
                     })
                   }
                 >
-                  Order via {provider.name}
+                  Order
                 </BrandButton>
               </li>
             );
