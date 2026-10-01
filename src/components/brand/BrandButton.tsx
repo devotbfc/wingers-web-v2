@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type React from "react";
 
-type BrandButtonVariant = "primary" | "secondary" | "ghost";
+type BrandButtonVariant = "primary" | "secondary" | "ghost" | "inverse";
 type BrandButtonSize = "sm" | "md" | "lg";
 
 interface BrandButtonProps {
@@ -24,7 +24,9 @@ interface BrandButtonProps {
 // ADR-018: brand-red is the only filled primary CTA colour. brand-pink is
 // permitted as a secondary fill, but never on the same screen as a red fill
 // — pair red+ghost (red text, no fill) when a secondary action sits beside
-// the primary.
+// the primary. On a red surface the primary fill inverts to white/red
+// (variant="inverse") so the button stays visible without breaking the
+// same-fill-pairs rule.
 const variantClasses: Record<BrandButtonVariant, string> = {
   primary:
     "bg-brand-red text-brand-white hover:bg-brand-pink hover:text-brand-black border-0 rounded-none shadow-none",
@@ -32,6 +34,8 @@ const variantClasses: Record<BrandButtonVariant, string> = {
     "bg-brand-pink text-brand-black hover:bg-brand-white hover:text-brand-black border-0 rounded-none shadow-none",
   ghost:
     "text-brand-red bg-transparent hover:text-brand-pink hover:bg-transparent underline rounded-none shadow-none",
+  inverse:
+    "bg-brand-white text-brand-red hover:bg-brand-pink hover:text-brand-black border-0 rounded-none shadow-none",
 };
 
 const sizeClasses: Record<BrandButtonSize, string> = {
