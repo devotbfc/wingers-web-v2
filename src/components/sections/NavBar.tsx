@@ -155,7 +155,7 @@ export function NavBar() {
               <button
                 type="button"
                 onClick={handleOrderClick}
-                className="w-full bg-brand-red text-brand-white font-display font-extrabold uppercase tracking-tight text-3xl py-4 hover:bg-brand-pink hover:text-brand-black transition-colors"
+                className="w-full bg-brand-pink text-brand-black font-display font-extrabold uppercase tracking-tight text-3xl py-4 hover:bg-brand-red hover:text-brand-white transition-colors"
               >
                 Order
               </button>
