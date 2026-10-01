@@ -220,7 +220,7 @@ export default async function LocationDetailPage({ params }: RouteProps) {
                 {location.phone ? (
                   <BrandButton
                     href={`tel:${location.phone.replace(/\s/g, "")}`}
-                    variant="secondary"
+                    variant="ghost"
                     size="lg"
                     className="min-h-11 w-full justify-center"
                   >

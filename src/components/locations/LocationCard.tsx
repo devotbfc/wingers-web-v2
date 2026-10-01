@@ -90,7 +90,7 @@ export function LocationCard({
             href={directionsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            variant="secondary"
+            variant="ghost"
             size="lg"
             className="min-h-11 w-full justify-center"
           >
