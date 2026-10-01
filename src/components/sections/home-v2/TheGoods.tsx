@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import type React from "react";
 import { MENU_ITEMS, type MenuItem } from "@/lib/menu";
 
 type CategoryTile = {
@@ -32,12 +31,6 @@ function formatPrice(price: number | null): string {
   if (price == null) return "See menu";
   return `from £${price.toFixed(2)}`;
 }
-
-const DOUBLED_STYLE = {
-  "--dh-fill": "var(--color-brand-red)",
-  "--dh-shadow": "var(--color-brand-pink)",
-  "--dh-offset": "0.06em",
-} as React.CSSProperties;
 
 export function TheGoods() {
   const tiles: CategoryTile[] = [
@@ -81,9 +74,7 @@ export function TheGoods() {
     >
       <h2
         id="the-goods-heading"
-        data-text="THE GOODS."
-        className="doubled-heading block px-5 font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,16vw,7rem)] sm:px-8"
-        style={DOUBLED_STYLE}
+        className="block px-5 font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,16vw,7rem)] text-brand-red sm:px-8"
       >
         THE GOODS.
       </h2>

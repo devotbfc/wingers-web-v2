@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
@@ -33,14 +32,9 @@ export default function ContactPage() {
       <main>
         <section className="pt-32 md:pt-40 px-4 md:px-8 pb-12 md:pb-16">
           <div className="mx-auto max-w-6xl">
-            <DoubledHeading
-              as="h1"
-              text="SAY HELLO."
-              fillColor="brand-red"
-              shadowColor="brand-pink"
-              offsetEm="0.06em"
-              className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,10vw,7rem)]"
-            />
+            <h1 className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,10vw,7rem)] text-brand-red">
+              SAY HELLO.
+            </h1>
             <p className="mt-6 max-w-2xl font-body text-lg md:text-xl leading-relaxed text-brand-black">
               Feedback, press, or partnerships — give us a ring, drop us an
               email, or come find us. For orders, use the Order button up top.

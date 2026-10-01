@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
@@ -115,14 +114,9 @@ export default function AboutPage() {
       <main>
         <section className="flex min-h-[88svh] items-center px-4 md:px-8">
           <div className="mx-auto w-full max-w-6xl">
-            <DoubledHeading
-              as="h1"
-              text="WE ONLY DO ONE THING. PROPERLY."
-              fillColor="brand-red"
-              shadowColor="brand-pink"
-              offsetEm="0.06em"
-              className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,14vw,10rem)]"
-            />
+            <h1 className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,14vw,10rem)] text-brand-red">
+              WE ONLY DO ONE THING. PROPERLY.
+            </h1>
             <p className="mt-8 max-w-2xl font-body text-lg md:text-xl leading-relaxed text-brand-black">
               Wingers is a halal buttermilk fried chicken shop in Milton Keynes
               and Northampton. Every bird brined for 24 hours, hand-dredged, and

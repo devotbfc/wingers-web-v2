@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BrandButton } from "@/components/brand/BrandButton";
 import { BrandLogo } from "@/components/brand/BrandLogo";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
@@ -186,14 +185,9 @@ export default async function LocationDetailPage({ params }: RouteProps) {
         >
           <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-16 md:px-8">
             <div>
-              <DoubledHeading
-                as="h2"
-                text="OPENING HOURS"
-                fillColor="brand-red"
-                shadowColor="brand-pink"
-                offsetEm="0.05em"
-                className="font-display text-[clamp(2rem,6vw,4rem)] font-extrabold uppercase leading-[0.9] tracking-tight"
-              />
+              <h2 className="font-display text-[clamp(2rem,6vw,4rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-red">
+                OPENING HOURS
+              </h2>
               <div className="mt-8">
                 <OpeningHoursTable location={location} />
                 <OpeningHoursTodayMarker locationSlug={location.slug} />

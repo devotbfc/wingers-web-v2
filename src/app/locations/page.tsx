@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
@@ -32,14 +31,9 @@ export default function LocationsPage() {
             <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
               Halal Buttermilk Fried Chicken
             </p>
-            <DoubledHeading
-              text="FIND US."
-              as="h1"
-              fillColor="brand-black"
-              shadowColor="brand-pink"
-              offsetEm="0.06em"
-              className="mt-2 font-display text-[clamp(3rem,10vw,7rem)] font-extrabold uppercase leading-[0.9] tracking-tight"
-            />
+            <h1 className="mt-2 font-display text-[clamp(3rem,10vw,7rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-black">
+              FIND US.
+            </h1>
             <p className="mt-6 max-w-2xl font-body text-base leading-relaxed text-brand-black/80 md:text-lg">
               Wingers has two halal buttermilk fried chicken shops: Milton
               Keynes and Northampton. Both are halal-certified. Order online

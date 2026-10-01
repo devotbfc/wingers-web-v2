@@ -3,7 +3,6 @@ import { BrandButton } from "@/components/brand/BrandButton";
 import { BrandPattern } from "@/components/brand/BrandPattern";
 import { MarqueeLockup } from "@/components/brand/MarqueeLockup";
 import { DoubledHeading } from "@/components/typography/DoubledHeading";
-import { DoubledCTAStrip } from "@/components/typography/DoubledCTAStrip";
 import { VideoHero } from "@/components/media/VideoHero";
 import { VideoCard } from "@/components/media/VideoCard";
 import { ImageCarousel } from "@/components/media/ImageCarousel";
@@ -123,17 +122,6 @@ export default function ComponentsDevPage() {
             className="text-2xl font-display font-extrabold uppercase tracking-display"
           />
         </div>
-      </Section>
-
-      <Section title="DoubledCTAStrip — 4 items">
-        <DoubledCTAStrip
-          items={[
-            { text: "ORDER NOW.", href: "/dev/components", fillColor: "brand-pink", shadowColor: "brand-red" },
-            { text: "FIND US.", fillColor: "brand-red", shadowColor: "brand-pink" },
-            { text: "TASTE IT.", fillColor: "brand-white", shadowColor: "brand-pink" },
-            { text: "LOVE IT.", fillColor: "brand-pink", shadowColor: "brand-white", offsetEm: "0.12em" },
-          ]}
-        />
       </Section>
 
       <Section title="VideoHero — autoplay loop with overlay (h-96)">

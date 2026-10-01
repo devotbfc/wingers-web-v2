@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import type React from "react";
 
 const FLAVOURS = [
   "Korea Town",
@@ -43,12 +42,6 @@ function truncate(label: string, max: number) {
 
 const HEADLINE_LINES = ["CAN'T", "DECIDE?"] as const;
 
-const DOUBLED_STYLE = {
-  "--dh-fill": "var(--color-brand-pink)",
-  "--dh-shadow": "var(--color-brand-red)",
-  "--dh-offset": "0.06em",
-} as React.CSSProperties;
-
 export function FlavourLabTeaser() {
   const step = 360 / SEGMENTS.length;
 
@@ -63,16 +56,14 @@ export function FlavourLabTeaser() {
 
       <h2
         id="flavour-lab-heading"
-        className="mb-10 text-center font-display font-extrabold uppercase leading-[0.85] tracking-tight"
+        className="mb-10 text-center font-display font-extrabold uppercase leading-[0.85] tracking-tight text-brand-pink"
       >
         <span className="sr-only">Can&apos;t decide?</span>
         {HEADLINE_LINES.map((line) => (
           <span
             key={line}
             aria-hidden="true"
-            data-text={line}
-            className="doubled-heading block text-[clamp(3.25rem,18vw,7rem)]"
-            style={DOUBLED_STYLE}
+            className="block text-[clamp(3.25rem,18vw,7rem)]"
           >
             {line}
           </span>

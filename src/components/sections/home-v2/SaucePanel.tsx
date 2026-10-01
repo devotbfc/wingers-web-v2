@@ -1,15 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import type React from "react";
 
 const HEADLINE_LINES = ["SAUCE IS NOT", "OPTIONAL."] as const;
-
-const DOUBLED_STYLE = {
-  "--dh-fill": "var(--color-brand-white)",
-  "--dh-shadow": "var(--color-brand-black)",
-  "--dh-offset": "0.06em",
-} as React.CSSProperties;
 
 export function SaucePanel() {
   return (
@@ -42,16 +35,14 @@ export function SaucePanel() {
       <div className="relative z-10 flex h-full w-full flex-col justify-end gap-6 px-5 pb-12 sm:px-8">
         <h2
           id="sauce-heading"
-          className="font-display font-extrabold uppercase leading-[0.9] tracking-tight"
+          className="font-display font-extrabold uppercase leading-[0.9] tracking-tight text-brand-white"
         >
           <span className="sr-only">Sauce is not optional.</span>
           {HEADLINE_LINES.map((line) => (
             <span
               key={line}
               aria-hidden="true"
-              data-text={line}
-              className="doubled-heading block text-[clamp(2.75rem,12vw,6rem)]"
-              style={DOUBLED_STYLE}
+              className="block text-[clamp(2.75rem,12vw,6rem)]"
             >
               {line}
             </span>
