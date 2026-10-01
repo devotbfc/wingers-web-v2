@@ -97,7 +97,7 @@ export function TheGoods() {
             <Link
               href="/menu"
               aria-label={`${tile.name}, ${formatPrice(tile.price > 0 ? tile.price : null)}`}
-              className="group relative block w-[78vw] max-w-[22rem] overflow-hidden bg-brand-black"
+              className="group relative block w-[78vw] max-w-[22rem] overflow-hidden bg-brand-white"
             >
               <div className="relative aspect-square w-full">
                 <Image

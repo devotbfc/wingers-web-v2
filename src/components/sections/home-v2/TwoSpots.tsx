@@ -11,26 +11,29 @@ type SpotTheme = {
   directionsClasses: string;
 };
 
+const DIRECTIONS_OUTLINE =
+  "border-2 border-brand-black text-brand-black hover:bg-brand-black hover:text-brand-white";
+
 const THEME_BY_SLUG: Record<string, SpotTheme> = {
   "milton-keynes": {
     panelBg: "bg-brand-pink",
     bodyText: "text-brand-black",
     photoFallbackBg: "bg-brand-red",
-    directionsClasses: "bg-brand-black text-brand-white hover:bg-brand-black/90",
+    directionsClasses: DIRECTIONS_OUTLINE,
   },
   northampton: {
-    panelBg: "bg-brand-black",
-    bodyText: "text-brand-white",
+    panelBg: "bg-brand-white",
+    bodyText: "text-brand-black",
     photoFallbackBg: "bg-brand-pink",
-    directionsClasses: "bg-brand-white text-brand-black hover:bg-brand-white/90",
+    directionsClasses: DIRECTIONS_OUTLINE,
   },
 };
 
 const DEFAULT_THEME: SpotTheme = {
-  panelBg: "bg-brand-black",
-  bodyText: "text-brand-white",
+  panelBg: "bg-brand-white",
+  bodyText: "text-brand-black",
   photoFallbackBg: "bg-brand-pink",
-  directionsClasses: "bg-brand-white text-brand-black hover:bg-brand-white/90",
+  directionsClasses: DIRECTIONS_OUTLINE,
 };
 
 function mapsUrlFor(loc: Location): string {
