@@ -66,7 +66,7 @@ const STAGES: readonly Stage[] = [
     n: "03",
     label: "FRY",
     copy: "Dropped in fresh oil and fried to order. Golden, loud, crunchy — never sitting under a lamp.",
-    tile: "bg-brand-black",
+    tile: "bg-brand-pink/20",
     align: "start",
     photoSlot: "P06",
   },
@@ -211,17 +211,17 @@ export default function AboutPage() {
 
         <section
           aria-labelledby="halal-heading"
-          className="section-dark py-16 md:py-24"
+          className="bg-brand-white py-16 md:py-24"
         >
           <div className="mx-auto max-w-2xl px-4 md:px-8">
             <h2
               id="halal-heading"
-              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-white"
+              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
             >
               HALAL. FACTUAL.
             </h2>
             <div
-              className="mt-6 space-y-4 font-body text-base md:text-lg leading-relaxed text-brand-white/80"
+              className="mt-6 space-y-4 font-body text-base md:text-lg leading-relaxed text-brand-black/80"
             >
               <p>
                 All chicken served at Wingers is halal. Certificates are held at
@@ -232,23 +232,17 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section aria-labelledby="close-heading" className="relative isolate">
+        <section
+          aria-labelledby="close-heading"
+          className="px-4 py-24 md:px-8 md:py-32"
+        >
           <h2 id="close-heading" className="sr-only">
             Get stuck in
           </h2>
-          <div
-            aria-hidden="true"
-            className="relative min-h-[70svh] w-full bg-brand-black"
-          />
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-8 px-4 text-center">
-            <DoubledHeading
-              as="p"
-              text="THAT'S IT."
-              fillColor="brand-white"
-              shadowColor="brand-pink"
-              offsetEm="0.06em"
-              className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,12vw,8rem)]"
-            />
+          <div className="mx-auto flex max-w-6xl flex-col items-start gap-8">
+            <p className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-brand-pink text-[clamp(3rem,12vw,8rem)]">
+              THAT&rsquo;S IT<span className="text-brand-red">.</span>
+            </p>
             <OrderTriggerButton variant="primary" size="lg">
               Get Stuck In
             </OrderTriggerButton>
