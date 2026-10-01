@@ -48,24 +48,26 @@ export function FlavourCard({ flavour, index }: FlavourCardProps) {
         />
       )}
 
-      <div className="relative flex items-start justify-between gap-2">
+      <div className="relative flex flex-wrap items-start gap-x-2 gap-y-1.5">
         <HeatFlames heat={flavour.heat} />
-        {isLE && !ghost && (
-          <span className="rounded-full border border-brand-pink/50 px-2 py-0.5 font-display text-[9px] font-bold uppercase tracking-[0.2em] text-brand-pink">
-            Limited
-          </span>
-        )}
-        {ghost && (
-          <span className="animate-flicker rounded-full border border-brand-red/60 px-2 py-0.5 font-display text-[9px] font-bold uppercase tracking-[0.25em] text-brand-red">
-            Danger
-          </span>
-        )}
-        {comingSoon && (
-          <Lock
-            className="h-4 w-4 text-brand-pink/70 drop-shadow-[0_0_6px_rgba(255,111,181,0.6)]"
-            aria-hidden="true"
-          />
-        )}
+        <div className="ml-auto flex items-center gap-2">
+          {isLE && !ghost && (
+            <span className="rounded-full border border-brand-pink/50 px-2 py-0.5 font-display text-[9px] font-bold uppercase tracking-[0.2em] text-brand-pink">
+              Limited
+            </span>
+          )}
+          {ghost && (
+            <span className="animate-flicker rounded-full border border-brand-red/60 px-2 py-0.5 font-display text-[9px] font-bold uppercase tracking-[0.25em] text-brand-red">
+              Danger
+            </span>
+          )}
+          {comingSoon && (
+            <Lock
+              className="h-4 w-4 text-brand-pink/70 drop-shadow-[0_0_6px_rgba(255,111,181,0.6)]"
+              aria-hidden="true"
+            />
+          )}
+        </div>
       </div>
 
       <h3

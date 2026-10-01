@@ -108,10 +108,10 @@ export default function AllergiesPage() {
               role="note"
               className="border-l-4 border-brand-red bg-brand-pink/15 p-6 text-brand-black md:p-8"
             >
+              <h3 className="mb-2 font-display font-extrabold uppercase tracking-tight text-brand-black">
+                Cross-contamination notice.
+              </h3>
               <p className="font-body text-base md:text-lg leading-relaxed">
-                <strong className="font-display font-extrabold uppercase tracking-tight">
-                  Cross-contamination notice.
-                </strong>{" "}
                 All items are prepared in kitchens that handle gluten, milk,
                 eggs, soya, sesame, peanuts, tree nuts, mustard, celery,
                 sulphites, lupin, fish, crustaceans and molluscs. We cannot
