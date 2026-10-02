@@ -10,7 +10,7 @@ const EXPLORE_LINKS = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/locations" },
   { label: "Allergies", href: "/allergies" },
-  { label: "FAQ", href: "/faq" },
+  { label: "FAQ", href: "/about#faq" },
 ];
 
 const SOCIAL_LINKS = [

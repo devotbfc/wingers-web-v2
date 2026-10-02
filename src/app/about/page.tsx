@@ -74,19 +74,19 @@ const STAGES: readonly Stage[] = [
 const FAQS: readonly { q: string; a: string }[] = [
   {
     q: "Is Wingers halal?",
-    a: "TODO(copy): confirm HMC certificate details and wording before launch.",
+    a: "Yes. Every item at both shops is halal-certified \u2014 the chicken, the beef burgers and all the sides. Certificates are available in the shop on request.",
   },
   {
     q: "Do you deliver?",
-    a: "TODO(copy): confirm delivery radius and platform per location before launch.",
+    a: "Delivery is through Deliveroo and Uber Eats at both shops. For collection, order ahead from this site \u2014 press Order and pick your shop \u2014 or just walk in.",
   },
   {
     q: "Do you offer gluten-free options?",
-    a: "TODO(copy): confirm which items are gluten-free before launch.",
+    a: "Our fried chicken is dredged in seasoned wheat flour, so it isn\u2019t gluten-free, and both kitchens handle gluten throughout. Our Allergens page lists every item. If you have a serious allergy, tell the shop team before you order.",
   },
   {
     q: "Do the shops have parking?",
-    a: "TODO(copy): confirm parking arrangements per location before launch.",
+    a: "Milton Keynes (Darin Court, Crownhill): plenty \u2014 pull up right outside. Northampton (2 Drapery): town-centre parking within a 30-second walk.",
   },
 ];
 
@@ -223,6 +223,41 @@ export default function AboutPage() {
               </p>
               <p>No pork on the menu. No alcohol in any product.</p>
             </div>
+          </div>
+        </section>
+
+        <section
+          id="faq"
+          aria-labelledby="faq-heading"
+          className="scroll-mt-24 bg-brand-white px-4 py-16 md:px-8 md:py-24"
+        >
+          <div className="mx-auto max-w-3xl">
+            <h2
+              id="faq-heading"
+              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
+            >
+              FREQUENTLY ASKED.
+            </h2>
+            <ul className="mt-10 space-y-3">
+              {FAQS.map((f) => (
+                <li key={f.q}>
+                  <details className="group border-t border-brand-black/10 py-5 first:border-t-0 open:pb-6">
+                    <summary className="flex cursor-pointer list-none items-start justify-between gap-6 font-display text-lg md:text-xl font-bold uppercase tracking-tight text-brand-black transition-colors group-hover:text-brand-red">
+                      <span>{f.q}</span>
+                      <span
+                        aria-hidden="true"
+                        className="mt-1 shrink-0 text-brand-red transition-transform group-open:rotate-45"
+                      >
+                        +
+                      </span>
+                    </summary>
+                    <p className="mt-4 font-body text-base md:text-lg leading-relaxed text-brand-black/80">
+                      {f.a}
+                    </p>
+                  </details>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
