@@ -46,8 +46,8 @@ export function Hero() {
           ))}
         </h1>
 
-        <p className="mt-6 max-w-md font-body text-base leading-relaxed text-brand-white sm:text-lg">
-          Halal buttermilk fried chicken. Milton Keynes &amp; Northampton.
+        <p className="mt-6 max-w-md font-body text-base leading-relaxed text-balance text-brand-white sm:text-lg">
+          Fresh, never frozen. Hand-breaded halal buttermilk fried chicken. Milton Keynes &amp; Northampton.
         </p>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">

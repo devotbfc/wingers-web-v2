@@ -28,11 +28,11 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-12 md:grid-cols-4">
           <div className="md:col-span-1">
             <BrandLogo
-              type="mark"
-              variant="white"
-              width={72}
-              height={72}
-              className="h-16 w-16"
+              type="lockup"
+              variant="pink"
+              width={180}
+              height={116}
+              className="h-auto w-[180px]"
               alt="Wingers"
             />
             <p className="mt-6 font-display text-lg font-bold uppercase tracking-tight text-brand-white">
