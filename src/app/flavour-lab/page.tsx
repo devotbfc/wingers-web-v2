@@ -57,7 +57,7 @@ export default function FlavourLabPage() {
 
   return (
     <OrderPanelProvider>
-      <NavBar />
+      <NavBar onDark />
       <main className="bg-lab-black text-brand-white">
         <FlavourLabHero />
         <SpinTheWheel />

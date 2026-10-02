@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <OrderPanelProvider>
-      <NavBar />
+      <NavBar onDark />
       <main>
         <Hero />
         <StatementPanel />

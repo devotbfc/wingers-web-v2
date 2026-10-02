@@ -18,7 +18,13 @@ const NAV_LINKS = [
   { label: "About", href: "/about" },
 ] as const;
 
-export function NavBar() {
+interface NavBarProps {
+  // Set on routes whose top-of-page strip is dark (homepage hero, flavour-lab).
+  // Everything else leaves it unset and gets dark links on a light page.
+  onDark?: boolean;
+}
+
+export function NavBar({ onDark = false }: NavBarProps = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { openPanel } = useOrderPanel();
@@ -75,7 +81,8 @@ export function NavBar() {
                 href={link.href}
                 className={cn(
                   "font-display font-bold uppercase tracking-wide text-sm transition-colors",
-                  scrolled
+                  "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red",
+                  scrolled || !onDark
                     ? "text-brand-black hover:text-brand-red"
                     : "text-brand-white hover:text-brand-pink"
                 )}
@@ -101,7 +108,8 @@ export function NavBar() {
           onClick={() => setMobileOpen(true)}
           className={cn(
             "md:hidden inline-flex items-center justify-center h-10 w-10 transition-colors",
-            scrolled ? "text-brand-black" : "text-brand-white"
+            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red",
+            scrolled || !onDark ? "text-brand-black" : "text-brand-white"
           )}
         >
           <Menu className="h-6 w-6" aria-hidden="true" />
@@ -134,7 +142,7 @@ export function NavBar() {
               type="button"
               aria-label="Close menu"
               onClick={() => setMobileOpen(false)}
-              className="inline-flex items-center justify-center h-10 w-10 text-brand-black"
+              className="inline-flex items-center justify-center h-10 w-10 text-brand-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red"
             >
               <X className="h-6 w-6" aria-hidden="true" />
             </button>
@@ -145,7 +153,7 @@ export function NavBar() {
                 <Link
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="block font-display font-extrabold uppercase tracking-tight text-3xl text-brand-black hover:text-brand-red transition-colors py-2"
+                  className="block font-display font-extrabold uppercase tracking-tight text-3xl text-brand-black hover:text-brand-red transition-colors py-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
                 >
                   {link.label}
                 </Link>
