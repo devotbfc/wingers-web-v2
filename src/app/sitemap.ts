@@ -1,10 +1,9 @@
 import type { MetadataRoute } from "next";
 import { LOCATIONS } from "@/lib/locations";
-
-const SITE_URL =
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://wingers-web-v2.vercel.app";
+import { getSiteUrl } from "@/lib/site-url";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const SITE_URL = getSiteUrl();
   const now = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [

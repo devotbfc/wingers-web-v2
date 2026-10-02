@@ -19,9 +19,7 @@ import {
   LOCATIONS,
   type Location,
 } from "@/lib/locations";
-
-const SITE_URL =
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://wingers-web-v2.vercel.app";
+import { getSiteUrl } from "@/lib/site-url";
 
 interface RouteParams {
   slug: string;
@@ -62,6 +60,7 @@ export async function generateMetadata({
 }
 
 function buildLocationJsonLd(location: Location) {
+  const SITE_URL = getSiteUrl();
   const townForCopy = location.address.city.split(",")[0].trim();
   const openingHoursSpecification = dayKeys
     .map((dayKey) => {

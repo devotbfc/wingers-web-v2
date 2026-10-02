@@ -1,15 +1,14 @@
 import type { MetadataRoute } from "next";
-
-const SITE_URL =
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://wingers-web-v2.vercel.app";
+import { getSiteUrl } from "@/lib/site-url";
 
 export default function robots(): MetadataRoute.Robots {
+  const SITE_URL = getSiteUrl();
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/dev/", "/terms", "/api/"],
+        disallow: ["/dev", "/terms", "/api/"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

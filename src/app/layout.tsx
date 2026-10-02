@@ -7,6 +7,7 @@ import { ConsentProvider } from "@/components/consent/ConsentProvider";
 import { ConsentBanner } from "@/components/consent/ConsentBanner";
 import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { PixelPageView } from "@/components/analytics/PixelPageView";
+import { getSiteUrl } from "@/lib/site-url";
 import "@/styles/globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -23,11 +24,8 @@ const inter = Inter({
   display: "swap",
 });
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://wingers-web-v2.vercel.app";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: new URL(getSiteUrl()),
   title: "Wingers — Buttermilk Fried Chicken",
   description:
     "Wingers serves buttermilk fried chicken in Milton Keynes and Northampton. Order online for delivery or collection.",
