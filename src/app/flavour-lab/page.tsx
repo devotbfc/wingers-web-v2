@@ -8,7 +8,7 @@ import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTrigg
 import { DipsSection } from "@/components/sections/flavour-lab/DipsSection";
 import { FlavourGrid } from "@/components/sections/flavour-lab/FlavourGrid";
 import { FlavourLabHero } from "@/components/sections/flavour-lab/FlavourLabHero";
-import { IncomingDropsSection } from "@/components/sections/flavour-lab/IncomingDropsSection";
+import { ComingSoonSection } from "@/components/sections/flavour-lab/ComingSoonSection";
 import { PastDropsSection } from "@/components/sections/flavour-lab/PastDropsSection";
 import { SpinTheWheel } from "@/components/sections/flavour-lab/SpinTheWheel";
 import { SPINNABLE_FLAVOURS } from "@/lib/flavours";
@@ -69,7 +69,7 @@ export default function FlavourLabPage() {
         <FlavourLabHero />
         <SpinTheWheel />
         <FlavourGrid />
-        <IncomingDropsSection />
+        <ComingSoonSection />
         <DipsSection />
         <PastDropsSection />
 

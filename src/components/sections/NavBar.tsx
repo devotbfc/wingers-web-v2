@@ -95,9 +95,9 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
           <li>
             <Link
               href="/flavour-lab"
-              className="inline-flex items-center gap-2 rounded-2xl bg-brand-pink px-3 h-9 font-display text-xs font-bold uppercase tracking-wide text-brand-black transition-colors hover:bg-brand-red hover:text-brand-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
+              className="inline-flex items-center gap-1.5 font-display text-sm font-bold uppercase tracking-wide text-brand-pink transition-colors hover:text-brand-red focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
             >
-              <FlaskGlyph className="h-[0.9em] w-[0.9em] shrink-0" />
+              <FlaskGlyph className="h-[1.5em] w-[1.5em] shrink-0" />
               Lab
             </Link>
           </li>
@@ -175,7 +175,7 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
                 onClick={() => setMobileOpen(false)}
                 className="inline-flex items-center gap-3 font-display font-extrabold uppercase tracking-tight text-3xl text-brand-pink hover:text-brand-red transition-colors py-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
               >
-                <FlaskGlyph className="h-[0.8em] w-[0.8em] shrink-0" />
+                <FlaskGlyph className="h-[1em] w-[1em] shrink-0" />
                 Lab
               </Link>
             </li>

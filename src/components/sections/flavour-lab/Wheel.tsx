@@ -22,6 +22,29 @@ const PALETTE = [
   { fill: "var(--color-lab-black)", text: "var(--color-brand-white)" },
 ] as const;
 
+// Greedy pass that keeps the natural i % palette.length rotation unless it
+// would make a segment match its neighbour — including the last↔first seam.
+// Compares by fill so duplicate palette entries (e.g. two lab-black slots) are
+// treated as the same colour.
+function pickWheelColorIndices(count: number, fills: readonly string[]): number[] {
+  const out: number[] = [];
+  for (let i = 0; i < count; i++) {
+    const prevFill = i > 0 ? fills[out[i - 1]] : null;
+    const firstFill = i === count - 1 && count > 1 ? fills[out[0]] : null;
+    const conflicts = (idx: number) =>
+      (prevFill !== null && fills[idx] === prevFill) ||
+      (firstFill !== null && fills[idx] === firstFill);
+    let c = i % fills.length;
+    if (conflicts(c)) {
+      for (let p = 0; p < fills.length; p++) {
+        if (!conflicts(p)) { c = p; break; }
+      }
+    }
+    out.push(c);
+  }
+  return out;
+}
+
 function polar(angleDeg: number, radius: number) {
   const a = (angleDeg * Math.PI) / 180;
   return { x: CX + radius * Math.cos(a), y: CY + radius * Math.sin(a) };
@@ -43,6 +66,10 @@ export function Wheel({
 }: WheelProps) {
   const reduce = useReducedMotion();
   const step = 360 / segments.length;
+  const segmentColorIndices = pickWheelColorIndices(
+    segments.length,
+    PALETTE.map((p) => p.fill),
+  );
 
   return (
     <div className="relative aspect-square w-[min(82vw,340px)] md:w-[520px]">
@@ -88,7 +115,7 @@ export function Wheel({
           style={{ transformOrigin: `${CX}px ${CY}px` }}
         >
           {segments.map((seg, i) => {
-            const palette = PALETTE[i % PALETTE.length];
+            const palette = PALETTE[segmentColorIndices[i]];
             const start = i * step - 90;
             const end = start + step;
             const p1 = polar(start, R);
@@ -119,7 +146,7 @@ export function Wheel({
                   className="font-display uppercase"
                   style={{ textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}
                 >
-                  {labelFor(seg.name)}
+                  {labelFor(seg.wheelLabel ?? seg.name)}
                 </text>
               </g>
             );

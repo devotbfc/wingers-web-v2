@@ -1,4 +1,5 @@
 import { FlaskGlyph } from "@/components/ui/FlaskGlyph";
+import { CORE_COUNT, numberToWord } from "@/lib/flavours";
 
 export function FlavourLabHero() {
   return (
@@ -39,9 +40,10 @@ export function FlavourLabHero() {
         </p>
 
         <p className="mt-4 max-w-2xl font-body text-base leading-relaxed text-brand-white/60">
-          Where we cook up the loud stuff — ten permanent sauces and rubs plus
-          fourteen limited-edition drops across Milton Keynes and Northampton.
-          Spin the wheel to pick one, or filter by heat.
+          Where we cook up the loud stuff — {numberToWord(CORE_COUNT)} permanent
+          sauces and rubs plus limited-edition drops rotating through the Lab
+          across Milton Keynes and Northampton. Spin the wheel to pick one, or
+          filter by heat.
         </p>
       </div>
     </section>
