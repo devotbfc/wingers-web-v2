@@ -18,7 +18,6 @@ import {
   readFbcCookie,
   readFbclidFromUrl,
 } from "@/lib/analytics/fbclid";
-import { cn } from "@/lib/utils";
 import { useOrderPanel } from "./order-panel-context";
 
 export function OrderPanel() {
@@ -36,14 +35,6 @@ export function OrderPanel() {
     return readFbclidFromUrl() ?? readFbcCookie();
   }, [consentStatus]);
 
-  const orderedLocations = preferredLocationSlug
-    ? [...LOCATIONS].sort((a, b) => {
-        if (a.slug === preferredLocationSlug) return -1;
-        if (b.slug === preferredLocationSlug) return 1;
-        return 0;
-      })
-    : LOCATIONS;
-
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent
@@ -59,7 +50,7 @@ export function OrderPanel() {
           </SheetDescription>
         </SheetHeader>
         <ul className="grid gap-4 px-6 pb-8 md:grid-cols-2">
-          {orderedLocations.map((loc) => {
+          {LOCATIONS.map((loc) => {
             const provider = getProviderForLocation(loc);
             const rawHref = provider.getOrderUrl(loc);
             const href = appendFbclidToUrl(rawHref, fbclid);
@@ -68,31 +59,18 @@ export function OrderPanel() {
             return (
               <li
                 key={loc.slug}
-                className={cn(
-                  "flex flex-col gap-4 p-5 text-brand-black",
-                  isPreferred ? "bg-brand-red text-brand-white" : "bg-brand-pink"
-                )}
+                className="flex flex-col gap-4 bg-brand-pink p-5 text-brand-black"
               >
                 {isPreferred && (
-                  <span className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-white/90">
+                  <span className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-black/70">
                     Your shop
                   </span>
                 )}
                 <div className="flex flex-col gap-1">
-                  <h3
-                    className={cn(
-                      "font-display text-xl font-extrabold uppercase tracking-tight",
-                      isPreferred ? "text-brand-white" : "text-brand-black"
-                    )}
-                  >
+                  <h3 className="font-display text-xl font-extrabold uppercase tracking-tight text-brand-black">
                     {loc.name}
                   </h3>
-                  <p
-                    className={cn(
-                      "font-body text-sm leading-snug",
-                      isPreferred ? "text-brand-white/85" : "text-brand-black/80"
-                    )}
-                  >
+                  <p className="font-body text-sm leading-snug text-brand-black/80">
                     {loc.address.street}
                     <br />
                     {loc.address.city}, {loc.address.postcode}
@@ -102,7 +80,7 @@ export function OrderPanel() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  variant={isPreferred ? "inverse" : "primary"}
+                  variant="outline"
                   size="lg"
                   className="w-full justify-center"
                   aria-label={`Order from ${loc.name}`}

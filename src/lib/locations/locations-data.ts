@@ -50,5 +50,11 @@ export const LOCATIONS_DATA: readonly Location[] = [
     geo: { latitude: 52.23725, longitude: -0.897566 },
     openingHours: northamptonHours,
     orderProvider: "Toast",
+    shopfront: {
+      src: "/brand/photos/locations/northampton/shopfront.jpg",
+      alt: "Wingers Northampton shopfront at 2 Drapery",
+      heroPosition: "object-[45%_center] md:object-[center_40%]",
+      cardPosition: "object-center",
+    },
   },
 ] as const;

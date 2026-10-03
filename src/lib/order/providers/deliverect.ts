@@ -2,7 +2,7 @@ import type { Location } from "@/lib/locations/types";
 import type { OrderProvider } from "../types";
 
 const DELIVERECT_URLS: Record<string, string> = {
-  "milton-keynes": "https://wingers-mk.deliverectdirect.com/",
+  "milton-keynes": "https://wingers-mk.deliverectdirect.com/pickup/67ab683697fbb3ec629388fd",
 };
 
 export const deliverectProvider: OrderProvider = {
