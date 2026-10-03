@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { BrandLogo } from "@/components/brand/BrandLogo";
+import { FlaskGlyph } from "@/components/ui/FlaskGlyph";
 import {
   Sheet,
   SheetContent,
@@ -92,6 +93,15 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
             </li>
           ))}
           <li>
+            <Link
+              href="/flavour-lab"
+              className="inline-flex items-center gap-2 rounded-2xl bg-brand-pink px-3 h-9 font-display text-xs font-bold uppercase tracking-wide text-brand-black transition-colors hover:bg-brand-red hover:text-brand-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
+            >
+              <FlaskGlyph className="h-[0.9em] w-[0.9em] shrink-0" />
+              Lab
+            </Link>
+          </li>
+          <li>
             <button
               type="button"
               onClick={() => openPanel()}
@@ -159,6 +169,16 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link
+                href="/flavour-lab"
+                onClick={() => setMobileOpen(false)}
+                className="inline-flex items-center gap-3 font-display font-extrabold uppercase tracking-tight text-3xl text-brand-pink hover:text-brand-red transition-colors py-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
+              >
+                <FlaskGlyph className="h-[0.8em] w-[0.8em] shrink-0" />
+                Lab
+              </Link>
+            </li>
             <li className="mt-4">
               <button
                 type="button"

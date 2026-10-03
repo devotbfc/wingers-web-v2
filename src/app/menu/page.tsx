@@ -13,7 +13,7 @@ import {
 import { MenuShell } from "./MenuShell";
 
 export const metadata: Metadata = {
-  title: "Menu — Wingers Buttermilk Fried Chicken",
+  title: "Menu — Wingers Halal Buttermilk Fried Chicken",
   description:
     "Halal buttermilk fried chicken in Milton Keynes and Northampton. Wings, boneless, tenders, burgers, loaded fries, mac & cheese, shakes, cookies and more — prices and availability differ per shop.",
   alternates: { canonical: "/menu" },
@@ -103,10 +103,10 @@ export default function MenuPage() {
     <OrderPanelProvider>
       <NavBar />
       <main>
-        <section className="bg-brand-white pt-12 pb-2 md:pt-20 md:pb-4">
+        <section className="bg-brand-white pt-28 pb-2 md:pt-32 md:pb-4">
           <div className="mx-auto max-w-6xl px-4 md:px-8">
             <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
-              Halal Buttermilk Fried Chicken
+              Fresh · Hand-Breaded · Halal
             </p>
             <h1 className="mt-2 font-display text-[clamp(3rem,10vw,7rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-pink">
               THE MENU

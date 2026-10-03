@@ -408,3 +408,19 @@ Separately, both brand-red and brand-pink were being used as filled primary butt
 - NavBar Order button is flattened to `brand-red` in both scrolled and top states — the previous dead ternary (pink when top, red when scrolled) landed pink Order beside the hero's red CTA on the homepage top-state.
 - Location detail hero drops its `bg-brand-black/55` scrim in favour of `bg-brand-white/85`, turning the pink/red brand base into a soft light-pink/coral canvas. The decorative BrandLogo mark swaps `variant="white"` → `variant="black"` so it still reads as a 15%-opacity watermark on light.
 - About page's dramatic "THAT'S IT." close loses its 70svh dark backdrop and collapses to a normal-flow section with left-aligned content matching the hero rhythm.
+
+## ADR-019 — Nav LAB pill is a permitted pink-filled element
+
+**Date**: 2026-10-03
+**Status**: Accepted (narrow exception to ADR-018 §4)
+
+### Context
+ADR-018 §4 established `brand-red` as the only filled primary CTA colour and forbade two filled CTA colours sitting side by side on the same screen. Adding a dedicated LAB nav item that visually matches the on-page `/flavour-lab` LAB badge (`bg-brand-pink` + `text-brand-black`) places a pink-filled element on the top nav alongside the red-filled ORDER button.
+
+### Decision
+The desktop nav LAB pill is a permitted pink-filled element and does not violate ADR-018 §4. The exception applies only to this element because it is brand navigation (destination signalling for the Flavour Lab zone), not a purchase CTA. ORDER remains the only filled primary CTA. The mobile nav sheet keeps LAB as a plain text link in `brand-pink` type — no fill — so the sheet still has exactly one filled CTA (the pink ORDER chip already permitted by ADR-018 §4).
+
+### Consequences
+- Desktop nav shows two filled elements (red ORDER, pink LAB); LAB is deliberately sized smaller (`h-9 px-3 text-xs` vs ORDER's `h-10 px-5 text-sm`) so ORDER stays dominant.
+- Mobile sheet is unchanged in filled-element count: pink ORDER chip is still the only filled CTA.
+- Any future pink-filled nav element requires a further ADR; this exception is scoped to LAB only.

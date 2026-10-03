@@ -76,7 +76,7 @@ export default function FlavourLabPage() {
         <section className="section-dark py-20 md:py-28">
           <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 text-center md:px-8">
             <DoubledHeading
-              text="TASTED SOMETHING?"
+              text="FOUND YOUR FLAVOUR?"
               as="p"
               fillColor="brand-pink"
               shadowColor="brand-red"
