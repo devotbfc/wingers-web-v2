@@ -30,7 +30,18 @@ export const metadata: Metadata = {
       "Halal buttermilk fried chicken in Milton Keynes and Northampton. Dip it. Bite it. Love it.",
     url: "/",
     type: "website",
-    images: [{ url: "/og/home.png", width: 1200, height: 630 }],
+    images: [
+      {
+        url: "/og/home.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Wingers mac & cheese",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og/home.jpg"],
   },
 };
 

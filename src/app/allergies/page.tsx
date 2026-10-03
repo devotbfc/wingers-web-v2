@@ -21,7 +21,14 @@ export const metadata: Metadata = {
       "Full allergen matrix for every item on the Wingers menu. UK 14 statutory allergens listed per item.",
     url: "/allergies",
     type: "website",
-    images: [{ url: "/og/allergies.png", width: 1200, height: 630 }],
+    images: [
+      {
+        url: "/og/home.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Wingers mac & cheese",
+      },
+    ],
   },
 };
 

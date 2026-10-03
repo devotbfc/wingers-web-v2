@@ -54,7 +54,12 @@ export async function generateMetadata({
       url: canonical,
       type: "website",
       images: [
-        { url: `/og/${location.slug}.png`, width: 1200, height: 630 },
+        {
+          url: "/og/home.jpg",
+          width: 1200,
+          height: 630,
+          alt: "Wingers mac & cheese",
+        },
       ],
     },
   };
