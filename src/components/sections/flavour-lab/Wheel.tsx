@@ -50,11 +50,22 @@ function polar(angleDeg: number, radius: number) {
   return { x: CX + radius * Math.cos(a), y: CY + radius * Math.sin(a) };
 }
 
-function labelFor(name: string, maxChars = 15): string {
-  if (name.length <= maxChars) return name;
-  const firstWord = name.split(/\s+/)[0];
-  if (firstWord.length <= maxChars) return firstWord;
-  return `${firstWord.slice(0, maxChars - 1)}…`;
+// Return 1 or 2 lines so long names don't truncate. Splits at the latest space
+// that keeps both parts within maxChars (so "Ghost Buffalo HOT" becomes
+// ["Ghost Buffalo", "HOT"], not ["Ghost", "Buffalo HOT"]).
+function labelLinesFor(name: string, maxChars = 15): string[] {
+  if (name.length <= maxChars) return [name];
+  const spaceIndices: number[] = [];
+  for (let i = 0; i < name.length; i++) {
+    if (name[i] === " ") spaceIndices.push(i);
+  }
+  for (let i = spaceIndices.length - 1; i >= 0; i--) {
+    const s = spaceIndices[i];
+    const a = name.slice(0, s);
+    const b = name.slice(s + 1);
+    if (a.length <= maxChars && b.length <= maxChars) return [a, b];
+  }
+  return [name];
 }
 
 export function Wheel({
@@ -133,21 +144,14 @@ export function Wheel({
                   stroke="rgba(0,0,0,0.4)"
                   strokeWidth={0.5}
                 />
-                <text
+                <WheelLabel
+                  lines={labelLinesFor(seg.wheelLabel ?? seg.name)}
                   x={labelPos.x}
                   y={labelPos.y}
+                  rot={rot}
                   fill={palette.text}
-                  fontSize="6"
-                  fontWeight="800"
-                  letterSpacing="0.02em"
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  transform={`rotate(${rot} ${labelPos.x} ${labelPos.y})`}
-                  className="font-display uppercase"
-                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}
-                >
-                  {labelFor(seg.wheelLabel ?? seg.name)}
-                </text>
+                  fontSize={6}
+                />
               </g>
             );
           })}
@@ -185,6 +189,48 @@ export function Wheel({
         aria-label={spinning ? "Wheel is spinning" : "Spin the wheel"}
       />
     </div>
+  );
+}
+
+function WheelLabel({
+  lines,
+  x,
+  y,
+  rot,
+  fill,
+  fontSize,
+}: {
+  lines: string[];
+  x: number;
+  y: number;
+  rot: number;
+  fill: string;
+  fontSize: number;
+}) {
+  return (
+    <text
+      x={x}
+      y={y}
+      fill={fill}
+      fontSize={fontSize}
+      fontWeight="800"
+      letterSpacing="0.02em"
+      textAnchor="middle"
+      dominantBaseline="middle"
+      transform={`rotate(${rot} ${x} ${y})`}
+      className="font-display uppercase"
+      style={{ textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}
+    >
+      {lines.length === 1 ? (
+        lines[0]
+      ) : (
+        lines.map((line, idx) => (
+          <tspan key={idx} x={x} dy={idx === 0 ? "-0.4em" : "1em"}>
+            {line}
+          </tspan>
+        ))
+      )}
+    </text>
   );
 }
 

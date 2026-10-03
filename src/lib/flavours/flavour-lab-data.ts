@@ -9,7 +9,8 @@
 //       — Lab-only teaser: coming-soon (shown in ComingSoonSection)
 //       — Suppressed: hidden (not shown anywhere)
 //     • wheelLabel:    optional short label for wheel segments where the full name overflows
-//                      (Buffalo NY, Cajun, Ghost Buffalo, Naked).
+//                      (Buffalo NY, Cajun, Naked). Ghost Buffalo HOT keeps its full name —
+//                      the wheels auto-wrap labels longer than 15 chars onto two lines.
 //     • Spelling fixes: "Caribbean Coconut" (was "Carribean"), "Singapore Zing" (was "Sinapore").
 //     • Katsu.shortDescription: hand-written pre-launch; long-form story fields still null.
 //
@@ -92,7 +93,6 @@ export const FLAVOURS: Flavour[] = [
   {
     "slug": "ghost-buffalo-hot",
     "name": "Ghost Buffalo HOT",
-    "wheelLabel": "Ghost Buffalo",
     "limitedEdition": false,
     "heat": 5,
     "type": "wet-sauce",

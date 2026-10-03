@@ -48,8 +48,20 @@ function polar(angleDeg: number, radius: number) {
   return { x: CX + radius * Math.cos(a), y: CY + radius * Math.sin(a) };
 }
 
-function truncate(label: string, max: number) {
-  return label.length > max ? `${label.slice(0, max - 1).trimEnd()}…` : label;
+// Return 1 or 2 lines so long names don't truncate — mirrors Wheel.labelLinesFor.
+function labelLinesFor(label: string, maxChars = 15): string[] {
+  if (label.length <= maxChars) return [label];
+  const spaceIndices: number[] = [];
+  for (let i = 0; i < label.length; i++) {
+    if (label[i] === " ") spaceIndices.push(i);
+  }
+  for (let i = spaceIndices.length - 1; i >= 0; i--) {
+    const s = spaceIndices[i];
+    const a = label.slice(0, s);
+    const b = label.slice(s + 1);
+    if (a.length <= maxChars && b.length <= maxChars) return [a, b];
+  }
+  return [label];
 }
 
 const HEADLINE_LINES = ["CAN'T", "DECIDE?"] as const;
@@ -117,20 +129,33 @@ export function FlavourLabTeaser() {
                   d={`M ${CX} ${CY} L ${p1.x} ${p1.y} A ${R} ${R} 0 0 1 ${p2.x} ${p2.y} Z`}
                   fill={seg.fill}
                 />
-                <text
-                  x={labelPos.x}
-                  y={labelPos.y}
-                  fill={seg.text}
-                  fontSize="5.5"
-                  fontWeight="800"
-                  letterSpacing="0.02em"
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  transform={`rotate(${rot} ${labelPos.x} ${labelPos.y})`}
-                  className="font-display uppercase"
-                >
-                  {truncate(seg.label, 15)}
-                </text>
+                {(() => {
+                  const lines = labelLinesFor(seg.label);
+                  return (
+                    <text
+                      x={labelPos.x}
+                      y={labelPos.y}
+                      fill={seg.text}
+                      fontSize="5.5"
+                      fontWeight="800"
+                      letterSpacing="0.02em"
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      transform={`rotate(${rot} ${labelPos.x} ${labelPos.y})`}
+                      className="font-display uppercase"
+                    >
+                      {lines.length === 1 ? (
+                        lines[0]
+                      ) : (
+                        lines.map((line, idx) => (
+                          <tspan key={idx} x={labelPos.x} dy={idx === 0 ? "-0.4em" : "1em"}>
+                            {line}
+                          </tspan>
+                        ))
+                      )}
+                    </text>
+                  );
+                })()}
               </g>
             );
           })}
