@@ -5,14 +5,23 @@
 //   HAND-EDITED FIELDS (per flavour)
 //     • status:        "core" | "active" | "coming-soon" | "hidden" | "incoming" | "past"
 //       — "coming-soon" and "hidden" were added in this branch for the pre-launch cut.
-//       — Live: core + active (shown on wheels + grid)
-//       — Lab-only teaser: coming-soon (shown in ComingSoonSection)
-//       — Suppressed: hidden (not shown anywhere)
+//         "hidden" is currently unused but kept in the union for future need.
+//       — Live: core + active (shown on wheels + /flavour-lab FlavourGrid)
+//       — Lab-only teaser: coming-soon (shown in LockedFlavoursSection "COMING SOON")
+//       — Finished / historical: past (shown in LockedFlavoursSection "PAST DROPS")
+//       — Suppressed: hidden (not shown anywhere) — none currently.
 //     • wheelLabel:    optional short label for wheel segments where the full name overflows
-//                      (Buffalo NY, Cajun, Naked). Ghost Buffalo HOT keeps its full name —
-//                      the wheels auto-wrap labels longer than 15 chars onto two lines.
+//                      the readable 15-char cap:
+//                        - Buffalo NY, Cajun, Naked (shortened)
+//                        - Ghost (for "Ghost Buffalo HOT")
+//                      Everything else uses the full name; the wheels auto-wrap >15-char
+//                      labels onto two lines as a safety net.
 //     • Spelling fixes: "Caribbean Coconut" (was "Carribean"), "Singapore Zing" (was "Sinapore").
 //     • Katsu.shortDescription: hand-written pre-launch; long-form story fields still null.
+//     • Hot Honey: moved from core/non-LE → past/LE. It ran as a drop and has now finished.
+//     • Thai City, Hot Maple, Honey Butter, Soul City, Korean Red Hot, American Hot BBQ,
+//       Honey Mustard, Caribbean Coconut, Singapore Zing, Wing No1: moved from incoming → past.
+//       They ran previously and are archived in the PAST DROPS section.
 //
 // If the generator overwrites this file, re-apply the overrides above or move them into the xlsx.
 
@@ -93,6 +102,7 @@ export const FLAVOURS: Flavour[] = [
   {
     "slug": "ghost-buffalo-hot",
     "name": "Ghost Buffalo HOT",
+    "wheelLabel": "Ghost",
     "limitedEdition": false,
     "heat": 5,
     "type": "wet-sauce",
@@ -174,7 +184,7 @@ export const FLAVOURS: Flavour[] = [
   {
     "slug": "hot-honey",
     "name": "Hot Honey",
-    "limitedEdition": false,
+    "limitedEdition": true,
     "heat": 3,
     "type": "wet-sauce",
     "shortDescription": "Sweet honey followed by a gentle chili kick.",
@@ -182,7 +192,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": ". \ud83c\udde8\ud83c\uddf1 Chile \u2013 Premium chili peppers",
     "history": "Hot Honey became famous after artisan pizza makers began infusing honey with chili peppers. Its sweet heat quickly spread to fried chicken, biscuits, pizza, and wings.",
     "pairsWith": "Ranch, Cali Mayo",
-    "status": "core"
+    "status": "past"
   },
   {
     "slug": "flamin-cajun",
@@ -237,7 +247,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "hidden"
+    "status": "past"
   },
   {
     "slug": "hot-maple",
@@ -250,7 +260,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "hidden"
+    "status": "past"
   },
   {
     "slug": "honey-butter",
@@ -263,7 +273,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "hidden"
+    "status": "past"
   },
   {
     "slug": "soul-city",
@@ -276,7 +286,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "hidden"
+    "status": "past"
   },
   {
     "slug": "korean-red-hot",
@@ -289,7 +299,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "hidden"
+    "status": "past"
   },
   {
     "slug": "american-hot-bbq",
@@ -302,7 +312,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "hidden"
+    "status": "past"
   },
   {
     "slug": "honey-mustard",
@@ -315,7 +325,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "hidden"
+    "status": "past"
   },
   {
     "slug": "caribbean-coconut",
@@ -328,7 +338,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "hidden"
+    "status": "past"
   },
   {
     "slug": "singapore-zing",
@@ -341,7 +351,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "hidden"
+    "status": "past"
   },
   {
     "slug": "wing-no1",
@@ -354,7 +364,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "hidden"
+    "status": "past"
   }
 ];
 
