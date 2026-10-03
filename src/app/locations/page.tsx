@@ -51,14 +51,9 @@ export default function LocationsPage() {
               {LOCATIONS.map((loc, i) => (
                 <li
                   key={loc.slug}
-                  className={
-                    i === 0 ? "mr-4 md:mr-0" : "ml-4 md:ml-0 md:mt-16"
-                  }
+                  className={i === 0 ? "mr-4 md:mr-0" : "ml-4 md:ml-0"}
                 >
-                  <LocationCard
-                    location={loc}
-                    mediaAspect={i === 0 ? "4/3" : "3/4"}
-                  />
+                  <LocationCard location={loc} mediaAspect="3/2" />
                 </li>
               ))}
             </ul>

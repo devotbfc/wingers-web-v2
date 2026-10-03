@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type React from "react";
 
-type BrandButtonVariant = "primary" | "secondary" | "ghost" | "inverse";
+type BrandButtonVariant = "primary" | "secondary" | "ghost" | "inverse" | "outline";
 type BrandButtonSize = "sm" | "md" | "lg";
 
 interface BrandButtonProps {
@@ -36,6 +36,8 @@ const variantClasses: Record<BrandButtonVariant, string> = {
     "text-brand-red bg-transparent hover:text-brand-pink hover:bg-transparent underline rounded-none shadow-none",
   inverse:
     "bg-brand-white text-brand-red hover:bg-brand-pink hover:text-brand-black border-0 rounded-none shadow-none",
+  outline:
+    "bg-brand-white text-brand-black border-2 border-brand-black hover:bg-brand-red hover:text-brand-white hover:border-brand-red focus-visible:bg-brand-red focus-visible:text-brand-white focus-visible:border-brand-red rounded-none shadow-none",
 };
 
 const sizeClasses: Record<BrandButtonSize, string> = {

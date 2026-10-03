@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BrandButton } from "@/components/brand/BrandButton";
@@ -126,39 +127,72 @@ export default async function LocationDetailPage({ params }: RouteProps) {
         <section
           className="relative isolate flex min-h-[78dvh] flex-col justify-end overflow-hidden"
         >
-          <div
-            className={`absolute inset-0 -z-20 ${heroBg}`}
-            aria-hidden="true"
-          >
-            <div className="absolute inset-0 flex items-center justify-center opacity-15">
-              <BrandLogo
-                variant="black"
-                type="mark"
-                width={640}
-                height={640}
-                className="h-80 w-80 md:h-[32rem] md:w-[32rem]"
+          {location.shopfront ? (
+            <div className="absolute inset-0 -z-20" aria-hidden="true">
+              <Image
+                src={location.shopfront.src}
+                alt={location.shopfront.alt}
+                fill
+                sizes="100vw"
+                priority
+                className={`object-cover ${location.shopfront.heroPosition}`}
               />
             </div>
-          </div>
+          ) : (
+            <div
+              className={`absolute inset-0 -z-20 ${heroBg}`}
+              aria-hidden="true"
+            >
+              <div className="absolute inset-0 flex items-center justify-center opacity-15">
+                <BrandLogo
+                  variant="black"
+                  type="mark"
+                  width={640}
+                  height={640}
+                  className="h-80 w-80 md:h-[32rem] md:w-[32rem]"
+                />
+              </div>
+            </div>
+          )}
           <div
             aria-hidden="true"
-            className="absolute inset-0 -z-10 bg-brand-white/85"
+            className={
+              location.shopfront
+                ? "absolute inset-0 -z-10 bg-gradient-to-t from-brand-black/70 via-brand-black/30 to-transparent"
+                : "absolute inset-0 -z-10 bg-brand-white/85"
+            }
           />
 
           <div className="mx-auto w-full max-w-6xl px-4 pb-10 pt-24 md:pb-16 md:pt-32">
             <Link
               href="/locations"
-              className="inline-flex min-h-11 items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-black/85 transition-colors hover:text-brand-red"
+              className={
+                location.shopfront
+                  ? "inline-flex min-h-11 items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-white/85 transition-colors hover:text-brand-pink"
+                  : "inline-flex min-h-11 items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-black/85 transition-colors hover:text-brand-red"
+              }
             >
               <span aria-hidden="true">←</span> All Shops
             </Link>
 
             <div className="mt-6 flex flex-col gap-6">
               <LocationOpenBadge location={location} size="lg" />
-              <h1 className="font-display text-[clamp(3rem,11vw,7rem)] font-extrabold uppercase leading-[0.85] tracking-tight text-brand-black">
+              <h1
+                className={
+                  location.shopfront
+                    ? "font-display text-[clamp(3rem,11vw,7rem)] font-extrabold uppercase leading-[0.85] tracking-tight text-brand-white"
+                    : "font-display text-[clamp(3rem,11vw,7rem)] font-extrabold uppercase leading-[0.85] tracking-tight text-brand-black"
+                }
+              >
                 {shortName.toUpperCase()}
               </h1>
-              <address className="font-body not-italic text-base leading-relaxed text-brand-black/85 md:text-lg">
+              <address
+                className={
+                  location.shopfront
+                    ? "font-body not-italic text-base leading-relaxed text-brand-white/90 md:text-lg"
+                    : "font-body not-italic text-base leading-relaxed text-brand-black/85 md:text-lg"
+                }
+              >
                 <span className="block">{location.address.street}</span>
                 <span className="block">{location.address.city}</span>
                 <span className="block">{location.address.postcode}</span>

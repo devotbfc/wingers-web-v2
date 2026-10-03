@@ -28,6 +28,13 @@ export interface LocationGeo {
 
 export type OrderProviderName = "Deliverect" | "Toast" | "PushPullHub";
 
+export interface LocationShopfront {
+  src: string;
+  alt: string;
+  heroPosition: string;
+  cardPosition: string;
+}
+
 export interface Location {
   slug: string;
   lastUpdated: string;
@@ -42,4 +49,5 @@ export interface Location {
   accessibility?: string;
   paymentMethods?: string[];
   dietaryOptions?: string[];
+  shopfront?: LocationShopfront;
 }

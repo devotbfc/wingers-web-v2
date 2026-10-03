@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { BrandButton } from "@/components/brand/BrandButton";
 import { BrandLogo } from "@/components/brand/BrandLogo";
@@ -8,7 +9,7 @@ import { LocationOpenBadge } from "./LocationOpenBadge";
 
 interface LocationCardProps {
   location: Location;
-  mediaAspect?: "4/3" | "3/4";
+  mediaAspect?: "4/3" | "3/4" | "3/2";
   className?: string;
 }
 
@@ -22,6 +23,12 @@ export function LocationCard({
   const shortName = location.name.replace(/^Wingers\s+/i, "");
   const mediaBg =
     location.slug === "milton-keynes" ? "bg-brand-red" : "bg-brand-pink";
+  const aspectClass =
+    mediaAspect === "4/3"
+      ? "aspect-[4/3]"
+      : mediaAspect === "3/4"
+        ? "aspect-[3/4]"
+        : "aspect-[3/2]";
 
   return (
     <article
@@ -39,19 +46,29 @@ export function LocationCard({
       <div
         className={cn(
           "relative overflow-hidden",
-          mediaBg,
-          mediaAspect === "4/3" ? "aspect-[4/3]" : "aspect-[3/4]",
+          !location.shopfront && mediaBg,
+          aspectClass,
         )}
       >
-        <div className="absolute inset-0 flex items-center justify-center opacity-20">
-          <BrandLogo
-            variant="white"
-            type="mark"
-            width={200}
-            height={200}
-            className="h-32 w-32 md:h-40 md:w-40"
+        {location.shopfront ? (
+          <Image
+            src={location.shopfront.src}
+            alt={location.shopfront.alt}
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className={cn("object-cover", location.shopfront.cardPosition)}
           />
-        </div>
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center opacity-20">
+            <BrandLogo
+              variant="white"
+              type="mark"
+              width={200}
+              height={200}
+              className="h-32 w-32 md:h-40 md:w-40"
+            />
+          </div>
+        )}
         <div className="absolute left-4 top-4 z-10">
           <LocationOpenBadge location={location} size="lg" />
         </div>
