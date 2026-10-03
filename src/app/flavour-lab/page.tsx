@@ -13,7 +13,7 @@ import { PastDropsSection } from "@/components/sections/flavour-lab/PastDropsSec
 import { SpinTheWheel } from "@/components/sections/flavour-lab/SpinTheWheel";
 import { SPINNABLE_FLAVOURS } from "@/lib/flavours";
 
-// data-todo="assets" — static OG image /og/flavour-lab.png pending per ADR-014.
+// data-todo="assets" — using sitewide /og/home.jpg until per-page Flavour Lab art ships (ADR-014).
 export const metadata: Metadata = {
   title: "Flavour Lab — Wingers",
   description:
@@ -25,7 +25,14 @@ export const metadata: Metadata = {
       "Twenty-four flavours. One wheel. Halal buttermilk fried chicken in Milton Keynes and Northampton.",
     url: "/flavour-lab",
     type: "website",
-    images: [{ url: "/og/flavour-lab.png", width: 1200, height: 630 }],
+    images: [
+      {
+        url: "/og/home.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Wingers mac & cheese",
+      },
+    ],
   },
 };
 

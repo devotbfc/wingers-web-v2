@@ -17,7 +17,14 @@ export const metadata: Metadata = {
       "Two halal buttermilk fried chicken shops. Wings, tenders, burgers and loaded fries — order online or drop in.",
     url: "/locations",
     type: "website",
-    images: [{ url: "/og/locations.png", width: 1200, height: 630 }],
+    images: [
+      {
+        url: "/og/home.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Wingers mac & cheese",
+      },
+    ],
   },
 };
 
