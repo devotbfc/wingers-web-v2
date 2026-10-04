@@ -196,12 +196,12 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
 
       <div className="flex flex-1 flex-col gap-3 p-4 md:p-5">
         <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between md:gap-3">
-          <h3 className="font-ui text-3xl uppercase leading-[0.95] tracking-tight text-balance text-brand-black">
+          <h3 className="font-ui font-[600] text-3xl uppercase leading-[0.95] tracking-[0.02em] text-balance text-brand-black">
             {item.name}
           </h3>
           {priceLabel && (
             <div className="flex shrink-0 flex-col items-start gap-1 md:items-end">
-              <span className="font-ui text-2xl leading-[0.95] tracking-tight tabular-nums text-brand-black">
+              <span className="font-ui font-[550] text-2xl leading-[0.95] tracking-[0.04em] tabular-nums text-brand-black">
                 {priceLabel}
               </span>
               {sizeList.length > 0 && (

@@ -42,13 +42,12 @@ const variantClasses: Record<BrandButtonVariant, string> = {
     "bg-brand-white text-brand-black border-2 border-brand-black hover:bg-brand-red hover:text-brand-white hover:border-brand-red focus-visible:bg-brand-red focus-visible:text-brand-white focus-visible:border-brand-red rounded-full shadow-none",
 };
 
-// Anton is condensed — characters sit narrower than Bricolage, so we bump
-// text-size by one notch at md/lg and lean on a slightly wider tracking so
-// uppercase labels stay legible without clipping the button height.
+// Oswald at 550 reads at a proper button weight without the Anton size bump
+// — reverted to the pre-Anton scale. 44px min height preserved by h-10 / h-12.
 const sizeClasses: Record<BrandButtonSize, string> = {
   sm: "h-8 px-4 text-sm",
-  md: "h-10 px-6 text-lg",
-  lg: "h-12 px-8 text-xl",
+  md: "h-10 px-6 text-base",
+  lg: "h-12 px-8 text-lg",
 };
 
 export function BrandButton({
@@ -65,7 +64,7 @@ export function BrandButton({
   "aria-label": ariaLabel,
 }: BrandButtonProps) {
   const classes = cn(
-    "font-ui uppercase tracking-[0.04em] transition-colors",
+    "font-ui font-[550] uppercase tracking-[0.04em] transition-colors",
     variantClasses[variant],
     sizeClasses[size],
     className
