@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { BrandButton } from "@/components/brand/BrandButton";
 import { SPINNABLE_FLAVOURS } from "@/lib/flavours";
 
 const PALETTE = [
@@ -179,13 +180,12 @@ export function FlavourLabTeaser() {
         Spin the wheel. Let the Lab pick your flavour.
       </p>
 
-      <Link
-        href="/flavour-lab"
-        className="inline-flex min-h-11 items-center gap-2 rounded-full bg-brand-pink px-8 font-display text-sm font-extrabold uppercase tracking-wide text-brand-black transition-colors hover:bg-brand-white"
-      >
-        Enter the Lab
-        <ArrowRight className="h-4 w-4" aria-hidden="true" />
-      </Link>
+      <BrandButton variant="outline" size="md" href="/flavour-lab">
+        <span className="inline-flex items-center gap-2">
+          Enter the Lab
+          <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        </span>
+      </BrandButton>
     </section>
   );
 }

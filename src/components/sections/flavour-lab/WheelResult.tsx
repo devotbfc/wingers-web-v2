@@ -65,7 +65,7 @@ export function WheelResult({ winner, onSpinAgain }: WheelResultProps) {
               <OrderTriggerButton size="lg">
                 Get these wings
               </OrderTriggerButton>
-              <BrandButton variant="ghost" onClick={onSpinAgain}>
+              <BrandButton variant="outline" onClick={onSpinAgain}>
                 Spin again
               </BrandButton>
             </div>

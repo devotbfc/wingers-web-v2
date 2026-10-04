@@ -1,4 +1,5 @@
 import { MapPin } from "lucide-react";
+import { BrandButton } from "@/components/brand/BrandButton";
 import { LocationOpenBadge } from "@/components/locations/LocationOpenBadge";
 import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTriggerButton";
 import { LOCATIONS, type Location } from "@/lib/locations";
@@ -7,24 +8,18 @@ type SpotTheme = {
   panelBg: string;
   bodyText: string;
   photoFallbackBg: string;
-  directionsClasses: string;
 };
-
-const DIRECTIONS_OUTLINE =
-  "border-2 border-brand-black text-brand-black hover:bg-brand-black hover:text-brand-white";
 
 const THEME_BY_SLUG: Record<string, SpotTheme> = {
   "milton-keynes": {
     panelBg: "bg-brand-pink",
     bodyText: "text-brand-black",
     photoFallbackBg: "bg-brand-red",
-    directionsClasses: DIRECTIONS_OUTLINE,
   },
   northampton: {
     panelBg: "bg-brand-white",
     bodyText: "text-brand-black",
     photoFallbackBg: "bg-brand-pink",
-    directionsClasses: DIRECTIONS_OUTLINE,
   },
 };
 
@@ -32,7 +27,6 @@ const DEFAULT_THEME: SpotTheme = {
   panelBg: "bg-brand-white",
   bodyText: "text-brand-black",
   photoFallbackBg: "bg-brand-pink",
-  directionsClasses: DIRECTIONS_OUTLINE,
 };
 
 function mapsUrlFor(loc: Location): string {
@@ -79,19 +73,19 @@ function SpotBlock({ spot }: { spot: Location }) {
             <OrderTriggerButton
               variant="primary"
               size="lg"
-              className="rounded-full"
               preferredLocationSlug={spot.slug}
             >
               Order
             </OrderTriggerButton>
-            <a
+            <BrandButton
+              variant="outline"
+              size="lg"
               href={mapsUrlFor(spot)}
               target="_blank"
               rel="noopener noreferrer"
-              className={`inline-flex min-h-11 items-center justify-center rounded-full px-8 font-display text-base font-bold uppercase tracking-wide transition-colors ${theme.directionsClasses}`}
             >
               Directions
-            </a>
+            </BrandButton>
           </div>
         </div>
       </div>

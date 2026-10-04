@@ -21,23 +21,23 @@ interface BrandButtonProps {
   "aria-label"?: string;
 }
 
-// ADR-018: brand-red is the only filled primary CTA colour. brand-pink is
-// permitted as a secondary fill, but never on the same screen as a red fill
-// — pair red+ghost (red text, no fill) when a secondary action sits beside
-// the primary. On a red surface the primary fill inverts to white/red
-// (variant="inverse") so the button stays visible without breaking the
-// same-fill-pairs rule.
+// ADR-018 §4 (post-rewrite): ORDER is always brand-red fill + brand-white text,
+// everywhere. Secondaries beside ORDER use variant="outline" (inverts to
+// red/white on hover). Hover must stay visible on pink, white and black
+// surfaces — primary + inverse use brightness-90 so the hue never clashes with
+// a brand-pink card (OrderPanel) or a lab-black section. Every variant renders
+// at rounded-md; radius is set here, not at call sites.
 const variantClasses: Record<BrandButtonVariant, string> = {
   primary:
-    "bg-brand-red text-brand-white hover:bg-brand-pink hover:text-brand-black border-0 rounded-none shadow-none",
+    "bg-brand-red text-brand-white hover:brightness-90 border-0 rounded-md shadow-none",
   secondary:
-    "bg-brand-pink text-brand-black hover:bg-brand-white hover:text-brand-black border-0 rounded-none shadow-none",
+    "bg-brand-pink text-brand-black hover:brightness-95 border-0 rounded-md shadow-none",
   ghost:
-    "text-brand-red bg-transparent hover:text-brand-pink hover:bg-transparent underline rounded-none shadow-none",
+    "text-brand-red bg-transparent hover:text-brand-pink hover:bg-transparent underline rounded-md shadow-none",
   inverse:
-    "bg-brand-white text-brand-red hover:bg-brand-pink hover:text-brand-black border-0 rounded-none shadow-none",
+    "bg-brand-white text-brand-red hover:brightness-95 border-0 rounded-md shadow-none",
   outline:
-    "bg-brand-white text-brand-black border-2 border-brand-black hover:bg-brand-red hover:text-brand-white hover:border-brand-red focus-visible:bg-brand-red focus-visible:text-brand-white focus-visible:border-brand-red rounded-none shadow-none",
+    "bg-brand-white text-brand-black border-2 border-brand-black hover:bg-brand-red hover:text-brand-white hover:border-brand-red focus-visible:bg-brand-red focus-visible:text-brand-white focus-visible:border-brand-red rounded-md shadow-none",
 };
 
 const sizeClasses: Record<BrandButtonSize, string> = {

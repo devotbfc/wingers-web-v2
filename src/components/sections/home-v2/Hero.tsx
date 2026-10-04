@@ -54,12 +54,11 @@ export function Hero() {
           <OrderTriggerButton
             variant="primary"
             size="lg"
-            className="rounded-full"
           >
             Get Stuck In
           </OrderTriggerButton>
           <BrandButton
-            variant="ghost"
+            variant="outline"
             size="lg"
             href="/locations"
           >
