@@ -95,11 +95,15 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
           <li>
             <Link
               href="/flavour-lab"
-              className="inline-flex items-center gap-1.5 font-display text-sm font-bold uppercase tracking-wide text-brand-pink transition-colors hover:text-brand-red focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
+              className={cn(
+                "relative pl-[calc(2em+0.5rem)] font-display font-bold uppercase tracking-wide text-sm transition-colors",
+                "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red",
+                "text-brand-pink hover:text-brand-red",
+              )}
             >
               <FlaskGlyph
-                strokeWidth={3}
-                className="h-[1.6em] w-[1.6em] shrink-0"
+                strokeWidth={4}
+                className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 h-[2em] w-[2em]"
               />
               Lab
             </Link>
