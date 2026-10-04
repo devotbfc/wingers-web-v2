@@ -6,6 +6,11 @@
   --color-brand-black: #000000;
   --color-brand-white: #FFFFFF;
 
+  /* Chrome-neutral used for pill tab/segmented-control inactive fill. Not a
+     general surface token — scoped to navigation chrome today (menu category
+     bar + location segmented toggle). */
+  --color-brand-grey: #F2F2F2;
+
   /* Near-black used only by the /flavour-lab neon inversion. Not part of
      the white-primary system — do not use elsewhere. */
   --color-lab-black: #0A0A0A;
@@ -21,6 +26,19 @@
 /* White-primary base: white page, black text by default.
    Dark sections opt in via .section-dark. See docs/decisions.md ADR-015. */
 @layer base {
+  /* Single source of truth for the fixed NavBar's height (h-20 / md:h-24 in
+     NavBar.tsx). Consumed by any sub-sticky chrome (menu category bar), by
+     scroll-margin on anchor targets, and by scroll-spy rootMargin maths —
+     keep this in sync with NavBar if the nav resizes. */
+  :root {
+    --nav-h: 5rem;
+  }
+  @media (min-width: 768px) {
+    :root {
+      --nav-h: 6rem;
+    }
+  }
+
   html,
   body {
     /* Belt-and-braces guard against horizontal overflow from decorative
