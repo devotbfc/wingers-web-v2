@@ -162,20 +162,20 @@ function LeStep({
         {shortDescription ??
           "On the menu for a limited run. Don't sleep on it."}
       </p>
-      <div className="relative mt-4 flex gap-2">
+      <div className="relative mt-4 grid grid-cols-1 gap-2 md:grid-cols-[1fr_auto]">
         <BrandButton
           variant="primary"
           size="md"
           onClick={onOrder}
-          className="flex-1 justify-center"
+          className="min-w-0 w-full justify-center"
         >
-          Get it before it&apos;s gone
+          Get it now
         </BrandButton>
         <BrandButton
           variant="outline"
           size="md"
           onClick={onNext}
-          className="justify-center"
+          className="min-w-0 w-full justify-center md:w-auto"
         >
           Next
         </BrandButton>
