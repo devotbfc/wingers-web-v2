@@ -6,10 +6,10 @@
   --color-brand-black: #000000;
   --color-brand-white: #FFFFFF;
 
-  /* Chrome-neutral used for pill tab/segmented-control inactive fill. Not a
-     general surface token — scoped to navigation chrome today (menu category
-     bar + location segmented toggle). */
-  --color-brand-grey: #F2F2F2;
+  /* Warm chrome-neutral used for pill tab inactive fill and the location
+     picker sheet shop cards. Scoped to navigation + picker chrome; not a
+     general surface token. Matches the wing-app's warm off-white rest state. */
+  --color-brand-warm-grey: #EAE6DF;
 
   /* Near-black used only by the /flavour-lab neon inversion. Not part of
      the white-primary system — do not use elsewhere. */

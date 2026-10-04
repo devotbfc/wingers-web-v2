@@ -98,7 +98,7 @@ export function LocationPicker({ value, onChange }: LocationPickerProps) {
                       "flex w-full flex-col items-start gap-3 rounded-md p-5 text-left transition-colors",
                       active
                         ? "bg-brand-pink text-brand-black"
-                        : "bg-brand-grey text-brand-black hover:brightness-95"
+                        : "bg-brand-warm-grey text-brand-black hover:brightness-95"
                     )}
                   >
                     <div className="flex w-full items-center justify-between gap-3">

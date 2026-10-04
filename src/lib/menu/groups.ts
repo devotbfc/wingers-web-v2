@@ -1,9 +1,16 @@
 import { MENU_SECTIONS } from "./menu-data";
 
+export type MenuProduct = "Wings" | "Boneless" | "Tenders";
+
 export interface MenuGroup {
   slug: string;
   label: string;
   sectionSlugs: readonly string[];
+  // When set, only items whose `product` is in this list contribute to the
+  // group. Used to split the single wings-boneless-tenders section into two
+  // app-style tabs: WINGS (Wings + Boneless) vs TENDERS (Tenders). Items are
+  // not renamed or re-slugged in the data.
+  productFilter?: readonly MenuProduct[];
   // Render each source section's name as a sub-heading inside the group when
   // the group bundles multiple sections, so items like "Chicken Loaded Fries"
   // and "Mac & Cheese" stay legible without their own pill.
@@ -15,62 +22,64 @@ export interface MenuGroup {
 // these buckets.
 export const MENU_GROUPS: readonly MenuGroup[] = [
   {
-    slug: "wings-tenders",
-    label: "Wings & Tenders",
+    slug: "wings",
+    label: "WINGS",
     sectionSlugs: ["wings-boneless-tenders"],
+    productFilter: ["Wings", "Boneless"],
     showSubHeadings: false,
   },
   {
-    slug: "chicken-burgers",
-    label: "Chicken Burgers",
-    sectionSlugs: ["chicken-burgers"],
+    slug: "tenders",
+    label: "TENDERS",
+    sectionSlugs: ["wings-boneless-tenders"],
+    productFilter: ["Tenders"],
     showSubHeadings: false,
   },
   {
-    slug: "beef-burgers",
-    label: "Beef Burgers",
-    sectionSlugs: ["beef-burgers"],
-    showSubHeadings: false,
+    slug: "burgers",
+    label: "BURGERS",
+    sectionSlugs: ["chicken-burgers", "beef-burgers"],
+    showSubHeadings: true,
   },
   {
-    slug: "fries-loaded",
-    label: "Fries & Loaded",
+    slug: "fries",
+    label: "FRIES",
     sectionSlugs: ["fries-loaded", "chicken-loaded-fries"],
     showSubHeadings: true,
   },
   {
-    slug: "sides-mac",
-    label: "Sides & Mac",
-    sectionSlugs: ["mac-and-cheese", "sides"],
+    slug: "sides",
+    label: "SIDES",
+    sectionSlugs: ["sides", "mac-and-cheese"],
     showSubHeadings: true,
   },
   {
     slug: "platters",
-    label: "Platters",
+    label: "PLATTERS",
     sectionSlugs: ["platters-combos"],
     showSubHeadings: false,
   },
   {
     slug: "dips",
-    label: "Dips",
+    label: "DIPS",
     sectionSlugs: ["dips"],
     showSubHeadings: false,
   },
   {
     slug: "drinks",
-    label: "Drinks",
+    label: "DRINKS",
     sectionSlugs: ["shakes", "coolers"],
     showSubHeadings: true,
   },
   {
     slug: "sweets",
-    label: "Sweets",
+    label: "SWEETS",
     sectionSlugs: ["churros", "nyc-cookies"],
     showSubHeadings: true,
   },
   {
     slug: "kids",
-    label: "Kids",
+    label: "KIDS",
     sectionSlugs: ["kids"],
     showSubHeadings: false,
   },

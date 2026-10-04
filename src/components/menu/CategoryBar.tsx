@@ -176,7 +176,7 @@ export function CategoryBar({ items }: CategoryBarProps) {
                 "inline-flex h-11 shrink-0 snap-start items-center whitespace-nowrap rounded-full px-4 font-display text-[13px] font-bold uppercase tracking-wide transition-colors",
                 active
                   ? "bg-brand-pink text-brand-black"
-                  : "bg-brand-grey text-brand-black/85 hover:bg-brand-grey hover:brightness-95"
+                  : "bg-brand-warm-grey text-brand-black/85 hover:brightness-95"
               )}
             >
               {item.label}

@@ -90,6 +90,37 @@ export function MenuShell({
   // are empty.
   const groups = useMemo(() => {
     return MENU_GROUPS.map((group) => {
+      // productFilter groups (WINGS, TENDERS): single flat sub-section
+      // produced from a product filter on one source section — no sub-headings.
+      if (group.productFilter) {
+        const sectionSlug = group.sectionSlugs[0]!;
+        const items = currentItems.filter(
+          (i) =>
+            i.sectionSlug === sectionSlug &&
+            typeof i.product === "string" &&
+            (group.productFilter as readonly string[]).includes(i.product)
+        );
+        const availableHere = items.filter((i) => i.unavailableAt !== code);
+        const sub = {
+          slug: group.slug,
+          name: group.label,
+          items,
+          hasAny: items.length > 0,
+          allUnavailableHere:
+            items.length > 0 && availableHere.length === 0,
+        };
+        return {
+          slug: group.slug,
+          label: group.label,
+          id: `group-${group.slug}`,
+          showSubHeadings: false,
+          subSections: sub.hasAny ? [sub] : [],
+          hasAny: sub.hasAny,
+          allUnavailableHere: sub.allUnavailableHere,
+        };
+      }
+
+      // Default: one sub-section per source section slug.
       const subSections = group.sectionSlugs.map((slug) => {
         const items = currentItems.filter((i) => i.sectionSlug === slug);
         const availableHere = items.filter((i) => i.unavailableAt !== code);
