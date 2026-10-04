@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { MapPin } from "lucide-react";
 import { BrandButton } from "@/components/brand/BrandButton";
 import { LocationOpenBadge } from "@/components/locations/LocationOpenBadge";
@@ -45,9 +46,22 @@ function SpotBlock({ spot }: { spot: Location }) {
   return (
     <div className="flex flex-col lg:flex-row">
       <div
-        className={`relative aspect-[4/3] w-full ${theme.photoFallbackBg} lg:aspect-auto lg:h-auto lg:w-1/2`}
-        aria-hidden="true"
-      />
+        className={`relative aspect-[4/3] w-full overflow-hidden lg:aspect-auto lg:h-auto lg:w-1/2 ${
+          spot.shopfront ? "" : theme.photoFallbackBg
+        }`}
+        {...(spot.shopfront ? {} : { "aria-hidden": true })}
+      >
+        {spot.shopfront ? (
+          <Image
+            src={spot.shopfront.src}
+            alt={spot.shopfront.alt}
+            fill
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            loading="lazy"
+            className={`object-cover ${spot.shopfront.cardPosition}`}
+          />
+        ) : null}
+      </div>
 
       <div
         className={`${theme.panelBg} ${theme.bodyText} w-full overflow-hidden px-6 py-12 lg:w-1/2 lg:px-12 lg:py-20`}
