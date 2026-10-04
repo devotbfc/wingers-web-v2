@@ -184,11 +184,11 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
                 onClick={() => setMobileOpen(false)}
                 className="inline-flex items-center gap-3 font-display font-extrabold uppercase tracking-tight text-3xl text-brand-pink hover:text-brand-red transition-colors py-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
               >
+                Lab
                 <FlaskGlyph
                   strokeWidth={3}
                   className="h-[1em] w-[1em] shrink-0"
                 />
-                Lab
               </Link>
             </li>
             <li className="mt-4">

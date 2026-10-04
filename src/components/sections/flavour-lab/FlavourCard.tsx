@@ -20,12 +20,12 @@ export function FlavourCard({ flavour, index }: FlavourCardProps) {
   const isLE = flavour.limitedEdition && !comingSoon;
   const ghost = flavour.heat === 5;
   const hasLongStory = Boolean(
-    flavour.howMade ||
-      flavour.sourcedFrom ||
-      flavour.history ||
-      flavour.pairsWith,
+    flavour.howMade || flavour.history || flavour.pairsWith,
   );
   const canExpand = !comingSoon && hasLongStory;
+  const nameMatch = flavour.name.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+  const nameMain = nameMatch ? nameMatch[1] : flavour.name;
+  const nameParen = nameMatch ? `(${nameMatch[2]})` : null;
 
   const verticalPad = index % 2 === 0 ? "py-5" : "py-7";
 
@@ -59,7 +59,7 @@ export function FlavourCard({ flavour, index }: FlavourCardProps) {
         <div className="ml-auto flex items-center gap-2">
           {isLE && !ghost && (
             <span className="rounded-full border border-brand-pink/50 px-2 py-0.5 font-display text-[9px] font-bold uppercase tracking-[0.2em] text-brand-pink">
-              Limited
+              Limited Edition
             </span>
           )}
           {ghost && (
@@ -85,7 +85,12 @@ export function FlavourCard({ flavour, index }: FlavourCardProps) {
               : "text-brand-white"
         }`}
       >
-        {flavour.name}
+        {nameMain}
+        {nameParen ? (
+          <span className="block font-display text-sm font-bold tracking-wide normal-case opacity-60 md:text-base">
+            {nameParen}
+          </span>
+        ) : null}
       </h3>
 
       {flavour.shortDescription && (
@@ -139,7 +144,6 @@ export function FlavourCard({ flavour, index }: FlavourCardProps) {
               }`}
             >
               <StoryField label="How it's made" body={flavour.howMade} ghost={ghost} />
-              <StoryField label="Sourced from" body={flavour.sourcedFrom} ghost={ghost} />
               <StoryField label="History" body={flavour.history} ghost={ghost} />
               <StoryField label="Pairs with" body={flavour.pairsWith} ghost={ghost} />
             </div>

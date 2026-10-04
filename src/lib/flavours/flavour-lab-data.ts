@@ -22,6 +22,15 @@
 //     • Thai City, Hot Maple, Honey Butter, Soul City, Korean Red Hot, American Hot BBQ,
 //       Honey Mustard, Caribbean Coconut, Singapore Zing, Wing No1: moved from incoming → past.
 //       They ran previously and are archived in the PAST DROPS section.
+//     • Lemon Pepper: type dry-rub + heat 1 (previously wet-sauce heat 0 — reclassified
+//       as a seasoning blend, not a sauce).
+//     • howMade: shortened to a one-line ingredient summary (3–4 key ingredients) for
+//       every live and coming-soon flavour. The long-form originals are no longer in
+//       the file; if the xlsx still carries them, port the short versions back.
+//     • sourcedFrom: hidden from the UI (FlavourCard story panel). Kept in the data for
+//       future reuse (SEO JSON-LD / admin tooling). Do not strip from the sheet.
+//     • Dips (blue-cheese, ranch, california-sauce-mayo, honey-mustard): shortDescription
+//       populated. DipsSection renders them as expandable chevron tiles.
 //
 // If the generator overwrites this file, re-apply the overrides above or move them into the xlsx.
 
@@ -54,7 +63,7 @@ export const FLAVOURS: Flavour[] = [
     "heat": 3,
     "type": "wet-sauce",
     "shortDescription": "Sweet tropical mango meets the fiery kick of habanero peppers for the perfect balance of fruity sweetness and bold heat.",
-    "howMade": "Made with ripe mango puree, Caribbean habanero peppers, honey, garlic, apple cider vinegar, citrus juice, and our signature spice blend before being slow-simmered until perfectly smooth.",
+    "howMade": "Mango, habanero, honey, apple cider vinegar.",
     "sourcedFrom": "\ud83c\uddf2\ud83c\uddfd Mexico \u2013 Habanero peppers. \ud83c\udde7\ud83c\uddf7 Brazil \u2013 Tropical fruits",
     "history": "Habanero peppers originated in the Amazon Basin before becoming famous throughout the Caribbean and Mexico. Pairing tropical fruits like mango with habaneros became popular because the natural sweetness helps balance the pepper's intense heat.",
     "pairsWith": "Blue Cheese, Ranch, Tennessee B.B.Q",
@@ -67,7 +76,7 @@ export const FLAVOURS: Flavour[] = [
     "heat": 2,
     "type": "wet-sauce",
     "shortDescription": "Sweet, savory, smoky, and mildly spicy with rich garlic and sesame flavors.",
-    "howMade": "Crafted with Korean gochujang, soy sauce, garlic, ginger, sesame oil, brown sugar, rice vinegar, and toasted sesame seeds.",
+    "howMade": "Gochujang, soy, garlic, sesame.",
     "sourcedFrom": "\ud83c\uddf0\ud83c\uddf7 South Korea \u2013 Gochujang & Korean seasonings. \ud83c\uddf9\ud83c\udded Thailand \u2013 Sweet chili influences",
     "history": "Inspired by Korea's famous Korean Fried Chicken, which became internationally popular for its crispy texture and bold sweet-spicy glaze using fermented chili paste known as gochujang.",
     "pairsWith": "Ranch, Blue Cheese",
@@ -80,7 +89,7 @@ export const FLAVOURS: Flavour[] = [
     "heat": 1,
     "type": "wet-sauce",
     "shortDescription": "Sweet, smoky, tangy, and rich with classic Southern barbecue flavor.",
-    "howMade": "Made using tomato, molasses, brown sugar, apple cider vinegar, smoked paprika, garlic, onion, black pepper, and natural hickory smoke.",
+    "howMade": "Tomato, molasses, smoked paprika, hickory smoke.",
     "sourcedFrom": "\ud83c\uddfa\ud83c\uddf8 United States \u2013 BBQ, Cajun traditions",
     "history": "Tennessee barbecue is known for balancing sweet tomato-based sauces with smoky spices and slow-cooked meats, creating one of America's most beloved BBQ traditions.",
     "pairsWith": "Ranch",
@@ -90,10 +99,10 @@ export const FLAVOURS: Flavour[] = [
     "slug": "lemon-pepper",
     "name": "Lemon Pepper",
     "limitedEdition": false,
-    "heat": 0,
-    "type": "wet-sauce",
+    "heat": 1,
+    "type": "dry-rub",
     "shortDescription": "Bright citrus with cracked black pepper and savory herbs.",
-    "howMade": "A premium blend of lemon zest, cracked black pepper, garlic, onion, sea salt, parsley, and herbs tossed over fresh wings.",
+    "howMade": "Lemon zest, cracked black pepper, garlic, sea salt.",
     "sourcedFrom": "\ud83c\uddfb\ud83c\uddf3 Vietnam \u2013 Garlic and citrus notes. \ud83c\udde7\ud83c\uddf7 Brazil \u2013 Tropical fruits",
     "history": "Although lemon pepper seasoning originated as a seafood seasoning, it became legendary in Atlanta's wing culture where it remains one of the city's signature flavors.",
     "pairsWith": "Blue Cheese, Ranch, Cali Mayo, Honey Mustard",
@@ -107,7 +116,7 @@ export const FLAVOURS: Flavour[] = [
     "heat": 5,
     "type": "wet-sauce",
     "shortDescription": "Classic Buffalo flavor with the intense heat of Ghost Peppers.",
-    "howMade": "Premium cayenne peppers, Ghost Pepper mash, butter, vinegar, garlic, and spices create an extremely hot yet flavorful sauce.",
+    "howMade": "Cayenne, ghost pepper mash, butter, vinegar.",
     "sourcedFrom": "\ud83c\uddee\ud83c\uddf3 India \u2013 Ghost Peppers and aromatic spices. \ud83c\uddfa\ud83c\uddf8 United States \u2013 Buffalo",
     "history": "Ghost Pepper (Bhut Jolokia) originated in Northeast India and once held the title of the world's hottest pepper. Combined with Buffalo sauce, it creates an unforgettable extreme heat experience.",
     "pairsWith": "Blue Cheese, Ranch",
@@ -121,7 +130,7 @@ export const FLAVOURS: Flavour[] = [
     "heat": 2,
     "type": "wet-sauce",
     "shortDescription": "Tangy, buttery, mildly spicy, and timeless.",
-    "howMade": "Made with aged cayenne peppers, butter, vinegar, garlic, Worcestershire sauce, and signature spices.",
+    "howMade": "Aged cayenne, butter, vinegar, Worcestershire.",
     "sourcedFrom": "\ud83c\uddfa\ud83c\uddf8 United States \u2013 Buffalo, BBQ, Cajun traditions",
     "history": "Buffalo sauce was invented in 1964 at the Anchor Bar in Buffalo, New York, when chicken wings were tossed in hot sauce and butter for the very first time. It quickly became one of America's most iconic comfort foods.",
     "pairsWith": "Blue Cheese",
@@ -135,7 +144,7 @@ export const FLAVOURS: Flavour[] = [
     "heat": 0,
     "type": null,
     "shortDescription": "Pure crispy chicken.",
-    "howMade": "Fresh wings are perfectly seasoned and cooked until golden crispy without any sauce, allowing the natural flavor of the chicken to shine.",
+    "howMade": "Seasoned and fried crispy. No sauce.",
     "sourcedFrom": "\ud83c\uddf9\ud83c\uddf7 Turkey \u2013 Paprika and spice blends",
     "history": "Sometimes less is more. Naked wings have always been a favorite for guests who enjoy dipping into their own sauces or appreciate perfectly cooked chicken on its own.",
     "pairsWith": "Ranch, Honey Mustard, Cali Mayo",
@@ -149,7 +158,7 @@ export const FLAVOURS: Flavour[] = [
     "heat": 1,
     "type": "dry-rub",
     "shortDescription": "Bold, peppery, smoky, garlicky, and packed with Louisiana spices.",
-    "howMade": "A dry blend of paprika, cayenne, garlic, onion, thyme, oregano, black pepper, white pepper, and herbs.",
+    "howMade": "Paprika, cayenne, garlic, thyme.",
     "sourcedFrom": "\ud83c\uddf9\ud83c\uddf7 Turkey \u2013 Paprika and spice blends",
     "history": "Born in Louisiana, Cajun seasoning comes from the French Acadian settlers who blended local herbs and peppers into flavorful spice mixes that became the foundation of Cajun cuisine.",
     "pairsWith": "Blue Cheese, Ranch, Cali Mayo, Honey Mustard",
@@ -162,7 +171,7 @@ export const FLAVOURS: Flavour[] = [
     "heat": 3,
     "type": "wet-sauce",
     "shortDescription": "Smoky, spicy, earthy, and slightly sweet.",
-    "howMade": "Made with allspice, thyme, Scotch Bonnet peppers, cinnamon, garlic, ginger, brown sugar, nutmeg, cloves, and herbs.",
+    "howMade": "Allspice, thyme, Scotch Bonnet, cinnamon.",
     "sourcedFrom": "\ud83c\uddef\ud83c\uddf2 Jamaica \u2013 Jerk spices & Scotch Bonnet peppers. \ud83c\udde7\ud83c\uddf7 Brazil \u2013 Tropical fruits",
     "history": "Traditional Jamaican Jerk dates back hundreds of years when the Maroons developed unique spice blends and slow-smoking techniques using local herbs and Scotch Bonnet peppers.",
     "pairsWith": "Ranch",
@@ -175,7 +184,7 @@ export const FLAVOURS: Flavour[] = [
     "heat": 0,
     "type": "wet-sauce",
     "shortDescription": "Rich, buttery, cheesy, and full of roasted garlic.",
-    "howMade": "Fresh roasted garlic is blended with real butter, aged Parmesan cheese, herbs, parsley, and cracked pepper.",
+    "howMade": "Roasted garlic, butter, Parmesan, cracked pepper.",
     "sourcedFrom": "\ud83c\udde8\ud83c\uddf3 China \u2013 Garlic and chili traditions. \ud83c\uddee\ud83c\uddf9 Italy \u2013 Parmesan cheese & herbs. \ud83c\uddec\ud83c\uddf7 Greece \u2013 Mediterranean herbs",
     "history": "Garlic Parmesan became a modern wing favorite by combining Italian-inspired flavors with American chicken wings, creating a rich, creamy alternative to spicy sauces.",
     "pairsWith": "Cali Mayo",
@@ -201,7 +210,7 @@ export const FLAVOURS: Flavour[] = [
     "heat": 3,
     "type": "dry-rub",
     "shortDescription": "Extra spicy Cajun seasoning with smoky Louisiana heat.",
-    "howMade": "An amped-up version of Cajun seasoning featuring extra cayenne, chili peppers, smoked paprika, garlic, black pepper, herbs, and bold spices.",
+    "howMade": "Extra cayenne, chilli, smoked paprika, garlic.",
     "sourcedFrom": "\ud83c\udde8\ud83c\uddf1 Chile \u2013 Premium chili peppers. \ud83c\uddfa\ud83c\uddf8 United States \u2013 Cajun traditions. \ud83c\uddf9\ud83c\uddf7 Turkey \u2013 Paprika and spice blends",
     "history": "Inspired by Louisiana's love of bold spice, Flamin' Cajun takes traditional Cajun flavors and turns the heat up for serious spice lovers.",
     "pairsWith": "Blue Cheese, Ranch, Cali Mayo, Honey Mustard",
@@ -214,7 +223,7 @@ export const FLAVOURS: Flavour[] = [
     "heat": 1,
     "type": "wet-sauce",
     "shortDescription": "Classic Buffalo flavor with less heat and extra buttery richness.",
-    "howMade": "Made using aged cayenne peppers, butter, vinegar, garlic, paprika, and signature seasonings with a milder pepper blend.",
+    "howMade": "Milder cayenne, butter, vinegar, garlic.",
     "sourcedFrom": "\ud83c\uddfa\ud83c\uddf8 United States \u2013 Buffalo",
     "history": "Created for those who love the original Buffalo flavor without overwhelming heat, Mild Buffalo remains one of America's most popular wing sauces.",
     "pairsWith": "Blue Cheese",
@@ -372,7 +381,7 @@ export const DIPS: Dip[] = [
   {
     "slug": "blue-cheese",
     "name": "Blue Cheese",
-    "shortDescription": null,
+    "shortDescription": "Cool, tangy and chunky — the classic Buffalo partner that tames the heat.",
     "howMade": null,
     "pairsWith": null,
     "notes": null
@@ -380,7 +389,7 @@ export const DIPS: Dip[] = [
   {
     "slug": "ranch",
     "name": "Ranch",
-    "shortDescription": null,
+    "shortDescription": "Creamy, herby and cool. Goes with literally everything.",
     "howMade": null,
     "pairsWith": null,
     "notes": null
@@ -388,7 +397,7 @@ export const DIPS: Dip[] = [
   {
     "slug": "california-sauce-mayo",
     "name": "California Sauce / Mayo",
-    "shortDescription": null,
+    "shortDescription": "Smooth, rich house mayo — made for dunking.",
     "howMade": null,
     "pairsWith": null,
     "notes": null
@@ -396,7 +405,7 @@ export const DIPS: Dip[] = [
   {
     "slug": "honey-mustard",
     "name": "Honey Mustard",
-    "shortDescription": null,
+    "shortDescription": "Sweet honey, sharp mustard — tangy, smooth and made for Lemon Pepper.",
     "howMade": null,
     "pairsWith": null,
     "notes": null
