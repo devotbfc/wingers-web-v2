@@ -26,8 +26,11 @@ Wire-shape summary (server wins on any disagreement):
 `src/lib/pph/mode.ts` resolves `NEXT_PUBLIC_ORDERING_MODE`:
 - Unset / `"handoff"` → today's Deliverect + Toast links, untouched. Every
   `/order/*` route calls `notFound()`. No sitemap or robots changes.
-- `"pph"` → `/order/*` routes render. Site-wide ORDER buttons route into
-  `/order` (via `pushPullHubProvider.getOrderUrl`). Routes carry
+- `"pph"` → `/order/*` routes render. `getProviderForLocation` short-circuits
+  to `pushPullHubProvider` for every location, so every site-wide ORDER
+  button on marketing pages routes to `/order/menu?location=<slug>` instead
+  of the aggregator (Deliverect / Toast). The menu page preselects the PPH
+  location that matches the slug. Routes carry
   `robots: { index: false, follow: false }` until go-live.
 
 `NEXT_PUBLIC_PPH_URL` toggles between `MockPphClient` (default when unset) and

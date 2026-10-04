@@ -8,7 +8,7 @@ export type PaymentResult =
   | { kind: "error"; message: string };
 
 export interface PaymentAdapter {
-  readonly label: "mock" | "stripe";
+  readonly label: "mock" | "stripe" | "unavailable";
   // Present the payment UI. Resolves when the user takes an action.
   confirm(args: { orderId: string; clientSecret: string; totalPence: number }): Promise<PaymentResult>;
 }

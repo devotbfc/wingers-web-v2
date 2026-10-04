@@ -14,7 +14,7 @@ import { useAuth } from "@/lib/pph/auth-store";
 import { PphApiError, mapErrorCodeToCopy } from "@/lib/pph/errors";
 import { cartSignature, newIdempotencyKey } from "@/lib/pph/idempotency";
 import { pence } from "@/lib/pph/money";
-import { paymentAdapter } from "@/lib/pph/payment/pick-adapter";
+import { UNAVAILABLE_PAYMENT_COPY, paymentAdapter } from "@/lib/pph/payment/pick-adapter";
 import { getMinPickupLeadMinutes, isSlotStillAvailable } from "@/lib/pph/pickup";
 import { estimatePointsFromLines } from "@/lib/pph/points";
 import { useLocations } from "@/lib/pph/hooks";
@@ -248,6 +248,12 @@ export default function CheckoutPage() {
   }
 
   const hasPending = pending !== null;
+  // Card tender needs a working payment adapter. Points / voucher-covered
+  // zero-total paths bypass payment entirely (paymentClientSecret === null),
+  // so they're unaffected by this gate.
+  const needsCardPayment = state.tender !== "points" && totalPence > 0;
+  const paymentUnavailable =
+    paymentAdapter.label === "unavailable" && needsCardPayment;
 
   return (
     <>
@@ -385,6 +391,15 @@ export default function CheckoutPage() {
           </div>
         </Section>
 
+        {paymentUnavailable ? (
+          <div
+            role="status"
+            className="rounded-md border border-red-500 bg-red-50 p-2 text-xs text-red-800"
+          >
+            {UNAVAILABLE_PAYMENT_COPY}
+          </div>
+        ) : null}
+
         {error ? (
           <div className="rounded-md border border-red-500 bg-red-50 p-2 text-xs text-red-800">
             {error}
@@ -399,7 +414,7 @@ export default function CheckoutPage() {
             size="lg"
             className="w-full"
             onClick={() => retryPayment()}
-            disabled={submitting}
+            disabled={submitting || paymentUnavailable}
           >
             Retry payment
           </BrandButton>
@@ -409,7 +424,7 @@ export default function CheckoutPage() {
             size="lg"
             className="w-full"
             onClick={() => setConfirmOpen(true)}
-            disabled={submitting || state.lines.length === 0}
+            disabled={submitting || state.lines.length === 0 || paymentUnavailable}
           >
             Confirm & Pay · {pointsCost != null ? `${pointsCost} pts` : pence(totalPence)}
           </BrandButton>

@@ -22,9 +22,28 @@ export default function MenuPage() {
   const [itemSheetOpen, setItemSheetOpen] = useState(false);
   const [activeItem, setActiveItem] = useState<MenuItem | null>(null);
 
-  // Default to Milton Keynes on first load.
+  // Preselect from ?location=<slug> (set by the site-wide ORDER CTAs via
+  // pushPullHubProvider.getOrderUrl). Falls back to the first location on
+  // cold boot. If the URL slug points at a different shop than the one
+  // currently loaded, the cart provider will clear the basket on switch —
+  // intentional: the user clicked a different shop.
   useEffect(() => {
-    if (!state.locationId && locations.length > 0) setLocation(locations[0].id);
+    if (locations.length === 0) return;
+    const slug =
+      typeof window !== "undefined"
+        ? new URLSearchParams(window.location.search).get("location")
+        : null;
+    if (slug) {
+      const normalised = slug.toLowerCase().replace(/-/g, " ");
+      const match = locations.find((l) =>
+        l.name.toLowerCase().includes(normalised),
+      );
+      if (match && match.id !== state.locationId) {
+        setLocation(match.id);
+        return;
+      }
+    }
+    if (!state.locationId) setLocation(locations[0].id);
   }, [locations, state.locationId, setLocation]);
 
   const activeLocation = locations.find((l) => l.id === state.locationId) ?? null;
