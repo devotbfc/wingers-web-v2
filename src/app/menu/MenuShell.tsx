@@ -1,96 +1,43 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
+import { CategoryBar } from "@/components/menu/CategoryBar";
+import { FlavourLabLinkCard } from "@/components/menu/FlavourLabLinkCard";
+import { LocationPicker } from "@/components/menu/LocationPicker";
 import { LOCATIONS } from "@/lib/locations";
 import {
-  FLAVOUR_SHOWCASE,
   MENU_ITEMS,
   MENU_SECTIONS,
   isCurrentLE,
   toMenuLocationCode,
   type MenuItem,
 } from "@/lib/menu";
+import { MENU_GROUPS } from "@/lib/menu/groups";
 import { cn } from "@/lib/utils";
-import { FlavourCard } from "./FlavourCard";
 import { MenuCard } from "./MenuCard";
 
-const OUR_FLAVOURS_ID = "our-flavours";
 const PAST_DROPS_ID = "past-drops";
+const LOCATION_STORAGE_KEY = "wingers_menu_location";
 
-function LocationSwitcher({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (slug: string) => void;
-}) {
-  return (
-    <div
-      role="radiogroup"
-      aria-label="Choose your shop"
-      className="grid grid-cols-2 gap-2"
-    >
-      {LOCATIONS.map((loc) => {
-        const active = value === loc.slug;
-        return (
-          <button
-            key={loc.slug}
-            role="radio"
-            aria-checked={active}
-            onClick={() => onChange(loc.slug)}
-            className={cn(
-              "min-h-11 rounded-md px-4 font-display text-sm font-bold uppercase tracking-wide transition-colors",
-              active
-                ? "bg-brand-pink text-brand-black"
-                : "bg-brand-white text-brand-black border border-brand-black/15 hover:bg-brand-black/5"
-            )}
-          >
-            {loc.name.replace(/^Wingers\s+/, "")}
-          </button>
-        );
-      })}
-    </div>
-  );
+const SECTION_NAME_BY_SLUG: Record<string, string> = Object.fromEntries(
+  MENU_SECTIONS.map((s) => [s.slug, s.name])
+);
+
+function readStoredLocation(): string | null {
+  try {
+    return window.localStorage.getItem(LOCATION_STORAGE_KEY);
+  } catch {
+    return null;
+  }
 }
 
-function SectionRail({
-  rails,
-  activeId,
-  onClick,
-}: {
-  rails: { id: string; label: string }[];
-  activeId: string;
-  onClick: (id: string) => void;
-}) {
-  return (
-    <nav
-      aria-label="Menu sections"
-      className="-mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:flex-wrap md:justify-center md:overflow-visible md:px-0"
-    >
-      {rails.map((r) => {
-        const active = activeId === r.id;
-        return (
-          <a
-            key={r.id}
-            href={`#${r.id}`}
-            onClick={(e) => {
-              e.preventDefault();
-              onClick(r.id);
-            }}
-            aria-current={active ? "true" : undefined}
-            className={cn(
-              "flex min-h-11 shrink-0 snap-start items-center whitespace-nowrap rounded-md px-4 font-display text-sm font-bold uppercase tracking-wide transition-colors",
-              active
-                ? "bg-brand-pink text-brand-black"
-                : "bg-brand-white text-brand-black border border-brand-black/15 hover:bg-brand-black/5"
-            )}
-          >
-            {r.label}
-          </a>
-        );
-      })}
-    </nav>
-  );
+function writeStoredLocation(slug: string): void {
+  try {
+    window.localStorage.setItem(LOCATION_STORAGE_KEY, slug);
+  } catch {
+    /* ignore */
+  }
 }
 
 interface MenuShellProps {
@@ -101,6 +48,25 @@ export function MenuShell({
   defaultLocationSlug = "milton-keynes",
 }: MenuShellProps) {
   const [locationSlug, setLocationSlug] = useState<string>(defaultLocationSlug);
+
+  // Rehydrate from localStorage post-mount so SSR output matches initial
+  // client render (then updates to the stored choice). Deferred via rAF so
+  // the setState sits outside the effect body — same pattern as
+  // LocationOpenBadge.
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      const stored = readStoredLocation();
+      if (stored && LOCATIONS.some((l) => l.slug === stored)) {
+        setLocationSlug(stored);
+      }
+    });
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  function handleLocationChange(slug: string) {
+    setLocationSlug(slug);
+    writeStoredLocation(slug);
+  }
   const code = toMenuLocationCode(locationSlug);
   const currentLocationName =
     LOCATIONS.find((l) => l.slug === locationSlug)?.name ?? "Wingers";
@@ -119,78 +85,88 @@ export function MenuShell({
     return other?.name.replace(/^Wingers\s+/, "") ?? "the other shop";
   }, [locationSlug]);
 
-  const sections = useMemo(
-    () =>
-      MENU_SECTIONS.map((section) => {
-        const itemsInSection = currentItems.filter(
-          (i) => i.sectionSlug === section.slug
+  // Build groups, each with its source sub-sections and their items (filtered
+  // to currently-live LE items). A group is dropped if all its sub-sections
+  // are empty.
+  const groups = useMemo(() => {
+    return MENU_GROUPS.map((group) => {
+      // productFilter groups (WINGS, TENDERS): single flat sub-section
+      // produced from a product filter on one source section — no sub-headings.
+      if (group.productFilter) {
+        const sectionSlug = group.sectionSlugs[0]!;
+        const items = currentItems.filter(
+          (i) =>
+            i.sectionSlug === sectionSlug &&
+            typeof i.product === "string" &&
+            (group.productFilter as readonly string[]).includes(i.product)
         );
-        const availableInSection = itemsInSection.filter(
-          (i) => i.unavailableAt !== code
-        );
-        return {
-          slug: section.slug,
-          id: `section-${section.slug}`,
-          name: section.name,
-          items: itemsInSection,
-          hasAny: itemsInSection.length > 0,
+        const availableHere = items.filter((i) => i.unavailableAt !== code);
+        const sub = {
+          slug: group.slug,
+          name: group.label,
+          items,
+          hasAny: items.length > 0,
           allUnavailableHere:
-            itemsInSection.length > 0 && availableInSection.length === 0,
+            items.length > 0 && availableHere.length === 0,
         };
-      }).filter((s) => s.hasAny),
-    [currentItems, code]
+        return {
+          slug: group.slug,
+          label: group.label,
+          id: `group-${group.slug}`,
+          showSubHeadings: false,
+          subSections: sub.hasAny ? [sub] : [],
+          hasAny: sub.hasAny,
+          allUnavailableHere: sub.allUnavailableHere,
+        };
+      }
+
+      // Default: one sub-section per source section slug.
+      const subSections = group.sectionSlugs.map((slug) => {
+        const items = currentItems.filter((i) => i.sectionSlug === slug);
+        const availableHere = items.filter((i) => i.unavailableAt !== code);
+        return {
+          slug,
+          name: SECTION_NAME_BY_SLUG[slug] ?? slug,
+          items,
+          hasAny: items.length > 0,
+          allUnavailableHere:
+            items.length > 0 && availableHere.length === 0,
+        };
+      }).filter((s) => s.hasAny);
+
+      return {
+        slug: group.slug,
+        label: group.label,
+        id: `group-${group.slug}`,
+        showSubHeadings: group.showSubHeadings,
+        subSections,
+        hasAny: subSections.length > 0,
+        allUnavailableHere:
+          subSections.length > 0 &&
+          subSections.every((s) => s.allUnavailableHere),
+      };
+    }).filter((g) => g.hasAny);
+  }, [currentItems, code]);
+
+  const barItems = useMemo(
+    () => groups.map((g) => ({ slug: g.slug, label: g.label, id: g.id })),
+    [groups]
   );
-
-  const rails = useMemo(() => {
-    const items = sections.map((s) => ({ id: s.id, label: s.name }));
-    items.push({ id: OUR_FLAVOURS_ID, label: "Our Flavours" });
-    if (pastDrops.length > 0) {
-      items.push({ id: PAST_DROPS_ID, label: "Past Drops" });
-    }
-    return items;
-  }, [sections, pastDrops]);
-
-  const [activeId, setActiveId] = useState<string>(rails[0]?.id ?? "");
-  const observerRef = useRef<IntersectionObserver | null>(null);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    observerRef.current?.disconnect();
-    const io = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible[0]) {
-          setActiveId(visible[0].target.id);
-        }
-      },
-      { rootMargin: "-96px 0px -60% 0px", threshold: 0 }
-    );
-    for (const rail of rails) {
-      const el = document.getElementById(rail.id);
-      if (el) io.observe(el);
-    }
-    observerRef.current = io;
-    return () => io.disconnect();
-  }, [rails]);
-
-  const scrollToId = (id: string) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    setActiveId(id);
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
 
   return (
     <>
-      <div className="mx-auto max-w-md px-4 pt-4 md:px-0">
-        <LocationSwitcher value={locationSlug} onChange={setLocationSlug} />
+      <div className="mt-4 flex justify-center px-4">
+        <LocationPicker value={locationSlug} onChange={handleLocationChange} />
       </div>
 
-      <div className="sticky top-0 z-20 mt-6 bg-brand-white/95 py-3 backdrop-blur">
-        <div className="mx-auto max-w-6xl px-4 md:px-8">
-          <SectionRail rails={rails} activeId={activeId} onClick={scrollToId} />
+      {/* Sticky chrome — seats flush under the fixed NavBar via --nav-h.
+          See globals.css. */}
+      <div
+        className="sticky z-20 mt-6 border-b border-brand-black/10 bg-brand-white"
+        style={{ top: "var(--nav-h)" }}
+      >
+        <div className="mx-auto max-w-6xl">
+          <CategoryBar items={barItems} />
         </div>
       </div>
 
@@ -200,73 +176,71 @@ export function MenuShell({
           shop.
         </p>
 
-        {sections.map((section) => (
+        {groups.map((group) => (
           <section
-            key={section.slug}
-            id={section.id}
-            aria-labelledby={`${section.id}-heading`}
-            className="scroll-mt-24 pt-10 first:pt-0 md:pt-16"
+            key={group.slug}
+            id={group.id}
+            aria-labelledby={`${group.id}-heading`}
+            // scroll-margin-top uses --nav-h so anchored scrolls land flush
+            // under both the NavBar and the sticky category bar.
+            style={{
+              scrollMarginTop: "calc(var(--nav-h) + 4rem)",
+            }}
+            className="pt-10 first:pt-0 md:pt-16"
           >
             <h2
-              id={`${section.id}-heading`}
-              className="font-display text-3xl font-extrabold uppercase leading-[0.95] tracking-tight text-brand-black md:text-5xl"
+              id={`${group.id}-heading`}
+              className="font-ui text-4xl uppercase leading-[0.95] tracking-tight text-brand-black md:text-6xl"
             >
-              {section.name}
+              {group.label}
             </h2>
 
-            {section.allUnavailableHere ? (
+            {group.allUnavailableHere ? (
               <div className="mt-6 border-l-4 border-brand-red bg-brand-pink/15 p-6 text-brand-black md:p-8">
                 <p className="font-display text-lg font-bold uppercase tracking-tight">
                   Available at {otherLocationName} only.
                 </p>
                 <p className="mt-2 font-body text-sm leading-relaxed text-brand-black/70">
-                  This section isn&rsquo;t on the {currentLocationName.replace(/^Wingers\s+/, "")} menu right now. Switch shops above to see it.
+                  This group isn&rsquo;t on the{" "}
+                  {currentLocationName.replace(/^Wingers\s+/, "")} menu right
+                  now. Switch shops above to see it.
                 </p>
               </div>
             ) : (
-              <ItemGrid items={section.items} locationSlug={locationSlug} />
+              group.subSections.map((sub) => (
+                <div key={sub.slug} className="mt-6 first:mt-6">
+                  {group.showSubHeadings && (
+                    <h3 className="font-ui text-2xl uppercase tracking-[0.02em] text-brand-black/85 md:text-3xl">
+                      {sub.name}
+                    </h3>
+                  )}
+                  {sub.allUnavailableHere ? (
+                    <div className="mt-4 border-l-4 border-brand-red bg-brand-pink/15 p-5 text-brand-black">
+                      <p className="font-body text-sm leading-relaxed text-brand-black/80">
+                        {sub.name} is at {otherLocationName} only right now.
+                      </p>
+                    </div>
+                  ) : (
+                    <ItemGrid items={sub.items} locationSlug={locationSlug} />
+                  )}
+                </div>
+              ))
             )}
           </section>
         ))}
 
-        <section
-          id={OUR_FLAVOURS_ID}
-          aria-labelledby={`${OUR_FLAVOURS_ID}-heading`}
-          className="scroll-mt-24 pt-10 md:pt-16"
-        >
-          <div className="flex items-baseline justify-between gap-4">
-            <h2
-              id={`${OUR_FLAVOURS_ID}-heading`}
-              className="font-display text-3xl font-extrabold uppercase leading-[0.95] tracking-tight text-brand-black md:text-5xl"
-            >
-              Our Flavours
-            </h2>
-          </div>
-          <p className="mt-3 max-w-2xl font-body text-sm leading-relaxed text-brand-black/70 md:text-base">
-            The sauces we coat our wings, boneless and tenders in. Pick one on
-            the ordering platform when you check out.
-          </p>
-          <ul className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
-            {FLAVOUR_SHOWCASE.map((flavour, i) => (
-              <li
-                key={flavour.slug}
-                className={cn(i % 2 === 0 ? "mr-3 md:mr-0" : "ml-3 md:ml-0")}
-              >
-                <FlavourCard flavour={flavour} />
-              </li>
-            ))}
-          </ul>
-        </section>
+        <FlavourLabLinkCard />
 
         {pastDrops.length > 0 && (
           <section
             id={PAST_DROPS_ID}
             aria-labelledby={`${PAST_DROPS_ID}-heading`}
-            className="scroll-mt-24 pt-10 md:pt-16"
+            style={{ scrollMarginTop: "calc(var(--nav-h) + 4rem)" }}
+            className="pt-10 md:pt-16"
           >
             <h2
               id={`${PAST_DROPS_ID}-heading`}
-              className="font-display text-3xl font-extrabold uppercase leading-[0.95] tracking-tight text-brand-black/60 md:text-5xl"
+              className="font-ui text-4xl uppercase leading-[0.95] tracking-tight text-brand-black/60 md:text-6xl"
             >
               Past Drops
             </h2>
@@ -303,7 +277,7 @@ function ItemGrid({
   locationSlug: string;
 }) {
   return (
-    <ul className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
+    <ul className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
       {items.map((item, i) => (
         <li
           key={item.slug}

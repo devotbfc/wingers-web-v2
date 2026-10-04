@@ -98,7 +98,7 @@ export function SignupSlideIn({
               type="button"
               onClick={onDismiss}
               aria-label="Dismiss sign-up"
-              className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-md text-brand-black/70 hover:text-brand-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-pink"
+              className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full text-brand-black/70 hover:text-brand-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-pink"
             >
               <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5">
                 <path

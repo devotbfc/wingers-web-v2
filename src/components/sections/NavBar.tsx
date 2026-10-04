@@ -126,7 +126,7 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
           aria-label="Open menu"
           onClick={() => setMobileOpen(true)}
           className={cn(
-            "md:hidden inline-flex items-center justify-center h-10 w-10 rounded-md transition-colors",
+            "md:hidden inline-flex items-center justify-center h-10 w-10 rounded-full transition-colors",
             "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red",
             scrolled || !onDark ? "text-brand-black" : "text-brand-white"
           )}
@@ -161,7 +161,7 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
               type="button"
               aria-label="Close menu"
               onClick={() => setMobileOpen(false)}
-              className="inline-flex items-center justify-center h-10 w-10 rounded-md text-brand-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red"
+              className="inline-flex items-center justify-center h-10 w-10 rounded-full text-brand-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red"
             >
               <X className="h-6 w-6" aria-hidden="true" />
             </button>

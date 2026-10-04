@@ -21,29 +21,34 @@ interface BrandButtonProps {
   "aria-label"?: string;
 }
 
-// ADR-018 §4 (post-rewrite): ORDER is always brand-red fill + brand-white text,
-// everywhere. Secondaries beside ORDER use variant="outline" (inverts to
-// red/white on hover). Hover must stay visible on pink, white and black
-// surfaces — primary + inverse use brightness-90 so the hue never clashes with
-// a brand-pink card (OrderPanel) or a lab-black section. Every variant renders
-// at rounded-md; radius is set here, not at call sites.
+// ADR-018 §4 (amended 2026-10-05, app-parity batch): ORDER is always
+// brand-red fill + brand-white text, everywhere. Secondaries beside ORDER
+// use variant="outline" (inverts to red/white on hover). Hover must stay
+// visible on pink, white and black surfaces — primary + inverse use
+// brightness-90 so the hue never clashes with a brand-pink card
+// (OrderPanel) or a lab-black section. Every variant renders at
+// rounded-full (pill), set here, not at call sites. Supersedes the earlier
+// rounded-md rule. Status badges + chips keep their own radii.
 const variantClasses: Record<BrandButtonVariant, string> = {
   primary:
-    "bg-brand-red text-brand-white hover:brightness-90 border-0 rounded-md shadow-none",
+    "bg-brand-red text-brand-white hover:brightness-90 border-0 rounded-full shadow-none",
   secondary:
-    "bg-brand-pink text-brand-black hover:brightness-95 border-0 rounded-md shadow-none",
+    "bg-brand-pink text-brand-black hover:brightness-95 border-0 rounded-full shadow-none",
   ghost:
-    "text-brand-red bg-transparent hover:text-brand-pink hover:bg-transparent underline rounded-md shadow-none",
+    "text-brand-red bg-transparent hover:text-brand-pink hover:bg-transparent underline rounded-full shadow-none",
   inverse:
-    "bg-brand-white text-brand-red hover:brightness-95 border-0 rounded-md shadow-none",
+    "bg-brand-white text-brand-red hover:brightness-95 border-0 rounded-full shadow-none",
   outline:
-    "bg-brand-white text-brand-black border-2 border-brand-black hover:bg-brand-red hover:text-brand-white hover:border-brand-red focus-visible:bg-brand-red focus-visible:text-brand-white focus-visible:border-brand-red rounded-md shadow-none",
+    "bg-brand-white text-brand-black border-2 border-brand-black hover:bg-brand-red hover:text-brand-white hover:border-brand-red focus-visible:bg-brand-red focus-visible:text-brand-white focus-visible:border-brand-red rounded-full shadow-none",
 };
 
+// Anton is condensed — characters sit narrower than Bricolage, so we bump
+// text-size by one notch at md/lg and lean on a slightly wider tracking so
+// uppercase labels stay legible without clipping the button height.
 const sizeClasses: Record<BrandButtonSize, string> = {
   sm: "h-8 px-4 text-sm",
-  md: "h-10 px-6 text-base",
-  lg: "h-12 px-8 text-lg",
+  md: "h-10 px-6 text-lg",
+  lg: "h-12 px-8 text-xl",
 };
 
 export function BrandButton({
@@ -60,7 +65,7 @@ export function BrandButton({
   "aria-label": ariaLabel,
 }: BrandButtonProps) {
   const classes = cn(
-    "font-display font-bold uppercase tracking-wide transition-colors",
+    "font-ui uppercase tracking-[0.04em] transition-colors",
     variantClasses[variant],
     sizeClasses[size],
     className

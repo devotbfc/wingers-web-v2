@@ -6,6 +6,11 @@
   --color-brand-black: #000000;
   --color-brand-white: #FFFFFF;
 
+  /* Warm chrome-neutral used for pill tab inactive fill and the location
+     picker sheet shop cards. Scoped to navigation + picker chrome; not a
+     general surface token. Matches the wing-app's warm off-white rest state. */
+  --color-brand-warm-grey: #EAE6DF;
+
   /* Near-black used only by the /flavour-lab neon inversion. Not part of
      the white-primary system — do not use elsewhere. */
   --color-lab-black: #0A0A0A;
@@ -14,6 +19,7 @@
      See src/app/layout.tsx. Do not rename without updating both files. */
   --font-display: "Bricolage Grotesque", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
+  --font-ui: "Anton", "Impact", "Arial Narrow", sans-serif;
 
   --tracking-display: -0.03em;
 }
@@ -21,6 +27,19 @@
 /* White-primary base: white page, black text by default.
    Dark sections opt in via .section-dark. See docs/decisions.md ADR-015. */
 @layer base {
+  /* Single source of truth for the fixed NavBar's height (h-20 / md:h-24 in
+     NavBar.tsx). Consumed by any sub-sticky chrome (menu category bar), by
+     scroll-margin on anchor targets, and by scroll-spy rootMargin maths —
+     keep this in sync with NavBar if the nav resizes. */
+  :root {
+    --nav-h: 5rem;
+  }
+  @media (min-width: 768px) {
+    :root {
+      --nav-h: 6rem;
+    }
+  }
+
   html,
   body {
     /* Belt-and-braces guard against horizontal overflow from decorative
