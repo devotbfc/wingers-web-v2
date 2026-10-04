@@ -7,6 +7,8 @@ import { ConsentProvider } from "@/components/consent/ConsentProvider";
 import { ConsentBanner } from "@/components/consent/ConsentBanner";
 import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { PixelPageView } from "@/components/analytics/PixelPageView";
+import { SignupSlideInHost } from "@/components/signup/SignupSlideInHost";
+import { getCurrentLimitedEdition } from "@/lib/flavours/current-le";
 import { getSiteUrl } from "@/lib/site-url";
 import "@/styles/globals.css";
 
@@ -54,6 +56,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Computed in the Server Component root so FLAVOURS stays out of the global
+  // client bundle. The slide-in only ever needs the one record.
+  const currentLE = getCurrentLimitedEdition();
+
   return (
     <html
       lang="en"
@@ -62,6 +68,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <ConsentProvider pixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID ?? ""}>
           {children}
+          <SignupSlideInHost currentLE={currentLE} />
           <ConsentBanner />
           <MetaPixel />
           {/* Suspense is required: useSearchParams inside PixelPageView would
