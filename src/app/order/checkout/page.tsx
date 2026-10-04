@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { CheckoutConfirmSheet } from "@/components/pph/CheckoutConfirmSheet";
 import { MockPaymentSheet } from "@/components/pph/MockPaymentSheet";
 import { ScheduleSheet } from "@/components/pph/ScheduleSheet";
+import { StripePaymentSheet } from "@/components/pph/StripePaymentSheet";
 import { track } from "@/lib/analytics/meta-pixel";
 import { useCart } from "@/lib/cart/context";
 import { useOrderStack } from "@/lib/order-stack/context";
@@ -472,6 +473,7 @@ export default function CheckoutPage() {
       />
 
       <MockPaymentSheet />
+      <StripePaymentSheet />
     </>
   );
 }
