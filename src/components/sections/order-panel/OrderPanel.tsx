@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import {
   Sheet,
   SheetContent,
@@ -19,10 +19,21 @@ import {
   readFbclidFromUrl,
 } from "@/lib/analytics/fbclid";
 import { useOrderPanel } from "./order-panel-context";
+import { OPEN_ORDER_EVENT } from "./events";
 
 export function OrderPanel() {
-  const { open, setOpen, preferredLocationSlug } = useOrderPanel();
+  const { open, setOpen, preferredLocationSlug, openPanel } = useOrderPanel();
   const { status: consentStatus } = useConsent();
+
+  useEffect(() => {
+    function handler(event: Event) {
+      const detail = (event as CustomEvent<{ preferredLocationSlug?: string }>)
+        .detail;
+      openPanel(detail?.preferredLocationSlug);
+    }
+    window.addEventListener(OPEN_ORDER_EVENT, handler);
+    return () => window.removeEventListener(OPEN_ORDER_EVENT, handler);
+  }, [openPanel]);
 
   // fbclid gate on consent (PECR — click identifier is non-essential tracking).
   // useMemo keyed on consentStatus: recomputes on the "unknown" → "accepted"
