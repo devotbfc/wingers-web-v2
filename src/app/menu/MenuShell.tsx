@@ -1,10 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { CategoryBar } from "@/components/menu/CategoryBar";
 import { FlavourLabLinkCard } from "@/components/menu/FlavourLabLinkCard";
-import { LocationToggle } from "@/components/menu/LocationToggle";
+import { LocationPicker } from "@/components/menu/LocationPicker";
 import { LOCATIONS } from "@/lib/locations";
 import {
   MENU_ITEMS,
@@ -18,10 +18,27 @@ import { cn } from "@/lib/utils";
 import { MenuCard } from "./MenuCard";
 
 const PAST_DROPS_ID = "past-drops";
+const LOCATION_STORAGE_KEY = "wingers_menu_location";
 
 const SECTION_NAME_BY_SLUG: Record<string, string> = Object.fromEntries(
   MENU_SECTIONS.map((s) => [s.slug, s.name])
 );
+
+function readStoredLocation(): string | null {
+  try {
+    return window.localStorage.getItem(LOCATION_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function writeStoredLocation(slug: string): void {
+  try {
+    window.localStorage.setItem(LOCATION_STORAGE_KEY, slug);
+  } catch {
+    /* ignore */
+  }
+}
 
 interface MenuShellProps {
   defaultLocationSlug?: string;
@@ -31,6 +48,25 @@ export function MenuShell({
   defaultLocationSlug = "milton-keynes",
 }: MenuShellProps) {
   const [locationSlug, setLocationSlug] = useState<string>(defaultLocationSlug);
+
+  // Rehydrate from localStorage post-mount so SSR output matches initial
+  // client render (then updates to the stored choice). Deferred via rAF so
+  // the setState sits outside the effect body — same pattern as
+  // LocationOpenBadge.
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      const stored = readStoredLocation();
+      if (stored && LOCATIONS.some((l) => l.slug === stored)) {
+        setLocationSlug(stored);
+      }
+    });
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  function handleLocationChange(slug: string) {
+    setLocationSlug(slug);
+    writeStoredLocation(slug);
+  }
   const code = toMenuLocationCode(locationSlug);
   const currentLocationName =
     LOCATIONS.find((l) => l.slug === locationSlug)?.name ?? "Wingers";
@@ -89,7 +125,7 @@ export function MenuShell({
   return (
     <>
       <div className="mt-4 flex justify-center px-4">
-        <LocationToggle value={locationSlug} onChange={setLocationSlug} />
+        <LocationPicker value={locationSlug} onChange={handleLocationChange} />
       </div>
 
       {/* Sticky chrome — seats flush under the fixed NavBar via --nav-h.
