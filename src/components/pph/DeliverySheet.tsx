@@ -1,6 +1,7 @@
 "use client";
 
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { ExternalLink } from "lucide-react";
+import { PphSheet, PphSheetContent } from "./PphSheet";
 
 const DELIVERY_APPS = [
   { name: "Deliveroo", href: "https://deliveroo.co.uk/brands/wingers" },
@@ -15,30 +16,27 @@ type Props = {
 
 export function DeliverySheet({ open, onOpenChange }: Props) {
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="bottom" className="rounded-t-xl pb-6">
-        <SheetHeader>
-          <SheetTitle className="font-display text-xl">Get Wingers Delivered</SheetTitle>
-        </SheetHeader>
-        <p className="px-4 text-sm text-neutral-600">
-          Delivery runs through our partners. Collection in-app earns loyalty points.
-        </p>
-        <ul className="mt-3 flex flex-col gap-2 px-4">
+    <PphSheet open={open} onOpenChange={onOpenChange}>
+      <PphSheetContent
+        title="Get Wingers delivered"
+        description="Delivery runs through our partners. Collect in-app to earn points."
+      >
+        <ul className="space-y-2">
           {DELIVERY_APPS.map((app) => (
             <li key={app.name}>
               <a
                 href={app.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between rounded-md border border-neutral-200 px-3 py-3 text-sm font-bold"
+                className="flex items-center justify-between rounded-md border border-neutral-200 bg-brand-white px-3 py-3 text-sm font-bold text-brand-black hover:bg-neutral-50"
               >
                 {app.name}
-                <span className="text-neutral-400">→</span>
+                <ExternalLink className="h-4 w-4 text-neutral-400" />
               </a>
             </li>
           ))}
         </ul>
-      </SheetContent>
-    </Sheet>
+      </PphSheetContent>
+    </PphSheet>
   );
 }

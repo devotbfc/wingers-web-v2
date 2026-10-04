@@ -1,10 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { BrandButton } from "@/components/brand/BrandButton";
 import { buildSlots, formatSlotLabel, type SlotDayKey } from "@/lib/pph/pickup";
 import type { LocationSummary } from "@/lib/pph/types";
+import { PphSheet, PphSheetContent } from "./PphSheet";
 
 type Props = {
   open: boolean;
@@ -15,56 +15,19 @@ type Props = {
 };
 
 export function ScheduleSheet({ open, onOpenChange, location, onPick, selectedIso }: Props) {
+  // Radix unmounts Portal content on close so these initialisers re-run on
+  // every open; no reset effect needed.
   const [day, setDay] = useState<SlotDayKey>("today");
   const [picked, setPicked] = useState<string | null>(selectedIso);
 
   const slots = useMemo(() => buildSlots(location, day), [location, day]);
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="bottom" className="max-h-[80vh] overflow-y-auto rounded-t-xl pb-6">
-        <SheetHeader>
-          <SheetTitle className="font-display text-xl">Schedule pickup</SheetTitle>
-        </SheetHeader>
-        <div className="flex gap-2 px-4">
-          {(["today", "tomorrow"] as const).map((k) => (
-            <button
-              key={k}
-              type="button"
-              onClick={() => setDay(k)}
-              className={`rounded-md px-3 py-1.5 text-sm font-bold uppercase ${
-                day === k ? "bg-brand-pink text-brand-black" : "bg-neutral-100 text-neutral-600"
-              }`}
-            >
-              {k}
-            </button>
-          ))}
-        </div>
-        <div className="mt-3 grid grid-cols-3 gap-2 px-4">
-          {slots.length === 0 ? (
-            <div className="col-span-3 py-6 text-center text-sm text-neutral-500">
-              No slots left {day}. Try {day === "today" ? "tomorrow" : "a later day"}.
-            </div>
-          ) : (
-            slots.map((s) => {
-              const iso = s.toISOString();
-              const isPicked = iso === picked;
-              return (
-                <button
-                  key={iso}
-                  type="button"
-                  onClick={() => setPicked(iso)}
-                  className={`rounded-md border py-2 text-sm ${
-                    isPicked ? "border-brand-pink bg-brand-pink text-brand-black" : "border-neutral-200"
-                  }`}
-                >
-                  {formatSlotLabel(s)}
-                </button>
-              );
-            })
-          )}
-        </div>
-        <div className="mt-4 px-4">
+    <PphSheet open={open} onOpenChange={onOpenChange}>
+      <PphSheetContent
+        title="Pickup time"
+        description="Choose when to collect"
+        footer={
           <BrandButton
             variant="primary"
             size="lg"
@@ -75,10 +38,55 @@ export function ScheduleSheet({ open, onOpenChange, location, onPick, selectedIs
               onOpenChange(false);
             }}
           >
-            Select Time
+            Confirm pickup time
           </BrandButton>
+        }
+      >
+        <div className="flex gap-2 pb-3">
+          {(["today", "tomorrow"] as const).map((k) => (
+            <button
+              key={k}
+              type="button"
+              onClick={() => {
+                setDay(k);
+                setPicked(null);
+              }}
+              className={`flex-1 rounded-md px-3 py-2 font-display text-xs font-bold uppercase tracking-wide ${
+                day === k ? "bg-brand-pink text-brand-black" : "bg-neutral-100 text-neutral-700"
+              }`}
+            >
+              {k}
+            </button>
+          ))}
         </div>
-      </SheetContent>
-    </Sheet>
+
+        {slots.length === 0 ? (
+          <div className="py-10 text-center text-sm text-neutral-500">
+            No slots left {day}. Try {day === "today" ? "tomorrow" : "today"}.
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 gap-2 pb-2">
+            {slots.map((s) => {
+              const iso = s.toISOString();
+              const isPicked = iso === picked;
+              return (
+                <button
+                  key={iso}
+                  type="button"
+                  onClick={() => setPicked(iso)}
+                  className={`rounded-md border px-2 py-2 text-sm font-bold ${
+                    isPicked
+                      ? "border-brand-pink bg-brand-pink text-brand-black"
+                      : "border-neutral-200 bg-brand-white text-brand-black"
+                  }`}
+                >
+                  {formatSlotLabel(s)}
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </PphSheetContent>
+    </PphSheet>
   );
 }

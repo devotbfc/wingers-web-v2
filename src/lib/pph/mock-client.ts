@@ -1,14 +1,23 @@
-// In-memory PphClient for dev when NEXT_PUBLIC_PPH_URL is unset. Ports
-// wing-app/src/api/mock.ts so the web flow has the same screen behaviours
-// as the mobile app on cold boot: same menu cuids, same loyalty seed, same
-// voucher seeds, same payment-sheet lifecycle (I5.a: Pay / Decline).
+// In-memory PphClient for dev when NEXT_PUBLIC_PPH_URL is unset. The menu,
+// sauces and dips are built from the site's real catalogue data
+// (`src/lib/menu/menu-data.ts` + `src/lib/flavours/flavour-lab-data.ts`) via
+// `./mock-catalogue`. Loyalty seed, voucher seed, payment-sheet lifecycle
+// (I5.a Pay / Decline) and all server-authoritative rules — idempotency,
+// VOUCHER_NOT_COMBINABLE, BLUE_LIGHT_NOT_COMBINABLE, promo math — mirror
+// wing-app/src/api/mock.ts.
 
 import type { MockOnlyPphClient, PphClient } from "./client";
+import {
+  MK_LOCATION_ID,
+  MOCK_MENU_BY_LOCATION,
+  NPTN_LOCATION_ID,
+  findMockMenuItem,
+  pickRewardItemId,
+} from "./mock-catalogue";
 import { mkPickupCode } from "./pickup-code";
 import { applyPromo } from "./promo";
 import type {
   ApiResponse,
-  Dip,
   IsoTimestamp,
   LedgerEntry,
   LocationSummary,
@@ -16,8 +25,6 @@ import type {
   LoyaltyAccount,
   LoyaltyLedgerResponse,
   Menu,
-  MenuItem,
-  MenuItemModifier,
   Order,
   OrderHistoryResponse,
   OrderItem,
@@ -27,7 +34,6 @@ import type {
   RefreshResponse,
   Reward,
   RewardsResponse,
-  Sauce,
   Session,
   SignupRequest,
   TierRule,
@@ -37,9 +43,6 @@ import type {
   VoucherStatus,
   VouchersResponse,
 } from "./types";
-
-const MK_LOCATION_ID = "ckloc0000000000000000mktnk";
-const NPTN_LOCATION_ID = "ckloc00000000000000000nptn";
 
 const now = (): IsoTimestamp => new Date().toISOString();
 const latency = () => 150 + Math.floor(Math.random() * 200);
@@ -58,121 +61,8 @@ function fail<T>(code: string, message: string, details?: Record<string, string[
   };
 }
 
-// Menu cuids. Match wing-app so cross-porting any component works unchanged.
-const wings6 = "ckitm000000000000000wings06";
-const wings10 = "ckitm000000000000000wings10";
-const wings20 = "ckitm000000000000000wings20";
-const tend3 = "ckitm000000000000000tend03";
-const tend5 = "ckitm000000000000000tend05";
-const labBurger = "ckitm000000000000burglab001";
-const hotStack = "ckitm000000000000burghot001";
-const fries = "ckitm00000000000000fries01";
-const slaw = "ckitm00000000000000slaw001";
-const macCheese = "ckitm000000000000macche001";
-const fizzyCan = "ckitm0000000000drink01";
-const stillWater = "ckitm0000000000drink02";
-
-const wingModifiers: MenuItemModifier[] = [
-  { id: "ckmod00000000000000mod_exchk", label: "Extra chicken", addPence: 150, kind: "add-on", pointsPrice: 75 },
-  { id: "ckmod00000000000000mod_exsce", label: "Extra sauce", addPence: 0, kind: "add-on", pointsPrice: 0 },
-  { id: "ckmod00000000000000mod_nochz", label: "No cheese", addPence: 0, kind: "remove", pointsPrice: 0 },
-];
-
-const mkSauceId = (n: number) =>
-  `cksau0000000000000000sauce${String(n).padStart(2, "0")}`;
-
-const sauces: Sauce[] = [
-  { id: mkSauceId(1), name: "Honey Heat", heat: 3, style: "wet", description: "Slow-drizzle honey cut with chilli.", status: "available", compatibleMenuItemIds: [wings6, wings10, tend3, tend5] },
-  { id: mkSauceId(2), name: "Smoky BBQ", heat: 1, style: "wet", description: "Deep smoke, sticky finish, zero jeopardy.", status: "available", compatibleMenuItemIds: [wings6, wings10, wings20, tend3, tend5, labBurger] },
-  { id: mkSauceId(3), name: "Lemon Pepper", heat: 2, style: "dry", description: "Bright citrus and cracked black pepper, no glaze.", status: "available", compatibleMenuItemIds: [wings6, wings10, tend3, tend5] },
-  { id: mkSauceId(4), name: "Peri Riot", heat: 4, style: "wet", description: "African bird's eye, garlic, lemon.", status: "available", compatibleMenuItemIds: [wings6, wings10, tend3, tend5, hotStack] },
-  { id: mkSauceId(5), name: "Katsu Dust", heat: 2, style: "dry", description: "Katsu curry powder rubbed straight onto the fry.", status: "available", compatibleMenuItemIds: [wings6, wings10, tend3, tend5] },
-  { id: mkSauceId(6), name: "Inferno Rub", heat: 5, style: "dry", description: "Ghost and habanero ground into a powder.", status: "available", compatibleMenuItemIds: [wings10, wings20, tend5] },
-  { id: mkSauceId(7), name: "Ghost Buffalo", heat: 5, style: "wet", description: "Classic buffalo tang, then ghost pepper late.", status: "available", compatibleMenuItemIds: [wings6, wings10, wings20, tend3, tend5] },
-  { id: mkSauceId(8), name: "Garlic Parm", heat: 1, style: "wet", description: "Roasted garlic, aged parmesan, butter.", status: "available", compatibleMenuItemIds: [wings6, wings10, wings20, tend3, tend5, labBurger] },
-  { id: mkSauceId(9), name: "Maple Miso", heat: 3, style: "wet", description: "Maple, white miso, chilli — this month's drop.", status: "limited", compatibleMenuItemIds: [wings6, wings10, tend3, tend5] },
-];
-
-const dips: Dip[] = [
-  { id: "ckdip0000000000000000dip001", name: "Blue Cheese", pricePence: 90, imageUrl: null, available: true },
-  { id: "ckdip0000000000000000dip002", name: "Ranch", pricePence: 90, imageUrl: null, available: true },
-  { id: "ckdip0000000000000000dip003", name: "Honey Mustard", pricePence: 90, imageUrl: null, available: true },
-  { id: "ckdip0000000000000000dip004", name: "Garlic Mayo", pricePence: 90, imageUrl: null, available: true },
-];
-
-const menu: Menu = {
-  locationId: MK_LOCATION_ID,
-  updatedAt: now(),
-  categories: [
-    {
-      id: "ckcat00000000000000000wings",
-      name: "Wings",
-      slug: "wings",
-      items: [
-        { id: wings6, categoryId: "ckcat00000000000000000wings", name: "6 Wings", description: "Buttermilk-brined bone-in wings with your choice of sauce.", pricePence: 795, pointsValue: 400, pointsPrice: 400, imageUrl: null, available: true, modifiers: wingModifiers },
-        { id: wings10, categoryId: "ckcat00000000000000000wings", name: "10 Wings", description: "Ten wings, two sauces.", pricePence: 1195, pointsValue: 400, pointsPrice: 600, imageUrl: null, available: true, modifiers: wingModifiers },
-        { id: wings20, categoryId: "ckcat00000000000000000wings", name: "20 Wing Bucket", description: "Twenty wings, three sauces, one big appetite.", pricePence: 2195, pointsValue: 400, pointsPrice: 1100, imageUrl: null, available: true, badge: "premium", modifiers: wingModifiers },
-      ],
-    },
-    {
-      id: "ckcat0000000000000000tendrs",
-      name: "Tenders",
-      slug: "tenders",
-      items: [
-        { id: tend3, categoryId: "ckcat0000000000000000tendrs", name: "3 Tenders", description: "Hand-battered chicken tenders, dip included.", pricePence: 795, pointsValue: 400, pointsPrice: 400, imageUrl: null, available: true, modifiers: wingModifiers },
-        { id: tend5, categoryId: "ckcat0000000000000000tendrs", name: "5 Tenders", description: "Five tenders, two dips.", pricePence: 1195, pointsValue: 400, pointsPrice: 600, imageUrl: null, available: true, modifiers: wingModifiers },
-      ],
-    },
-    {
-      id: "ckcat0000000000000000burger",
-      name: "Burgers",
-      slug: "burgers",
-      items: [
-        { id: labBurger, categoryId: "ckcat0000000000000000burger", name: "Lab Burger", description: "Double crispy chicken, lab sauce, pickles, brioche.", pricePence: 995, pointsValue: 500, pointsPrice: 500, imageUrl: null, available: true },
-        { id: hotStack, categoryId: "ckcat0000000000000000burger", name: "Hot Honey Stack", description: "Crispy chicken, hot honey glaze, slaw.", pricePence: 1095, pointsValue: 500, pointsPrice: 550, imageUrl: null, available: true, heatLevel: 3, badge: "new" },
-      ],
-    },
-    {
-      id: "ckcat00000000000000000sides",
-      name: "Sides",
-      slug: "sides",
-      items: [
-        { id: fries, categoryId: "ckcat00000000000000000sides", name: "Wingers Fries", description: "Skin-on fries dusted with our house seasoning.", pricePence: 395, pointsValue: 150, pointsPrice: 200, imageUrl: null, available: true },
-        { id: slaw, categoryId: "ckcat00000000000000000sides", name: "Neon Slaw", description: "Crunchy cabbage slaw with a pink twist.", pricePence: 295, pointsValue: 150, pointsPrice: 150, imageUrl: null, available: true },
-        { id: macCheese, categoryId: "ckcat00000000000000000sides", name: "Mac & Cheese", description: "Three-cheese mac, breadcrumb crust.", pricePence: 495, pointsValue: 150, pointsPrice: 250, imageUrl: null, available: true },
-      ],
-    },
-    {
-      id: "ckcat0000000000000drinks01",
-      name: "Drinks",
-      slug: "drinks",
-      items: [
-        { id: fizzyCan, categoryId: "ckcat0000000000000drinks01", name: "Fizzy Can", description: "Ice cold.", pricePence: 195, pointsValue: 100, pointsPrice: 100, imageUrl: null, available: true },
-        { id: stillWater, categoryId: "ckcat0000000000000drinks01", name: "Still Water 500ml", description: "Bottled.", pricePence: 150, pointsValue: 100, pointsPrice: 80, imageUrl: null, available: true },
-      ],
-    },
-  ],
-  sauces,
-  dips,
-};
-
-for (const cat of menu.categories) {
-  for (const item of cat.items) {
-    const compatible = sauces.filter((s) => s.compatibleMenuItemIds.includes(item.id)).map((s) => s.id);
-    if (compatible.length > 0) item.compatibleSauceIds = compatible;
-  }
-}
-
-function findMenuItem(id: string): MenuItem | null {
-  for (const cat of menu.categories) {
-    const found = cat.items.find((i) => i.id === id);
-    if (found) return found;
-  }
-  return null;
-}
-
 const loyalty: LoyaltyAccount = {
-  userId: "ckuser00000000000000000001",
+  userId: "ckuser_demo_01",
   points: 640,
   lifetimePoints: 1240,
   tier: "silver",
@@ -210,7 +100,7 @@ const mockLocations: LocationSummary[] = [
     id: NPTN_LOCATION_ID,
     name: "Wingers Northampton",
     address: "2 Drapery, Northampton NN1 2ET",
-    phone: "01908 755800",
+    phone: "01604 755800",
     hours: [
       { day: 0, closed: false, openTime: "11:30", closeTime: "22:00" },
       { day: 1, closed: false, openTime: "11:30", closeTime: "20:00" },
@@ -224,9 +114,9 @@ const mockLocations: LocationSummary[] = [
   },
 ];
 
-const REWARD_FREE_6_WINGS = "ckrwd00000000000000free06w";
-const REWARD_FREE_FRIES = "ckrwd00000000000000freefri";
-const REWARD_FREE_LAB_BURGER = "ckrwd00000000000000freeburger";
+const REWARD_FREE_6_WINGS = "ckrwd_free_6_wings";
+const REWARD_FREE_FRIES = "ckrwd_free_fries";
+const REWARD_FREE_LAB_BURGER = "ckrwd_free_lab_burger";
 
 const rewards: Reward[] = [
   { id: REWARD_FREE_6_WINGS, name: "Free 6 Wings", description: "Redeem against any 6-wing box.", costPoints: 300, imageUrl: null, available: true },
@@ -234,16 +124,19 @@ const rewards: Reward[] = [
   { id: REWARD_FREE_LAB_BURGER, name: "Free Lab Burger", description: "The signature crispy stack.", costPoints: 500, imageUrl: null, available: true },
 ];
 
-const REWARD_MENU_ITEM: Record<string, string> = {
-  [REWARD_FREE_6_WINGS]: wings6,
-  [REWARD_FREE_FRIES]: fries,
-  [REWARD_FREE_LAB_BURGER]: labBurger,
+// Map rewards to a real menu item id so voucher-covered zero-total paths
+// find a line to discount. Resolved against the mock catalogue once at
+// module load.
+const REWARD_MENU_ITEM: Record<string, string | null> = {
+  [REWARD_FREE_6_WINGS]: pickRewardItemId(/wings/i),
+  [REWARD_FREE_FRIES]: pickRewardItemId(/fries/i),
+  [REWARD_FREE_LAB_BURGER]: pickRewardItemId(/burger/i),
 };
 
 const orders: Order[] = [];
 const session: Session = {
   user: {
-    id: "ckuser00000000000000000001",
+    id: "ckuser_demo_01",
     email: "demo@wingers.co",
     firstName: "Alex",
     lastName: "Baker",
@@ -269,13 +162,13 @@ function isBlueLightActive(): boolean {
 let ledgerCounter = 0;
 function mkLedgerId(): string {
   ledgerCounter += 1;
-  return `cklg${String(ledgerCounter).padStart(24, "0")}`;
+  return `cklg_${String(ledgerCounter).padStart(10, "0")}`;
 }
 
 let voucherCounter = 0;
 function mkVoucherId(): string {
   voucherCounter += 1;
-  return `ckvch${String(voucherCounter).padStart(23, "0")}`;
+  return `ckvch_${String(voucherCounter).padStart(10, "0")}`;
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -322,7 +215,7 @@ const LEDGER_PAGE_SIZE = 10;
 
 function mkOrderId(): string {
   orderCounter += 1;
-  return `ckord${String(orderCounter).padStart(23, "0")}`;
+  return `ckord_${String(orderCounter).padStart(10, "0")}`;
 }
 
 function mkReference(): string {
@@ -382,7 +275,9 @@ export class MockPphClient implements PphClient, MockOnlyPphClient {
   }
 
   async getMenu(locationId: string): Promise<ApiResponse<Menu>> {
-    return delay(ok({ ...menu, locationId }));
+    const menu = MOCK_MENU_BY_LOCATION[locationId];
+    if (!menu) return delay(fail<Menu>("NOT_FOUND", "Unknown location"));
+    return delay(ok(menu));
   }
 
   async getLoyaltyAccount(): Promise<ApiResponse<LoyaltyAccount>> {
@@ -408,7 +303,7 @@ export class MockPphClient implements PphClient, MockOnlyPphClient {
   async submitReceiptScan(_code: string): Promise<ApiResponse<ReceiptScanResult>> {
     const credited = 24;
     const result: ReceiptScanResult = {
-      orderId: "ckord00000000000000scan001",
+      orderId: "ckord_scan_01",
       reference: "WG-SCAN-01",
       pointsCredited: credited,
       newBalance: loyalty.points + credited,
@@ -439,6 +334,9 @@ export class MockPphClient implements PphClient, MockOnlyPphClient {
       return fail<Order>("NOT_FOUND", "Unknown pickup location");
     }
 
+    const menu = MOCK_MENU_BY_LOCATION[payload.locationId];
+    const sauces = menu?.sauces ?? [];
+
     const isPoints = payload.tender === "points";
     const blueLightActive = isBlueLightActive();
 
@@ -462,7 +360,7 @@ export class MockPphClient implements PphClient, MockOnlyPphClient {
     let pointsIneligible = false;
 
     for (const [idx, line] of payload.lines.entries()) {
-      const item = findMenuItem(line.menuItemId);
+      const item = findMockMenuItem(line.menuItemId, payload.locationId);
       if (!item) {
         return fail<Order>("NOT_FOUND", `Item ${line.menuItemId} is no longer on the menu`);
       }
@@ -473,7 +371,7 @@ export class MockPphClient implements PphClient, MockOnlyPphClient {
         return sum + (mod?.addPence ?? 0);
       }, 0);
       const sauceLabels = (line.selectedSauceIds ?? []).flatMap((sauceId) => {
-        const sauce = menu.sauces.find((s) => s.id === sauceId);
+        const sauce = sauces.find((s) => s.id === sauceId);
         return sauce ? [sauce.name] : [];
       });
       const unitPricePence = item.pricePence + modifiersTotalPence;
@@ -497,7 +395,7 @@ export class MockPphClient implements PphClient, MockOnlyPphClient {
       }
 
       orderItems.push({
-        id: `ckoit${String(idx + 1).padStart(23, "0")}`,
+        id: `ckoit_${String(idx + 1).padStart(6, "0")}`,
         menuItemId: item.id,
         name: item.name,
         quantity: line.quantity,

@@ -6,6 +6,10 @@ export type CartLine = {
   lineId: string;
   menuItemId: string;
   name: string;
+  // Cached from the MenuItem at add-time so basket + checkout can render
+  // thumbnails without re-hitting the menu (which is fine, but means the
+  // basket page doesn't need to fetch the menu to display rows).
+  imageUrl: string | null;
   unitPricePence: number;
   pointsValuePerUnit: number;
   pointsPricePerUnit: number | null;

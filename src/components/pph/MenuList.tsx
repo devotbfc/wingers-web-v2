@@ -1,8 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
+import { useCart } from "@/lib/cart/context";
 import { pence } from "@/lib/pph/money";
 import type { Menu, MenuCategory, MenuItem } from "@/lib/pph/types";
+import { FoodThumb } from "./FoodThumb";
 
 type Props = {
   menu: Menu;
@@ -27,7 +29,7 @@ export function MenuList({ menu, onOpenItem }: Props) {
             key={c.id}
             type="button"
             onClick={() => scrollTo(c.slug)}
-            className={`whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-bold uppercase tracking-wide ${
+            className={`whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-bold uppercase tracking-wide ${
               activeSlug === c.slug ? "bg-brand-pink text-brand-black" : "text-neutral-600"
             }`}
           >
@@ -59,26 +61,72 @@ function CategoryBlock({
   innerRef: (el: HTMLDivElement | null) => void;
 }) {
   return (
-    <section ref={innerRef} className="px-4 pt-4">
-      <h2 className="font-display text-lg font-bold uppercase">{category.name}</h2>
-      <ul className="mt-2 flex flex-col divide-y divide-neutral-100">
-        {category.items.map((item) => (
-          <li key={item.id}>
-            <button
-              type="button"
-              onClick={() => onOpenItem(item)}
-              disabled={!item.available}
-              className="flex w-full items-start justify-between py-3 text-left disabled:opacity-50"
-            >
-              <div className="pr-3">
-                <div className="font-display text-base font-bold">{item.name}</div>
-                <div className="line-clamp-2 text-xs text-neutral-600">{item.description}</div>
-              </div>
-              <div className="shrink-0 text-sm font-bold">{pence(item.pricePence)}</div>
-            </button>
-          </li>
+    <section ref={innerRef} className="pt-5">
+      <h2 className="px-4 pb-2 font-display text-xl font-extrabold uppercase tracking-tight text-brand-black">
+        {category.name}
+      </h2>
+      <div>
+        {category.items.map((item, idx) => (
+          <Fragment key={item.id}>
+            {idx > 0 ? <div className="mx-4 h-px bg-neutral-100" /> : null}
+            <MenuRow item={item} onOpenItem={onOpenItem} />
+          </Fragment>
         ))}
-      </ul>
+      </div>
     </section>
+  );
+}
+
+function MenuRow({ item, onOpenItem }: { item: MenuItem; onOpenItem: (i: MenuItem) => void }) {
+  const { itemCount, state } = useCart();
+  // Count this item across any lines in the basket (any sauce/mod combo).
+  const qty = state.lines.reduce(
+    (sum, l) => (l.menuItemId === item.id ? sum + l.quantity : sum),
+    0,
+  );
+  void itemCount; // keep subscription stable
+  const badge = item.badge;
+
+  return (
+    <button
+      type="button"
+      onClick={() => onOpenItem(item)}
+      disabled={!item.available}
+      className="group flex w-full items-start gap-3 px-4 py-3 text-left disabled:opacity-50"
+    >
+      <div className="min-w-0 flex-1">
+        {qty > 0 || badge ? (
+          <div className="mb-1 flex items-center gap-1.5">
+            {qty > 0 ? (
+              <span className="inline-flex h-5 items-center rounded-full bg-brand-pink px-2 font-display text-[11px] font-bold text-brand-black">
+                ×{qty}
+              </span>
+            ) : null}
+            {badge === "new" ? (
+              <span className="inline-flex h-5 items-center rounded-full bg-brand-pink/20 px-2 font-display text-[10px] font-bold uppercase tracking-wide text-brand-pink">
+                New
+              </span>
+            ) : null}
+            {badge === "premium" ? (
+              <span className="inline-flex h-5 items-center rounded-full bg-neutral-100 px-2 font-display text-[10px] font-bold uppercase tracking-wide text-brand-black">
+                Signature
+              </span>
+            ) : null}
+          </div>
+        ) : null}
+        <div className="font-display text-base font-extrabold uppercase leading-tight tracking-tight">
+          {item.name}
+        </div>
+        {item.description ? (
+          <p className="mt-1 line-clamp-2 text-xs leading-snug text-neutral-500">
+            {item.description}
+          </p>
+        ) : null}
+        <div className="mt-2 font-display text-sm font-bold text-brand-black">
+          {pence(item.pricePence)}
+        </div>
+      </div>
+      <FoodThumb src={item.imageUrl} alt={item.name} size="md" />
+    </button>
   );
 }

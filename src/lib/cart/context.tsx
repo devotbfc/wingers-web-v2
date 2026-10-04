@@ -85,6 +85,7 @@ function reducer(state: CartState, action: Action): CartState {
             lineId: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
             menuItemId: input.menuItemId,
             name: input.name,
+            imageUrl: input.imageUrl,
             unitPricePence: input.unitPricePence,
             pointsValuePerUnit: input.pointsValuePerUnit,
             pointsPricePerUnit: input.pointsPricePerUnit,
