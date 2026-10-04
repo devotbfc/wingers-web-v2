@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, ShoppingBag, UserRound, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { BrandButton } from "@/components/brand/BrandButton";
 import { BrandLogo } from "@/components/brand/BrandLogo";
+import { BucketIcon } from "@/components/pph/icons/BucketIcon";
 import { FlaskGlyph } from "@/components/ui/FlaskGlyph";
 import {
   Sheet,
@@ -239,34 +240,48 @@ function SiteMobileCta({ onNavigate }: { onNavigate: () => void }) {
 
 // --- App CTA cluster (/order/* routes) ----------------------------------
 // Mounted only under /order/*, where PphProviders wraps the subtree so
-// useCart + useAuth resolve. ORDER CTA is replaced by an account icon
-// (filled when signed in) + a basket icon with a count badge.
+// useCart + useAuth resolve. Replaces the site ORDER CTA with a SIGN IN
+// pill (unauth) or HI, FIRSTNAME greeting (auth) linking to /order/auth
+// routes, plus a multi-coloured BucketIcon basket with a count badge.
 
 function AppDesktopCta() {
   const { itemCount } = useCart();
   const auth = useAuth();
   const signedIn = auth.status === "authenticated";
+  const firstName = auth.user?.firstName ?? "";
+  const firstNameLabel = firstName.slice(0, 12).toUpperCase();
+  const basketLabel =
+    itemCount > 0
+      ? `Basket, ${itemCount} ${itemCount === 1 ? "item" : "items"}`
+      : "Basket";
   return (
-    <div className="flex items-center gap-1">
-      <Link
-        href="/order/account"
-        aria-label={signedIn ? "Account" : "Sign in"}
-        className="inline-flex h-10 w-10 items-center justify-center rounded-md text-brand-black hover:text-brand-red focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red"
-      >
-        <UserRound
-          className="h-5 w-5"
-          strokeWidth={1.5}
-          {...(signedIn ? { fill: "currentColor" } : {})}
-        />
-      </Link>
+    <div className="flex items-center gap-4">
+      {signedIn ? (
+        <Link
+          href="/order/account"
+          className="font-display font-bold uppercase text-[13px] tracking-[0.04em] text-brand-black hover:text-brand-red focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
+        >
+          HI, {firstNameLabel}
+        </Link>
+      ) : (
+        <Link
+          href="/order/auth/login"
+          className="inline-flex h-[34px] items-center rounded-full border-2 border-brand-black px-[14px] font-display font-bold uppercase text-[13px] tracking-[0.04em] text-brand-black hover:border-brand-red hover:text-brand-red focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
+        >
+          Sign in
+        </Link>
+      )}
       <Link
         href="/order/basket"
-        aria-label={`Basket, ${itemCount} ${itemCount === 1 ? "item" : "items"}`}
-        className="relative inline-flex h-10 w-10 items-center justify-center rounded-md text-brand-black hover:text-brand-red focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red"
+        aria-label={basketLabel}
+        className="relative inline-flex items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
       >
-        <ShoppingBag className="h-5 w-5" strokeWidth={1.5} />
+        <BucketIcon width={30} height={30} aria-label={basketLabel} />
         {itemCount > 0 ? (
-          <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-brand-pink px-1.5 font-display text-[11px] text-brand-black">
+          <span
+            aria-hidden="true"
+            className="absolute -top-1 -right-1 inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-brand-black px-1 font-display text-[11px] font-bold leading-none text-brand-white"
+          >
             {itemCount}
           </span>
         ) : null}
@@ -279,6 +294,12 @@ function AppMobileRows({ onNavigate }: { onNavigate: () => void }) {
   const { itemCount } = useCart();
   const auth = useAuth();
   const signedIn = auth.status === "authenticated";
+  const firstName = auth.user?.firstName ?? "";
+  const firstNameLabel = firstName.slice(0, 12).toUpperCase();
+  const basketLabel =
+    itemCount > 0
+      ? `Basket, ${itemCount} ${itemCount === 1 ? "item" : "items"}`
+      : "Basket";
   return (
     <>
       <li className="mt-4">
@@ -287,19 +308,22 @@ function AppMobileRows({ onNavigate }: { onNavigate: () => void }) {
           onClick={onNavigate}
           className="flex items-center justify-between font-display font-extrabold uppercase tracking-tight text-3xl text-brand-black hover:text-brand-red transition-colors py-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
         >
-          <span>Basket</span>
-          <span className="inline-flex h-9 min-w-9 items-center justify-center rounded-full bg-brand-pink px-3 font-display text-base text-brand-black">
+          <span className="inline-flex items-center gap-3">
+            <BucketIcon width={32} height={32} aria-label={basketLabel} />
+            <span>Basket</span>
+          </span>
+          <span className="inline-flex h-9 min-w-9 items-center justify-center rounded-full bg-brand-black px-3 font-display text-base font-bold text-brand-white">
             {itemCount}
           </span>
         </Link>
       </li>
       <li>
         <Link
-          href="/order/account"
+          href={signedIn ? "/order/account" : "/order/auth/login"}
           onClick={onNavigate}
           className="block font-display font-extrabold uppercase tracking-tight text-3xl text-brand-black hover:text-brand-red transition-colors py-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
         >
-          {signedIn ? "Account" : "Sign in"}
+          {signedIn ? `Hi, ${firstNameLabel}` : "Sign in"}
         </Link>
       </li>
     </>
