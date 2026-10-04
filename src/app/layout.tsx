@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Inter } from "next/font/google";
+import { Anton, Bricolage_Grotesque, Inter } from "next/font/google";
 import { Suspense } from "react";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/next";
@@ -23,6 +23,16 @@ const inter = Inter({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
+  display: "swap",
+});
+
+// Anton — condensed uppercase display. Scoped to UI chrome (buttons, pills,
+// menu section headings, MenuCard item name + price). Headlines and body
+// stay on Bricolage / Inter. One weight only (400).
+const anton = Anton({
+  variable: "--font-ui",
+  subsets: ["latin"],
+  weight: "400",
   display: "swap",
 });
 
@@ -63,7 +73,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bricolage.variable} ${inter.variable} h-full antialiased`}
+      className={`${bricolage.variable} ${inter.variable} ${anton.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <ConsentProvider pixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID ?? ""}>
