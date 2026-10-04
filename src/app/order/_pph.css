@@ -1,10 +1,14 @@
 /* Scoped theme for the /order subtree only (ADR-019). The main site is a
    white-primary brand; the native web ordering flow mirrors the wing-app
    dark theme (tokens from wing-app/src/theme/tokens.ts). Nothing in this
-   file is global — every rule is nested under `.pph-app`, which is only
-   applied by `src/app/order/layout.tsx`. */
+   file is global — every rule is nested under `.pph-app` (the in-flow
+   wrapper on `src/app/order/layout.tsx`) or `.pph-portal` (attached by
+   PphSheet to overlay + content so Radix portal nodes under `<body>`
+   still pick up the tokens). */
 
-.pph-app {
+/* Shared tokens — defined once, referenced from both root selectors. */
+.pph-app,
+.pph-portal {
   --pph-bg: #0a0a0a;
   --pph-surface: #161616;
   --pph-elevated: #1f1f1f;
@@ -15,15 +19,22 @@
   --pph-text: #fefdfb;
   --pph-muted: #8a8a8a;
 
-  /* Scoped font override — rebind the global font variables inside this
-     subtree so existing `font-display` / `font-body` Tailwind utilities
-     pick up Anton + DM Sans instead of the site's Bricolage + Inter.
-     Variables below are injected by next/font/google in layout.tsx. */
+  /* Rebind the global font variables inside this subtree + any pph portal
+     so existing `font-display` / `font-body` Tailwind utilities pick up
+     Anton + DM Sans instead of Bricolage + Inter. The `--font-anton` /
+     `--font-dm-sans` variables are provided by `next/font/google`; the
+     caller must attach `pphAnton.variable` + `pphDmSans.variable` to the
+     portal panel too, otherwise those variables don't resolve under
+     `<body>` and we fall back to the stacks after `var()`. */
   --font-display: var(--font-anton), system-ui, sans-serif;
   --font-body: var(--font-dm-sans), system-ui, sans-serif;
+}
 
-  /* Baseline look for the subtree. The outer wrapper on desktop lets the
-     page background stay very dark around the max-w-md column. */
+/* Baseline look for the in-flow /order subtree. The outer wrapper on
+   desktop lets the page background stay very dark around the max-w-md
+   column. DO NOT replicate these on `.pph-portal` — min-height would beat
+   `max-h-[85vh]` on sheet panels and open every sheet full-screen. */
+.pph-app {
   background-color: var(--pph-bg);
   color: var(--pph-text);
   min-height: 100vh;
@@ -34,45 +45,71 @@
   min-height: 100vh;
 }
 
-/* Backgrounds */
-.pph-app .bg-pph-bg { background-color: var(--pph-bg); }
-.pph-app .bg-pph-surface { background-color: var(--pph-surface); }
-.pph-app .bg-pph-elevated { background-color: var(--pph-elevated); }
-.pph-app .bg-pph-pink { background-color: var(--pph-pink); }
-.pph-app .bg-pph-red { background-color: var(--pph-red); }
-.pph-app .bg-pph-gold { background-color: var(--pph-gold); }
-.pph-app .bg-pph-blue { background-color: var(--pph-blue-light); }
+/* Portal variant: carries ONLY the tokens + font rebinding (above). No
+   background, no min-height — PphSheet controls panel geometry per-
+   instance via `max-h-[85vh]` and sets its own `bg-pph-surface`. */
+
+/* Utility classes — must match BOTH when the class is a descendant of a
+   pph root AND when it sits ON the root itself (overlay + panel both
+   wear `.pph-portal` directly). `:where()` keeps specificity at 0 so
+   call sites can still override with inline Tailwind. */
+:where(.pph-app, .pph-portal) .bg-pph-bg,
+.bg-pph-bg:where(.pph-app, .pph-portal) { background-color: var(--pph-bg); }
+:where(.pph-app, .pph-portal) .bg-pph-surface,
+.bg-pph-surface:where(.pph-app, .pph-portal) { background-color: var(--pph-surface); }
+:where(.pph-app, .pph-portal) .bg-pph-elevated,
+.bg-pph-elevated:where(.pph-app, .pph-portal) { background-color: var(--pph-elevated); }
+:where(.pph-app, .pph-portal) .bg-pph-pink,
+.bg-pph-pink:where(.pph-app, .pph-portal) { background-color: var(--pph-pink); }
+:where(.pph-app, .pph-portal) .bg-pph-red,
+.bg-pph-red:where(.pph-app, .pph-portal) { background-color: var(--pph-red); }
+:where(.pph-app, .pph-portal) .bg-pph-gold,
+.bg-pph-gold:where(.pph-app, .pph-portal) { background-color: var(--pph-gold); }
+:where(.pph-app, .pph-portal) .bg-pph-blue,
+.bg-pph-blue:where(.pph-app, .pph-portal) { background-color: var(--pph-blue-light); }
 
 /* Text colours */
-.pph-app .text-pph { color: var(--pph-text); }
-.pph-app .text-pph-muted { color: var(--pph-muted); }
-.pph-app .text-pph-pink { color: var(--pph-pink); }
-.pph-app .text-pph-red { color: var(--pph-red); }
-.pph-app .text-pph-gold { color: var(--pph-gold); }
-.pph-app .text-pph-bg { color: var(--pph-bg); }
+:where(.pph-app, .pph-portal) .text-pph,
+.text-pph:where(.pph-app, .pph-portal) { color: var(--pph-text); }
+:where(.pph-app, .pph-portal) .text-pph-muted,
+.text-pph-muted:where(.pph-app, .pph-portal) { color: var(--pph-muted); }
+:where(.pph-app, .pph-portal) .text-pph-pink,
+.text-pph-pink:where(.pph-app, .pph-portal) { color: var(--pph-pink); }
+:where(.pph-app, .pph-portal) .text-pph-red,
+.text-pph-red:where(.pph-app, .pph-portal) { color: var(--pph-red); }
+:where(.pph-app, .pph-portal) .text-pph-gold,
+.text-pph-gold:where(.pph-app, .pph-portal) { color: var(--pph-gold); }
+:where(.pph-app, .pph-portal) .text-pph-bg,
+.text-pph-bg:where(.pph-app, .pph-portal) { color: var(--pph-bg); }
 
 /* Borders */
-.pph-app .border-pph-elevated { border-color: var(--pph-elevated); }
-.pph-app .border-pph-pink { border-color: var(--pph-pink); }
-.pph-app .border-pph-gold { border-color: var(--pph-gold); }
-.pph-app .border-pph-red { border-color: var(--pph-red); }
+:where(.pph-app, .pph-portal) .border-pph-elevated,
+.border-pph-elevated:where(.pph-app, .pph-portal) { border-color: var(--pph-elevated); }
+:where(.pph-app, .pph-portal) .border-pph-pink,
+.border-pph-pink:where(.pph-app, .pph-portal) { border-color: var(--pph-pink); }
+:where(.pph-app, .pph-portal) .border-pph-gold,
+.border-pph-gold:where(.pph-app, .pph-portal) { border-color: var(--pph-gold); }
+:where(.pph-app, .pph-portal) .border-pph-red,
+.border-pph-red:where(.pph-app, .pph-portal) { border-color: var(--pph-red); }
 
-/* Divide (vertical lines between stacked items) */
-.pph-app .divide-pph-elevated > :not([hidden]) ~ :not([hidden]) {
+/* Divide (vertical lines between stacked items). Works on either root. */
+:where(.pph-app, .pph-portal) .divide-pph-elevated > :not([hidden]) ~ :not([hidden]),
+.divide-pph-elevated:where(.pph-app, .pph-portal) > :not([hidden]) ~ :not([hidden]) {
   border-top: 1px solid var(--pph-elevated);
 }
 
 /* Radii — map wing-app's radii tokens. `rounded-pill` is the one new name;
    the sm/md/lg values match Tailwind's defaults within 1px, so we only
    add the pill utility. */
-.pph-app .rounded-pill { border-radius: 9999px; }
+:where(.pph-app, .pph-portal) .rounded-pill,
+.rounded-pill:where(.pph-app, .pph-portal) { border-radius: 9999px; }
 
 /* Placeholder/caret colour for inputs in the dark theme. */
-.pph-app input::placeholder,
-.pph-app textarea::placeholder { color: var(--pph-muted); }
-.pph-app input,
-.pph-app textarea,
-.pph-app select { color: var(--pph-text); background-color: var(--pph-elevated); }
+:where(.pph-app, .pph-portal) input::placeholder,
+:where(.pph-app, .pph-portal) textarea::placeholder { color: var(--pph-muted); }
+:where(.pph-app, .pph-portal) input,
+:where(.pph-app, .pph-portal) textarea,
+:where(.pph-app, .pph-portal) select { color: var(--pph-text); background-color: var(--pph-elevated); }
 
 /* Checkbox tint for the solid sheet forms. */
-.pph-app input[type="checkbox"] { accent-color: var(--pph-pink); }
+:where(.pph-app, .pph-portal) input[type="checkbox"] { accent-color: var(--pph-pink); }
