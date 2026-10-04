@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { CheckoutConfirmSheet } from "@/components/pph/CheckoutConfirmSheet";
 import { MockPaymentSheet } from "@/components/pph/MockPaymentSheet";
 import { ScheduleSheet } from "@/components/pph/ScheduleSheet";
-import { TopBar } from "@/components/pph/TopBar";
 import { track } from "@/lib/analytics/meta-pixel";
 import { useCart } from "@/lib/cart/context";
 import { useOrderStack } from "@/lib/order-stack/context";
@@ -102,10 +101,12 @@ export default function CheckoutPage() {
   if (!location) {
     return (
       <>
-        <TopBar title="Checkout" backHref="/order/basket" />
-        <main className="flex-1 p-6 font-body text-[14px] text-pph-muted">
+        <h1 className="mb-3 font-display text-[28px] uppercase tracking-tight text-pph">
+          Checkout
+        </h1>
+        <p className="font-body text-[14px] text-pph-muted">
           Pick a location to continue.
-        </main>
+        </p>
       </>
     );
   }
@@ -113,10 +114,12 @@ export default function CheckoutPage() {
   if (state.lines.length === 0) {
     return (
       <>
-        <TopBar title="Checkout" backHref="/order/menu" />
-        <main className="flex-1 p-6 text-center font-body text-[14px] text-pph-muted">
+        <h1 className="mb-3 font-display text-[28px] uppercase tracking-tight text-pph">
+          Checkout
+        </h1>
+        <p className="text-center font-body text-[14px] text-pph-muted">
           Your basket is empty.
-        </main>
+        </p>
       </>
     );
   }
@@ -258,8 +261,10 @@ export default function CheckoutPage() {
 
   return (
     <>
-      <TopBar title="Checkout" backHref="/order/basket" />
-      <main className="flex-1 space-y-5 px-6 pb-32 pt-4">
+      <h1 className="mb-5 font-display text-[28px] uppercase tracking-tight text-pph">
+        Checkout
+      </h1>
+      <div className="space-y-5 pb-32">
         {staleBanner ? (
           <div className="rounded-[16px] border-2 border-pph-gold bg-pph-surface px-4 py-3">
             <div className="font-display text-[13px] uppercase tracking-wide text-pph-gold-dark">
@@ -408,9 +413,9 @@ export default function CheckoutPage() {
             {error}
           </div>
         ) : null}
-      </main>
+      </div>
 
-      <div className="pointer-events-none fixed bottom-0 left-1/2 z-30 w-full max-w-md -translate-x-1/2">
+      <div className="pointer-events-none fixed bottom-0 left-1/2 z-30 w-full max-w-lg -translate-x-1/2">
         <div className="px-4 pb-5">
           {hasPending ? (
             <button

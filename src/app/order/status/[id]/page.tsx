@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
 import { PickupCodeBlock } from "@/components/pph/PickupCodeBlock";
-import { TopBar } from "@/components/pph/TopBar";
 import { useOrderStack } from "@/lib/order-stack/context";
 import { pence } from "@/lib/pph/money";
 import { headlineForStatus, isLazySwept, showPickupCode } from "@/lib/pph/order-status";
@@ -40,10 +39,12 @@ export default function OrderStatusPage({ params }: { params: Promise<{ id: stri
 
   if (!order) {
     return (
-      <>
-        <TopBar title="Order" backHref="/order/menu" />
-        <main className="flex-1 p-6 font-body text-[14px] text-pph-muted">Loading…</main>
-      </>
+      <div className="mx-auto w-full max-w-md px-6 pb-8">
+        <h1 className="mb-3 font-display text-[28px] uppercase tracking-tight text-pph">
+          Order
+        </h1>
+        <p className="font-body text-[14px] text-pph-muted">Loading…</p>
+      </div>
     );
   }
 
@@ -52,9 +53,10 @@ export default function OrderStatusPage({ params }: { params: Promise<{ id: stri
   const isReady = order.status === "ready";
 
   return (
-    <>
-      <TopBar title={`Order ${order.reference}`} backHref="/order/menu" />
-      <main className="flex-1 space-y-4 px-6 pb-8 pt-4">
+    <div className="mx-auto w-full max-w-md space-y-4 px-6 pb-8">
+      <h1 className="font-display text-[28px] uppercase tracking-tight text-pph">
+        Order {order.reference}
+      </h1>
         <section
           className={`rounded-[20px] bg-pph-elevated px-5 py-4 ${
             isReady ? "border-2 border-pph-gold" : swept ? "border-2 border-pph-red" : ""
@@ -128,16 +130,15 @@ export default function OrderStatusPage({ params }: { params: Promise<{ id: stri
           ) : null}
         </section>
 
-        {swept ? (
-          <Link
-            href="/order/menu"
-            className="inline-flex h-14 w-full items-center justify-center rounded-pill bg-pph-pink font-display text-[15px] uppercase text-pph-on-pink hover:brightness-95"
-          >
-            Start a new order
-          </Link>
-        ) : null}
-      </main>
-    </>
+      {swept ? (
+        <Link
+          href="/order/menu"
+          className="inline-flex h-14 w-full items-center justify-center rounded-pill bg-pph-pink font-display text-[15px] uppercase text-pph-on-pink hover:brightness-95"
+        >
+          Start a new order
+        </Link>
+      ) : null}
+    </div>
   );
 }
 

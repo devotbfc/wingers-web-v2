@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { BlueLightBadge } from "@/components/pph/BlueLightBadge";
 import { PointsPill } from "@/components/pph/PointsPill";
-import { TopBar } from "@/components/pph/TopBar";
 import { useAuth } from "@/lib/pph/auth-store";
 import { PphApiError, mapErrorCodeToCopy } from "@/lib/pph/errors";
 import { pph } from "@/lib/pph/singleton";
@@ -50,12 +49,14 @@ export default function LoyaltyPage() {
 
   if (auth.status === "unauthenticated") {
     return (
-      <>
-        <TopBar title="Loyalty" backHref="/order/menu" />
-        <main className="flex-1 p-6 font-body text-[14px] text-pph-muted">
+      <div className="mx-auto w-full max-w-md px-6 pb-8">
+        <h1 className="mb-3 font-display text-[28px] uppercase tracking-tight text-pph">
+          Loyalty
+        </h1>
+        <p className="font-body text-[14px] text-pph-muted">
           Sign in to see your points and rewards.
-        </main>
-      </>
+        </p>
+      </div>
     );
   }
 
@@ -82,10 +83,11 @@ export default function LoyaltyPage() {
   }
 
   return (
-    <>
-      <TopBar title="Loyalty" backHref="/order/menu" />
-      <main className="flex-1 space-y-4 px-6 pb-8 pt-4">
-        {loyalty ? (
+    <div className="mx-auto w-full max-w-md space-y-4 px-6 pb-8">
+      <h1 className="font-display text-[28px] uppercase tracking-tight text-pph">
+        Loyalty
+      </h1>
+      {loyalty ? (
           <section className="rounded-[20px] bg-pph-elevated px-5 py-4">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
@@ -172,36 +174,35 @@ export default function LoyaltyPage() {
           </ul>
         </section>
 
-        {ledger.length > 0 ? (
-          <section>
-            <h2 className="mb-2 font-display text-[13px] uppercase tracking-widest text-pph-muted">
-              Recent activity
-            </h2>
-            <ul className="divide-pph-elevated overflow-hidden rounded-[16px] bg-pph-elevated">
-              {ledger.map((e) => (
-                <li key={e.id} className="flex items-center justify-between px-4 py-3">
-                  <div className="min-w-0 flex-1">
-                    <div className="font-display text-[13px] uppercase text-pph">
-                      {e.sourceLabel}
-                    </div>
-                    <div className="mt-0.5 font-body text-[11px] text-pph-muted">
-                      {new Date(e.createdAt).toLocaleString()}
-                    </div>
+      {ledger.length > 0 ? (
+        <section>
+          <h2 className="mb-2 font-display text-[13px] uppercase tracking-widest text-pph-muted">
+            Recent activity
+          </h2>
+          <ul className="divide-pph-elevated overflow-hidden rounded-[16px] bg-pph-elevated">
+            {ledger.map((e) => (
+              <li key={e.id} className="flex items-center justify-between px-4 py-3">
+                <div className="min-w-0 flex-1">
+                  <div className="font-display text-[13px] uppercase text-pph">
+                    {e.sourceLabel}
                   </div>
-                  <div
-                    className={`font-display text-[14px] ${
-                      e.delta < 0 ? "text-pph-red" : "text-pph-gold-dark"
-                    }`}
-                  >
-                    {e.delta > 0 ? "+" : ""}
-                    {e.delta}
+                  <div className="mt-0.5 font-body text-[11px] text-pph-muted">
+                    {new Date(e.createdAt).toLocaleString()}
                   </div>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
-      </main>
-    </>
+                </div>
+                <div
+                  className={`font-display text-[14px] ${
+                    e.delta < 0 ? "text-pph-red" : "text-pph-gold-dark"
+                  }`}
+                >
+                  {e.delta > 0 ? "+" : ""}
+                  {e.delta}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+    </div>
   );
 }

@@ -25,8 +25,9 @@ export function MenuList({ menu, onOpenItem }: Props) {
   return (
     <div className="flex-1">
       {/* Horizontal category rail — mirrors wing-app menu.tsx rail
-          (rounded-pill pink when active, elevated otherwise). */}
-      <nav className="sticky top-14 z-10 flex gap-2 overflow-x-auto bg-pph-bg px-6 py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          (rounded-pill pink when active, elevated otherwise). Sticks
+          beneath the site NavBar (h-20 md:h-24) + OrderSubBar (h-12). */}
+      <nav className="sticky top-32 z-20 flex gap-2 overflow-x-auto bg-pph-bg px-6 py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:top-36 lg:px-0">
         {menu.categories.map((c) => {
           const active = activeSlug === c.slug;
           return (
@@ -43,7 +44,7 @@ export function MenuList({ menu, onOpenItem }: Props) {
           );
         })}
       </nav>
-      <div className="pb-28">
+      <div className="pb-28 lg:pb-10">
         {menu.categories.map((cat) => (
           <CategoryBlock
             key={cat.id}
@@ -67,14 +68,18 @@ function CategoryBlock({
   innerRef: (el: HTMLDivElement | null) => void;
 }) {
   return (
-    <section ref={innerRef} className="pt-6">
-      <h2 className="px-6 pb-3 font-display text-[28px] uppercase tracking-tight text-pph">
+    <section ref={innerRef} className="scroll-mt-36 pt-6">
+      <h2 className="px-6 pb-3 font-display text-[28px] uppercase tracking-tight text-pph lg:px-0">
         {category.name}
       </h2>
-      <div>
+      {/* <lg: single column with hairline dividers between rows (phone list).
+          lg+: 2-col card grid without dividers (two-column desktop menu). */}
+      <div className="lg:grid lg:grid-cols-2 lg:gap-x-6 lg:gap-y-2">
         {category.items.map((item, idx) => (
           <Fragment key={item.id}>
-            {idx > 0 ? <div className="mx-6 h-px bg-pph-elevated" /> : null}
+            {idx > 0 ? (
+              <div className="mx-6 h-px bg-pph-elevated lg:hidden" />
+            ) : null}
             <MenuRow item={item} onOpenItem={onOpenItem} />
           </Fragment>
         ))}
@@ -97,7 +102,7 @@ function MenuRow({ item, onOpenItem }: { item: MenuItem; onOpenItem: (i: MenuIte
       onClick={() => onOpenItem(item)}
       disabled={!item.available}
       aria-label={`Open ${item.name}`}
-      className="flex w-full items-start gap-4 px-6 py-4 text-left hover:opacity-90 disabled:opacity-50"
+      className="flex w-full items-start gap-4 px-6 py-4 text-left hover:opacity-90 disabled:opacity-50 lg:rounded-[16px] lg:border lg:border-pph-border lg:bg-pph-bg lg:px-4 lg:hover:border-pph-pink"
     >
       <div className="min-w-0 flex-1">
         {qty > 0 || badge ? (

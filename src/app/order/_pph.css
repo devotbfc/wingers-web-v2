@@ -59,6 +59,16 @@
   min-height: 100vh;
 }
 
+/* At lg+ (menu's two-column layout), drop the phone-column frame and let
+   the ordering flow sit on the site's normal white backdrop at site
+   width. The `.pph-app` wrapper itself still carries `--pph-bg #FFFFFF`,
+   so content stays legible. */
+@media (min-width: 1024px) {
+  .pph-outer {
+    background-color: transparent;
+  }
+}
+
 /* Portal variant: carries ONLY the tokens + font rebinding (above). No
    background, no min-height — PphSheet controls panel geometry per-
    instance via `max-h-[85vh]` and sets its own `bg-pph-surface`. */

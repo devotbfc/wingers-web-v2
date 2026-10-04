@@ -13,7 +13,7 @@ export function BasketBar() {
   if (itemCount === 0) return null;
   return (
     <div
-      className="pointer-events-none fixed bottom-0 left-1/2 z-40 w-full max-w-md -translate-x-1/2"
+      className="pointer-events-none fixed bottom-0 left-1/2 z-40 w-full max-w-md -translate-x-1/2 lg:hidden"
     >
       <Link
         href="/order/basket"

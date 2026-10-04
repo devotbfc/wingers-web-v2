@@ -3,7 +3,6 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { TopBar } from "@/components/pph/TopBar";
 import { authStore } from "@/lib/pph/auth-store";
 import { PphApiError, mapErrorCodeToCopy } from "@/lib/pph/errors";
 import { pph } from "@/lib/pph/singleton";
@@ -51,10 +50,11 @@ function SignupForm() {
   }
 
   return (
-    <>
-      <TopBar title="Create account" backHref="/order/auth/login" />
-      <main className="flex-1 p-6">
-        <form onSubmit={submit} className="space-y-4">
+    <div className="mx-auto w-full max-w-md px-6 pb-8">
+      <h1 className="mb-5 font-display text-[28px] uppercase tracking-tight text-pph">
+        Create account
+      </h1>
+      <form onSubmit={submit} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <Input label="First name" value={firstName} onChange={setFirstName} autoComplete="given-name" />
             <Input label="Last name" value={lastName} onChange={setLastName} autoComplete="family-name" />
@@ -80,18 +80,17 @@ function SignupForm() {
           >
             Become a Winger
           </button>
-        </form>
-        <p className="mt-6 text-center font-body text-[14px] text-pph-muted">
-          Already a Winger?{" "}
-          <Link
-            href={`/order/auth/login?returnTo=${encodeURIComponent(returnTo)}`}
-            className="font-display uppercase text-pph-pink underline"
-          >
-            Sign in
-          </Link>
-        </p>
-      </main>
-    </>
+      </form>
+      <p className="mt-6 text-center font-body text-[14px] text-pph-muted">
+        Already a Winger?{" "}
+        <Link
+          href={`/order/auth/login?returnTo=${encodeURIComponent(returnTo)}`}
+          className="font-display uppercase text-pph-pink underline"
+        >
+          Sign in
+        </Link>
+      </p>
+    </div>
   );
 }
 

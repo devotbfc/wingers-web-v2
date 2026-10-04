@@ -3,7 +3,6 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { TopBar } from "@/components/pph/TopBar";
 import { authStore } from "@/lib/pph/auth-store";
 import { PphApiError, mapErrorCodeToCopy } from "@/lib/pph/errors";
 import { pph } from "@/lib/pph/singleton";
@@ -38,10 +37,11 @@ function LoginForm() {
   }
 
   return (
-    <>
-      <TopBar title="Sign in" backHref="/order/menu" />
-      <main className="flex-1 p-6">
-        <form onSubmit={submit} className="space-y-4">
+    <div className="mx-auto w-full max-w-md px-6 pb-8">
+      <h1 className="mb-5 font-display text-[28px] uppercase tracking-tight text-pph">
+        Sign in
+      </h1>
+      <form onSubmit={submit} className="space-y-4">
           <Field label="Email">
             <input
               type="email"
@@ -72,18 +72,17 @@ function LoginForm() {
           >
             Sign in
           </button>
-        </form>
-        <p className="mt-6 text-center font-body text-[14px] text-pph-muted">
-          New here?{" "}
-          <Link
-            href={`/order/auth/signup?returnTo=${encodeURIComponent(returnTo)}`}
-            className="font-display uppercase text-pph-pink underline"
-          >
-            Create an account
-          </Link>
-        </p>
-      </main>
-    </>
+      </form>
+      <p className="mt-6 text-center font-body text-[14px] text-pph-muted">
+        New here?{" "}
+        <Link
+          href={`/order/auth/signup?returnTo=${encodeURIComponent(returnTo)}`}
+          className="font-display uppercase text-pph-pink underline"
+        >
+          Create an account
+        </Link>
+      </p>
+    </div>
   );
 }
 

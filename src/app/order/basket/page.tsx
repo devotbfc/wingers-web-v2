@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { Coins } from "lucide-react";
 import { BasketRow } from "@/components/pph/BasketRow";
-import { TopBar } from "@/components/pph/TopBar";
 import { useCart } from "@/lib/cart/context";
 import { pence } from "@/lib/pph/money";
 
@@ -12,9 +11,11 @@ export default function BasketPage() {
 
   if (state.lines.length === 0) {
     return (
-      <>
-        <TopBar title="Review basket" backHref="/order/menu" />
-        <main className="flex flex-1 flex-col items-center justify-center gap-6 px-6 pb-10 pt-20 text-center">
+      <div className="mx-auto w-full max-w-md px-6 pb-10 text-center">
+        <h1 className="font-display text-[28px] uppercase tracking-tight text-pph">
+          Review basket
+        </h1>
+        <div className="mt-10 flex flex-col items-center gap-5">
           <h2 className="font-display text-[22px] uppercase text-pph">Your basket is empty</h2>
           <p className="font-body text-[14px] text-pph-muted">
             Add something delicious from the menu.
@@ -25,16 +26,18 @@ export default function BasketPage() {
           >
             Browse menu
           </Link>
-        </main>
-      </>
+        </div>
+      </div>
     );
   }
 
   return (
     <>
-      <TopBar title="Review basket" backHref="/order/menu" />
-      <main className="flex-1 pb-28">
-        <div className="px-6 pt-4">
+      <div className="mx-auto w-full max-w-md pb-28">
+        <div className="px-6 pt-2">
+          <h1 className="mb-3 font-display text-[28px] uppercase tracking-tight text-pph">
+            Review basket
+          </h1>
           <div className="font-display text-[13px] uppercase tracking-widest text-pph-muted">
             Order overview
           </div>
@@ -55,7 +58,7 @@ export default function BasketPage() {
             </span>
           </div>
         </div>
-      </main>
+      </div>
       <div className="pointer-events-none fixed bottom-0 left-1/2 z-30 w-full max-w-md -translate-x-1/2">
         <div className="px-4 pb-5">
           <Link

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { TopBar } from "@/components/pph/TopBar";
 import { useAuth } from "@/lib/pph/auth-store";
 import { pph } from "@/lib/pph/singleton";
 import type { Voucher } from "@/lib/pph/types";
@@ -31,21 +30,25 @@ export default function VouchersPage() {
 
   if (auth.status === "unauthenticated") {
     return (
-      <>
-        <TopBar title="Vouchers" backHref="/order/account" />
-        <main className="flex-1 p-6 font-body text-[14px] text-pph-muted">
+      <div className="mx-auto w-full max-w-md px-6 pb-8">
+        <h1 className="mb-3 font-display text-[28px] uppercase tracking-tight text-pph">
+          Vouchers
+        </h1>
+        <p className="font-body text-[14px] text-pph-muted">
           Sign in to view your vouchers.
-        </main>
-      </>
+        </p>
+      </div>
     );
   }
 
   if (!vouchers) {
     return (
-      <>
-        <TopBar title="Vouchers" backHref="/order/account" />
-        <main className="flex-1 p-6 font-body text-[14px] text-pph-muted">Loading…</main>
-      </>
+      <div className="mx-auto w-full max-w-md px-6 pb-8">
+        <h1 className="mb-3 font-display text-[28px] uppercase tracking-tight text-pph">
+          Vouchers
+        </h1>
+        <p className="font-body text-[14px] text-pph-muted">Loading…</p>
+      </div>
     );
   }
 
@@ -55,13 +58,14 @@ export default function VouchersPage() {
   })).filter((g) => g.items.length > 0);
 
   return (
-    <>
-      <TopBar title="Vouchers" backHref="/order/account" />
-      <main className="flex-1 space-y-4 px-6 pb-8 pt-4">
-        {grouped.length === 0 ? (
-          <p className="font-body text-[14px] text-pph-muted">No vouchers yet.</p>
-        ) : null}
-        {grouped.map((g) => (
+    <div className="mx-auto w-full max-w-md space-y-4 px-6 pb-8">
+      <h1 className="font-display text-[28px] uppercase tracking-tight text-pph">
+        Vouchers
+      </h1>
+      {grouped.length === 0 ? (
+        <p className="font-body text-[14px] text-pph-muted">No vouchers yet.</p>
+      ) : null}
+      {grouped.map((g) => (
           <section key={g.status}>
             <h2 className="mb-2 font-display text-[13px] uppercase tracking-widest text-pph-muted">
               {g.status}
@@ -91,9 +95,8 @@ export default function VouchersPage() {
               ))}
             </ul>
           </section>
-        ))}
-      </main>
-    </>
+      ))}
+    </div>
   );
 }
 

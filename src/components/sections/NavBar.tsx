@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Menu, ShoppingBag, UserRound, X } from "lucide-react";
 import { BrandButton } from "@/components/brand/BrandButton";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { FlaskGlyph } from "@/components/ui/FlaskGlyph";
@@ -11,6 +12,8 @@ import {
   SheetContent,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { useCart } from "@/lib/cart/context";
+import { useAuth } from "@/lib/pph/auth-store";
 import { cn } from "@/lib/utils";
 import { useOrderPanel } from "./order-panel/order-panel-context";
 
@@ -29,7 +32,8 @@ interface NavBarProps {
 export function NavBar({ onDark = false }: NavBarProps = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { openPanel } = useOrderPanel();
+  const pathname = usePathname();
+  const isOrderRoute = pathname?.startsWith("/order") ?? false;
 
   useEffect(() => {
     let ticking = false;
@@ -46,16 +50,17 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleOrderClick = () => {
-    setMobileOpen(false);
-    openPanel();
-  };
+  // On /order/* we always sit on a light page — force the white backdrop and
+  // the dark link treatment regardless of scroll / onDark. Elsewhere the
+  // original transparent-on-top → white-on-scroll behaviour is preserved.
+  const solid = isOrderRoute || scrolled;
+  const darkTextOnTop = isOrderRoute || scrolled || !onDark;
 
   return (
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-40 transition-colors duration-200",
-        scrolled ? "bg-brand-white" : "bg-transparent"
+        solid ? "bg-brand-white" : "bg-transparent"
       )}
     >
       <nav
@@ -84,7 +89,7 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
                 className={cn(
                   "font-display font-bold uppercase tracking-wide text-sm transition-colors",
                   "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red",
-                  scrolled || !onDark
+                  darkTextOnTop
                     ? "text-brand-black hover:text-brand-red"
                     : "text-brand-white hover:text-brand-pink"
                 )}
@@ -110,14 +115,7 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
             </Link>
           </li>
           <li>
-            <BrandButton
-              variant="primary"
-              size="md"
-              onClick={() => openPanel()}
-              className="text-sm px-5"
-            >
-              Order
-            </BrandButton>
+            {isOrderRoute ? <AppDesktopCta /> : <SiteDesktopCta />}
           </li>
         </ul>
 
@@ -128,7 +126,7 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
           className={cn(
             "md:hidden inline-flex items-center justify-center h-10 w-10 rounded-md transition-colors",
             "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red",
-            scrolled || !onDark ? "text-brand-black" : "text-brand-white"
+            darkTextOnTop ? "text-brand-black" : "text-brand-white"
           )}
         >
           <Menu className="h-6 w-6" aria-hidden="true" />
@@ -191,19 +189,119 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
                 />
               </Link>
             </li>
-            <li className="mt-4">
-              <BrandButton
-                variant="primary"
-                size="lg"
-                onClick={handleOrderClick}
-                className="w-full justify-center h-auto py-4 text-3xl font-extrabold tracking-tight"
-              >
-                Order
-              </BrandButton>
-            </li>
+            {isOrderRoute ? (
+              <AppMobileRows onNavigate={() => setMobileOpen(false)} />
+            ) : (
+              <SiteMobileCta onNavigate={() => setMobileOpen(false)} />
+            )}
           </ul>
         </SheetContent>
       </Sheet>
     </header>
+  );
+}
+
+// --- Site CTA cluster (non-/order routes) -------------------------------
+// Mounted only outside /order/*, where OrderPanelProvider wraps the page.
+
+function SiteDesktopCta() {
+  const { openPanel } = useOrderPanel();
+  return (
+    <BrandButton
+      variant="primary"
+      size="md"
+      onClick={() => openPanel()}
+      className="text-sm px-5"
+    >
+      Order
+    </BrandButton>
+  );
+}
+
+function SiteMobileCta({ onNavigate }: { onNavigate: () => void }) {
+  const { openPanel } = useOrderPanel();
+  return (
+    <li className="mt-4">
+      <BrandButton
+        variant="primary"
+        size="lg"
+        onClick={() => {
+          onNavigate();
+          openPanel();
+        }}
+        className="w-full justify-center h-auto py-4 text-3xl font-extrabold tracking-tight"
+      >
+        Order
+      </BrandButton>
+    </li>
+  );
+}
+
+// --- App CTA cluster (/order/* routes) ----------------------------------
+// Mounted only under /order/*, where PphProviders wraps the subtree so
+// useCart + useAuth resolve. ORDER CTA is replaced by an account icon
+// (filled when signed in) + a basket icon with a count badge.
+
+function AppDesktopCta() {
+  const { itemCount } = useCart();
+  const auth = useAuth();
+  const signedIn = auth.status === "authenticated";
+  return (
+    <div className="flex items-center gap-1">
+      <Link
+        href="/order/account"
+        aria-label={signedIn ? "Account" : "Sign in"}
+        className="inline-flex h-10 w-10 items-center justify-center rounded-md text-brand-black hover:text-brand-red focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red"
+      >
+        <UserRound
+          className="h-5 w-5"
+          strokeWidth={1.5}
+          {...(signedIn ? { fill: "currentColor" } : {})}
+        />
+      </Link>
+      <Link
+        href="/order/basket"
+        aria-label={`Basket, ${itemCount} ${itemCount === 1 ? "item" : "items"}`}
+        className="relative inline-flex h-10 w-10 items-center justify-center rounded-md text-brand-black hover:text-brand-red focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red"
+      >
+        <ShoppingBag className="h-5 w-5" strokeWidth={1.5} />
+        {itemCount > 0 ? (
+          <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-brand-pink px-1.5 font-display text-[11px] text-brand-black">
+            {itemCount}
+          </span>
+        ) : null}
+      </Link>
+    </div>
+  );
+}
+
+function AppMobileRows({ onNavigate }: { onNavigate: () => void }) {
+  const { itemCount } = useCart();
+  const auth = useAuth();
+  const signedIn = auth.status === "authenticated";
+  return (
+    <>
+      <li className="mt-4">
+        <Link
+          href="/order/basket"
+          onClick={onNavigate}
+          className="flex items-center justify-between font-display font-extrabold uppercase tracking-tight text-3xl text-brand-black hover:text-brand-red transition-colors py-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
+        >
+          <span>Basket</span>
+          <span className="inline-flex h-9 min-w-9 items-center justify-center rounded-full bg-brand-pink px-3 font-display text-base text-brand-black">
+            {itemCount}
+          </span>
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/order/account"
+          onClick={onNavigate}
+          className="block font-display font-extrabold uppercase tracking-tight text-3xl text-brand-black hover:text-brand-red transition-colors py-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
+        >
+          {signedIn ? "Account" : "Sign in"}
+        </Link>
+      </li>
+    </>
   );
 }
