@@ -45,7 +45,7 @@ export function Footer() {
 
           <FooterColumn title="Explore">
             {EXPLORE_LINKS.map((link) => (
-              <li key={link.href}>
+              <li key={link.label}>
                 <Link
                   href={link.href}
                   className="font-body text-sm text-brand-white transition-colors hover:text-brand-pink"

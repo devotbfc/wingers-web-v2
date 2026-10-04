@@ -1,15 +1,19 @@
-/* Scoped theme for the /order subtree only (ADR-019 + 2026-10-04 amendment).
-   Web /order/* mirrors the wing-app's layout, typography (Anton + DM Sans),
-   pill buttons, sheet shape and row rhythm, but renders on the main site's
-   light palette so it reads as part of wingers.co rather than the dark app.
-   The dark palette is retained in the mobile app only.
+/* Scoped theme for the /order subtree only (ADR-019 + 2026-10-04 amendment,
+   revised). Web /order/* mirrors the wing-app's layout, pill buttons, sheet
+   shape and row rhythm, but renders on the main site's light palette AND
+   inherits the site's typography (Bricolage Grotesque + Inter) so the
+   shared NavBar/Footer rendered via OrderChrome match every other route.
+   The dark palette and Anton + DM Sans are retained in the mobile app only.
 
    Nothing in this file is global — every rule is nested under `.pph-app`
    (the in-flow wrapper on `src/app/order/layout.tsx`) or `.pph-portal`
    (attached by PphSheet to overlay + content so Radix portal nodes under
    `<body>` still pick up the tokens). */
 
-/* Shared tokens — defined once, referenced from both root selectors. */
+/* Shared tokens — defined once, referenced from both root selectors.
+   Font variables are intentionally NOT rebound here: /order inherits
+   `--font-display` (Bricolage) and `--font-body` (Inter) from the root
+   `<html>` element via `src/app/layout.tsx` + `src/styles/globals.css`. */
 .pph-app,
 .pph-portal {
   --pph-bg: #ffffff;
@@ -31,16 +35,6 @@
      button and chip in the subtree. */
   --pph-on-pink: #0a0a0a;
   --pph-on-red: #ffffff;
-
-  /* Rebind the global font variables inside this subtree + any pph portal
-     so existing `font-display` / `font-body` Tailwind utilities pick up
-     Anton + DM Sans instead of Bricolage + Inter. The `--font-anton` /
-     `--font-dm-sans` variables are provided by `next/font/google`; the
-     caller must attach `pphAnton.variable` + `pphDmSans.variable` to the
-     portal panel too, otherwise those variables don't resolve under
-     `<body>` and we fall back to the stacks after `var()`. */
-  --font-display: var(--font-anton), system-ui, sans-serif;
-  --font-body: var(--font-dm-sans), system-ui, sans-serif;
 }
 
 /* Baseline look for the in-flow /order subtree. The outer wrapper on

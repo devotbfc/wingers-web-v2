@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isPphMode } from "@/lib/pph/mode";
-import { pphAnton, pphDmSans } from "@/lib/pph/fonts";
 import { PphProviders } from "@/components/pph/PphProviders";
 import { OrderChrome } from "./OrderChrome";
 import "./_pph.css";
 
-// Scoped exception (ADR-019 + 2026-10-04 amendment): /order/* loads the
-// wing-app's Anton + DM Sans faces inside the `.pph-app` wrapper and lays
-// out components with pill buttons on the site's light palette. The
-// marketing site above continues to use Bricolage + Inter.
+// Scoped exception (ADR-019 + 2026-10-04 amendment, revised): /order/*
+// mirrors the wing-app's layout, pill buttons and sheet shape on the main
+// site's light palette, but inherits the site's typography (Bricolage
+// Grotesque + Inter) so the shared NavBar/Footer rendered via OrderChrome
+// read as part of wingers.co. Anton + DM Sans remain app-only.
 //
 // Chrome (NavBar / Footer / focused-checkout header) is applied inside
 // `OrderChrome` because it branches on pathname — layouts are server by
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 export default function OrderLayout({ children }: { children: React.ReactNode }) {
   if (!isPphMode()) notFound();
   return (
-    <div className={`pph-outer ${pphAnton.variable} ${pphDmSans.variable}`}>
+    <div className="pph-outer">
       <PphProviders>
         <div className="pph-app flex min-h-screen flex-col">
           <OrderChrome>{children}</OrderChrome>

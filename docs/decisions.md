@@ -431,9 +431,9 @@ The native web ordering flow at `/order/*` (gated by `NEXT_PUBLIC_ORDERING_MODE=
 - Delivery aggregator links are per-location (new optional fields on `src/lib/locations/types.ts`: `deliverooUrl`, `uberEatsUrl`, `justEatUrl`, default null). The /order menu-page "Prefer delivery?" trigger is hidden entirely when the active shop has none configured, so we don't show a sheet that could link to a different brand's listing by accident.
 - Site-wide CTAs (ADR-018) still own the handoff experience when the flag is off (`handoff` mode routes CTAs to Deliverect/Toast on the marketing site). Nothing in this ADR relaxes the main-site ADR-015/018 enforcement.
 
-### Amendment (2026-10-04)
+### Amendment (2026-10-04, revised)
 
-Web `/order/*` now renders the app's **layout, typography (Anton + DM Sans), components, pill buttons, sheet shape, row rhythm and chips** on the **main site's light palette**, not the wing-app's dark palette. The dark palette (`bg #0A0A0A`, surface `#161616`, elevated `#1F1F1F`, text `#FEFDFB`, muted `#8A8A8A`) is retained **in the mobile app only** — on web the same components re-skin to:
+Web `/order/*` now renders the app's **layout, components, pill buttons, sheet shape, row rhythm and chips** on the **main site's light palette AND the main site's typography (Bricolage Grotesque display + Inter body)**, not the wing-app's dark palette and not the wing-app's Anton + DM Sans faces. The dark palette (`bg #0A0A0A`, surface `#161616`, elevated `#1F1F1F`, text `#FEFDFB`, muted `#8A8A8A`) **and the Anton + DM Sans faces** are retained **in the mobile app only** — on web the same components re-skin to:
 
 - `--pph-bg #FFFFFF`, `--pph-surface #F6F6F6`, `--pph-elevated #EDEDED`, `--pph-border #E5E5E5`
 - `--pph-text #0A0A0A`, `--pph-muted #6B6B6B`
@@ -448,3 +448,5 @@ Three new semantic tokens carry the contrast guarantees because the dark palette
 **PickupCodeBlock is the sole in-flow dark surface** — a near-black `#0A0A0A` ticket with the 44px gold code and a gold border, deliberately preserved as a receipt-ticket contrast island so the pickup code stays legible on the status card, receipt and confirm sheet. The ticket wraps hardcoded dark classes with a comment referencing this amendment.
 
 Scoping remains the `.pph-app` + `.pph-portal` CSS wrapper from the original decision — only token values and new on-colour utilities move; the globals of the marketing site are still untouched. ADR-018's `rounded-md` red ORDER CTA rule continues to apply to the marketing site outside `/order/*` (home, menu, locations, flavour lab); the two surfaces don't blend.
+
+**Typography consolidation (also 2026-10-04):** the original decision point 3 (above) loaded Anton + DM Sans via `next/font/google` in `src/app/order/layout.tsx` and rebound `--font-display` / `--font-body` inside `.pph-app` + `.pph-portal`. That rebinding is **removed**. The site chrome (NavBar + Footer) rendered on `/order/*` by `src/app/order/OrderChrome.tsx` would otherwise fork into Anton on the ordering flow and Bricolage on every other route, breaking the shared-chrome parity. `/order/*` now inherits `--font-display` (Bricolage Grotesque) and `--font-body` (Inter) from the root `<html>` element via `src/app/layout.tsx`. `src/lib/pph/fonts.ts` is deleted. The `pph-*` palette tokens, pill buttons and sheet shape are unchanged.

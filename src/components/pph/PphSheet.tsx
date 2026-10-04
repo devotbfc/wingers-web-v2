@@ -4,22 +4,18 @@ import * as React from "react";
 import { XIcon } from "lucide-react";
 import { Dialog as SheetPrimitive } from "radix-ui";
 import { cn } from "@/lib/utils";
-import { pphFontVars } from "@/lib/pph/fonts";
 
-// Dark bottom-anchored sheet, scoped to the /order subtree. Uses the pph
-// surface colour so the panel reads as part of the app theme (ADR-019).
-// Rebuilt from Radix Dialog primitives because the shadcn sheet.tsx in
-// this project binds to `bg-background` / `text-foreground` tokens that
-// this theme does not define.
+// Bottom-anchored sheet, scoped to the /order subtree. Uses the pph
+// surface colour so the panel reads as part of the app theme (ADR-019
+// amendment, revised). Rebuilt from Radix Dialog primitives because the
+// shadcn sheet.tsx in this project binds to `bg-background` /
+// `text-foreground` tokens that this theme does not define.
 //
 // Portals the content into document.body, so overlay + panel each wear
-// `.pph-portal` (tokens + font rebinding only — no `min-height: 100vh`
-// which would otherwise beat the panel's `max-h-[85vh]` and open the
-// sheet full-screen) plus the Anton + DM Sans `.variable` classes so the
-// `--font-anton` / `--font-dm-sans` CSS variables resolve inside the
-// portal subtree (they're set by next/font/google on the font object's
-// `.variable` className — attached by the layout wrapper on in-flow
-// nodes, which the portal is NOT under).
+// `.pph-portal` (tokens only — no `min-height: 100vh` which would
+// otherwise beat the panel's `max-h-[85vh]` and open the sheet
+// full-screen). Typography inherits the site's Bricolage + Inter from
+// `<html>`, so no font variable classes are needed on the portal.
 
 export function PphSheet({
   open,
@@ -57,7 +53,6 @@ export function PphSheetContent({
       <SheetPrimitive.Overlay
         className={cn(
           "pph-portal",
-          pphFontVars,
           "fixed inset-0 z-50 bg-black/70",
           "data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
           "data-[state=open]:animate-in data-[state=open]:fade-in-0",
@@ -66,7 +61,6 @@ export function PphSheetContent({
       <SheetPrimitive.Content
         className={cn(
           "pph-portal",
-          pphFontVars,
           "fixed bottom-0 left-1/2 z-50 flex w-full max-w-md -translate-x-1/2 flex-col",
           "max-h-[85vh] overflow-hidden rounded-t-[20px] bg-pph-surface text-pph shadow-2xl",
           "data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom data-[state=closed]:duration-300",
