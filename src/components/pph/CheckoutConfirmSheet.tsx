@@ -50,7 +50,7 @@ export function CheckoutConfirmSheet({
             disabled={!canConfirm}
             onClick={onConfirm}
             className={`h-14 w-full rounded-pill font-display text-[15px] uppercase ${
-              canConfirm ? "bg-pph-pink text-pph-bg hover:brightness-95" : "bg-pph-elevated text-pph-muted"
+              canConfirm ? "bg-pph-pink text-pph-on-pink hover:brightness-95" : "bg-pph-elevated text-pph-muted"
             }`}
           >
             Pay · {payLabel}
@@ -62,7 +62,7 @@ export function CheckoutConfirmSheet({
             <div className="font-display text-[11px] uppercase tracking-widest text-pph-muted">
               You&apos;ll earn
             </div>
-            <div className="mt-1 font-display text-[22px] text-pph-gold">
+            <div className="mt-1 font-display text-[22px] text-pph-gold-dark">
               {estimatedPoints} pts
             </div>
             <div className="mt-0.5 font-body text-[12px] text-pph-muted">when you collect</div>
@@ -70,7 +70,7 @@ export function CheckoutConfirmSheet({
 
           {needsSecondCheck ? (
             <div className="rounded-[16px] border-2 border-pph-gold bg-pph-surface px-4 py-3">
-              <div className="font-display text-[13px] uppercase tracking-wide text-pph-gold">
+              <div className="font-display text-[13px] uppercase tracking-wide text-pph-gold-dark">
                 You already have an order being prepared
               </div>
               <div className="mt-1 font-body text-[13px] text-pph">

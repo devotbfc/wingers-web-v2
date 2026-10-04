@@ -75,7 +75,7 @@ function SignupForm() {
             className={`h-14 w-full rounded-pill font-display text-[15px] uppercase ${
               !canSubmit || submitting
                 ? "bg-pph-elevated text-pph-muted"
-                : "bg-pph-pink text-pph-bg hover:brightness-95"
+                : "bg-pph-pink text-pph-on-pink hover:brightness-95"
             }`}
           >
             Become a Winger

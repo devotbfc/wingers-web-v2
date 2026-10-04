@@ -28,7 +28,7 @@ export function MockPaymentSheet() {
             <button
               type="button"
               onClick={() => mockPaymentBus.pay()}
-              className="h-14 w-full rounded-pill bg-pph-pink font-display text-[15px] uppercase text-pph-bg hover:brightness-95"
+              className="h-14 w-full rounded-pill bg-pph-pink font-display text-[15px] uppercase text-pph-on-pink hover:brightness-95"
             >
               Pay · {pence(current.totalPence)}
             </button>

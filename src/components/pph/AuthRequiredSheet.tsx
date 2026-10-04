@@ -22,7 +22,7 @@ export function AuthRequiredSheet({ open, onOpenChange, title, message, returnTo
           <div className="space-y-2">
             <Link
               href={`/order/auth/login?returnTo=${to}`}
-              className="inline-flex h-14 w-full items-center justify-center rounded-pill bg-pph-pink font-display text-[15px] uppercase text-pph-bg hover:brightness-95"
+              className="inline-flex h-14 w-full items-center justify-center rounded-pill bg-pph-pink font-display text-[15px] uppercase text-pph-on-pink hover:brightness-95"
             >
               Sign in
             </Link>

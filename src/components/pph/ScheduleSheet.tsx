@@ -33,7 +33,7 @@ export function ScheduleSheet({ open, onOpenChange, location, onPick, selectedIs
               onOpenChange(false);
             }}
             className={`h-14 w-full rounded-pill font-display text-[15px] uppercase ${
-              picked ? "bg-pph-pink text-pph-bg hover:brightness-95" : "bg-pph-elevated text-pph-muted"
+              picked ? "bg-pph-pink text-pph-on-pink hover:brightness-95" : "bg-pph-elevated text-pph-muted"
             }`}
           >
             Confirm pickup time
@@ -50,7 +50,7 @@ export function ScheduleSheet({ open, onOpenChange, location, onPick, selectedIs
                 setPicked(null);
               }}
               className={`h-11 flex-1 rounded-pill font-display text-[14px] uppercase tracking-wide ${
-                day === k ? "bg-pph-pink text-pph-bg" : "bg-pph-elevated text-pph"
+                day === k ? "bg-pph-pink text-pph-on-pink" : "bg-pph-elevated text-pph"
               }`}
             >
               {k}
@@ -73,7 +73,7 @@ export function ScheduleSheet({ open, onOpenChange, location, onPick, selectedIs
                   type="button"
                   onClick={() => setPicked(iso)}
                   className={`h-11 rounded-pill font-display text-[14px] ${
-                    isPicked ? "bg-pph-pink text-pph-bg" : "bg-pph-elevated text-pph"
+                    isPicked ? "bg-pph-pink text-pph-on-pink" : "bg-pph-elevated text-pph"
                   }`}
                 >
                   {formatSlotLabel(s)}

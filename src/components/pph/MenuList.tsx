@@ -35,7 +35,7 @@ export function MenuList({ menu, onOpenItem }: Props) {
               type="button"
               onClick={() => scrollTo(c.slug)}
               className={`inline-flex h-11 items-center whitespace-nowrap rounded-pill px-4 font-display text-[13px] uppercase tracking-wide ${
-                active ? "bg-pph-pink text-pph-bg" : "bg-pph-elevated text-pph"
+                active ? "bg-pph-pink text-pph-on-pink" : "bg-pph-elevated text-pph"
               }`}
             >
               {c.name}
@@ -103,7 +103,7 @@ function MenuRow({ item, onOpenItem }: { item: MenuItem; onOpenItem: (i: MenuIte
         {qty > 0 || badge ? (
           <div className="mb-1.5 flex items-center gap-1.5">
             {qty > 0 ? (
-              <span className="inline-flex h-5 items-center rounded-pill bg-pph-pink px-2 font-display text-[11px] text-pph-bg">
+              <span className="inline-flex h-5 items-center rounded-pill bg-pph-pink px-2 font-display text-[11px] text-pph-on-pink">
                 ×{qty}
               </span>
             ) : null}
@@ -137,7 +137,7 @@ function Badge({ kind }: { kind: MenuItemBadge }) {
     );
   }
   return (
-    <span className="inline-flex h-5 items-center rounded-pill bg-pph-elevated px-2 font-display text-[10px] uppercase leading-none text-pph-gold">
+    <span className="inline-flex h-5 items-center rounded-pill bg-pph-elevated px-2 font-display text-[10px] uppercase leading-none text-pph-gold-dark">
       PREMIUM
     </span>
   );

@@ -21,7 +21,7 @@ export default function BasketPage() {
           </p>
           <Link
             href="/order/menu"
-            className="inline-flex h-14 items-center justify-center rounded-pill bg-pph-pink px-8 font-display text-[15px] uppercase text-pph-bg hover:brightness-95"
+            className="inline-flex h-14 items-center justify-center rounded-pill bg-pph-pink px-8 font-display text-[15px] uppercase text-pph-on-pink hover:brightness-95"
           >
             Browse menu
           </Link>
@@ -49,8 +49,8 @@ export default function BasketPage() {
             ))}
           </ul>
           <div className="mt-4 flex items-center gap-2">
-            <Coins className="h-4 w-4 text-pph-gold" strokeWidth={2} />
-            <span className="font-body text-[14px] text-pph-gold">
+            <Coins className="h-4 w-4 text-pph-gold-dark" strokeWidth={2} />
+            <span className="font-body text-[14px] text-pph-gold-dark">
               Earn Wingers points on this order
             </span>
           </div>
@@ -63,8 +63,8 @@ export default function BasketPage() {
             aria-label={`Go to checkout, total ${pence(subtotalPence)}`}
             className="pointer-events-auto flex h-14 items-center justify-between rounded-pill bg-pph-pink px-6 hover:brightness-95"
           >
-            <span className="font-display text-[15px] uppercase text-pph-bg">Go to checkout</span>
-            <span className="font-display text-[15px] uppercase text-pph-bg">
+            <span className="font-display text-[15px] uppercase text-pph-on-pink">Go to checkout</span>
+            <span className="font-display text-[15px] uppercase text-pph-on-pink">
               {pence(subtotalPence)}
             </span>
           </Link>

@@ -42,7 +42,7 @@ export default function AccountPage() {
           </p>
           <Link
             href="/order/auth/login?returnTo=/order/account"
-            className="inline-flex h-14 w-full items-center justify-center rounded-pill bg-pph-pink font-display text-[15px] uppercase text-pph-bg hover:brightness-95"
+            className="inline-flex h-14 w-full items-center justify-center rounded-pill bg-pph-pink font-display text-[15px] uppercase text-pph-on-pink hover:brightness-95"
           >
             Sign in
           </Link>
@@ -121,7 +121,7 @@ function AccountRow({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      className="flex min-h-[52px] items-center justify-between px-5 py-3 font-display text-[14px] uppercase text-pph hover:bg-black/10"
+      className="flex min-h-[52px] items-center justify-between px-5 py-3 font-display text-[14px] uppercase text-pph hover:bg-pph-text/10"
     >
       <span>{label}</span>
       <ChevronRight className="h-4 w-4 text-pph-muted" strokeWidth={1.5} />

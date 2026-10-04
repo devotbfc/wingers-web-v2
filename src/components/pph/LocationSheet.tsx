@@ -54,7 +54,7 @@ export function LocationSheet({ open, onOpenChange, locations, activeLocationId,
               <button
                 type="button"
                 onClick={() => onConfirm(draft.id)}
-                className="h-14 flex-[2] rounded-pill bg-pph-pink font-display text-[15px] uppercase text-pph-bg hover:brightness-95"
+                className="h-14 flex-[2] rounded-pill bg-pph-pink font-display text-[15px] uppercase text-pph-on-pink hover:brightness-95"
               >
                 Confirm pickup
               </button>

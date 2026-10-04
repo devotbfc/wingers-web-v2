@@ -67,7 +67,7 @@ function LoginForm() {
             type="submit"
             disabled={submitting}
             className={`h-14 w-full rounded-pill font-display text-[15px] uppercase ${
-              submitting ? "bg-pph-elevated text-pph-muted" : "bg-pph-pink text-pph-bg hover:brightness-95"
+              submitting ? "bg-pph-elevated text-pph-muted" : "bg-pph-pink text-pph-on-pink hover:brightness-95"
             }`}
           >
             Sign in

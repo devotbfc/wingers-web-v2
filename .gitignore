@@ -33,3 +33,5 @@ Thumbs.db
 
 # v0 exports - reference only, never committed
 .v0/
+
+.tmp-*

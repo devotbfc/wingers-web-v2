@@ -61,7 +61,7 @@ export default function OrderStatusPage({ params }: { params: Promise<{ id: stri
           }`}
         >
           <div
-            className={`font-display text-[13px] uppercase ${isReady ? "text-pph-gold" : "text-pph-pink"}`}
+            className={`font-display text-[13px] uppercase ${isReady ? "text-pph-gold-dark" : "text-pph-pink"}`}
           >
             Order {order.reference}
           </div>
@@ -122,7 +122,7 @@ export default function OrderStatusPage({ params }: { params: Promise<{ id: stri
             {order.isPaid ? " · paid" : ""}
           </p>
           {order.pointsEarned > 0 ? (
-            <p className="mt-1 font-body text-[12px] text-pph-gold">
+            <p className="mt-1 font-body text-[12px] text-pph-gold-dark">
               You earned {order.pointsEarned} pts.
             </p>
           ) : null}
@@ -131,7 +131,7 @@ export default function OrderStatusPage({ params }: { params: Promise<{ id: stri
         {swept ? (
           <Link
             href="/order/menu"
-            className="inline-flex h-14 w-full items-center justify-center rounded-pill bg-pph-pink font-display text-[15px] uppercase text-pph-bg hover:brightness-95"
+            className="inline-flex h-14 w-full items-center justify-center rounded-pill bg-pph-pink font-display text-[15px] uppercase text-pph-on-pink hover:brightness-95"
           >
             Start a new order
           </Link>

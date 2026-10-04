@@ -89,7 +89,7 @@ export default function LoyaltyPage() {
           <section className="rounded-[20px] bg-pph-elevated px-5 py-4">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
-                <div className="font-display text-[36px] leading-none text-pph-gold">
+                <div className="font-display text-[36px] leading-none text-pph-gold-dark">
                   {loyalty.points} pts
                 </div>
                 <div className="mt-1 font-body text-[13px] text-pph-muted">
@@ -144,7 +144,7 @@ export default function LoyaltyPage() {
                         {r.description}
                       </div>
                     </div>
-                    <div className="shrink-0 font-display text-[13px] text-pph-gold">
+                    <div className="shrink-0 font-display text-[13px] text-pph-gold-dark">
                       {r.costPoints} pts
                     </div>
                   </div>
@@ -155,7 +155,7 @@ export default function LoyaltyPage() {
                       disabled={!canAfford || !!redeemingId}
                       className={`inline-flex h-10 items-center justify-center rounded-pill px-5 font-display text-[13px] uppercase ${
                         canAfford && !redeemingId
-                          ? "bg-pph-pink text-pph-bg hover:brightness-95"
+                          ? "bg-pph-pink text-pph-on-pink hover:brightness-95"
                           : "bg-pph-surface text-pph-muted"
                       }`}
                     >
@@ -190,7 +190,7 @@ export default function LoyaltyPage() {
                   </div>
                   <div
                     className={`font-display text-[14px] ${
-                      e.delta < 0 ? "text-pph-red" : "text-pph-gold"
+                      e.delta < 0 ? "text-pph-red" : "text-pph-gold-dark"
                     }`}
                   >
                     {e.delta > 0 ? "+" : ""}

@@ -430,3 +430,21 @@ The native web ordering flow at `/order/*` (gated by `NEXT_PUBLIC_ORDERING_MODE=
 - Any future `/order/*` component must use the `pph-*` utility classes (`bg-pph-bg`, `text-pph`, `rounded-pill`, etc.) and the font-display/body classes rather than importing marketing-site components like `BrandButton`. `BrandButton` is still allowed anywhere outside `/order/*`.
 - Delivery aggregator links are per-location (new optional fields on `src/lib/locations/types.ts`: `deliverooUrl`, `uberEatsUrl`, `justEatUrl`, default null). The /order menu-page "Prefer delivery?" trigger is hidden entirely when the active shop has none configured, so we don't show a sheet that could link to a different brand's listing by accident.
 - Site-wide CTAs (ADR-018) still own the handoff experience when the flag is off (`handoff` mode routes CTAs to Deliverect/Toast on the marketing site). Nothing in this ADR relaxes the main-site ADR-015/018 enforcement.
+
+### Amendment (2026-10-04)
+
+Web `/order/*` now renders the app's **layout, typography (Anton + DM Sans), components, pill buttons, sheet shape, row rhythm and chips** on the **main site's light palette**, not the wing-app's dark palette. The dark palette (`bg #0A0A0A`, surface `#161616`, elevated `#1F1F1F`, text `#FEFDFB`, muted `#8A8A8A`) is retained **in the mobile app only** — on web the same components re-skin to:
+
+- `--pph-bg #FFFFFF`, `--pph-surface #F6F6F6`, `--pph-elevated #EDEDED`, `--pph-border #E5E5E5`
+- `--pph-text #0A0A0A`, `--pph-muted #6B6B6B`
+- Pink `#FF6FB5` and red `#FF2D2D` unchanged; `.pph-outer` desktop frame `#F2F2F2`.
+
+Three new semantic tokens carry the contrast guarantees because the dark palette's inversion rule (white text on filled brand) breaks on light:
+
+- `--pph-on-pink: #0A0A0A` — text/icons that sit on `--pph-pink` (white on `#FF6FB5` is ≈2.5:1, which fails WCAG). Every `bg-pph-pink text-pph-bg` call site swaps to `bg-pph-pink text-pph-on-pink`.
+- `--pph-on-red: #FFFFFF` — text/icons that sit on `--pph-red`.
+- `--pph-gold-dark: #8A6200` — gold text on a light background (`#FFB800` fails ≈1.7:1 on white). Reserved for in-flow surfaces (PointsPill, loyalty points headline, "You earned N pts", status-card reference line when ready, basket "Earn Wingers points" row, checkout "Menu updated" / "Blue Light applied" labels). The `#FFB800` gold is retained **only** for the PickupCodeBlock.
+
+**PickupCodeBlock is the sole in-flow dark surface** — a near-black `#0A0A0A` ticket with the 44px gold code and a gold border, deliberately preserved as a receipt-ticket contrast island so the pickup code stays legible on the status card, receipt and confirm sheet. The ticket wraps hardcoded dark classes with a comment referencing this amendment.
+
+Scoping remains the `.pph-app` + `.pph-portal` CSS wrapper from the original decision — only token values and new on-colour utilities move; the globals of the marketing site are still untouched. ADR-018's `rounded-md` red ORDER CTA rule continues to apply to the marketing site outside `/order/*` (home, menu, locations, flavour lab); the two surfaces don't blend.

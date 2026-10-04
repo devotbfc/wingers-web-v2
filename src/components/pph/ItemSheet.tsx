@@ -145,7 +145,7 @@ function ItemSheetInner({
             <button
               type="button"
               onClick={handleAdd}
-              className="inline-flex h-14 flex-1 items-center justify-center rounded-pill bg-pph-pink px-6 font-display text-[15px] uppercase text-pph-bg hover:brightness-95"
+              className="inline-flex h-14 flex-1 items-center justify-center rounded-pill bg-pph-pink px-6 font-display text-[15px] uppercase text-pph-on-pink hover:brightness-95"
             >
               Add {pence(totalPrice)}
             </button>
@@ -169,7 +169,7 @@ function ItemSheetInner({
                     type="button"
                     onClick={() => toggleMod(m.id)}
                     className={`flex h-12 items-center justify-between rounded-pill px-5 font-body text-[15px] ${
-                      active ? "bg-pph-pink text-pph-bg" : "bg-pph-elevated text-pph"
+                      active ? "bg-pph-pink text-pph-on-pink" : "bg-pph-elevated text-pph"
                     }`}
                   >
                     <span>
@@ -203,7 +203,7 @@ function ItemSheetInner({
                     <div className="min-w-0 flex-1 pr-3">
                       <div
                         className={`font-display text-[15px] uppercase ${
-                          active ? "text-pph-bg" : "text-pph"
+                          active ? "text-pph-on-pink" : "text-pph"
                         }`}
                       >
                         {s.name.toUpperCase()}
@@ -213,7 +213,7 @@ function ItemSheetInner({
                         {s.status === "limited" ? (
                           <span
                             className={`ml-1 font-display text-[10px] uppercase ${
-                              active ? "text-pph-bg" : "text-pph-red"
+                              active ? "text-pph-on-pink" : "text-pph-red"
                             }`}
                           >
                             Limited
@@ -222,7 +222,7 @@ function ItemSheetInner({
                       </div>
                     </div>
                     {active ? (
-                      <Check className="h-5 w-5 text-pph-bg" strokeWidth={2.5} />
+                      <Check className="h-5 w-5 text-pph-on-pink" strokeWidth={2.5} />
                     ) : null}
                   </button>
                 );
@@ -237,9 +237,11 @@ function ItemSheetInner({
 
 function HeatRow({ heat, active }: { heat: number; active: boolean }) {
   // Mirrors wing-app HeatScale — small dots, red for lit, muted for unlit.
-  // When the row is active (pink background), swap to white for contrast.
-  const on = active ? "bg-pph-bg" : "bg-pph-red";
-  const off = active ? "bg-black/30" : "bg-pph-muted/50";
+  // When the row is active (pink background), swap the lit dot to on-pink
+  // (dark) so it stays visible, and the off dot to a dimmed dark instead
+  // of black/… (which bypasses the pph token system).
+  const on = active ? "bg-pph-on-pink" : "bg-pph-red";
+  const off = active ? "bg-pph-text/30" : "bg-pph-muted/50";
   return (
     <span className="inline-flex items-center gap-0.5" aria-label={`Heat ${heat} of 5`}>
       {[1, 2, 3, 4, 5].map((i) => (

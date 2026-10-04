@@ -1,23 +1,36 @@
-/* Scoped theme for the /order subtree only (ADR-019). The main site is a
-   white-primary brand; the native web ordering flow mirrors the wing-app
-   dark theme (tokens from wing-app/src/theme/tokens.ts). Nothing in this
-   file is global — every rule is nested under `.pph-app` (the in-flow
-   wrapper on `src/app/order/layout.tsx`) or `.pph-portal` (attached by
-   PphSheet to overlay + content so Radix portal nodes under `<body>`
-   still pick up the tokens). */
+/* Scoped theme for the /order subtree only (ADR-019 + 2026-10-04 amendment).
+   Web /order/* mirrors the wing-app's layout, typography (Anton + DM Sans),
+   pill buttons, sheet shape and row rhythm, but renders on the main site's
+   light palette so it reads as part of wingers.co rather than the dark app.
+   The dark palette is retained in the mobile app only.
+
+   Nothing in this file is global — every rule is nested under `.pph-app`
+   (the in-flow wrapper on `src/app/order/layout.tsx`) or `.pph-portal`
+   (attached by PphSheet to overlay + content so Radix portal nodes under
+   `<body>` still pick up the tokens). */
 
 /* Shared tokens — defined once, referenced from both root selectors. */
 .pph-app,
 .pph-portal {
-  --pph-bg: #0a0a0a;
-  --pph-surface: #161616;
-  --pph-elevated: #1f1f1f;
+  --pph-bg: #ffffff;
+  --pph-surface: #f6f6f6;
+  --pph-elevated: #ededed;
+  --pph-border: #e5e5e5;
   --pph-pink: #ff6fb5;
   --pph-red: #ff2d2d;
   --pph-gold: #ffb800;
+  --pph-gold-dark: #8a6200;
   --pph-blue-light: #3e7bfa;
-  --pph-text: #fefdfb;
-  --pph-muted: #8a8a8a;
+  --pph-text: #0a0a0a;
+  --pph-muted: #6b6b6b;
+
+  /* Semantic on-colour tokens — the text/icon colour that must sit on a
+     given fill to clear WCAG 4.5:1. White on #FF6FB5 fails (≈2.5:1); black
+     on red fails too (≈5.4:1 passes but reads muddy against pure red).
+     These two tokens are the single source of truth for every pink / red
+     button and chip in the subtree. */
+  --pph-on-pink: #0a0a0a;
+  --pph-on-red: #ffffff;
 
   /* Rebind the global font variables inside this subtree + any pph portal
      so existing `font-display` / `font-body` Tailwind utilities pick up
@@ -31,9 +44,10 @@
 }
 
 /* Baseline look for the in-flow /order subtree. The outer wrapper on
-   desktop lets the page background stay very dark around the max-w-md
-   column. DO NOT replicate these on `.pph-portal` — min-height would beat
-   `max-h-[85vh]` on sheet panels and open every sheet full-screen. */
+   desktop lets the page frame stay a slightly darker grey around the
+   max-w-md column so the white app surface pops. DO NOT replicate these
+   on `.pph-portal` — min-height would beat `max-h-[85vh]` on sheet panels
+   and open every sheet full-screen. */
 .pph-app {
   background-color: var(--pph-bg);
   color: var(--pph-text);
@@ -41,7 +55,7 @@
 }
 
 .pph-outer {
-  background-color: #000;
+  background-color: #f2f2f2;
   min-height: 100vh;
 }
 
@@ -67,6 +81,10 @@
 .bg-pph-gold:where(.pph-app, .pph-portal) { background-color: var(--pph-gold); }
 :where(.pph-app, .pph-portal) .bg-pph-blue,
 .bg-pph-blue:where(.pph-app, .pph-portal) { background-color: var(--pph-blue-light); }
+:where(.pph-app, .pph-portal) .bg-pph-on-pink,
+.bg-pph-on-pink:where(.pph-app, .pph-portal) { background-color: var(--pph-on-pink); }
+:where(.pph-app, .pph-portal) .bg-pph-on-red,
+.bg-pph-on-red:where(.pph-app, .pph-portal) { background-color: var(--pph-on-red); }
 
 /* Text colours */
 :where(.pph-app, .pph-portal) .text-pph,
@@ -79,12 +97,24 @@
 .text-pph-red:where(.pph-app, .pph-portal) { color: var(--pph-red); }
 :where(.pph-app, .pph-portal) .text-pph-gold,
 .text-pph-gold:where(.pph-app, .pph-portal) { color: var(--pph-gold); }
+:where(.pph-app, .pph-portal) .text-pph-gold-dark,
+.text-pph-gold-dark:where(.pph-app, .pph-portal) { color: var(--pph-gold-dark); }
 :where(.pph-app, .pph-portal) .text-pph-bg,
 .text-pph-bg:where(.pph-app, .pph-portal) { color: var(--pph-bg); }
+:where(.pph-app, .pph-portal) .text-pph-on-pink,
+.text-pph-on-pink:where(.pph-app, .pph-portal) { color: var(--pph-on-pink); }
+:where(.pph-app, .pph-portal) .text-pph-on-red,
+.text-pph-on-red:where(.pph-app, .pph-portal) { color: var(--pph-on-red); }
 
-/* Borders */
+/* Borders. `border-pph-elevated` kept as an alias that now maps to the
+   hairline divider token — every existing call site was reaching for a
+   soft neutral line, and in dark mode `--pph-elevated` doubled as that.
+   On light we need an even softer stroke, hence the dedicated
+   `--pph-border`; `border-pph-elevated` keeps working everywhere. */
 :where(.pph-app, .pph-portal) .border-pph-elevated,
-.border-pph-elevated:where(.pph-app, .pph-portal) { border-color: var(--pph-elevated); }
+.border-pph-elevated:where(.pph-app, .pph-portal) { border-color: var(--pph-border); }
+:where(.pph-app, .pph-portal) .border-pph-border,
+.border-pph-border:where(.pph-app, .pph-portal) { border-color: var(--pph-border); }
 :where(.pph-app, .pph-portal) .border-pph-pink,
 .border-pph-pink:where(.pph-app, .pph-portal) { border-color: var(--pph-pink); }
 :where(.pph-app, .pph-portal) .border-pph-gold,
@@ -95,7 +125,11 @@
 /* Divide (vertical lines between stacked items). Works on either root. */
 :where(.pph-app, .pph-portal) .divide-pph-elevated > :not([hidden]) ~ :not([hidden]),
 .divide-pph-elevated:where(.pph-app, .pph-portal) > :not([hidden]) ~ :not([hidden]) {
-  border-top: 1px solid var(--pph-elevated);
+  border-top: 1px solid var(--pph-border);
+}
+:where(.pph-app, .pph-portal) .divide-pph-border > :not([hidden]) ~ :not([hidden]),
+.divide-pph-border:where(.pph-app, .pph-portal) > :not([hidden]) ~ :not([hidden]) {
+  border-top: 1px solid var(--pph-border);
 }
 
 /* Radii — map wing-app's radii tokens. `rounded-pill` is the one new name;
@@ -104,7 +138,7 @@
 :where(.pph-app, .pph-portal) .rounded-pill,
 .rounded-pill:where(.pph-app, .pph-portal) { border-radius: 9999px; }
 
-/* Placeholder/caret colour for inputs in the dark theme. */
+/* Placeholder/caret colour for inputs in the light theme. */
 :where(.pph-app, .pph-portal) input::placeholder,
 :where(.pph-app, .pph-portal) textarea::placeholder { color: var(--pph-muted); }
 :where(.pph-app, .pph-portal) input,

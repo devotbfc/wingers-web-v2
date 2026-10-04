@@ -23,8 +23,8 @@ export function BasketBar() {
         <span className="flex h-8 w-8 items-center justify-center rounded-pill bg-pph-bg font-display text-sm text-pph">
           {itemCount}
         </span>
-        <span className="font-display text-[15px] uppercase text-pph-bg">View Basket</span>
-        <span className="font-display text-[15px] uppercase text-pph-bg">
+        <span className="font-display text-[15px] uppercase text-pph-on-pink">View Basket</span>
+        <span className="font-display text-[15px] uppercase text-pph-on-pink">
           {pence(subtotalPence)}
         </span>
       </Link>

@@ -25,7 +25,7 @@ export function OrderStatusCard({ order }: { order: Order }) {
       <div className="px-5 pb-5 pt-4">
         <div
           className={`font-display text-[13px] uppercase ${
-            isReady ? "text-pph-gold" : "text-pph-pink"
+            isReady ? "text-pph-gold-dark" : "text-pph-pink"
           }`}
         >
           Order {order.reference}

@@ -262,7 +262,7 @@ export default function CheckoutPage() {
       <main className="flex-1 space-y-5 px-6 pb-32 pt-4">
         {staleBanner ? (
           <div className="rounded-[16px] border-2 border-pph-gold bg-pph-surface px-4 py-3">
-            <div className="font-display text-[13px] uppercase tracking-wide text-pph-gold">
+            <div className="font-display text-[13px] uppercase tracking-wide text-pph-gold-dark">
               Menu updated
             </div>
             <div className="mt-1 font-body text-[13px] text-pph">
@@ -302,7 +302,7 @@ export default function CheckoutPage() {
                 setScheduledFor(null);
               }}
               className={`h-11 rounded-pill px-4 font-display text-[13px] uppercase ${
-                pickupMode === "asap" ? "bg-pph-pink text-pph-bg" : "bg-pph-elevated text-pph"
+                pickupMode === "asap" ? "bg-pph-pink text-pph-on-pink" : "bg-pph-elevated text-pph"
               }`}
             >
               ASAP ({getMinPickupLeadMinutes(location)}–{getMinPickupLeadMinutes(location) + 10} min)
@@ -314,7 +314,7 @@ export default function CheckoutPage() {
                 setScheduleOpen(true);
               }}
               className={`h-11 rounded-pill px-4 font-display text-[13px] uppercase ${
-                pickupMode === "scheduled" ? "bg-pph-pink text-pph-bg" : "bg-pph-elevated text-pph"
+                pickupMode === "scheduled" ? "bg-pph-pink text-pph-on-pink" : "bg-pph-elevated text-pph"
               }`}
             >
               {scheduledFor
@@ -333,7 +333,7 @@ export default function CheckoutPage() {
                   type="button"
                   onClick={() => setTender(t)}
                   className={`h-11 flex-1 rounded-pill font-display text-[13px] uppercase ${
-                    state.tender === t ? "bg-pph-pink text-pph-bg" : "bg-pph-elevated text-pph"
+                    state.tender === t ? "bg-pph-pink text-pph-on-pink" : "bg-pph-elevated text-pph"
                   }`}
                 >
                   {t}
@@ -355,7 +355,7 @@ export default function CheckoutPage() {
               <button
                 type="button"
                 onClick={() => setPromo(promoInput ? promoInput : null)}
-                className="h-11 rounded-pill bg-pph-pink px-4 font-display text-[13px] uppercase text-pph-bg"
+                className="h-11 rounded-pill bg-pph-pink px-4 font-display text-[13px] uppercase text-pph-on-pink"
               >
                 Apply
               </button>
@@ -420,7 +420,7 @@ export default function CheckoutPage() {
               className={`pointer-events-auto h-14 w-full rounded-pill font-display text-[15px] uppercase ${
                 submitting || paymentUnavailable
                   ? "bg-pph-elevated text-pph-muted"
-                  : "bg-pph-pink text-pph-bg hover:brightness-95"
+                  : "bg-pph-pink text-pph-on-pink hover:brightness-95"
               }`}
             >
               Retry payment
@@ -433,7 +433,7 @@ export default function CheckoutPage() {
               className={`pointer-events-auto flex h-14 w-full items-center justify-between rounded-pill px-6 ${
                 submitting || state.lines.length === 0 || paymentUnavailable
                   ? "bg-pph-elevated text-pph-muted"
-                  : "bg-pph-pink text-pph-bg hover:brightness-95"
+                  : "bg-pph-pink text-pph-on-pink hover:brightness-95"
               }`}
             >
               <span className="font-display text-[15px] uppercase">Confirm &amp; pay</span>
