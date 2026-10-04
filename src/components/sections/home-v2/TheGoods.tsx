@@ -74,9 +74,9 @@ export function TheGoods() {
     >
       <h2
         id="the-goods-heading"
-        className="block px-5 font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,16vw,7rem)] text-brand-red sm:px-8"
+        className="block px-5 font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(2.5rem,12vw,7rem)] text-brand-red sm:px-8"
       >
-        THE GOODS.
+        FAN FAVOURITES.
       </h2>
 
       <ul

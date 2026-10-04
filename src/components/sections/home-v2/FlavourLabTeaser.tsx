@@ -1,20 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-
-const FLAVOURS = [
-  "Korea Town",
-  "Mango Habanero",
-  "Hot Honey",
-  "Tennessee BBQ",
-  "Lemon Pepper",
-  "Buffalo NY",
-  "Garlic Parmesan",
-  "Cajun",
-  "Caribbean Jerk",
-  "Naked",
-  "Ghost Buffalo",
-  "Mild Buffalo",
-] as const;
+import { SPINNABLE_FLAVOURS } from "@/lib/flavours";
 
 const PALETTE = [
   { fill: "var(--color-brand-pink)", text: "var(--color-brand-black)" },
@@ -22,9 +8,35 @@ const PALETTE = [
   { fill: "var(--color-brand-white)", text: "var(--color-brand-black)" },
 ] as const;
 
-const SEGMENTS = FLAVOURS.map((label, i) => ({
-  label: label.toUpperCase(),
-  ...PALETTE[i % PALETTE.length],
+// Greedy pass that keeps the natural i % palette.length rotation unless it
+// would make a segment match its neighbour — including the last↔first seam.
+function pickWheelColorIndices(count: number, fills: readonly string[]): number[] {
+  const out: number[] = [];
+  for (let i = 0; i < count; i++) {
+    const prevFill = i > 0 ? fills[out[i - 1]] : null;
+    const firstFill = i === count - 1 && count > 1 ? fills[out[0]] : null;
+    const conflicts = (idx: number) =>
+      (prevFill !== null && fills[idx] === prevFill) ||
+      (firstFill !== null && fills[idx] === firstFill);
+    let c = i % fills.length;
+    if (conflicts(c)) {
+      for (let p = 0; p < fills.length; p++) {
+        if (!conflicts(p)) { c = p; break; }
+      }
+    }
+    out.push(c);
+  }
+  return out;
+}
+
+const SEGMENT_COLORS = pickWheelColorIndices(
+  SPINNABLE_FLAVOURS.length,
+  PALETTE.map((p) => p.fill),
+);
+
+const SEGMENTS = SPINNABLE_FLAVOURS.map((f, i) => ({
+  label: (f.wheelLabel ?? f.name).toUpperCase(),
+  ...PALETTE[SEGMENT_COLORS[i]],
 }));
 
 const R = 100;
@@ -36,8 +48,20 @@ function polar(angleDeg: number, radius: number) {
   return { x: CX + radius * Math.cos(a), y: CY + radius * Math.sin(a) };
 }
 
-function truncate(label: string, max: number) {
-  return label.length > max ? `${label.slice(0, max - 1).trimEnd()}…` : label;
+// Return 1 or 2 lines so long names don't truncate — mirrors Wheel.labelLinesFor.
+function labelLinesFor(label: string, maxChars = 15): string[] {
+  if (label.length <= maxChars) return [label];
+  const spaceIndices: number[] = [];
+  for (let i = 0; i < label.length; i++) {
+    if (label[i] === " ") spaceIndices.push(i);
+  }
+  for (let i = spaceIndices.length - 1; i >= 0; i--) {
+    const s = spaceIndices[i];
+    const a = label.slice(0, s);
+    const b = label.slice(s + 1);
+    if (a.length <= maxChars && b.length <= maxChars) return [a, b];
+  }
+  return [label];
 }
 
 const HEADLINE_LINES = ["CAN'T", "DECIDE?"] as const;
@@ -70,7 +94,11 @@ export function FlavourLabTeaser() {
         ))}
       </h2>
 
-      <div className="relative mb-10 aspect-square w-[min(78vw,340px)]">
+      <Link
+        href="/flavour-lab"
+        aria-label="Spin the wheel in the Flavour Lab"
+        className="group relative mb-3 aspect-square w-[min(78vw,340px)] cursor-pointer rounded-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-pink"
+      >
         <div
           aria-hidden="true"
           className="absolute left-1/2 top-0 z-10 h-0 w-0 -translate-x-1/2 -translate-y-1"
@@ -82,9 +110,8 @@ export function FlavourLabTeaser() {
         />
         <svg
           viewBox="0 0 220 220"
+          aria-hidden="true"
           className="h-full w-full motion-safe:animate-[spin_28s_linear_infinite]"
-          role="img"
-          aria-label="Flavour wheel with twelve flavours including Korea Town, Mango Habanero and Hot Honey"
         >
           {SEGMENTS.map((seg, i) => {
             const start = i * step - 90;
@@ -102,20 +129,33 @@ export function FlavourLabTeaser() {
                   d={`M ${CX} ${CY} L ${p1.x} ${p1.y} A ${R} ${R} 0 0 1 ${p2.x} ${p2.y} Z`}
                   fill={seg.fill}
                 />
-                <text
-                  x={labelPos.x}
-                  y={labelPos.y}
-                  fill={seg.text}
-                  fontSize="5.5"
-                  fontWeight="800"
-                  letterSpacing="0.02em"
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  transform={`rotate(${rot} ${labelPos.x} ${labelPos.y})`}
-                  className="font-display uppercase"
-                >
-                  {truncate(seg.label, 15)}
-                </text>
+                {(() => {
+                  const lines = labelLinesFor(seg.label);
+                  return (
+                    <text
+                      x={labelPos.x}
+                      y={labelPos.y}
+                      fill={seg.text}
+                      fontSize="5.5"
+                      fontWeight="800"
+                      letterSpacing="0.02em"
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      transform={`rotate(${rot} ${labelPos.x} ${labelPos.y})`}
+                      className="font-display uppercase"
+                    >
+                      {lines.length === 1 ? (
+                        lines[0]
+                      ) : (
+                        lines.map((line, idx) => (
+                          <tspan key={idx} x={labelPos.x} dy={idx === 0 ? "-0.4em" : "1em"}>
+                            {line}
+                          </tspan>
+                        ))
+                      )}
+                    </text>
+                  );
+                })()}
               </g>
             );
           })}
@@ -129,7 +169,11 @@ export function FlavourLabTeaser() {
           />
           <circle cx={CX} cy={CY} r="4" fill="var(--color-brand-pink)" />
         </svg>
-      </div>
+      </Link>
+
+      <p className="mb-6 text-center font-display text-sm font-extrabold uppercase tracking-[0.25em] text-brand-pink">
+        Spin it in the Lab →
+      </p>
 
       <p className="mb-8 max-w-xs text-center font-body text-base leading-relaxed text-brand-white/70 text-pretty">
         Spin the wheel. Let the Lab pick your flavour.

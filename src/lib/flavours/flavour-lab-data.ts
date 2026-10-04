@@ -1,12 +1,43 @@
-// AUTO-GENERATED from Wingers-FLAVOUR-STORIES.xlsx — do not hand-edit.
-// status: core | active | incoming | past  (LE lifecycle; auto-assigned, override in the sheet when proofed)
+// Originally AUTO-GENERATED from Wingers-FLAVOUR-STORIES.xlsx (location: ASK BENSON).
+// This file now carries HAND-EDITS that the current xlsx + generator do not know about.
+// Before re-running the generator, port these overrides into the sheet (or into the generator):
+//
+//   HAND-EDITED FIELDS (per flavour)
+//     • status:        "core" | "active" | "coming-soon" | "hidden" | "incoming" | "past"
+//       — "coming-soon" and "hidden" were added in this branch for the pre-launch cut.
+//         "hidden" is currently unused but kept in the union for future need.
+//       — Live: core + active (shown on wheels + /flavour-lab FlavourGrid)
+//       — Lab-only teaser: coming-soon (shown in LockedFlavoursSection "COMING SOON")
+//       — Finished / historical: past (shown in LockedFlavoursSection "PAST DROPS")
+//       — Suppressed: hidden (not shown anywhere) — none currently.
+//     • wheelLabel:    optional short label for wheel segments where the full name overflows
+//                      the readable 15-char cap:
+//                        - Buffalo NY, Cajun, Naked (shortened)
+//                        - Ghost (for "Ghost Buffalo HOT")
+//                      Everything else uses the full name; the wheels auto-wrap >15-char
+//                      labels onto two lines as a safety net.
+//     • Spelling fixes: "Caribbean Coconut" (was "Carribean"), "Singapore Zing" (was "Sinapore").
+//     • Katsu.shortDescription: hand-written pre-launch; long-form story fields still null.
+//     • Hot Honey: moved from core/non-LE → past/LE. It ran as a drop and has now finished.
+//     • Thai City, Hot Maple, Honey Butter, Soul City, Korean Red Hot, American Hot BBQ,
+//       Honey Mustard, Caribbean Coconut, Singapore Zing, Wing No1: moved from incoming → past.
+//       They ran previously and are archived in the PAST DROPS section.
+//
+// If the generator overwrites this file, re-apply the overrides above or move them into the xlsx.
 
 export type FlavourType = "dry-rub" | "wet-sauce" | null;
-export type FlavourStatus = "core" | "active" | "incoming" | "past";
+export type FlavourStatus =
+  | "core"
+  | "active"
+  | "coming-soon"
+  | "hidden"
+  | "incoming"
+  | "past";
 
 export interface Flavour {
   slug: string; name: string; limitedEdition: boolean; status: FlavourStatus;
   heat: number; type: FlavourType;
+  wheelLabel?: string;
   shortDescription: string | null; howMade: string | null;
   sourcedFrom: string | null; history: string | null; pairsWith: string | null;
 }
@@ -71,6 +102,7 @@ export const FLAVOURS: Flavour[] = [
   {
     "slug": "ghost-buffalo-hot",
     "name": "Ghost Buffalo HOT",
+    "wheelLabel": "Ghost",
     "limitedEdition": false,
     "heat": 5,
     "type": "wet-sauce",
@@ -84,6 +116,7 @@ export const FLAVOURS: Flavour[] = [
   {
     "slug": "buffalo-new-york",
     "name": "Buffalo New York",
+    "wheelLabel": "Buffalo NY",
     "limitedEdition": false,
     "heat": 2,
     "type": "wet-sauce",
@@ -97,6 +130,7 @@ export const FLAVOURS: Flavour[] = [
   {
     "slug": "naked",
     "name": "Naked (no sauce)",
+    "wheelLabel": "Naked",
     "limitedEdition": false,
     "heat": 0,
     "type": null,
@@ -110,6 +144,7 @@ export const FLAVOURS: Flavour[] = [
   {
     "slug": "new-orleans-cajun",
     "name": "New Orleans Cajun",
+    "wheelLabel": "Cajun",
     "limitedEdition": false,
     "heat": 1,
     "type": "dry-rub",
@@ -131,7 +166,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": "\ud83c\uddef\ud83c\uddf2 Jamaica \u2013 Jerk spices & Scotch Bonnet peppers. \ud83c\udde7\ud83c\uddf7 Brazil \u2013 Tropical fruits",
     "history": "Traditional Jamaican Jerk dates back hundreds of years when the Maroons developed unique spice blends and slow-smoking techniques using local herbs and Scotch Bonnet peppers.",
     "pairsWith": "Ranch",
-    "status": "active"
+    "status": "coming-soon"
   },
   {
     "slug": "garlic-parmesan",
@@ -149,7 +184,7 @@ export const FLAVOURS: Flavour[] = [
   {
     "slug": "hot-honey",
     "name": "Hot Honey",
-    "limitedEdition": false,
+    "limitedEdition": true,
     "heat": 3,
     "type": "wet-sauce",
     "shortDescription": "Sweet honey followed by a gentle chili kick.",
@@ -157,7 +192,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": ". \ud83c\udde8\ud83c\uddf1 Chile \u2013 Premium chili peppers",
     "history": "Hot Honey became famous after artisan pizza makers began infusing honey with chili peppers. Its sweet heat quickly spread to fried chicken, biscuits, pizza, and wings.",
     "pairsWith": "Ranch, Cali Mayo",
-    "status": "core"
+    "status": "past"
   },
   {
     "slug": "flamin-cajun",
@@ -170,7 +205,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": "\ud83c\udde8\ud83c\uddf1 Chile \u2013 Premium chili peppers. \ud83c\uddfa\ud83c\uddf8 United States \u2013 Cajun traditions. \ud83c\uddf9\ud83c\uddf7 Turkey \u2013 Paprika and spice blends",
     "history": "Inspired by Louisiana's love of bold spice, Flamin' Cajun takes traditional Cajun flavors and turns the heat up for serious spice lovers.",
     "pairsWith": "Blue Cheese, Ranch, Cali Mayo, Honey Mustard",
-    "status": "active"
+    "status": "coming-soon"
   },
   {
     "slug": "mild-buffalo",
@@ -183,7 +218,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": "\ud83c\uddfa\ud83c\uddf8 United States \u2013 Buffalo",
     "history": "Created for those who love the original Buffalo flavor without overwhelming heat, Mild Buffalo remains one of America's most popular wing sauces.",
     "pairsWith": "Blue Cheese",
-    "status": "active"
+    "status": "coming-soon"
   },
   {
     "slug": "katsu",
@@ -191,13 +226,16 @@ export const FLAVOURS: Flavour[] = [
     "limitedEdition": true,
     "heat": 1,
     "type": "wet-sauce",
-    "shortDescription": null,
+    "shortDescription": "Crispy chicken glazed in a rich Japanese katsu curry sauce — mild, sweet and savoury.",
     "howMade": null,
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "incoming"
+    "status": "active"
   },
+  // TODO(copy): Katsu's long-form story (howMade / sourcedFrom / history /
+  // pairsWith) is pending. FlavourCard hides the "More" button until at least
+  // one long-form field is populated.
   {
     "slug": "thai-city",
     "name": "Thai City",
@@ -209,7 +247,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "incoming"
+    "status": "past"
   },
   {
     "slug": "hot-maple",
@@ -222,7 +260,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "incoming"
+    "status": "past"
   },
   {
     "slug": "honey-butter",
@@ -235,7 +273,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "incoming"
+    "status": "past"
   },
   {
     "slug": "soul-city",
@@ -248,7 +286,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "incoming"
+    "status": "past"
   },
   {
     "slug": "korean-red-hot",
@@ -261,7 +299,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "incoming"
+    "status": "past"
   },
   {
     "slug": "american-hot-bbq",
@@ -274,7 +312,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "incoming"
+    "status": "past"
   },
   {
     "slug": "honey-mustard",
@@ -287,11 +325,11 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "incoming"
+    "status": "past"
   },
   {
-    "slug": "carribean-coconut",
-    "name": "Carribean Coconut",
+    "slug": "caribbean-coconut",
+    "name": "Caribbean Coconut",
     "limitedEdition": true,
     "heat": 2,
     "type": "dry-rub",
@@ -300,11 +338,11 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "incoming"
+    "status": "past"
   },
   {
-    "slug": "sinapore-zing",
-    "name": "Sinapore Zing",
+    "slug": "singapore-zing",
+    "name": "Singapore Zing",
     "limitedEdition": true,
     "heat": 2,
     "type": "wet-sauce",
@@ -313,7 +351,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "incoming"
+    "status": "past"
   },
   {
     "slug": "wing-no1",
@@ -326,7 +364,7 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": null,
     "history": null,
     "pairsWith": null,
-    "status": "incoming"
+    "status": "past"
   }
 ];
 
@@ -365,10 +403,20 @@ export const DIPS: Dip[] = [
   }
 ];
 
-// Wheel + grid use flavours that have stories (core + active LE).
+// Wheel + grid use flavours that are live (core + active LE).
 export const SPINNABLE_FLAVOURS = FLAVOURS.filter(f => f.status === "core" || f.status === "active");
-export const INCOMING_LE = FLAVOURS.filter(f => f.status === "incoming");
+export const COMING_SOON_LE = FLAVOURS.filter(f => f.status === "coming-soon");
 export const PAST_DROPS = FLAVOURS.filter(f => f.status === "past");
+export const CORE_COUNT = FLAVOURS.filter(f => f.status === "core").length;
+
+const NUMBER_WORDS = [
+  "zero","one","two","three","four","five","six","seven","eight","nine","ten",
+  "eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty",
+];
+export function numberToWord(n: number): string {
+  if (Number.isInteger(n) && n >= 0 && n < NUMBER_WORDS.length) return NUMBER_WORDS[n];
+  return String(n);
+}
 
 // Suggest a dip to pair with a spun flavour (uses dip.pairsWith text match, falls back to first dip).
 export function suggestDipFor(flavour: Flavour): Dip | null {

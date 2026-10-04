@@ -2,12 +2,16 @@
 
 import { useCallback, useRef, useState } from "react";
 import { useReducedMotion } from "motion/react";
-import { SPINNABLE_FLAVOURS, type Flavour } from "@/lib/flavours";
+import { SPINNABLE_FLAVOURS, numberToWord, type Flavour } from "@/lib/flavours";
 import { Wheel, computeTargetRotation } from "./Wheel";
 import { WheelResult } from "./WheelResult";
 import { SauceEdgeAccent } from "./SauceEdgeAccent";
 
 const SEGMENTS = SPINNABLE_FLAVOURS;
+
+function capitalise(s: string) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
 
 export function SpinTheWheel() {
   const reduce = useReducedMotion();
@@ -82,7 +86,7 @@ export function SpinTheWheel() {
           Spin the <span className="neon-pink text-brand-pink">wheel</span>
         </h2>
         <p className="mt-3 max-w-md text-center font-body text-base leading-relaxed text-brand-white/60">
-          Let the Lab pick your flavour. Thirteen sauces and rubs, ready to go.
+          Let the Lab pick your flavour. {capitalise(numberToWord(SPINNABLE_FLAVOURS.length))} sauces and rubs, ready to go.
         </p>
 
         <div className="mt-10">

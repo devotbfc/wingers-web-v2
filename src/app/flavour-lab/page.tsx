@@ -8,7 +8,7 @@ import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTrigg
 import { DipsSection } from "@/components/sections/flavour-lab/DipsSection";
 import { FlavourGrid } from "@/components/sections/flavour-lab/FlavourGrid";
 import { FlavourLabHero } from "@/components/sections/flavour-lab/FlavourLabHero";
-import { IncomingDropsSection } from "@/components/sections/flavour-lab/IncomingDropsSection";
+import { ComingSoonSection } from "@/components/sections/flavour-lab/ComingSoonSection";
 import { PastDropsSection } from "@/components/sections/flavour-lab/PastDropsSection";
 import { SpinTheWheel } from "@/components/sections/flavour-lab/SpinTheWheel";
 import { SPINNABLE_FLAVOURS } from "@/lib/flavours";
@@ -69,14 +69,14 @@ export default function FlavourLabPage() {
         <FlavourLabHero />
         <SpinTheWheel />
         <FlavourGrid />
-        <IncomingDropsSection />
+        <ComingSoonSection />
         <DipsSection />
         <PastDropsSection />
 
         <section className="section-dark py-20 md:py-28">
           <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 text-center md:px-8">
             <DoubledHeading
-              text="TASTED SOMETHING?"
+              text="FOUND YOUR FLAVOUR?"
               as="p"
               fillColor="brand-pink"
               shadowColor="brand-red"

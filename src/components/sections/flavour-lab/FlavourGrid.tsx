@@ -3,11 +3,15 @@
 import { useMemo, useState } from "react";
 import { LayoutGroup } from "motion/react";
 import { DoubledHeading } from "@/components/typography/DoubledHeading";
-import { SPINNABLE_FLAVOURS } from "@/lib/flavours";
+import { CORE_COUNT, SPINNABLE_FLAVOURS, numberToWord } from "@/lib/flavours";
 import { FlavourFilters } from "./FlavourFilters";
 import { FlavourCard } from "./FlavourCard";
 
 export type TypeFilter = "all" | "dry-rub" | "wet-sauce";
+
+function capitaliseFirst(s: string) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
 
 export function FlavourGrid() {
   const [heatMax, setHeatMax] = useState(5);
@@ -37,7 +41,7 @@ export function FlavourGrid() {
           className="font-display text-[clamp(2.5rem,7vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-tight"
         />
         <p className="mt-4 max-w-xl font-body text-base leading-relaxed text-brand-white/60">
-          Ten permanent sauces and rubs plus limited-edition drops with a story. See what&rsquo;s incoming below.
+          {capitaliseFirst(numberToWord(CORE_COUNT))} permanent sauces and rubs plus limited-edition drops with a story. See what&rsquo;s coming soon below.
         </p>
 
         <div className="mt-10">

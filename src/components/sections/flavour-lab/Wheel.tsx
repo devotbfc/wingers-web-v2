@@ -22,16 +22,50 @@ const PALETTE = [
   { fill: "var(--color-lab-black)", text: "var(--color-brand-white)" },
 ] as const;
 
+// Greedy pass that keeps the natural i % palette.length rotation unless it
+// would make a segment match its neighbour — including the last↔first seam.
+// Compares by fill so duplicate palette entries (e.g. two lab-black slots) are
+// treated as the same colour.
+function pickWheelColorIndices(count: number, fills: readonly string[]): number[] {
+  const out: number[] = [];
+  for (let i = 0; i < count; i++) {
+    const prevFill = i > 0 ? fills[out[i - 1]] : null;
+    const firstFill = i === count - 1 && count > 1 ? fills[out[0]] : null;
+    const conflicts = (idx: number) =>
+      (prevFill !== null && fills[idx] === prevFill) ||
+      (firstFill !== null && fills[idx] === firstFill);
+    let c = i % fills.length;
+    if (conflicts(c)) {
+      for (let p = 0; p < fills.length; p++) {
+        if (!conflicts(p)) { c = p; break; }
+      }
+    }
+    out.push(c);
+  }
+  return out;
+}
+
 function polar(angleDeg: number, radius: number) {
   const a = (angleDeg * Math.PI) / 180;
   return { x: CX + radius * Math.cos(a), y: CY + radius * Math.sin(a) };
 }
 
-function labelFor(name: string, maxChars = 15): string {
-  if (name.length <= maxChars) return name;
-  const firstWord = name.split(/\s+/)[0];
-  if (firstWord.length <= maxChars) return firstWord;
-  return `${firstWord.slice(0, maxChars - 1)}…`;
+// Return 1 or 2 lines so long names don't truncate. Splits at the latest space
+// that keeps both parts within maxChars (so "Ghost Buffalo HOT" becomes
+// ["Ghost Buffalo", "HOT"], not ["Ghost", "Buffalo HOT"]).
+function labelLinesFor(name: string, maxChars = 15): string[] {
+  if (name.length <= maxChars) return [name];
+  const spaceIndices: number[] = [];
+  for (let i = 0; i < name.length; i++) {
+    if (name[i] === " ") spaceIndices.push(i);
+  }
+  for (let i = spaceIndices.length - 1; i >= 0; i--) {
+    const s = spaceIndices[i];
+    const a = name.slice(0, s);
+    const b = name.slice(s + 1);
+    if (a.length <= maxChars && b.length <= maxChars) return [a, b];
+  }
+  return [name];
 }
 
 export function Wheel({
@@ -43,6 +77,10 @@ export function Wheel({
 }: WheelProps) {
   const reduce = useReducedMotion();
   const step = 360 / segments.length;
+  const segmentColorIndices = pickWheelColorIndices(
+    segments.length,
+    PALETTE.map((p) => p.fill),
+  );
 
   return (
     <div className="relative aspect-square w-[min(82vw,340px)] md:w-[520px]">
@@ -88,7 +126,7 @@ export function Wheel({
           style={{ transformOrigin: `${CX}px ${CY}px` }}
         >
           {segments.map((seg, i) => {
-            const palette = PALETTE[i % PALETTE.length];
+            const palette = PALETTE[segmentColorIndices[i]];
             const start = i * step - 90;
             const end = start + step;
             const p1 = polar(start, R);
@@ -106,21 +144,14 @@ export function Wheel({
                   stroke="rgba(0,0,0,0.4)"
                   strokeWidth={0.5}
                 />
-                <text
+                <WheelLabel
+                  lines={labelLinesFor(seg.wheelLabel ?? seg.name)}
                   x={labelPos.x}
                   y={labelPos.y}
+                  rot={rot}
                   fill={palette.text}
-                  fontSize="6"
-                  fontWeight="800"
-                  letterSpacing="0.02em"
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  transform={`rotate(${rot} ${labelPos.x} ${labelPos.y})`}
-                  className="font-display uppercase"
-                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}
-                >
-                  {labelFor(seg.name)}
-                </text>
+                  fontSize={6}
+                />
               </g>
             );
           })}
@@ -158,6 +189,48 @@ export function Wheel({
         aria-label={spinning ? "Wheel is spinning" : "Spin the wheel"}
       />
     </div>
+  );
+}
+
+function WheelLabel({
+  lines,
+  x,
+  y,
+  rot,
+  fill,
+  fontSize,
+}: {
+  lines: string[];
+  x: number;
+  y: number;
+  rot: number;
+  fill: string;
+  fontSize: number;
+}) {
+  return (
+    <text
+      x={x}
+      y={y}
+      fill={fill}
+      fontSize={fontSize}
+      fontWeight="800"
+      letterSpacing="0.02em"
+      textAnchor="middle"
+      dominantBaseline="middle"
+      transform={`rotate(${rot} ${x} ${y})`}
+      className="font-display uppercase"
+      style={{ textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}
+    >
+      {lines.length === 1 ? (
+        lines[0]
+      ) : (
+        lines.map((line, idx) => (
+          <tspan key={idx} x={x} dy={idx === 0 ? "-0.4em" : "1em"}>
+            {line}
+          </tspan>
+        ))
+      )}
+    </text>
   );
 }
 

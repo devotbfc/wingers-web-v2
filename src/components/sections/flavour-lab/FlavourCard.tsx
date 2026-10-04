@@ -16,10 +16,16 @@ export function FlavourCard({ flavour, index }: FlavourCardProps) {
   const reduce = useReducedMotion();
   const [expanded, setExpanded] = useState(false);
 
-  const comingSoon = flavour.limitedEdition && !flavour.shortDescription;
+  const comingSoon = flavour.status === "coming-soon";
   const isLE = flavour.limitedEdition && !comingSoon;
   const ghost = flavour.heat === 5;
-  const canExpand = !comingSoon;
+  const hasLongStory = Boolean(
+    flavour.howMade ||
+      flavour.sourcedFrom ||
+      flavour.history ||
+      flavour.pairsWith,
+  );
+  const canExpand = !comingSoon && hasLongStory;
 
   const verticalPad = index % 2 === 0 ? "py-5" : "py-7";
 
