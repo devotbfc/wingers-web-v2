@@ -11,10 +11,10 @@ type Props = {
 };
 
 const DIMS: Record<Props["size"], { px: number; className: string; initial: string }> = {
-  sm: { px: 48, className: "h-12 w-12 rounded-md", initial: "text-sm" },
-  md: { px: 80, className: "h-20 w-20 rounded-lg", initial: "text-xl" },
-  lg: { px: 112, className: "h-28 w-28 rounded-xl", initial: "text-2xl" },
-  hero: { px: 480, className: "h-56 w-full rounded-none", initial: "text-6xl" },
+  sm: { px: 48, className: "h-12 w-12 rounded-[12px]", initial: "text-sm" },
+  md: { px: 96, className: "h-24 w-24 rounded-[16px]", initial: "text-[28px]" },
+  lg: { px: 112, className: "h-28 w-28 rounded-[16px]", initial: "text-[32px]" },
+  hero: { px: 480, className: "h-56 w-full rounded-none", initial: "text-[56px]" },
 };
 
 function initials(label: string): string {
@@ -31,7 +31,7 @@ export function FoodThumb({ src, alt, size, className }: Props) {
   if (src) {
     const isHero = size === "hero";
     return (
-      <div className={cn("relative shrink-0 overflow-hidden", d.className, className)}>
+      <div className={cn("relative shrink-0 overflow-hidden bg-pph-elevated", d.className, className)}>
         <Image
           src={src}
           alt={alt}
@@ -47,7 +47,7 @@ export function FoodThumb({ src, alt, size, className }: Props) {
     <div
       aria-hidden
       className={cn(
-        "flex shrink-0 items-center justify-center bg-brand-pink/15 font-display font-extrabold uppercase text-brand-pink",
+        "flex shrink-0 items-center justify-center bg-pph-elevated font-display uppercase text-pph-muted",
         d.className,
         d.initial,
         className,

@@ -3,7 +3,6 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { BrandButton } from "@/components/brand/BrandButton";
 import { TopBar } from "@/components/pph/TopBar";
 import { authStore } from "@/lib/pph/auth-store";
 import { PphApiError, mapErrorCodeToCopy } from "@/lib/pph/errors";
@@ -41,43 +40,61 @@ function LoginForm() {
   return (
     <>
       <TopBar title="Sign in" backHref="/order/menu" />
-      <main className="flex-1 p-4">
-        <form onSubmit={submit} className="space-y-3">
-          <label className="block">
-            <span className="text-xs font-bold uppercase text-neutral-600">Email</span>
+      <main className="flex-1 p-6">
+        <form onSubmit={submit} className="space-y-4">
+          <Field label="Email">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
-              className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+              className="h-12 w-full rounded-pill bg-pph-elevated px-5 font-body text-[14px] text-pph placeholder:text-pph-muted"
             />
-          </label>
-          <label className="block">
-            <span className="text-xs font-bold uppercase text-neutral-600">Password</span>
+          </Field>
+          <Field label="Password">
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
-              className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+              className="h-12 w-full rounded-pill bg-pph-elevated px-5 font-body text-[14px] text-pph placeholder:text-pph-muted"
             />
-          </label>
-          {error ? <div className="text-xs text-red-700">{error}</div> : null}
-          <BrandButton variant="primary" size="lg" type="submit" className="w-full" disabled={submitting}>
+          </Field>
+          {error ? <div className="font-body text-[12px] text-pph-red">{error}</div> : null}
+          <button
+            type="submit"
+            disabled={submitting}
+            className={`h-14 w-full rounded-pill font-display text-[15px] uppercase ${
+              submitting ? "bg-pph-elevated text-pph-muted" : "bg-pph-pink text-pph-bg hover:brightness-95"
+            }`}
+          >
             Sign in
-          </BrandButton>
+          </button>
         </form>
-        <p className="mt-4 text-center text-sm">
+        <p className="mt-6 text-center font-body text-[14px] text-pph-muted">
           New here?{" "}
-          <Link href={`/order/auth/signup?returnTo=${encodeURIComponent(returnTo)}`} className="text-brand-pink underline">
+          <Link
+            href={`/order/auth/signup?returnTo=${encodeURIComponent(returnTo)}`}
+            className="font-display uppercase text-pph-pink underline"
+          >
             Create an account
           </Link>
         </p>
       </main>
     </>
+  );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label className="block">
+      <span className="mb-1.5 block font-display text-[11px] uppercase tracking-widest text-pph-muted">
+        {label}
+      </span>
+      {children}
+    </label>
   );
 }
 

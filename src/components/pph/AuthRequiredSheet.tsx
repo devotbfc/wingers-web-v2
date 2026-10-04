@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { BrandButton } from "@/components/brand/BrandButton";
 import { PphSheet, PphSheetContent } from "./PphSheet";
 
 type Props = {
@@ -21,24 +20,22 @@ export function AuthRequiredSheet({ open, onOpenChange, title, message, returnTo
         description={message}
         footer={
           <div className="space-y-2">
-            <BrandButton
-              variant="primary"
-              size="lg"
-              className="w-full"
+            <Link
               href={`/order/auth/login?returnTo=${to}`}
+              className="inline-flex h-14 w-full items-center justify-center rounded-pill bg-pph-pink font-display text-[15px] uppercase text-pph-bg hover:brightness-95"
             >
               Sign in
-            </BrandButton>
+            </Link>
             <Link
               href={`/order/auth/signup?returnTo=${to}`}
-              className="block text-center text-sm font-bold text-brand-black underline"
+              className="block text-center font-display text-[13px] uppercase text-pph underline"
             >
               Create an account
             </Link>
           </div>
         }
       >
-        <div className="pb-1 text-sm text-neutral-600">
+        <div className="pb-1 font-body text-[13px] text-pph-muted">
           Signing in syncs your points, saved details and order history across the app and the
           website.
         </div>

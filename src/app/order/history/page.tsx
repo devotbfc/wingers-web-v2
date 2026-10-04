@@ -33,9 +33,12 @@ export default function HistoryPage() {
     return (
       <>
         <TopBar title="Order history" backHref="/order/menu" />
-        <main className="flex-1 p-6 text-center text-sm">
-          <p className="mb-3 text-neutral-600">Sign in to view your orders.</p>
-          <Link href="/order/auth/login" className="text-brand-pink underline">
+        <main className="flex-1 p-6 text-center">
+          <p className="mb-3 font-body text-[14px] text-pph-muted">Sign in to view your orders.</p>
+          <Link
+            href="/order/auth/login"
+            className="font-display text-[13px] uppercase text-pph-pink underline"
+          >
             Sign in
           </Link>
         </main>
@@ -47,7 +50,7 @@ export default function HistoryPage() {
     return (
       <>
         <TopBar title="Order history" backHref="/order/menu" />
-        <main className="flex-1 p-6 text-sm text-neutral-500">Loading…</main>
+        <main className="flex-1 p-6 font-body text-[14px] text-pph-muted">Loading…</main>
       </>
     );
   }
@@ -56,7 +59,7 @@ export default function HistoryPage() {
     return (
       <>
         <TopBar title="Order history" backHref="/order/menu" />
-        <main className="flex-1 p-6 text-sm text-neutral-500">No orders yet.</main>
+        <main className="flex-1 p-6 font-body text-[14px] text-pph-muted">No orders yet.</main>
       </>
     );
   }
@@ -64,22 +67,24 @@ export default function HistoryPage() {
   return (
     <>
       <TopBar title="Order history" backHref="/order/menu" />
-      <main className="flex-1 divide-y divide-neutral-100 px-4 pb-8">
+      <main className="flex-1 divide-pph-elevated px-6 pb-8">
         {orders.map((o) => (
           <Link
             key={o.id}
             href={`/order/status/${o.id}`}
-            className="flex items-center justify-between py-3"
+            className="flex items-center justify-between py-4"
           >
-            <div>
-              <div className="font-display text-sm font-bold">{o.reference}</div>
-              <div className="text-xs text-neutral-500">
+            <div className="min-w-0 flex-1">
+              <div className="font-display text-[15px] uppercase text-pph">{o.reference}</div>
+              <div className="mt-0.5 font-body text-[12px] text-pph-muted">
                 {new Date(o.createdAt).toLocaleString()} · {o.locationName}
               </div>
             </div>
-            <div className="text-right">
-              <div className="text-sm font-bold">{pence(o.totalPence)}</div>
-              <div className="text-xs text-neutral-500">{o.status}</div>
+            <div className="shrink-0 text-right">
+              <div className="font-display text-[15px] text-pph">{pence(o.totalPence)}</div>
+              <div className="mt-0.5 font-display text-[11px] uppercase text-pph-muted">
+                {o.status}
+              </div>
             </div>
           </Link>
         ))}

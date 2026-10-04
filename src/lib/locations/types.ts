@@ -50,4 +50,13 @@ export interface Location {
   paymentMethods?: string[];
   dietaryOptions?: string[];
   shopfront?: LocationShopfront;
+  // Third-party delivery aggregator URLs. These are per-shop (each
+  // location can be onboarded independently); default null and the
+  // /order DeliverySheet hides any slot that is still unset. The old
+  // sitewide list previously pointed at other businesses — moved out
+  // here so the actual go-live URLs can be flipped per shop as they
+  // land. Null everywhere today.
+  deliverooUrl?: string | null;
+  uberEatsUrl?: string | null;
+  justEatUrl?: string | null;
 }

@@ -1,0 +1,78 @@
+/* Scoped theme for the /order subtree only (ADR-019). The main site is a
+   white-primary brand; the native web ordering flow mirrors the wing-app
+   dark theme (tokens from wing-app/src/theme/tokens.ts). Nothing in this
+   file is global — every rule is nested under `.pph-app`, which is only
+   applied by `src/app/order/layout.tsx`. */
+
+.pph-app {
+  --pph-bg: #0a0a0a;
+  --pph-surface: #161616;
+  --pph-elevated: #1f1f1f;
+  --pph-pink: #ff6fb5;
+  --pph-red: #ff2d2d;
+  --pph-gold: #ffb800;
+  --pph-blue-light: #3e7bfa;
+  --pph-text: #fefdfb;
+  --pph-muted: #8a8a8a;
+
+  /* Scoped font override — rebind the global font variables inside this
+     subtree so existing `font-display` / `font-body` Tailwind utilities
+     pick up Anton + DM Sans instead of the site's Bricolage + Inter.
+     Variables below are injected by next/font/google in layout.tsx. */
+  --font-display: var(--font-anton), system-ui, sans-serif;
+  --font-body: var(--font-dm-sans), system-ui, sans-serif;
+
+  /* Baseline look for the subtree. The outer wrapper on desktop lets the
+     page background stay very dark around the max-w-md column. */
+  background-color: var(--pph-bg);
+  color: var(--pph-text);
+  min-height: 100vh;
+}
+
+.pph-outer {
+  background-color: #000;
+  min-height: 100vh;
+}
+
+/* Backgrounds */
+.pph-app .bg-pph-bg { background-color: var(--pph-bg); }
+.pph-app .bg-pph-surface { background-color: var(--pph-surface); }
+.pph-app .bg-pph-elevated { background-color: var(--pph-elevated); }
+.pph-app .bg-pph-pink { background-color: var(--pph-pink); }
+.pph-app .bg-pph-red { background-color: var(--pph-red); }
+.pph-app .bg-pph-gold { background-color: var(--pph-gold); }
+.pph-app .bg-pph-blue { background-color: var(--pph-blue-light); }
+
+/* Text colours */
+.pph-app .text-pph { color: var(--pph-text); }
+.pph-app .text-pph-muted { color: var(--pph-muted); }
+.pph-app .text-pph-pink { color: var(--pph-pink); }
+.pph-app .text-pph-red { color: var(--pph-red); }
+.pph-app .text-pph-gold { color: var(--pph-gold); }
+.pph-app .text-pph-bg { color: var(--pph-bg); }
+
+/* Borders */
+.pph-app .border-pph-elevated { border-color: var(--pph-elevated); }
+.pph-app .border-pph-pink { border-color: var(--pph-pink); }
+.pph-app .border-pph-gold { border-color: var(--pph-gold); }
+.pph-app .border-pph-red { border-color: var(--pph-red); }
+
+/* Divide (vertical lines between stacked items) */
+.pph-app .divide-pph-elevated > :not([hidden]) ~ :not([hidden]) {
+  border-top: 1px solid var(--pph-elevated);
+}
+
+/* Radii — map wing-app's radii tokens. `rounded-pill` is the one new name;
+   the sm/md/lg values match Tailwind's defaults within 1px, so we only
+   add the pill utility. */
+.pph-app .rounded-pill { border-radius: 9999px; }
+
+/* Placeholder/caret colour for inputs in the dark theme. */
+.pph-app input::placeholder,
+.pph-app textarea::placeholder { color: var(--pph-muted); }
+.pph-app input,
+.pph-app textarea,
+.pph-app select { color: var(--pph-text); background-color: var(--pph-elevated); }
+
+/* Checkbox tint for the solid sheet forms. */
+.pph-app input[type="checkbox"] { accent-color: var(--pph-pink); }

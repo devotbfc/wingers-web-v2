@@ -3,7 +3,6 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { BrandButton } from "@/components/brand/BrandButton";
 import { TopBar } from "@/components/pph/TopBar";
 import { authStore } from "@/lib/pph/auth-store";
 import { PphApiError, mapErrorCodeToCopy } from "@/lib/pph/errors";
@@ -54,23 +53,40 @@ function SignupForm() {
   return (
     <>
       <TopBar title="Create account" backHref="/order/auth/login" />
-      <main className="flex-1 p-4">
-        <form onSubmit={submit} className="space-y-3">
-          <div className="grid grid-cols-2 gap-2">
+      <main className="flex-1 p-6">
+        <form onSubmit={submit} className="space-y-4">
+          <div className="grid grid-cols-2 gap-3">
             <Input label="First name" value={firstName} onChange={setFirstName} autoComplete="given-name" />
             <Input label="Last name" value={lastName} onChange={setLastName} autoComplete="family-name" />
           </div>
           <Input label="Email" type="email" value={email} onChange={setEmail} autoComplete="email" />
-          <Input label="Password (min 8)" type="password" value={password} onChange={setPassword} autoComplete="new-password" />
+          <Input
+            label="Password (min 8)"
+            type="password"
+            value={password}
+            onChange={setPassword}
+            autoComplete="new-password"
+          />
           <Input label="Phone (optional)" type="tel" value={phone} onChange={setPhone} autoComplete="tel" />
-          {error ? <div className="text-xs text-red-700">{error}</div> : null}
-          <BrandButton variant="primary" size="lg" type="submit" className="w-full" disabled={!canSubmit || submitting}>
+          {error ? <div className="font-body text-[12px] text-pph-red">{error}</div> : null}
+          <button
+            type="submit"
+            disabled={!canSubmit || submitting}
+            className={`h-14 w-full rounded-pill font-display text-[15px] uppercase ${
+              !canSubmit || submitting
+                ? "bg-pph-elevated text-pph-muted"
+                : "bg-pph-pink text-pph-bg hover:brightness-95"
+            }`}
+          >
             Become a Winger
-          </BrandButton>
+          </button>
         </form>
-        <p className="mt-4 text-center text-sm">
+        <p className="mt-6 text-center font-body text-[14px] text-pph-muted">
           Already a Winger?{" "}
-          <Link href={`/order/auth/login?returnTo=${encodeURIComponent(returnTo)}`} className="text-brand-pink underline">
+          <Link
+            href={`/order/auth/login?returnTo=${encodeURIComponent(returnTo)}`}
+            className="font-display uppercase text-pph-pink underline"
+          >
             Sign in
           </Link>
         </p>
@@ -94,13 +110,15 @@ function Input({
 }) {
   return (
     <label className="block">
-      <span className="text-xs font-bold uppercase text-neutral-600">{label}</span>
+      <span className="mb-1.5 block font-display text-[11px] uppercase tracking-widest text-pph-muted">
+        {label}
+      </span>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         autoComplete={autoComplete}
-        className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+        className="h-12 w-full rounded-pill bg-pph-elevated px-5 font-body text-[14px] text-pph placeholder:text-pph-muted"
       />
     </label>
   );

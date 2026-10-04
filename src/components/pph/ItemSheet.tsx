@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import { Check } from "lucide-react";
-import { BrandButton } from "@/components/brand/BrandButton";
 import { useCart } from "@/lib/cart/context";
 import { pence } from "@/lib/pph/money";
 import type { MenuItem, Menu } from "@/lib/pph/types";
@@ -139,13 +138,17 @@ function ItemSheetInner({
         title={item.name}
         description={item.description || undefined}
         footer={
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <div className="w-32 shrink-0">
               <QuantityStepper value={qty} onChange={setQty} min={1} />
             </div>
-            <BrandButton variant="primary" size="lg" className="flex-1" onClick={handleAdd}>
-              Add {qty} · {pence(totalPrice)}
-            </BrandButton>
+            <button
+              type="button"
+              onClick={handleAdd}
+              className="inline-flex h-14 flex-1 items-center justify-center rounded-pill bg-pph-pink px-6 font-display text-[15px] uppercase text-pph-bg hover:brightness-95"
+            >
+              Add {pence(totalPrice)}
+            </button>
           </div>
         }
       >
@@ -155,25 +158,24 @@ function ItemSheetInner({
 
         {item.modifiers && item.modifiers.length > 0 ? (
           <section className="mt-1">
-            <h3 className="mb-2 font-display text-xs font-bold uppercase tracking-wide text-neutral-500">
-              Customise
-            </h3>
-            <div className="flex flex-wrap gap-2">
+            <h3 className="mb-3 font-display text-[17px] uppercase text-pph">Customise</h3>
+            <div className="flex flex-col gap-2">
               {item.modifiers.map((m) => {
                 const active = modIds.includes(m.id);
+                const priceSuffix = m.addPence > 0 ? ` (+${pence(m.addPence)})` : "";
                 return (
                   <button
                     key={m.id}
                     type="button"
                     onClick={() => toggleMod(m.id)}
-                    className={`rounded-md border px-3 py-1.5 text-sm font-medium ${
-                      active
-                        ? "border-brand-pink bg-brand-pink text-brand-black"
-                        : "border-neutral-200 text-brand-black"
+                    className={`flex h-12 items-center justify-between rounded-pill px-5 font-body text-[15px] ${
+                      active ? "bg-pph-pink text-pph-bg" : "bg-pph-elevated text-pph"
                     }`}
                   >
-                    {m.label}
-                    {m.addPence > 0 ? ` +${pence(m.addPence)}` : ""}
+                    <span>
+                      {m.label}
+                      {priceSuffix}
+                    </span>
                   </button>
                 );
               })}
@@ -182,11 +184,9 @@ function ItemSheetInner({
         ) : null}
 
         {compatibleSauces.length > 0 && sauceCap > 0 ? (
-          <section className="mt-5">
-            <h3 className="mb-2 font-display text-xs font-bold uppercase tracking-wide text-neutral-500">
-              {sauceHeading}
-            </h3>
-            <div className="space-y-2">
+          <section className="mt-6">
+            <h3 className="mb-3 font-display text-[17px] uppercase text-pph">{sauceHeading}</h3>
+            <div className="flex flex-col gap-2">
               {compatibleSauces.map((s) => {
                 const active = sauceIds.includes(s.id);
                 const atCap = !active && sauceCap > 1 && sauceIds.length >= sauceCap;
@@ -196,26 +196,34 @@ function ItemSheetInner({
                     type="button"
                     onClick={() => toggleSauce(s.id)}
                     disabled={atCap}
-                    className={`flex w-full items-center justify-between rounded-md border px-3 py-2.5 text-left transition ${
-                      active
-                        ? "border-brand-pink bg-brand-pink text-brand-black"
-                        : "border-neutral-200 bg-brand-white text-brand-black"
+                    className={`flex min-h-[52px] items-center justify-between rounded-[16px] px-4 py-2.5 text-left ${
+                      active ? "bg-pph-pink" : "bg-pph-elevated"
                     } ${atCap ? "opacity-40" : ""}`}
                   >
-                    <div className="min-w-0 flex-1">
-                      <div className="font-display text-sm font-bold uppercase tracking-tight">
-                        {s.name}
+                    <div className="min-w-0 flex-1 pr-3">
+                      <div
+                        className={`font-display text-[15px] uppercase ${
+                          active ? "text-pph-bg" : "text-pph"
+                        }`}
+                      >
+                        {s.name.toUpperCase()}
                       </div>
-                      <div className="mt-0.5 flex items-center gap-1">
-                        <HeatRow heat={s.heat} />
+                      <div className="mt-1 flex items-center gap-1">
+                        <HeatRow heat={s.heat} active={active} />
                         {s.status === "limited" ? (
-                          <span className="ml-1 text-[10px] font-bold uppercase text-brand-red">
+                          <span
+                            className={`ml-1 font-display text-[10px] uppercase ${
+                              active ? "text-pph-bg" : "text-pph-red"
+                            }`}
+                          >
                             Limited
                           </span>
                         ) : null}
                       </div>
                     </div>
-                    {active ? <Check className="h-4 w-4" strokeWidth={2.5} /> : null}
+                    {active ? (
+                      <Check className="h-5 w-5 text-pph-bg" strokeWidth={2.5} />
+                    ) : null}
                   </button>
                 );
               })}
@@ -227,14 +235,15 @@ function ItemSheetInner({
   );
 }
 
-function HeatRow({ heat }: { heat: number }) {
+function HeatRow({ heat, active }: { heat: number; active: boolean }) {
+  // Mirrors wing-app HeatScale — small dots, red for lit, muted for unlit.
+  // When the row is active (pink background), swap to white for contrast.
+  const on = active ? "bg-pph-bg" : "bg-pph-red";
+  const off = active ? "bg-black/30" : "bg-pph-muted/50";
   return (
     <span className="inline-flex items-center gap-0.5" aria-label={`Heat ${heat} of 5`}>
       {[1, 2, 3, 4, 5].map((i) => (
-        <span
-          key={i}
-          className={`h-1.5 w-1.5 rounded-full ${i <= heat ? "bg-brand-red" : "bg-neutral-300"}`}
-        />
+        <span key={i} className={`h-1.5 w-1.5 rounded-pill ${i <= heat ? on : off}`} />
       ))}
     </span>
   );

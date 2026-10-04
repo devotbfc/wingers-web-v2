@@ -1,7 +1,7 @@
 "use client";
 
+import Link from "next/link";
 import { use, useEffect, useState } from "react";
-import { BrandButton } from "@/components/brand/BrandButton";
 import { PickupCodeBlock } from "@/components/pph/PickupCodeBlock";
 import { TopBar } from "@/components/pph/TopBar";
 import { useOrderStack } from "@/lib/order-stack/context";
@@ -14,13 +14,10 @@ export default function OrderStatusPage({ params }: { params: Promise<{ id: stri
   const { id } = use(params);
   const { active, upsert } = useOrderStack();
 
-  // Live view: whatever's currently on the active stack if present (it ticks
-  // on the 8s poll inside OrderStackProvider).
   const fromStack = active.find((o) => o.id === id) ?? null;
   const [fetched, setFetched] = useState<Order | null>(null);
   const order = fromStack ?? fetched;
 
-  // Deep-link fetch: if the stack doesn't have the order yet, pull it once.
   useEffect(() => {
     if (fromStack) return;
     let cancelled = false;
@@ -45,35 +42,39 @@ export default function OrderStatusPage({ params }: { params: Promise<{ id: stri
     return (
       <>
         <TopBar title="Order" backHref="/order/menu" />
-        <main className="flex-1 p-6 text-sm text-neutral-500">Loading…</main>
+        <main className="flex-1 p-6 font-body text-[14px] text-pph-muted">Loading…</main>
       </>
     );
   }
 
   const headline = headlineForStatus(order);
   const swept = isLazySwept(order);
+  const isReady = order.status === "ready";
 
   return (
     <>
       <TopBar title={`Order ${order.reference}`} backHref="/order/menu" />
-      <main className="flex-1 space-y-4 p-4 pb-8">
+      <main className="flex-1 space-y-4 px-6 pb-8 pt-4">
         <section
-          className={`rounded-md border p-4 ${
-            order.status === "ready" ? "border-yellow-400 border-2" : swept ? "border-red-500" : "border-neutral-200"
+          className={`rounded-[20px] bg-pph-elevated px-5 py-4 ${
+            isReady ? "border-2 border-pph-gold" : swept ? "border-2 border-pph-red" : ""
           }`}
         >
-          <h2 className="font-display text-lg font-bold uppercase tracking-wide">{headline}</h2>
-          {swept ? (
-            <p className="mt-1 text-xs text-red-700">
-              Please re-order · {order.locationName}
-            </p>
-          ) : (
-            <p className="mt-1 text-xs text-neutral-600">
-              {etaCaption(order)} · {order.locationName}
-            </p>
-          )}
+          <div
+            className={`font-display text-[13px] uppercase ${isReady ? "text-pph-gold" : "text-pph-pink"}`}
+          >
+            Order {order.reference}
+          </div>
+          <h2 className="mt-1 font-display text-[20px] uppercase leading-tight text-pph">
+            {headline}
+          </h2>
+          <div className="mt-2 font-body text-[14px] text-pph-muted">
+            {swept
+              ? `Please re-order · ${order.locationName}`
+              : `${etaCaption(order)} · ${order.locationName}`}
+          </div>
           {order.pickupCode && (showPickupCode(order) || order.status === "collected") ? (
-            <div className="mt-3">
+            <div className="mt-4">
               <PickupCodeBlock
                 code={order.pickupCode}
                 label={order.status === "collected" ? "Collection code" : "Your collection code"}
@@ -84,15 +85,17 @@ export default function OrderStatusPage({ params }: { params: Promise<{ id: stri
 
         <Timeline order={order} />
 
-        <section className="rounded-md border border-neutral-200 p-4">
-          <h3 className="mb-2 font-display text-xs font-bold uppercase">Items</h3>
-          <ul className="space-y-1 text-sm">
+        <section className="rounded-[20px] bg-pph-elevated px-5 py-4">
+          <h3 className="mb-2 font-display text-[13px] uppercase tracking-widest text-pph-muted">
+            Items
+          </h3>
+          <ul className="space-y-2 font-body text-[14px] text-pph">
             {order.items.map((it) => (
               <li key={it.id} className="flex justify-between">
                 <span>
                   {it.quantity}× {it.name}
                   {it.modifierLabels.length + it.sauceLabels.length > 0 ? (
-                    <span className="block text-xs text-neutral-500">
+                    <span className="mt-0.5 block font-body text-[12px] text-pph-muted">
                       {[...it.modifierLabels, ...it.sauceLabels].join(" · ")}
                     </span>
                   ) : null}
@@ -101,32 +104,37 @@ export default function OrderStatusPage({ params }: { params: Promise<{ id: stri
               </li>
             ))}
           </ul>
-          <div className="mt-3 space-y-1 text-sm">
+          <div className="mt-3 space-y-1 font-body text-[14px] text-pph">
             <Row label="Subtotal" value={pence(order.subtotalPence)} />
             {order.discountPence > 0 ? (
               <Row label="Discount" value={`−${pence(order.discountPence)}`} />
             ) : null}
             <Row
               label="Total"
-              value={order.paymentMethod === "points" ? "Paid with points" : pence(order.totalPence)}
+              value={
+                order.paymentMethod === "points" ? "Paid with points" : pence(order.totalPence)
+              }
               bold
             />
           </div>
-          <p className="mt-3 text-xs text-neutral-500">
+          <p className="mt-3 font-body text-[12px] text-pph-muted">
             Payment: {order.paymentMethod}
             {order.isPaid ? " · paid" : ""}
           </p>
           {order.pointsEarned > 0 ? (
-            <p className="mt-1 text-xs text-neutral-500">
+            <p className="mt-1 font-body text-[12px] text-pph-gold">
               You earned {order.pointsEarned} pts.
             </p>
           ) : null}
         </section>
 
         {swept ? (
-          <BrandButton variant="primary" size="lg" className="w-full" href="/order/menu">
+          <Link
+            href="/order/menu"
+            className="inline-flex h-14 w-full items-center justify-center rounded-pill bg-pph-pink font-display text-[15px] uppercase text-pph-bg hover:brightness-95"
+          >
             Start a new order
-          </BrandButton>
+          </Link>
         ) : null}
       </main>
     </>
@@ -134,16 +142,17 @@ export default function OrderStatusPage({ params }: { params: Promise<{ id: stri
 }
 
 function etaCaption(order: Order): string {
-  if (!order.estimatedReadyAt) return "";
+  if (!order.estimatedReadyAt) return "Any moment now";
   const t = new Date(order.estimatedReadyAt).getTime();
   const diffMin = Math.max(0, Math.round((t - Date.now()) / 60_000));
-  if (diffMin === 0) return "Ready now";
+  if (order.status === "ready") return "Pick up now";
+  if (diffMin === 0) return "Any moment now";
   return `Ready in ~${diffMin} min`;
 }
 
 function Row({ label, value, bold = false }: { label: string; value: string; bold?: boolean }) {
   return (
-    <div className={`flex justify-between ${bold ? "font-bold" : ""}`}>
+    <div className={`flex justify-between ${bold ? "font-display text-[15px] text-pph" : ""}`}>
       <span>{label}</span>
       <span>{value}</span>
     </div>
@@ -160,15 +169,20 @@ function Timeline({ order }: { order: Order }) {
   ];
   const idx = steps.findIndex((s) => s.key === order.status);
   return (
-    <section className="rounded-md border border-neutral-200 p-4">
-      <h3 className="mb-3 font-display text-xs font-bold uppercase">Progress</h3>
-      <ol className="space-y-2 text-sm">
+    <section className="rounded-[20px] bg-pph-elevated px-5 py-4">
+      <h3 className="mb-3 font-display text-[13px] uppercase tracking-widest text-pph-muted">
+        Progress
+      </h3>
+      <ol className="space-y-2 font-body text-[14px]">
         {steps.map((s, i) => {
           const reached = i <= idx;
           return (
-            <li key={s.key} className={`flex items-center gap-2 ${reached ? "text-brand-black" : "text-neutral-400"}`}>
+            <li
+              key={s.key}
+              className={`flex items-center gap-2 ${reached ? "text-pph" : "text-pph-muted"}`}
+            >
               <span
-                className={`h-2.5 w-2.5 rounded-full ${reached ? "bg-brand-pink" : "bg-neutral-300"}`}
+                className={`h-2.5 w-2.5 rounded-pill ${reached ? "bg-pph-pink" : "bg-pph-muted/40"}`}
                 aria-hidden
               />
               {s.label}

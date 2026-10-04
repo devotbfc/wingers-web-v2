@@ -2,9 +2,9 @@
 
 export function PointsPill({ points }: { points: number }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-md bg-neutral-100 px-2 py-1 text-xs font-bold uppercase tracking-wide text-neutral-900">
-      <span className="h-1.5 w-1.5 rounded-full bg-yellow-500" aria-hidden />
-      {points} PTS
+    <span className="inline-flex items-center gap-1.5 rounded-pill bg-pph-elevated px-2.5 py-1 font-display text-[11px] uppercase tracking-wide text-pph-gold">
+      <span className="h-1.5 w-1.5 rounded-pill bg-pph-gold" aria-hidden />
+      {points} pts
     </span>
   );
 }

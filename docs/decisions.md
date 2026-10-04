@@ -408,3 +408,25 @@ Separately, both brand-red and brand-pink were being used as filled primary butt
 - NavBar Order button is flattened to `brand-red` in both scrolled and top states — the previous dead ternary (pink when top, red when scrolled) landed pink Order beside the hero's red CTA on the homepage top-state.
 - Location detail hero drops its `bg-brand-black/55` scrim in favour of `bg-brand-white/85`, turning the pink/red brand base into a soft light-pink/coral canvas. The decorative BrandLogo mark swaps `variant="white"` → `variant="black"` so it still reads as a 15%-opacity watermark on light.
 - About page's dramatic "THAT'S IT." close loses its 70svh dark backdrop and collapses to a normal-flow section with left-aligned content matching the hero rhythm.
+
+---
+
+## ADR-019 — `/order` mirrors the wing-app theme (scoped exception to ADR-015 + ADR-018)
+
+**Date**: 2026-10-04
+**Status**: Accepted (scoped exception to ADR-015 and ADR-018)
+
+### Context
+The native web ordering flow at `/order/*` (gated by `NEXT_PUBLIC_ORDERING_MODE=pph`) is a one-to-one mirror of the Wingers mobile app (`wing-app`). The app is a dark, premium brand surface (`bg #0A0A0A`, Anton display, DM Sans body, rounded-pill buttons, gold loyalty accents). Shipping it on the main site's white-primary brand (ADR-015) made every screen read as a different product — buttons flattened to a square `rounded-md` red, headings in Bricolage not Anton, no sense that this is the same loyalty surface the user already knows from their phone. The Flavour Lab (ADR-018) is already a documented inversion zone for a similar reason.
+
+### Decision
+1. `/order/*` is a scoped exception to ADR-015 (white-primary palette) and ADR-018 (`rounded-md` CTAs, red/pink restrictions). Within `/order/*` the look is the wing-app's: dark background, Anton + DM Sans, rounded-pill buttons.
+2. Scoping is a `.pph-app` CSS class wrapper applied by `src/app/order/layout.tsx` only. All dark tokens live in `src/app/order/_pph.css` under that selector — the main site globals (`src/styles/globals.css`) are untouched. Nothing outside `/order/*` can accidentally pick up a `bg-pph-*` or `text-pph-*` utility.
+3. Fonts: Anton + DM Sans are loaded via `next/font/google` in `src/app/order/layout.tsx` only. The CSS rebinds `--font-display` → Anton and `--font-body` → DM Sans inside `.pph-app` so the existing `font-display` / `font-body` Tailwind utilities keep working, but render in the app faces within the ordering flow and in Bricolage + Inter everywhere else.
+4. Buttons inside `/order/*` follow the app: `rounded-pill`, pink fill on primary CTAs (ORDER, Confirm, Pay), gold on loyalty redemption, elevated-grey on neutral/secondary. ADR-018's red `brand-red` ORDER rule stays in force on the marketing site (home, menu, locations, flavour lab, etc.) — the two surfaces don't blend.
+
+### Consequences
+- The marketing site renders byte-identical to before, because none of the dark tokens or app fonts leak out of `.pph-app`.
+- Any future `/order/*` component must use the `pph-*` utility classes (`bg-pph-bg`, `text-pph`, `rounded-pill`, etc.) and the font-display/body classes rather than importing marketing-site components like `BrandButton`. `BrandButton` is still allowed anywhere outside `/order/*`.
+- Delivery aggregator links are per-location (new optional fields on `src/lib/locations/types.ts`: `deliverooUrl`, `uberEatsUrl`, `justEatUrl`, default null). The /order menu-page "Prefer delivery?" trigger is hidden entirely when the active shop has none configured, so we don't show a sheet that could link to a different brand's listing by accident.
+- Site-wide CTAs (ADR-018) still own the handoff experience when the flag is off (`handoff` mode routes CTAs to Deliverect/Toast on the marketing site). Nothing in this ADR relaxes the main-site ADR-015/018 enforcement.

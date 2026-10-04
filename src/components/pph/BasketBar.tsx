@@ -4,18 +4,30 @@ import Link from "next/link";
 import { useCart } from "@/lib/cart/context";
 import { pence } from "@/lib/pph/money";
 
+// Port of wing-app/src/components/BasketBar.tsx:
+// mx-4 mb-3 h-14 rounded-pill bg-brand-pink
+// Count circle on the left, VIEW BASKET centre, total right — one line,
+// space-between.
 export function BasketBar() {
   const { itemCount, subtotalPence } = useCart();
   if (itemCount === 0) return null;
   return (
-    <Link
-      href="/order/basket"
-      className="fixed bottom-4 left-1/2 z-40 -translate-x-1/2 rounded-md bg-brand-pink px-5 py-3 font-display font-bold uppercase tracking-wide text-brand-black shadow-lg transition hover:brightness-95"
+    <div
+      className="pointer-events-none fixed bottom-0 left-1/2 z-40 w-full max-w-md -translate-x-1/2"
     >
-      <span className="mr-2 inline-flex min-w-[1.75rem] items-center justify-center rounded-sm bg-brand-black px-2 py-0.5 text-sm text-brand-white">
-        {itemCount}
-      </span>
-      View Basket · {pence(subtotalPence)}
-    </Link>
+      <Link
+        href="/order/basket"
+        aria-label={`View basket, ${itemCount} ${itemCount === 1 ? "item" : "items"}, ${pence(subtotalPence)}`}
+        className="pointer-events-auto mx-4 mb-3 flex h-14 items-center justify-between rounded-pill bg-pph-pink px-4 hover:brightness-95"
+      >
+        <span className="flex h-8 w-8 items-center justify-center rounded-pill bg-pph-bg font-display text-sm text-pph">
+          {itemCount}
+        </span>
+        <span className="font-display text-[15px] uppercase text-pph-bg">View Basket</span>
+        <span className="font-display text-[15px] uppercase text-pph-bg">
+          {pence(subtotalPence)}
+        </span>
+      </Link>
+    </div>
   );
 }

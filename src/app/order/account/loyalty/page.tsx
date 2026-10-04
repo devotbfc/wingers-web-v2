@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { BrandButton } from "@/components/brand/BrandButton";
 import { BlueLightBadge } from "@/components/pph/BlueLightBadge";
 import { PointsPill } from "@/components/pph/PointsPill";
 import { TopBar } from "@/components/pph/TopBar";
@@ -53,7 +52,9 @@ export default function LoyaltyPage() {
     return (
       <>
         <TopBar title="Loyalty" backHref="/order/menu" />
-        <main className="flex-1 p-6 text-sm text-neutral-500">Sign in to see your points and rewards.</main>
+        <main className="flex-1 p-6 font-body text-[14px] text-pph-muted">
+          Sign in to see your points and rewards.
+        </main>
       </>
     );
   }
@@ -73,8 +74,6 @@ export default function LoyaltyPage() {
       if (err instanceof PphApiError) {
         toast.error(mapErrorCodeToCopy(err.code));
       } else {
-        // Network/unknown error: do NOT auto-retry. Ask user to re-open the
-        // page (which refetches vouchers) before trying again.
         toast.error("Something went wrong. Re-open the page before trying again.");
       }
     } finally {
@@ -85,13 +84,15 @@ export default function LoyaltyPage() {
   return (
     <>
       <TopBar title="Loyalty" backHref="/order/menu" />
-      <main className="flex-1 space-y-4 p-4 pb-8">
+      <main className="flex-1 space-y-4 px-6 pb-8 pt-4">
         {loyalty ? (
-          <section className="rounded-md border border-neutral-200 p-4">
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="font-display text-2xl font-extrabold">{loyalty.points} pts</div>
-                <div className="text-xs text-neutral-500">
+          <section className="rounded-[20px] bg-pph-elevated px-5 py-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0 flex-1">
+                <div className="font-display text-[36px] leading-none text-pph-gold">
+                  {loyalty.points} pts
+                </div>
+                <div className="mt-1 font-body text-[13px] text-pph-muted">
                   {loyalty.tierName}
                   {loyalty.nextTierAt != null
                     ? ` · ${Math.max(0, loyalty.nextTierAt - loyalty.lifetimePoints)} pts to next tier`
@@ -110,12 +111,14 @@ export default function LoyaltyPage() {
 
         {tiers.length > 0 ? (
           <section>
-            <h2 className="mb-2 font-display text-xs font-bold uppercase text-neutral-500">Tiers</h2>
-            <ul className="rounded-md border border-neutral-200 divide-y divide-neutral-100 text-sm">
+            <h2 className="mb-2 font-display text-[13px] uppercase tracking-widest text-pph-muted">
+              Tiers
+            </h2>
+            <ul className="divide-pph-elevated overflow-hidden rounded-[16px] bg-pph-elevated">
               {tiers.map((t) => (
-                <li key={t.tier} className="flex items-center justify-between px-3 py-2">
-                  <span className="font-bold">{t.tierName}</span>
-                  <span className="text-xs text-neutral-500">
+                <li key={t.tier} className="flex items-center justify-between px-4 py-3">
+                  <span className="font-display text-[14px] uppercase text-pph">{t.tierName}</span>
+                  <span className="font-body text-[12px] text-pph-muted">
                     {t.thresholdPoints}+ pts · ×{t.multiplier.toFixed(2)}
                   </span>
                 </li>
@@ -125,29 +128,43 @@ export default function LoyaltyPage() {
         ) : null}
 
         <section>
-          <h2 className="mb-2 font-display text-xs font-bold uppercase text-neutral-500">Rewards</h2>
+          <h2 className="mb-2 font-display text-[13px] uppercase tracking-widest text-pph-muted">
+            Rewards
+          </h2>
           <ul className="space-y-2">
             {rewards.map((r) => {
               const balance = loyalty?.points ?? 0;
               const canAfford = balance >= r.costPoints;
               return (
-                <li key={r.id} className="rounded-md border border-neutral-200 p-3">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <div className="font-display text-sm font-bold">{r.name}</div>
-                      <div className="text-xs text-neutral-500">{r.description}</div>
+                <li key={r.id} className="rounded-[16px] bg-pph-elevated px-4 py-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="font-display text-[15px] uppercase text-pph">{r.name}</div>
+                      <div className="mt-0.5 font-body text-[13px] text-pph-muted">
+                        {r.description}
+                      </div>
                     </div>
-                    <div className="text-xs font-bold">{r.costPoints} pts</div>
+                    <div className="shrink-0 font-display text-[13px] text-pph-gold">
+                      {r.costPoints} pts
+                    </div>
                   </div>
-                  <div className="mt-2 flex items-center gap-2">
-                    <BrandButton
-                      variant="primary"
-                      size="sm"
+                  <div className="mt-3">
+                    <button
+                      type="button"
                       onClick={() => redeem(r)}
                       disabled={!canAfford || !!redeemingId}
+                      className={`inline-flex h-10 items-center justify-center rounded-pill px-5 font-display text-[13px] uppercase ${
+                        canAfford && !redeemingId
+                          ? "bg-pph-pink text-pph-bg hover:brightness-95"
+                          : "bg-pph-surface text-pph-muted"
+                      }`}
                     >
-                      {redeemingId === r.id ? "Redeeming…" : canAfford ? "Redeem" : `${r.costPoints - balance} pts to go`}
-                    </BrandButton>
+                      {redeemingId === r.id
+                        ? "Redeeming…"
+                        : canAfford
+                          ? "Redeem"
+                          : `${r.costPoints - balance} pts to go`}
+                    </button>
                   </div>
                 </li>
               );
@@ -157,15 +174,25 @@ export default function LoyaltyPage() {
 
         {ledger.length > 0 ? (
           <section>
-            <h2 className="mb-2 font-display text-xs font-bold uppercase text-neutral-500">Recent activity</h2>
-            <ul className="rounded-md border border-neutral-200 divide-y divide-neutral-100 text-sm">
+            <h2 className="mb-2 font-display text-[13px] uppercase tracking-widest text-pph-muted">
+              Recent activity
+            </h2>
+            <ul className="divide-pph-elevated overflow-hidden rounded-[16px] bg-pph-elevated">
               {ledger.map((e) => (
-                <li key={e.id} className="flex items-center justify-between px-3 py-2">
-                  <div>
-                    <div className="font-bold">{e.sourceLabel}</div>
-                    <div className="text-xs text-neutral-500">{new Date(e.createdAt).toLocaleString()}</div>
+                <li key={e.id} className="flex items-center justify-between px-4 py-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="font-display text-[13px] uppercase text-pph">
+                      {e.sourceLabel}
+                    </div>
+                    <div className="mt-0.5 font-body text-[11px] text-pph-muted">
+                      {new Date(e.createdAt).toLocaleString()}
+                    </div>
                   </div>
-                  <div className={`font-bold ${e.delta < 0 ? "text-red-600" : "text-emerald-600"}`}>
+                  <div
+                    className={`font-display text-[14px] ${
+                      e.delta < 0 ? "text-pph-red" : "text-pph-gold"
+                    }`}
+                  >
                     {e.delta > 0 ? "+" : ""}
                     {e.delta}
                   </div>

@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { BrandButton } from "@/components/brand/BrandButton";
 import { CheckoutConfirmSheet } from "@/components/pph/CheckoutConfirmSheet";
 import { MockPaymentSheet } from "@/components/pph/MockPaymentSheet";
 import { ScheduleSheet } from "@/components/pph/ScheduleSheet";
@@ -104,7 +103,9 @@ export default function CheckoutPage() {
     return (
       <>
         <TopBar title="Checkout" backHref="/order/basket" />
-        <main className="flex-1 p-4 text-sm text-neutral-500">Pick a location to continue.</main>
+        <main className="flex-1 p-6 font-body text-[14px] text-pph-muted">
+          Pick a location to continue.
+        </main>
       </>
     );
   }
@@ -113,7 +114,7 @@ export default function CheckoutPage() {
     return (
       <>
         <TopBar title="Checkout" backHref="/order/menu" />
-        <main className="flex-1 p-6 text-center text-sm text-neutral-500">
+        <main className="flex-1 p-6 text-center font-body text-[14px] text-pph-muted">
           Your basket is empty.
         </main>
       </>
@@ -258,15 +259,19 @@ export default function CheckoutPage() {
   return (
     <>
       <TopBar title="Checkout" backHref="/order/basket" />
-      <main className="flex-1 space-y-4 p-4 pb-32">
+      <main className="flex-1 space-y-5 px-6 pb-32 pt-4">
         {staleBanner ? (
-          <div className="rounded-md border-2 border-yellow-400 bg-yellow-50 p-3 text-sm">
-            <div className="font-bold">Menu updated</div>
-            <div>Prices or items just changed. We&apos;ve updated your basket — please review.</div>
+          <div className="rounded-[16px] border-2 border-pph-gold bg-pph-surface px-4 py-3">
+            <div className="font-display text-[13px] uppercase tracking-wide text-pph-gold">
+              Menu updated
+            </div>
+            <div className="mt-1 font-body text-[13px] text-pph">
+              Prices or items just changed. We&apos;ve updated your basket — please review.
+            </div>
             <button
               type="button"
               onClick={() => router.replace("/order/basket")}
-              className="mt-2 text-xs underline"
+              className="mt-2 font-display text-[12px] uppercase text-pph-pink underline"
             >
               Back to basket
             </button>
@@ -274,20 +279,18 @@ export default function CheckoutPage() {
         ) : null}
 
         {blueLightApplies ? (
-          <div className="rounded-md border border-blue-500 bg-blue-50 p-3 text-xs text-blue-900">
+          <div className="rounded-[16px] border border-[color:var(--pph-blue-light)] bg-pph-elevated px-4 py-3 font-body text-[12px] text-pph">
             Blue Light 20% applied. Blue Light orders don&apos;t earn points.
           </div>
         ) : null}
 
-        <Section title="Pickup method">Collection</Section>
+        <Section title="Pickup method">
+          <div className="font-body text-[15px] text-pph">Collection</div>
+        </Section>
 
         <Section title="Store">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="font-bold">{location.name}</div>
-              <div className="text-xs text-neutral-600">{location.address}</div>
-            </div>
-          </div>
+          <div className="font-display text-[15px] uppercase text-pph">{location.name}</div>
+          <div className="mt-1 font-body text-[12px] text-pph-muted">{location.address}</div>
         </Section>
 
         <Section title="Pickup time">
@@ -298,8 +301,8 @@ export default function CheckoutPage() {
                 setPickupMode("asap");
                 setScheduledFor(null);
               }}
-              className={`rounded-md border px-3 py-1.5 text-sm ${
-                pickupMode === "asap" ? "border-brand-pink bg-brand-pink text-brand-black" : "border-neutral-200"
+              className={`h-11 rounded-pill px-4 font-display text-[13px] uppercase ${
+                pickupMode === "asap" ? "bg-pph-pink text-pph-bg" : "bg-pph-elevated text-pph"
               }`}
             >
               ASAP ({getMinPickupLeadMinutes(location)}–{getMinPickupLeadMinutes(location) + 10} min)
@@ -310,11 +313,13 @@ export default function CheckoutPage() {
                 setPickupMode("scheduled");
                 setScheduleOpen(true);
               }}
-              className={`rounded-md border px-3 py-1.5 text-sm ${
-                pickupMode === "scheduled" ? "border-brand-pink bg-brand-pink text-brand-black" : "border-neutral-200"
+              className={`h-11 rounded-pill px-4 font-display text-[13px] uppercase ${
+                pickupMode === "scheduled" ? "bg-pph-pink text-pph-bg" : "bg-pph-elevated text-pph"
               }`}
             >
-              {scheduledFor ? new Date(scheduledFor).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "Schedule"}
+              {scheduledFor
+                ? new Date(scheduledFor).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+                : "Schedule"}
             </button>
           </div>
         </Section>
@@ -322,24 +327,18 @@ export default function CheckoutPage() {
         {auth.user && pointsEligible ? (
           <Section title="Payment">
             <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setTender("card")}
-                className={`rounded-md border px-3 py-1.5 text-sm ${
-                  state.tender === "card" ? "border-brand-pink bg-brand-pink text-brand-black" : "border-neutral-200"
-                }`}
-              >
-                Card
-              </button>
-              <button
-                type="button"
-                onClick={() => setTender("points")}
-                className={`rounded-md border px-3 py-1.5 text-sm ${
-                  state.tender === "points" ? "border-brand-pink bg-brand-pink text-brand-black" : "border-neutral-200"
-                }`}
-              >
-                Points
-              </button>
+              {(["card", "points"] as const).map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setTender(t)}
+                  className={`h-11 flex-1 rounded-pill font-display text-[13px] uppercase ${
+                    state.tender === t ? "bg-pph-pink text-pph-bg" : "bg-pph-elevated text-pph"
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
             </div>
           </Section>
         ) : null}
@@ -351,12 +350,12 @@ export default function CheckoutPage() {
                 value={promoInput}
                 onChange={(e) => setPromoInput(e.target.value)}
                 placeholder="WINGERS10"
-                className="flex-1 rounded-md border border-neutral-300 px-2 py-1.5 text-sm"
+                className="h-11 flex-1 rounded-pill bg-pph-elevated px-4 font-body text-[14px] text-pph placeholder:text-pph-muted"
               />
               <button
                 type="button"
                 onClick={() => setPromo(promoInput ? promoInput : null)}
-                className="rounded-md bg-neutral-900 px-3 py-1.5 text-sm text-brand-white"
+                className="h-11 rounded-pill bg-pph-pink px-4 font-display text-[13px] uppercase text-pph-bg"
               >
                 Apply
               </button>
@@ -365,7 +364,7 @@ export default function CheckoutPage() {
         ) : null}
 
         <Section title="Order summary">
-          <ul className="space-y-1 text-sm">
+          <ul className="space-y-1 font-body text-[14px] text-pph">
             {state.lines.map((l) => (
               <li key={l.lineId} className="flex justify-between">
                 <span>
@@ -375,17 +374,21 @@ export default function CheckoutPage() {
               </li>
             ))}
           </ul>
-          <div className="mt-3 space-y-1 text-sm">
+          <div className="mt-3 space-y-1 font-body text-[14px] text-pph">
             <Row label="Subtotal" value={pence(subtotalPence)} />
             {blueLightDiscount > 0 ? (
               <Row label="Blue Light 20%" value={`−${pence(blueLightDiscount)}`} />
             ) : null}
-            <Row label="Total" value={pointsCost != null ? `${pointsCost} pts` : pence(totalPence)} bold />
-            <div className="pt-1 text-xs text-neutral-500">
+            <Row
+              label="Total"
+              value={pointsCost != null ? `${pointsCost} pts` : pence(totalPence)}
+              bold
+            />
+            <div className="pt-1 font-body text-[12px] text-pph-muted">
               {state.tender === "points"
                 ? "No points earned on points orders."
                 : blueLightApplies
-                  ? "Blue Light orders don&apos;t earn points."
+                  ? "Blue Light orders don't earn points."
                   : `Earn ${estimatedPoints} pts when you collect`}
             </div>
           </div>
@@ -394,41 +397,52 @@ export default function CheckoutPage() {
         {paymentUnavailable ? (
           <div
             role="status"
-            className="rounded-md border border-red-500 bg-red-50 p-2 text-xs text-red-800"
+            className="rounded-[16px] border border-pph-red bg-pph-surface px-3 py-2 font-body text-[12px] text-pph-red"
           >
             {UNAVAILABLE_PAYMENT_COPY}
           </div>
         ) : null}
 
         {error ? (
-          <div className="rounded-md border border-red-500 bg-red-50 p-2 text-xs text-red-800">
+          <div className="rounded-[16px] border border-pph-red bg-pph-surface px-3 py-2 font-body text-[12px] text-pph-red">
             {error}
           </div>
         ) : null}
       </main>
 
-      <div className="fixed bottom-0 left-1/2 z-30 w-full max-w-md -translate-x-1/2 border-t border-neutral-200 bg-brand-white p-3">
-        {hasPending ? (
-          <BrandButton
-            variant="primary"
-            size="lg"
-            className="w-full"
-            onClick={() => retryPayment()}
-            disabled={submitting || paymentUnavailable}
-          >
-            Retry payment
-          </BrandButton>
-        ) : (
-          <BrandButton
-            variant="primary"
-            size="lg"
-            className="w-full"
-            onClick={() => setConfirmOpen(true)}
-            disabled={submitting || state.lines.length === 0 || paymentUnavailable}
-          >
-            Confirm & Pay · {pointsCost != null ? `${pointsCost} pts` : pence(totalPence)}
-          </BrandButton>
-        )}
+      <div className="pointer-events-none fixed bottom-0 left-1/2 z-30 w-full max-w-md -translate-x-1/2">
+        <div className="px-4 pb-5">
+          {hasPending ? (
+            <button
+              type="button"
+              onClick={() => retryPayment()}
+              disabled={submitting || paymentUnavailable}
+              className={`pointer-events-auto h-14 w-full rounded-pill font-display text-[15px] uppercase ${
+                submitting || paymentUnavailable
+                  ? "bg-pph-elevated text-pph-muted"
+                  : "bg-pph-pink text-pph-bg hover:brightness-95"
+              }`}
+            >
+              Retry payment
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setConfirmOpen(true)}
+              disabled={submitting || state.lines.length === 0 || paymentUnavailable}
+              className={`pointer-events-auto flex h-14 w-full items-center justify-between rounded-pill px-6 ${
+                submitting || state.lines.length === 0 || paymentUnavailable
+                  ? "bg-pph-elevated text-pph-muted"
+                  : "bg-pph-pink text-pph-bg hover:brightness-95"
+              }`}
+            >
+              <span className="font-display text-[15px] uppercase">Confirm &amp; pay</span>
+              <span className="font-display text-[15px] uppercase">
+                {pointsCost != null ? `${pointsCost} pts` : pence(totalPence)}
+              </span>
+            </button>
+          )}
+        </div>
       </div>
 
       <ScheduleSheet
@@ -460,17 +474,17 @@ export default function CheckoutPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <h2 className="mb-2 font-display text-xs font-bold uppercase tracking-wide text-neutral-500">
+      <h2 className="mb-2 font-display text-[13px] uppercase tracking-widest text-pph-muted">
         {title}
       </h2>
-      <div className="rounded-md border border-neutral-200 bg-brand-white p-3">{children}</div>
+      <div className="rounded-[16px] bg-pph-surface px-4 py-3">{children}</div>
     </section>
   );
 }
 
 function Row({ label, value, bold = false }: { label: string; value: string; bold?: boolean }) {
   return (
-    <div className={`flex justify-between ${bold ? "font-bold" : ""}`}>
+    <div className={`flex justify-between ${bold ? "font-display text-[15px] text-pph" : ""}`}>
       <span>{label}</span>
       <span>{value}</span>
     </div>

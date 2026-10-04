@@ -33,7 +33,9 @@ export default function VouchersPage() {
     return (
       <>
         <TopBar title="Vouchers" backHref="/order/account" />
-        <main className="flex-1 p-6 text-sm text-neutral-500">Sign in to view your vouchers.</main>
+        <main className="flex-1 p-6 font-body text-[14px] text-pph-muted">
+          Sign in to view your vouchers.
+        </main>
       </>
     );
   }
@@ -42,7 +44,7 @@ export default function VouchersPage() {
     return (
       <>
         <TopBar title="Vouchers" backHref="/order/account" />
-        <main className="flex-1 p-6 text-sm text-neutral-500">Loading…</main>
+        <main className="flex-1 p-6 font-body text-[14px] text-pph-muted">Loading…</main>
       </>
     );
   }
@@ -55,28 +57,32 @@ export default function VouchersPage() {
   return (
     <>
       <TopBar title="Vouchers" backHref="/order/account" />
-      <main className="flex-1 space-y-4 p-4 pb-8">
+      <main className="flex-1 space-y-4 px-6 pb-8 pt-4">
         {grouped.length === 0 ? (
-          <p className="text-sm text-neutral-500">No vouchers yet.</p>
+          <p className="font-body text-[14px] text-pph-muted">No vouchers yet.</p>
         ) : null}
         {grouped.map((g) => (
           <section key={g.status}>
-            <h2 className="mb-2 font-display text-xs font-bold uppercase tracking-wide text-neutral-500">
+            <h2 className="mb-2 font-display text-[13px] uppercase tracking-widest text-pph-muted">
               {g.status}
             </h2>
-            <ul className="rounded-md border border-neutral-200 divide-y divide-neutral-100">
+            <ul className="divide-pph-elevated overflow-hidden rounded-[16px] bg-pph-elevated">
               {g.items.map((v) => (
                 <li
                   key={v.id}
-                  className={`flex items-center justify-between px-3 py-3 text-sm ${
+                  className={`flex items-center justify-between px-4 py-3 ${
                     g.status === "expired" || g.status === "void" ? "opacity-55" : ""
                   }`}
                 >
-                  <div>
-                    <div className="font-bold">{v.rewardName}</div>
-                    <div className="text-xs text-neutral-500">
+                  <div className="min-w-0 flex-1">
+                    <div className="font-display text-[14px] uppercase text-pph">
+                      {v.rewardName}
+                    </div>
+                    <div className="mt-0.5 font-body text-[12px] text-pph-muted">
                       {g.status === "issued" ? `Expires ${relative(v.expiresAt)}` : null}
-                      {g.status === "applied" && v.appliedAt ? `Applied ${relative(v.appliedAt)}` : null}
+                      {g.status === "applied" && v.appliedAt
+                        ? `Applied ${relative(v.appliedAt)}`
+                        : null}
                       {g.status === "expired" ? `Expired ${relative(v.expiresAt)}` : null}
                       {g.status === "void" ? "Voided" : null}
                     </div>

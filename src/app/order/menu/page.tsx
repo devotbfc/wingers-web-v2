@@ -1,14 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useCart } from "@/lib/cart/context";
+import { LOCATIONS } from "@/lib/locations";
 import { useAuth, authStore } from "@/lib/pph/auth-store";
 import { useLocations, useMenu } from "@/lib/pph/hooks";
 import type { MenuItem } from "@/lib/pph/types";
 import { useOrderStack } from "@/lib/order-stack/context";
 import { BasketBar } from "@/components/pph/BasketBar";
-import { DeliverySheet } from "@/components/pph/DeliverySheet";
+import { DeliverySheet, hasDeliveryLinks } from "@/components/pph/DeliverySheet";
 import { ItemSheet } from "@/components/pph/ItemSheet";
 import { LocationSheet } from "@/components/pph/LocationSheet";
 import { MenuList } from "@/components/pph/MenuList";
@@ -57,6 +58,21 @@ export default function MenuPage() {
     authStore.rehydrate();
   }, []);
 
+  // Resolve the site Location (LOCATIONS) matching the active PPH location
+  // by name — PPH doesn't ship delivery URLs on the wire, so they live on
+  // the per-shop site Location config. hasDeliveryLinks() gates the
+  // "Prefer delivery?" entry.
+  const deliveryLinks = useMemo(() => {
+    if (!activeLocation) return null;
+    const siteLoc = LOCATIONS.find((l) => activeLocation.name.toLowerCase().includes(l.slug.replace(/-/g, " ")));
+    if (!siteLoc) return null;
+    return {
+      deliverooUrl: siteLoc.deliverooUrl ?? null,
+      uberEatsUrl: siteLoc.uberEatsUrl ?? null,
+      justEatUrl: siteLoc.justEatUrl ?? null,
+    };
+  }, [activeLocation]);
+
   const topActive = active[0] ?? null;
 
   return (
@@ -68,35 +84,34 @@ export default function MenuPage() {
             <button
               type="button"
               onClick={() => setLocSheetOpen(true)}
-              className="rounded-md bg-brand-pink px-2 py-1 text-xs font-bold uppercase text-brand-black"
+              className="rounded-pill bg-pph-elevated px-3 py-1.5 font-display text-[11px] uppercase text-pph"
             >
               Change
             </button>
             <Link
               href="/order/account"
-              className="rounded-md border border-neutral-200 px-2 py-1 text-xs font-bold uppercase"
+              className="rounded-pill bg-pph-elevated px-3 py-1.5 font-display text-[11px] uppercase text-pph"
             >
               {auth.status === "authenticated" ? "Account" : "Sign in"}
             </Link>
           </>
         }
       />
-      {topActive ? (
-        <div className="px-4 pt-3">
-          <OrderStatusCard order={topActive} />
+      {topActive ? <OrderStatusCard order={topActive} /> : null}
+      {hasDeliveryLinks(deliveryLinks) ? (
+        <div className="px-6 pt-3">
+          <button
+            type="button"
+            onClick={() => setDeliveryOpen(true)}
+            className="flex min-h-[48px] w-full items-center justify-between rounded-pill bg-pph-elevated px-5 font-display text-[13px] uppercase text-pph hover:opacity-90"
+          >
+            Prefer delivery?
+            <span className="text-pph-pink">→</span>
+          </button>
         </div>
       ) : null}
-      <div className="px-4 pt-3">
-        <button
-          type="button"
-          onClick={() => setDeliveryOpen(true)}
-          className="w-full rounded-md border border-neutral-200 px-3 py-2 text-sm font-bold"
-        >
-          Prefer delivery? Open an aggregator →
-        </button>
-      </div>
       {loading || !menu ? (
-        <div className="p-6 text-sm text-neutral-500">Loading menu…</div>
+        <div className="p-6 font-body text-[14px] text-pph-muted">Loading menu…</div>
       ) : (
         <MenuList
           menu={menu}
@@ -106,7 +121,9 @@ export default function MenuPage() {
           }}
         />
       )}
-      <DeliverySheet open={deliveryOpen} onOpenChange={setDeliveryOpen} />
+      {deliveryLinks ? (
+        <DeliverySheet open={deliveryOpen} onOpenChange={setDeliveryOpen} links={deliveryLinks} />
+      ) : null}
       <BasketBar />
       <LocationSheet
         open={locSheetOpen}

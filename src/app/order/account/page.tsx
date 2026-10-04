@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { BrandButton } from "@/components/brand/BrandButton";
 import { BlueLightBadge } from "@/components/pph/BlueLightBadge";
 import { PointsPill } from "@/components/pph/PointsPill";
 import { TopBar } from "@/components/pph/TopBar";
@@ -36,14 +36,20 @@ export default function AccountPage() {
     return (
       <>
         <TopBar title="Account" backHref="/order/menu" />
-        <main className="flex-1 p-6 text-center">
-          <p className="mb-3 text-sm text-neutral-600">
+        <main className="flex-1 space-y-3 p-6 text-center">
+          <p className="font-body text-[14px] text-pph-muted">
             Sign in to see your points, vouchers and order history.
           </p>
-          <BrandButton variant="primary" size="lg" className="w-full" href="/order/auth/login?returnTo=/order/account">
+          <Link
+            href="/order/auth/login?returnTo=/order/account"
+            className="inline-flex h-14 w-full items-center justify-center rounded-pill bg-pph-pink font-display text-[15px] uppercase text-pph-bg hover:brightness-95"
+          >
             Sign in
-          </BrandButton>
-          <Link href="/order/auth/signup?returnTo=/order/account" className="mt-2 block text-sm underline">
+          </Link>
+          <Link
+            href="/order/auth/signup?returnTo=/order/account"
+            className="block font-display text-[13px] uppercase text-pph underline"
+          >
             Create an account
           </Link>
         </main>
@@ -58,14 +64,16 @@ export default function AccountPage() {
   return (
     <>
       <TopBar title="Account" backHref="/order/menu" />
-      <main className="flex-1 space-y-4 p-4 pb-8">
-        <section className="rounded-md border border-neutral-200 p-4">
-          <div className="flex items-start justify-between">
-            <div>
-              <div className="font-display text-lg font-bold">
+      <main className="flex-1 space-y-4 px-6 pb-8 pt-4">
+        <section className="rounded-[20px] bg-pph-elevated px-5 py-4">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <div className="font-display text-[20px] uppercase text-pph">
                 {auth.user?.firstName} {auth.user?.lastName}
               </div>
-              <div className="text-xs text-neutral-500">{auth.user?.email}</div>
+              <div className="mt-0.5 font-body text-[12px] text-pph-muted">
+                {auth.user?.email}
+              </div>
               {bl ? (
                 <div className="mt-2">
                   <BlueLightBadge variant="verified" />
@@ -75,7 +83,7 @@ export default function AccountPage() {
             {loyalty ? <PointsPill points={loyalty.points} /> : null}
           </div>
           {loyalty ? (
-            <div className="mt-3 text-xs text-neutral-600">
+            <div className="mt-3 font-body text-[13px] text-pph-muted">
               {loyalty.tierName}
               {loyalty.nextTierAt != null
                 ? ` · ${Math.max(0, loyalty.nextTierAt - loyalty.lifetimePoints)} pts to next tier`
@@ -84,7 +92,7 @@ export default function AccountPage() {
           ) : null}
         </section>
 
-        <nav className="rounded-md border border-neutral-200">
+        <nav className="divide-pph-elevated overflow-hidden rounded-[20px] bg-pph-elevated">
           <AccountRow href="/order/account/loyalty" label="Loyalty & rewards" />
           <AccountRow href="/order/account/vouchers" label="Vouchers" />
           <AccountRow href="/order/history" label="Order history" />
@@ -100,7 +108,7 @@ export default function AccountPage() {
             }
             authStore.markUnauthenticated();
           }}
-          className="w-full py-3 text-sm text-neutral-500 underline"
+          className="block w-full py-3 text-center font-display text-[13px] uppercase text-pph-muted underline"
         >
           Sign out
         </button>
@@ -113,10 +121,10 @@ function AccountRow({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      className="flex items-center justify-between border-b border-neutral-100 px-3 py-3 text-sm last:border-b-0"
+      className="flex min-h-[52px] items-center justify-between px-5 py-3 font-display text-[14px] uppercase text-pph hover:bg-black/10"
     >
       <span>{label}</span>
-      <span className="text-neutral-400">→</span>
+      <ChevronRight className="h-4 w-4 text-pph-muted" strokeWidth={1.5} />
     </Link>
   );
 }
