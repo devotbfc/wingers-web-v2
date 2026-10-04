@@ -39,7 +39,7 @@ function LocationSwitcher({
             aria-checked={active}
             onClick={() => onChange(loc.slug)}
             className={cn(
-              "min-h-11 px-4 font-display text-sm font-bold uppercase tracking-wide transition-colors",
+              "min-h-11 rounded-md px-4 font-display text-sm font-bold uppercase tracking-wide transition-colors",
               active
                 ? "bg-brand-pink text-brand-black"
                 : "bg-brand-white text-brand-black border border-brand-black/15 hover:bg-brand-black/5"
@@ -79,7 +79,7 @@ function SectionRail({
             }}
             aria-current={active ? "true" : undefined}
             className={cn(
-              "flex min-h-11 shrink-0 snap-start items-center whitespace-nowrap px-4 font-display text-sm font-bold uppercase tracking-wide transition-colors",
+              "flex min-h-11 shrink-0 snap-start items-center whitespace-nowrap rounded-md px-4 font-display text-sm font-bold uppercase tracking-wide transition-colors",
               active
                 ? "bg-brand-pink text-brand-black"
                 : "bg-brand-white text-brand-black border border-brand-black/15 hover:bg-brand-black/5"

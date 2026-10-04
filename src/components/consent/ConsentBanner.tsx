@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { BrandButton } from "@/components/brand/BrandButton";
 import { useConsent } from "./ConsentProvider";
 
 export function ConsentBanner() {
@@ -25,20 +26,22 @@ export function ConsentBanner() {
           .
         </p>
         <div className="flex gap-3">
-          <button
-            type="button"
+          <BrandButton
+            variant="outline"
+            size="sm"
             onClick={reject}
-            className="min-h-[44px] flex-1 border border-brand-black/40 bg-brand-white px-5 font-display text-sm font-bold uppercase tracking-wide text-brand-black transition-colors hover:bg-brand-black/5 md:flex-none"
+            className="min-h-[44px] flex-1 md:flex-none"
           >
             Reject
-          </button>
-          <button
-            type="button"
+          </BrandButton>
+          <BrandButton
+            variant="outline"
+            size="sm"
             onClick={accept}
-            className="min-h-[44px] flex-1 bg-brand-pink px-5 font-display text-sm font-bold uppercase tracking-wide text-brand-black transition-colors hover:brightness-95 md:flex-none"
+            className="min-h-[44px] flex-1 md:flex-none"
           >
             Accept
-          </button>
+          </BrandButton>
         </div>
       </div>
     </div>

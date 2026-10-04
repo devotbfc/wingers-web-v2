@@ -249,7 +249,7 @@ export default async function LocationDetailPage({ params }: RouteProps) {
                   href={directionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  variant="primary"
+                  variant="outline"
                   size="lg"
                   className="min-h-11 w-full justify-center"
                 >

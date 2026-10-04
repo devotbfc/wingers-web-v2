@@ -249,7 +249,7 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
             aria-expanded={showAllergens}
             aria-controls={`allergens-${item.slug}`}
             onClick={() => setShowAllergens((v) => !v)}
-            className="-my-2 inline-flex min-h-11 items-center gap-1 py-2 font-body text-[10px] uppercase tracking-[0.18em] text-brand-black/70 transition-colors hover:text-brand-black"
+            className="-my-2 inline-flex min-h-11 items-center gap-1 rounded-md px-2 py-2 font-body text-[10px] uppercase tracking-[0.18em] text-brand-black/70 transition-colors hover:text-brand-black"
           >
             Allergens
             <span aria-hidden="true" className="font-mono text-xs leading-none">

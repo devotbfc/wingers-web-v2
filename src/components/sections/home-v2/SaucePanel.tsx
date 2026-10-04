@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { BrandButton } from "@/components/brand/BrandButton";
 
 const HEADLINE_LINES = ["SAUCE IS NOT", "OPTIONAL."] as const;
 
@@ -49,13 +49,14 @@ export function SaucePanel() {
           ))}
         </h2>
 
-        <Link
-          href="/menu"
-          className="inline-flex min-h-11 items-center gap-2 self-start rounded-full bg-brand-white px-6 font-display text-base font-bold uppercase tracking-wide text-brand-black transition-colors hover:bg-brand-pink"
-        >
-          Our Flavours
-          <ArrowRight className="h-5 w-5" aria-hidden="true" />
-        </Link>
+        <div className="self-start">
+          <BrandButton variant="outline" size="md" href="/flavour-lab">
+            <span className="inline-flex items-center gap-2">
+              Our Flavours
+              <ArrowRight className="h-5 w-5" aria-hidden="true" />
+            </span>
+          </BrandButton>
+        </div>
       </div>
     </section>
   );

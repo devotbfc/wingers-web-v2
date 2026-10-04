@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { BrandButton } from "@/components/brand/BrandButton";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { FlaskGlyph } from "@/components/ui/FlaskGlyph";
 import {
@@ -109,13 +110,14 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
             </Link>
           </li>
           <li>
-            <button
-              type="button"
+            <BrandButton
+              variant="primary"
+              size="md"
               onClick={() => openPanel()}
-              className="font-display font-bold uppercase tracking-wide text-sm px-5 h-10 transition-colors bg-brand-red text-brand-white hover:bg-brand-pink hover:text-brand-black"
+              className="text-sm px-5"
             >
               Order
-            </button>
+            </BrandButton>
           </li>
         </ul>
 
@@ -124,7 +126,7 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
           aria-label="Open menu"
           onClick={() => setMobileOpen(true)}
           className={cn(
-            "md:hidden inline-flex items-center justify-center h-10 w-10 transition-colors",
+            "md:hidden inline-flex items-center justify-center h-10 w-10 rounded-md transition-colors",
             "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red",
             scrolled || !onDark ? "text-brand-black" : "text-brand-white"
           )}
@@ -159,7 +161,7 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
               type="button"
               aria-label="Close menu"
               onClick={() => setMobileOpen(false)}
-              className="inline-flex items-center justify-center h-10 w-10 text-brand-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red"
+              className="inline-flex items-center justify-center h-10 w-10 rounded-md text-brand-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red"
             >
               <X className="h-6 w-6" aria-hidden="true" />
             </button>
@@ -190,13 +192,14 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
               </Link>
             </li>
             <li className="mt-4">
-              <button
-                type="button"
+              <BrandButton
+                variant="primary"
+                size="lg"
                 onClick={handleOrderClick}
-                className="w-full bg-brand-pink text-brand-black font-display font-extrabold uppercase tracking-tight text-3xl py-4 hover:bg-brand-red hover:text-brand-white transition-colors"
+                className="w-full justify-center h-auto py-4 text-3xl font-extrabold tracking-tight"
               >
                 Order
-              </button>
+              </BrandButton>
             </li>
           </ul>
         </SheetContent>
