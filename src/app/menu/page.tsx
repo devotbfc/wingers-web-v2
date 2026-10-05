@@ -112,11 +112,9 @@ export default function MenuPage() {
               THE MENU
             </h1>
             <p className="mt-4 max-w-2xl font-body text-base leading-relaxed text-brand-black/75 md:text-lg">
-              Wingers serves halal buttermilk fried chicken across Milton Keynes
-              and Northampton. Wings, boneless, tenders, burgers, loaded fries,
-              mac and cheese, sides, shakes and cookies — every item is
-              halal-certified. Prices and availability vary by shop; pick yours
-              below.
+              Wingers serves buttermilk halal fried chicken across Milton Keynes
+              and Northampton — every item fully certified. Prices and
+              availability vary by shop; pick yours below.
             </p>
           </div>
         </section>
