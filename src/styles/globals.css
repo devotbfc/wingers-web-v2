@@ -154,6 +154,34 @@
   .animate-flicker {
     animation: lab-flicker 4s ease-in-out infinite;
   }
+
+  /* Sauce shimmer — soft diagonal pink → red sheen drifting across a card
+     background on a slow loop. Behind the content (negative z-index on a
+     pseudo-element that inherits the parent's border-radius). Low opacity
+     via the gradient alpha so text contrast is unaffected. Reuses the same
+     135° pink→red colour palette as SauceEdgeAccent. */
+  .sauce-shimmer {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .sauce-shimmer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      transparent 0%,
+      rgba(255, 111, 181, 0.16) 35%,
+      rgba(255, 45, 45, 0.16) 65%,
+      transparent 100%
+    );
+    background-size: 220% 220%;
+    animation: sauce-shimmer-drift 6s linear infinite;
+  }
 }
 
 @keyframes lab-pulse-ring {
@@ -179,12 +207,20 @@
   97% { opacity: 1; }
 }
 
+@keyframes sauce-shimmer-drift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee-track {
     animation-play-state: paused;
   }
   .animate-glow-ring,
   .animate-flicker {
+    animation: none;
+  }
+  .sauce-shimmer::before {
     animation: none;
   }
 }
