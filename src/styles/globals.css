@@ -15,6 +15,11 @@
      the white-primary system — do not use elsewhere. */
   --color-lab-black: #0A0A0A;
 
+  /* Neon purple used only to mark the active limited-edition slice on the
+     Flavour Lab wheels. LE-only — not part of the white-primary system,
+     not for use anywhere else. See docs/decisions.md amendment. */
+  --color-le-purple: #8B2CFF;
+
   /* Fallback stacks — overridden at runtime by next/font/google CSS variables on <html>.
      See src/app/layout.tsx. Do not rename without updating both files. */
   --font-display: "Bricolage Grotesque", system-ui, sans-serif;
