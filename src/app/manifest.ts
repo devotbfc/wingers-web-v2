@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Wingers — Halal Buttermilk Fried Chicken",
+    name: "Wingers — Buttermilk Halal Fried Chicken",
     short_name: "Wingers",
     description:
-      "Halal buttermilk fried chicken in Milton Keynes and Northampton.",
+      "Buttermilk halal fried chicken in Milton Keynes & Northampton.",
     start_url: "/",
     display: "standalone",
     background_color: "#FFFFFF",
