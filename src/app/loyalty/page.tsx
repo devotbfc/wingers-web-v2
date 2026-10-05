@@ -7,14 +7,14 @@ import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
 import { OrderPanelProvider } from "@/components/sections/order-panel/order-panel-context";
 
 export const metadata: Metadata = {
-  title: "Become a Winger — Loyalty at Wingers",
+  title: "Become a Winger — Wingers Buttermilk Halal Fried Chicken",
   description:
-    "Join the Winger Club. Free wings on your birthday, first dibs on new sauces, member-only drops across Milton Keynes and Northampton.",
+    "Join the Winger Club — the Wingers loyalty programme for buttermilk halal fried chicken fans in Milton Keynes & Northampton.",
   alternates: { canonical: "/loyalty" },
   openGraph: {
-    title: "Become a Winger — Loyalty at Wingers",
+    title: "Become a Winger — Wingers Buttermilk Halal Fried Chicken",
     description:
-      "Free wings on your birthday, first dibs on new sauces, member-only drops. Halal buttermilk fried chicken in Milton Keynes and Northampton.",
+      "Free wings on your birthday, first dibs on new sauces, member-only drops. Buttermilk halal fried chicken in Milton Keynes & Northampton.",
     url: "/loyalty",
     type: "website",
     images: [

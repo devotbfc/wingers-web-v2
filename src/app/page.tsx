@@ -20,14 +20,14 @@ import { TwoSpots } from "@/components/sections/home-v2/TwoSpots";
 
 export const metadata: Metadata = {
   title:
-    "Wingers — Halal Buttermilk Fried Chicken · Milton Keynes & Northampton",
+    "Wingers · Buttermilk Halal Fried Chicken · MK & Northampton",
   description:
-    "Wingers is a halal buttermilk fried chicken shop in Milton Keynes and Northampton. 24-hour buttermilk brine, hand-dredged, fried to order. Wings, tenders, burgers and loaded fries — order online for delivery or collection.",
+    "Wingers · buttermilk halal fried chicken in Milton Keynes & Northampton. 24-hr brined, hand-dredged. Collection online, delivery via the apps.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Wingers — Halal Buttermilk Fried Chicken",
+    title: "Wingers · Buttermilk Halal Fried Chicken",
     description:
-      "Halal buttermilk fried chicken in Milton Keynes and Northampton. Dip it. Bite it. Love it.",
+      "Buttermilk halal fried chicken in Milton Keynes & Northampton. Dip it. Bite it. Love it.",
     url: "/",
     type: "website",
     images: [
