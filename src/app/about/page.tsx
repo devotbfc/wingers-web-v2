@@ -125,8 +125,8 @@ export default function AboutPage() {
               WE ONLY DO ONE THING. PROPERLY.
             </h1>
             <p className="mt-8 max-w-2xl font-body text-lg md:text-xl leading-relaxed text-brand-black">
-              Wingers is a halal buttermilk fried chicken shop in Milton Keynes
-              and Northampton. Every bird brined for 24 hours, hand-dredged, and
+              Wingers is a buttermilk fried chicken shop in Milton Keynes and
+              Northampton. Every bird brined for 24 hours, hand-dredged, and
               fried to order. That is the whole story.
             </p>
           </div>
