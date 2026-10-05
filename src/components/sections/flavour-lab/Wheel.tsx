@@ -2,6 +2,12 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import type { Flavour } from "@/lib/flavours";
+import {
+  WHEEL_FLAME_GRADIENT_ID,
+  WHEEL_FLAME_PATH,
+  pickSliceStyles,
+  type SliceStyle,
+} from "./wheel-palette";
 
 interface WheelProps {
   segments: Flavour[];
@@ -15,35 +21,15 @@ const R = 100;
 const CX = 110;
 const CY = 110;
 
-const PALETTE = [
-  { fill: "var(--color-brand-pink)", text: "var(--color-brand-black)" },
-  { fill: "var(--color-lab-black)", text: "var(--color-brand-white)" },
-  { fill: "var(--color-brand-red)", text: "var(--color-brand-white)" },
-  { fill: "var(--color-lab-black)", text: "var(--color-brand-white)" },
+// Base palette for non-special slices: pink, white, red, lab-black.
+// Label colour per fill for contrast: near-black on pink/white, white on
+// red/lab-black (purple + flame always use white, defined in wheel-palette.ts).
+const PALETTE: readonly SliceStyle[] = [
+  { fill: "var(--color-brand-pink)", text: "var(--color-brand-black)", kind: "palette" },
+  { fill: "var(--color-brand-white)", text: "var(--color-brand-black)", kind: "palette" },
+  { fill: "var(--color-brand-red)", text: "var(--color-brand-white)", kind: "palette" },
+  { fill: "var(--color-lab-black)", text: "var(--color-brand-white)", kind: "palette" },
 ] as const;
-
-// Greedy pass that keeps the natural i % palette.length rotation unless it
-// would make a segment match its neighbour — including the last↔first seam.
-// Compares by fill so duplicate palette entries (e.g. two lab-black slots) are
-// treated as the same colour.
-function pickWheelColorIndices(count: number, fills: readonly string[]): number[] {
-  const out: number[] = [];
-  for (let i = 0; i < count; i++) {
-    const prevFill = i > 0 ? fills[out[i - 1]] : null;
-    const firstFill = i === count - 1 && count > 1 ? fills[out[0]] : null;
-    const conflicts = (idx: number) =>
-      (prevFill !== null && fills[idx] === prevFill) ||
-      (firstFill !== null && fills[idx] === firstFill);
-    let c = i % fills.length;
-    if (conflicts(c)) {
-      for (let p = 0; p < fills.length; p++) {
-        if (!conflicts(p)) { c = p; break; }
-      }
-    }
-    out.push(c);
-  }
-  return out;
-}
 
 function polar(angleDeg: number, radius: number) {
   const a = (angleDeg * Math.PI) / 180;
@@ -77,10 +63,7 @@ export function Wheel({
 }: WheelProps) {
   const reduce = useReducedMotion();
   const step = 360 / segments.length;
-  const segmentColorIndices = pickWheelColorIndices(
-    segments.length,
-    PALETTE.map((p) => p.fill),
-  );
+  const sliceStyles = pickSliceStyles(segments, PALETTE);
 
   return (
     <div className="relative aspect-square w-[min(82vw,340px)] md:w-[520px]">
@@ -115,6 +98,40 @@ export function Wheel({
         role="img"
         aria-label={`Flavour wheel with ${segments.length} flavours`}
       >
+        <defs>
+          {/* Radial flame gradient for heat-5 slices: red at centre → orange
+              → yellow at the rim. userSpaceOnUse anchored at the wheel's
+              centre so the gradient stays centred as the wheel rotates. */}
+          <radialGradient
+            id={WHEEL_FLAME_GRADIENT_ID}
+            cx={CX}
+            cy={CY}
+            r={R}
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0" stopColor="#FF2D2D" />
+            <stop offset="0.6" stopColor="#FF7A00" />
+            <stop offset="1" stopColor="#FFC400" />
+          </radialGradient>
+          {/* Soft purple halo around the LE slice edge. */}
+          <filter
+            id="wheel-le-glow"
+            x="-30%"
+            y="-30%"
+            width="160%"
+            height="160%"
+          >
+            <feGaussianBlur stdDeviation="2" />
+            <feComponentTransfer>
+              <feFuncA type="linear" slope="1.4" />
+            </feComponentTransfer>
+            <feMerge>
+              <feMergeNode />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
         <motion.g
           animate={{ rotate: rotation }}
           transition={
@@ -126,7 +143,7 @@ export function Wheel({
           style={{ transformOrigin: `${CX}px ${CY}px` }}
         >
           {segments.map((seg, i) => {
-            const palette = PALETTE[segmentColorIndices[i]];
+            const style = sliceStyles[i];
             const start = i * step - 90;
             const end = start + step;
             const p1 = polar(start, R);
@@ -136,22 +153,47 @@ export function Wheel({
             const norm = ((mid % 360) + 360) % 360;
             const flip = norm > 90 && norm < 270;
             const rot = flip ? mid + 180 : mid;
+            const pathD = `M ${CX} ${CY} L ${p1.x} ${p1.y} A ${R} ${R} 0 0 1 ${p2.x} ${p2.y} Z`;
             return (
               <g key={seg.slug}>
                 <path
-                  d={`M ${CX} ${CY} L ${p1.x} ${p1.y} A ${R} ${R} 0 0 1 ${p2.x} ${p2.y} Z`}
-                  fill={palette.fill}
-                  stroke="rgba(0,0,0,0.4)"
-                  strokeWidth={0.5}
+                  d={pathD}
+                  fill={style.fill}
+                  stroke={
+                    style.kind === "le"
+                      ? "var(--color-le-purple)"
+                      : "rgba(0,0,0,0.4)"
+                  }
+                  strokeWidth={style.kind === "le" ? 1.2 : 0.5}
+                  filter={style.kind === "le" ? "url(#wheel-le-glow)" : undefined}
                 />
                 <WheelLabel
                   lines={labelLinesFor(seg.wheelLabel ?? seg.name)}
                   x={labelPos.x}
                   y={labelPos.y}
                   rot={rot}
-                  fill={palette.text}
+                  fill={style.text}
                   fontSize={6}
                 />
+                {style.kind === "le" && (
+                  <SliceTag
+                    label="LE"
+                    pos={polar(mid, R * 0.86)}
+                    rot={rot}
+                    fill={style.text}
+                    fontSize={4.5}
+                    flicker
+                  />
+                )}
+                {style.kind === "hot" && (
+                  <SliceFlame
+                    pos={polar(mid, R * 0.86)}
+                    rot={rot}
+                    size={7}
+                    fill={style.text}
+                    flicker
+                  />
+                )}
               </g>
             );
           })}
@@ -231,6 +273,70 @@ function WheelLabel({
         ))
       )}
     </text>
+  );
+}
+
+function SliceTag({
+  label,
+  pos,
+  rot,
+  fill,
+  fontSize,
+  flicker,
+}: {
+  label: string;
+  pos: { x: number; y: number };
+  rot: number;
+  fill: string;
+  fontSize: number;
+  flicker?: boolean;
+}) {
+  return (
+    <text
+      x={pos.x}
+      y={pos.y}
+      fill={fill}
+      fontSize={fontSize}
+      fontWeight="800"
+      letterSpacing="0.1em"
+      textAnchor="middle"
+      dominantBaseline="middle"
+      transform={`rotate(${rot} ${pos.x} ${pos.y})`}
+      className={`font-display uppercase ${flicker ? "animate-flicker" : ""}`}
+      style={{ textShadow: "0 0 4px rgba(139,44,255,0.9)" }}
+    >
+      {label}
+    </text>
+  );
+}
+
+function SliceFlame({
+  pos,
+  rot,
+  size,
+  fill,
+  flicker,
+}: {
+  pos: { x: number; y: number };
+  rot: number;
+  size: number;
+  fill: string;
+  flicker?: boolean;
+}) {
+  const scale = size / 24;
+  const half = size / 2;
+  return (
+    <g
+      transform={`rotate(${rot} ${pos.x} ${pos.y}) translate(${pos.x - half} ${pos.y - half}) scale(${scale})`}
+      className={flicker ? "animate-flicker" : undefined}
+      aria-hidden="true"
+    >
+      <path
+        d={WHEEL_FLAME_PATH}
+        fill={fill}
+        style={{ filter: "drop-shadow(0 0 2px rgba(255,45,45,0.8))" }}
+      />
+    </g>
   );
 }
 

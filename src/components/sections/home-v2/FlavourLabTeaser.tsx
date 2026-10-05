@@ -2,42 +2,24 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { BrandButton } from "@/components/brand/BrandButton";
 import { SPINNABLE_FLAVOURS } from "@/lib/flavours";
+import {
+  WHEEL_FLAME_GRADIENT_ID,
+  WHEEL_FLAME_PATH,
+  pickSliceStyles,
+  type SliceStyle,
+} from "@/components/sections/flavour-lab/wheel-palette";
 
-const PALETTE = [
-  { fill: "var(--color-brand-pink)", text: "var(--color-brand-black)" },
-  { fill: "var(--color-brand-red)", text: "var(--color-brand-white)" },
-  { fill: "var(--color-brand-white)", text: "var(--color-brand-black)" },
+const PALETTE: readonly SliceStyle[] = [
+  { fill: "var(--color-brand-pink)", text: "var(--color-brand-black)", kind: "palette" },
+  { fill: "var(--color-brand-red)", text: "var(--color-brand-white)", kind: "palette" },
+  { fill: "var(--color-brand-white)", text: "var(--color-brand-black)", kind: "palette" },
 ] as const;
 
-// Greedy pass that keeps the natural i % palette.length rotation unless it
-// would make a segment match its neighbour — including the last↔first seam.
-function pickWheelColorIndices(count: number, fills: readonly string[]): number[] {
-  const out: number[] = [];
-  for (let i = 0; i < count; i++) {
-    const prevFill = i > 0 ? fills[out[i - 1]] : null;
-    const firstFill = i === count - 1 && count > 1 ? fills[out[0]] : null;
-    const conflicts = (idx: number) =>
-      (prevFill !== null && fills[idx] === prevFill) ||
-      (firstFill !== null && fills[idx] === firstFill);
-    let c = i % fills.length;
-    if (conflicts(c)) {
-      for (let p = 0; p < fills.length; p++) {
-        if (!conflicts(p)) { c = p; break; }
-      }
-    }
-    out.push(c);
-  }
-  return out;
-}
-
-const SEGMENT_COLORS = pickWheelColorIndices(
-  SPINNABLE_FLAVOURS.length,
-  PALETTE.map((p) => p.fill),
-);
+const SLICE_STYLES = pickSliceStyles(SPINNABLE_FLAVOURS, PALETTE);
 
 const SEGMENTS = SPINNABLE_FLAVOURS.map((f, i) => ({
   label: (f.wheelLabel ?? f.name).toUpperCase(),
-  ...PALETTE[SEGMENT_COLORS[i]],
+  style: SLICE_STYLES[i],
 }));
 
 const R = 100;
@@ -114,6 +96,35 @@ export function FlavourLabTeaser() {
           aria-hidden="true"
           className="h-full w-full motion-safe:animate-[spin_28s_linear_infinite]"
         >
+          <defs>
+            <radialGradient
+              id={WHEEL_FLAME_GRADIENT_ID}
+              cx={CX}
+              cy={CY}
+              r={R}
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop offset="0" stopColor="#FF2D2D" />
+              <stop offset="0.6" stopColor="#FF7A00" />
+              <stop offset="1" stopColor="#FFC400" />
+            </radialGradient>
+            <filter
+              id="wheel-le-glow"
+              x="-30%"
+              y="-30%"
+              width="160%"
+              height="160%"
+            >
+              <feGaussianBlur stdDeviation="2" />
+              <feComponentTransfer>
+                <feFuncA type="linear" slope="1.4" />
+              </feComponentTransfer>
+              <feMerge>
+                <feMergeNode />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
           {SEGMENTS.map((seg, i) => {
             const start = i * step - 90;
             const end = start + step;
@@ -121,14 +132,19 @@ export function FlavourLabTeaser() {
             const p2 = polar(end, R);
             const mid = start + step / 2;
             const labelPos = polar(mid, R * 0.58);
+            const tagPos = polar(mid, R * 0.86);
             const norm = ((mid % 360) + 360) % 360;
             const flip = norm > 90 && norm < 270;
             const rot = flip ? mid + 180 : mid;
+            const pathD = `M ${CX} ${CY} L ${p1.x} ${p1.y} A ${R} ${R} 0 0 1 ${p2.x} ${p2.y} Z`;
             return (
               <g key={seg.label}>
                 <path
-                  d={`M ${CX} ${CY} L ${p1.x} ${p1.y} A ${R} ${R} 0 0 1 ${p2.x} ${p2.y} Z`}
-                  fill={seg.fill}
+                  d={pathD}
+                  fill={seg.style.fill}
+                  stroke={seg.style.kind === "le" ? "var(--color-le-purple)" : undefined}
+                  strokeWidth={seg.style.kind === "le" ? 1.2 : undefined}
+                  filter={seg.style.kind === "le" ? "url(#wheel-le-glow)" : undefined}
                 />
                 {(() => {
                   const lines = labelLinesFor(seg.label);
@@ -136,7 +152,7 @@ export function FlavourLabTeaser() {
                     <text
                       x={labelPos.x}
                       y={labelPos.y}
-                      fill={seg.text}
+                      fill={seg.style.text}
                       fontSize="5.5"
                       fontWeight="800"
                       letterSpacing="0.02em"
@@ -157,6 +173,36 @@ export function FlavourLabTeaser() {
                     </text>
                   );
                 })()}
+                {seg.style.kind === "le" && (
+                  <text
+                    x={tagPos.x}
+                    y={tagPos.y}
+                    fill={seg.style.text}
+                    fontSize="4"
+                    fontWeight="800"
+                    letterSpacing="0.1em"
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    transform={`rotate(${rot} ${tagPos.x} ${tagPos.y})`}
+                    className="font-display uppercase animate-flicker"
+                    style={{ textShadow: "0 0 4px rgba(139,44,255,0.9)" }}
+                  >
+                    LE
+                  </text>
+                )}
+                {seg.style.kind === "hot" && (
+                  <g
+                    transform={`rotate(${rot} ${tagPos.x} ${tagPos.y}) translate(${tagPos.x - 3.25} ${tagPos.y - 3.25}) scale(${6.5 / 24})`}
+                    className="animate-flicker"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d={WHEEL_FLAME_PATH}
+                      fill={seg.style.text}
+                      style={{ filter: "drop-shadow(0 0 2px rgba(255,45,45,0.8))" }}
+                    />
+                  </g>
+                )}
               </g>
             );
           })}

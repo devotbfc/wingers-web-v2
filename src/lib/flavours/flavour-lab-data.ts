@@ -18,6 +18,9 @@
 //                      labels onto two lines as a safety net.
 //     • Spelling fixes: "Caribbean Coconut" (was "Carribean"), "Singapore Zing" (was "Sinapore").
 //     • Katsu.shortDescription: hand-written pre-launch; long-form story fields still null.
+//     • Katsu.pairsWith: hand-edited to "Cali Mayo, Ranch" so suggestDipsFor
+//       returns something for the only currently-active LE (and so the wheel
+//       result card has dips to render). Port into the sheet when regenerating.
 //     • Hot Honey: moved from core/non-LE → past/LE. It ran as a drop and has now finished.
 //     • Thai City, Hot Maple, Honey Butter, Soul City, Korean Red Hot, American Hot BBQ,
 //       Honey Mustard, Caribbean Coconut, Singapore Zing, Wing No1: moved from incoming → past.
@@ -239,12 +242,12 @@ export const FLAVOURS: Flavour[] = [
     "howMade": null,
     "sourcedFrom": null,
     "history": null,
-    "pairsWith": null,
+    "pairsWith": "Cali Mayo, Ranch",
     "status": "active"
   },
-  // TODO(copy): Katsu's long-form story (howMade / sourcedFrom / history /
-  // pairsWith) is pending. FlavourCard hides the "More" button until at least
-  // one long-form field is populated.
+  // TODO(copy): Katsu's long-form story (howMade / sourcedFrom / history) is
+  // pending. FlavourCard hides the "More" button until at least one long-form
+  // field is populated. pairsWith is now populated (see header comment).
   {
     "slug": "thai-city",
     "name": "Thai City",
@@ -427,9 +430,64 @@ export function numberToWord(n: number): string {
   return String(n);
 }
 
-// Suggest a dip to pair with a spun flavour (uses dip.pairsWith text match, falls back to first dip).
-export function suggestDipFor(flavour: Flavour): Dip | null {
-  if (DIPS.length === 0) return null;
-  const match = DIPS.find(d => d.pairsWith && d.pairsWith.toLowerCase().includes(flavour.name.toLowerCase().split(" ")[0]));
-  return match ?? DIPS[0] ?? null;
+// Suggest up to `max` dips for a spun flavour. Parses the FLAVOUR's own
+// `pairsWith` (comma-separated list of names), maps each token to a known Dip
+// via aliases, drops non-dip pairings (e.g. "Tennessee B.B.Q"), dedupes and
+// preserves the listed order. Falls back when the flavour has no pairsWith:
+// Katsu → Cali Mayo + Ranch (safe sweet/savoury partners for the only live
+// LE); everything else → Ranch (goes with everything).
+//
+// Previous implementation `suggestDipFor` matched against DIP.pairsWith, which
+// is null for every dip, so it always returned DIPS[0] (Blue Cheese) — hence
+// Blue Cheese appeared under every wheel result. Replaced here.
+const DIP_ALIASES: Record<string, string> = {
+  "blue cheese": "blue-cheese",
+  "ranch": "ranch",
+  "cali mayo": "california-sauce-mayo",
+  "california": "california-sauce-mayo",
+  "california sauce": "california-sauce-mayo",
+  "california sauce / mayo": "california-sauce-mayo",
+  "mayo": "california-sauce-mayo",
+  "honey mustard": "honey-mustard",
+};
+
+function resolveDipSlug(token: string): string | null {
+  const key = token.trim().toLowerCase();
+  if (!key) return null;
+  return DIP_ALIASES[key] ?? null;
+}
+
+export function suggestDipsFor(flavour: Flavour, max = 2): Dip[] {
+  if (DIPS.length === 0 || max <= 0) return [];
+
+  const picks: Dip[] = [];
+  const seen = new Set<string>();
+
+  const tokens = flavour.pairsWith ? flavour.pairsWith.split(",") : [];
+  for (const token of tokens) {
+    const slug = resolveDipSlug(token);
+    if (!slug || seen.has(slug)) continue;
+    const dip = DIPS.find((d) => d.slug === slug);
+    if (!dip) continue;
+    seen.add(slug);
+    picks.push(dip);
+    if (picks.length >= max) return picks;
+  }
+
+  if (picks.length > 0) return picks;
+
+  // Fallback — no parseable pairings on this flavour.
+  const fallbackSlugs =
+    flavour.slug === "katsu"
+      ? ["california-sauce-mayo", "ranch"]
+      : ["ranch"];
+  for (const slug of fallbackSlugs) {
+    const dip = DIPS.find((d) => d.slug === slug);
+    if (dip && !seen.has(slug)) {
+      seen.add(slug);
+      picks.push(dip);
+      if (picks.length >= max) break;
+    }
+  }
+  return picks;
 }
