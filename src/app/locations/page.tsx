@@ -42,9 +42,10 @@ export default function LocationsPage() {
               FIND US.
             </h1>
             <p className="mt-6 max-w-2xl font-body text-base leading-relaxed text-brand-black/80 md:text-lg">
-              Wingers has two halal buttermilk fried chicken shops: Milton
-              Keynes and Northampton. Both are halal-certified. Order online
-              for delivery or collection, or drop in and get stuck in.
+              Wingers has two buttermilk halal fried chicken shops: Milton
+              Keynes and Northampton — both fully certified. Order online
+              for collection, delivery through the apps, or drop in and get
+              stuck in.
             </p>
           </div>
         </section>
