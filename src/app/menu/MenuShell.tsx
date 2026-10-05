@@ -190,7 +190,7 @@ export function MenuShell({
           >
             <h2
               id={`${group.id}-heading`}
-              className="font-ui text-4xl uppercase leading-[0.95] tracking-tight text-brand-black md:text-6xl"
+              className="font-display font-extrabold text-3xl uppercase leading-[0.95] tracking-tight text-brand-black md:text-5xl"
             >
               {group.label}
             </h2>
@@ -210,7 +210,7 @@ export function MenuShell({
               group.subSections.map((sub) => (
                 <div key={sub.slug} className="mt-6 first:mt-6">
                   {group.showSubHeadings && (
-                    <h3 className="font-ui text-2xl uppercase tracking-[0.02em] text-brand-black/85 md:text-3xl">
+                    <h3 className="font-display font-extrabold text-xl uppercase tracking-tight text-brand-black/85 md:text-2xl">
                       {sub.name}
                     </h3>
                   )}
@@ -240,7 +240,7 @@ export function MenuShell({
           >
             <h2
               id={`${PAST_DROPS_ID}-heading`}
-              className="font-ui text-4xl uppercase leading-[0.95] tracking-tight text-brand-black/60 md:text-6xl"
+              className="font-display font-extrabold text-3xl uppercase leading-[0.95] tracking-tight text-brand-black/60 md:text-5xl"
             >
               Past Drops
             </h2>
