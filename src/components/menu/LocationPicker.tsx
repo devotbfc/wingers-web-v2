@@ -56,7 +56,7 @@ export function LocationPicker({ value, onChange }: LocationPickerProps) {
   return (
     <>
       <div className="flex flex-col items-center gap-1">
-        <span className="font-ui text-xs uppercase tracking-[0.25em] text-brand-black/60">
+        <span className="font-display font-extrabold text-[11px] uppercase tracking-[0.02em] text-brand-black/60">
           Pick up
         </span>
         <button
@@ -64,7 +64,7 @@ export function LocationPicker({ value, onChange }: LocationPickerProps) {
           onClick={() => setOpen(true)}
           aria-haspopup="dialog"
           aria-expanded={open}
-          className="inline-flex items-center gap-1.5 font-ui text-xl uppercase tracking-[0.02em] text-brand-pink transition-opacity hover:opacity-80 md:text-2xl"
+          className="inline-flex items-center gap-1.5 font-display font-extrabold text-lg uppercase tracking-[0.02em] text-brand-pink transition-opacity hover:opacity-80 md:text-xl"
         >
           <MapPin className="h-5 w-5" />
           <span>{current.name}</span>

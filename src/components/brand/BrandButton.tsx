@@ -42,13 +42,10 @@ const variantClasses: Record<BrandButtonVariant, string> = {
     "bg-brand-white text-brand-black border-2 border-brand-black hover:bg-brand-red hover:text-brand-white hover:border-brand-red focus-visible:bg-brand-red focus-visible:text-brand-white focus-visible:border-brand-red rounded-full shadow-none",
 };
 
-// Anton is condensed — characters sit narrower than Bricolage, so we bump
-// text-size by one notch at md/lg and lean on a slightly wider tracking so
-// uppercase labels stay legible without clipping the button height.
 const sizeClasses: Record<BrandButtonSize, string> = {
   sm: "h-8 px-4 text-sm",
-  md: "h-10 px-6 text-lg",
-  lg: "h-12 px-8 text-xl",
+  md: "h-10 px-6 text-base",
+  lg: "h-12 px-8 text-lg",
 };
 
 export function BrandButton({
@@ -65,7 +62,7 @@ export function BrandButton({
   "aria-label": ariaLabel,
 }: BrandButtonProps) {
   const classes = cn(
-    "font-ui uppercase tracking-[0.04em] transition-colors",
+    "font-display font-extrabold uppercase tracking-[0.02em] transition-colors",
     variantClasses[variant],
     sizeClasses[size],
     className
