@@ -28,9 +28,9 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
-  title: "Wingers — Buttermilk Fried Chicken",
+  title: "Wingers — Buttermilk Halal Fried Chicken",
   description:
-    "Wingers serves buttermilk fried chicken in Milton Keynes and Northampton. Order online for delivery or collection.",
+    "Wingers serves buttermilk halal fried chicken in Milton Keynes & Northampton. Order for collection or delivery via the apps.",
   openGraph: {
     siteName: "Wingers",
     locale: "en_GB",

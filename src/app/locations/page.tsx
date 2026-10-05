@@ -7,14 +7,14 @@ import { LocationCard } from "@/components/locations/LocationCard";
 import { LOCATIONS } from "@/lib/locations";
 
 export const metadata: Metadata = {
-  title: "Find Us — Wingers Halal Fried Chicken in Milton Keynes & Northampton",
+  title: "Find Us — Buttermilk Halal Fried Chicken · MK & Northampton",
   description:
-    "Wingers has two halal buttermilk fried chicken shops: Milton Keynes and Northampton. Opening hours, addresses and directions.",
+    "Wingers has two buttermilk halal fried chicken shops: Milton Keynes & Northampton. Opening hours, addresses and directions.",
   alternates: { canonical: "/locations" },
   openGraph: {
-    title: "Find Wingers — Milton Keynes & Northampton",
+    title: "Find Wingers — Buttermilk Halal Fried Chicken",
     description:
-      "Two halal buttermilk fried chicken shops. Wings, tenders, burgers and loaded fries — order online or drop in.",
+      "Two buttermilk halal fried chicken shops in Milton Keynes & Northampton. Order for collection or delivery via the apps.",
     url: "/locations",
     type: "website",
     images: [
@@ -42,9 +42,10 @@ export default function LocationsPage() {
               FIND US.
             </h1>
             <p className="mt-6 max-w-2xl font-body text-base leading-relaxed text-brand-black/80 md:text-lg">
-              Wingers has two halal buttermilk fried chicken shops: Milton
-              Keynes and Northampton. Both are halal-certified. Order online
-              for delivery or collection, or drop in and get stuck in.
+              Wingers has two buttermilk halal fried chicken shops: Milton
+              Keynes and Northampton — both fully certified. Order online
+              for collection, delivery through the apps, or drop in and get
+              stuck in.
             </p>
           </div>
         </section>

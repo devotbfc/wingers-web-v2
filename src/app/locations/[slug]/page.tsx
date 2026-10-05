@@ -42,8 +42,8 @@ export async function generateMetadata({
   if (!location) return {};
   const townForCopy = location.address.city.split(",")[0].trim();
   const canonical = `/locations/${location.slug}`;
-  const title = `${location.name} — Halal Fried Chicken in ${townForCopy}`;
-  const description = `${location.name} is a halal buttermilk fried chicken shop in ${townForCopy}. Opening hours, address and directions — order online for delivery or collection.`;
+  const title = `${location.name} — Buttermilk Halal Fried Chicken`;
+  const description = `${location.name} is a buttermilk halal fried chicken shop in ${townForCopy}. Opening hours, address and directions.`;
   return {
     title,
     description,
@@ -99,7 +99,7 @@ function buildLocationJsonLd(location: Location) {
     openingHoursSpecification,
     hasMenu: `${SITE_URL}/menu`,
     suitableForDiet: "https://schema.org/HalalDiet",
-    description: `Halal buttermilk fried chicken shop in ${townForCopy}. Wings, tenders, burgers, loaded fries and sides — order online for delivery or collection.`,
+    description: `Buttermilk halal fried chicken shop in ${townForCopy}. Wings, tenders, burgers, loaded fries and sides — order for collection, delivery via the apps.`,
   };
 
   if (location.phone) base.telephone = location.phone;

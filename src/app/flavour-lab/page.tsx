@@ -15,14 +15,14 @@ import { SPINNABLE_FLAVOURS } from "@/lib/flavours";
 
 // data-todo="assets" — using sitewide /og/home.jpg until per-page Flavour Lab art ships (ADR-014).
 export const metadata: Metadata = {
-  title: "Flavour Lab — Wingers",
+  title: "Flavour Lab — Wingers Buttermilk Halal Fried Chicken",
   description:
-    "Meet the sauces and rubs. Spin the wheel, filter by heat, get stuck in. Wingers halal buttermilk fried chicken — Milton Keynes and Northampton.",
+    "Meet the sauces and rubs. Spin the wheel. Find your flavour. Wingers buttermilk halal fried chicken in Milton Keynes & Northampton.",
   alternates: { canonical: "/flavour-lab" },
   openGraph: {
-    title: "Flavour Lab — Wingers",
+    title: "Flavour Lab — Wingers Buttermilk Halal Fried Chicken",
     description:
-      "Twenty-four flavours. One wheel. Halal buttermilk fried chicken in Milton Keynes and Northampton.",
+      "Spin the wheel. Find your flavour. Buttermilk halal fried chicken in Milton Keynes & Northampton.",
     url: "/flavour-lab",
     type: "website",
     images: [

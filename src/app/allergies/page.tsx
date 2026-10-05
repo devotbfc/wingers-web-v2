@@ -11,14 +11,14 @@ import {
 } from "@/lib/menu";
 
 export const metadata: Metadata = {
-  title: "Allergens — Wingers Menu",
+  title: "Allergens — Wingers Buttermilk Halal Fried Chicken Menu",
   description:
-    "Full allergen matrix for all 95 items on the Wingers menu — wings, tenders, burgers, loaded fries, sides, sauces, shakes, churros, kids meals and coolers. Contains and may-contain-traces listed separately for every one of the 14 UK statutory allergens.",
+    "Full allergen matrix for Wingers buttermilk halal fried chicken — 95 items across Milton Keynes & Northampton. UK 14 statutory allergens listed.",
   alternates: { canonical: "/allergies" },
   openGraph: {
-    title: "Allergens — Wingers Menu",
+    title: "Allergens — Wingers Buttermilk Halal Fried Chicken Menu",
     description:
-      "Full allergen matrix for every item on the Wingers menu. UK 14 statutory allergens listed per item.",
+      "Full allergen matrix for the Wingers buttermilk halal fried chicken menu. UK 14 statutory allergens per item.",
     url: "/allergies",
     type: "website",
     images: [

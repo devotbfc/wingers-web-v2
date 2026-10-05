@@ -36,7 +36,7 @@ export function FlavourLabHero() {
         </h1>
 
         <p className="mt-6 max-w-2xl font-body text-lg leading-relaxed text-brand-white md:text-xl">
-          Twenty-four flavours. One wheel. Get stuck in.
+          Spin the wheel. Find your flavour. Get stuck in.
         </p>
 
         <p className="mt-4 max-w-2xl font-body text-base leading-relaxed text-brand-white/60">

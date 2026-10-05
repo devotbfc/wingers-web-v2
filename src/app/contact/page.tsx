@@ -11,14 +11,14 @@ const CONTACT_PHONE =
 const CONTACT_EMAIL = "hi@wingers.co";
 
 export const metadata: Metadata = {
-  title: "Contact Wingers",
+  title: "Contact Wingers — Buttermilk Halal Fried Chicken",
   description:
-    "Get in touch with Wingers — halal buttermilk fried chicken in Milton Keynes and Northampton. Call, email, or find your nearest shop.",
+    "Get in touch with Wingers — buttermilk halal fried chicken in Milton Keynes & Northampton. Call, email, or find your nearest shop.",
   alternates: { canonical: "/contact" },
   openGraph: {
-    title: "Contact Wingers",
+    title: "Contact Wingers — Buttermilk Halal Fried Chicken",
     description:
-      "Call, email, or drop in. Feedback, press, partnerships — halal buttermilk fried chicken in Milton Keynes and Northampton.",
+      "Call, email, or drop in. Buttermilk halal fried chicken in Milton Keynes & Northampton — feedback, press, partnerships welcome.",
     url: "/contact",
     type: "website",
     images: [
