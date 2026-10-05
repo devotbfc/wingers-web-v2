@@ -7,14 +7,14 @@ import { OrderPanelProvider } from "@/components/sections/order-panel/order-pane
 import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTriggerButton";
 
 export const metadata: Metadata = {
-  title: "About Wingers — Buttermilk Fried Chicken",
+  title: "About Wingers — Buttermilk Halal Fried Chicken",
   description:
-    "Wingers is a halal buttermilk fried chicken shop in Milton Keynes and Northampton. 24-hour buttermilk brine, hand-dredged, fried to order.",
+    "About Wingers — buttermilk halal fried chicken in Milton Keynes & Northampton. 24-hr brined, hand-dredged, fried to order.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "About Wingers",
+    title: "About Wingers — Buttermilk Halal Fried Chicken",
     description:
-      "Halal buttermilk fried chicken. Milton Keynes and Northampton. We only do one thing — properly.",
+      "Buttermilk halal fried chicken in Milton Keynes & Northampton. We only do one thing — properly.",
     url: "/about",
     type: "website",
     images: [
