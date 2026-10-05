@@ -173,7 +173,7 @@ export function CategoryBar({ items }: CategoryBarProps) {
               onClick={() => handlePillClick(item)}
               aria-current={active ? "true" : undefined}
               className={cn(
-                "inline-flex h-11 shrink-0 snap-start items-center whitespace-nowrap rounded-full px-4 font-ui text-base uppercase tracking-[0.06em] transition-colors",
+                "inline-flex h-11 shrink-0 snap-start items-center whitespace-nowrap rounded-full px-4 font-display font-extrabold text-[13px] uppercase tracking-[0.02em] transition-colors",
                 active
                   ? "bg-brand-pink text-brand-black"
                   : "bg-brand-warm-grey text-brand-black/85 hover:brightness-95"
