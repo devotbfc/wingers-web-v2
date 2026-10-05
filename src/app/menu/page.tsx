@@ -13,14 +13,14 @@ import {
 import { MenuShell } from "./MenuShell";
 
 export const metadata: Metadata = {
-  title: "Menu — Wingers Halal Buttermilk Fried Chicken",
+  title: "Menu — Buttermilk Halal Fried Chicken · Wingers",
   description:
-    "Halal buttermilk fried chicken in Milton Keynes and Northampton. Wings, boneless, tenders, burgers, loaded fries, mac & cheese, shakes, cookies and more — prices and availability differ per shop.",
+    "The Wingers menu — buttermilk halal fried chicken in Milton Keynes & Northampton. Wings, tenders, burgers, loaded fries, shakes. Prices differ per shop.",
   alternates: { canonical: "/menu" },
   openGraph: {
-    title: "The Wingers Menu",
+    title: "The Wingers Menu — Buttermilk Halal Fried Chicken",
     description:
-      "Halal buttermilk fried chicken in Milton Keynes and Northampton.",
+      "Buttermilk halal fried chicken in Milton Keynes & Northampton. Order for collection or drop in.",
     url: "/menu",
     type: "website",
     images: [
