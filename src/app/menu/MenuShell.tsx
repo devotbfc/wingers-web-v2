@@ -2,9 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import { BeefNorthamptonTeaser } from "@/components/menu/BeefNorthamptonTeaser";
 import { CategoryBar } from "@/components/menu/CategoryBar";
 import { FlavourLabLinkCard } from "@/components/menu/FlavourLabLinkCard";
 import { LimitedEditionSpotlight } from "@/components/menu/LimitedEditionSpotlight";
+import { LocationExclusiveBadge } from "@/components/menu/LocationExclusiveBadge";
 import { LocationPicker } from "@/components/menu/LocationPicker";
 import type { Flavour } from "@/lib/flavours/flavour-lab-data";
 import { LOCATIONS } from "@/lib/locations";
@@ -218,14 +220,23 @@ export function MenuShell({
                   {group.showSubHeadings && (
                     <h3 className="font-display font-extrabold text-xl uppercase tracking-tight text-brand-black/85 md:text-2xl">
                       {sub.name}
+                      {sub.slug === "beef-burgers" && code === "NN" && (
+                        <LocationExclusiveBadge />
+                      )}
                     </h3>
                   )}
                   {sub.allUnavailableHere ? (
-                    <div className="mt-4 border-l-4 border-brand-red bg-brand-pink/15 p-5 text-brand-black">
-                      <p className="font-body text-sm leading-relaxed text-brand-black/80">
-                        {sub.name} is at {otherLocationName} only right now.
-                      </p>
-                    </div>
+                    sub.slug === "beef-burgers" && code === "MK" ? (
+                      <BeefNorthamptonTeaser
+                        onSwitchToNN={() => handleLocationChange("northampton")}
+                      />
+                    ) : (
+                      <div className="mt-4 border-l-4 border-brand-red bg-brand-pink/15 p-5 text-brand-black">
+                        <p className="font-body text-sm leading-relaxed text-brand-black/80">
+                          {sub.name} is at {otherLocationName} only right now.
+                        </p>
+                      </div>
+                    )
                   ) : (
                     <ItemGrid items={sub.items} locationSlug={locationSlug} />
                   )}
