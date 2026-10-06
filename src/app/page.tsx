@@ -10,7 +10,7 @@ const OrderPanel = dynamic(() =>
     (m) => m.OrderPanel,
   ),
 );
-import { BackToTopButton } from "@/components/sections/home-v2/BackToTopButton";
+import { BackToTopButton } from "@/components/common/BackToTopButton";
 import { FlavourLabTeaser } from "@/components/sections/home-v2/FlavourLabTeaser";
 import { Hero } from "@/components/sections/home-v2/Hero";
 import { SaucePanel } from "@/components/sections/home-v2/SaucePanel";

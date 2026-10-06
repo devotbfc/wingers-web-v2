@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import { BackToTopButton } from "@/components/common/BackToTopButton";
 import { BeefNorthamptonTeaser } from "@/components/menu/BeefNorthamptonTeaser";
 import { CategoryBar } from "@/components/menu/CategoryBar";
 import { FlavourLabLinkCard } from "@/components/menu/FlavourLabLinkCard";
@@ -295,6 +296,8 @@ export function MenuShell({
           </section>
         )}
       </div>
+
+      <BackToTopButton anchor="right" appearAfter={400} />
     </>
   );
 }

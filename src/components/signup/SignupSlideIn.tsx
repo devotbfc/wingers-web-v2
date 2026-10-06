@@ -34,6 +34,11 @@ export function SignupSlideIn({
     const previousFocus = document.activeElement as HTMLElement | null;
     closeBtnRef.current?.focus();
 
+    // Advertise open state to peer floating UI (e.g. BackToTopButton) via a
+    // body dataset flag so it can step aside on mobile without pulling in a
+    // shared context.
+    document.body.dataset.signupOpen = "true";
+
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") {
         e.stopPropagation();
@@ -43,6 +48,7 @@ export function SignupSlideIn({
     window.addEventListener("keydown", onKey);
     return () => {
       window.removeEventListener("keydown", onKey);
+      delete document.body.dataset.signupOpen;
       try {
         previousFocus?.focus();
       } catch {}
