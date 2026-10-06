@@ -72,17 +72,30 @@ export const MENU_GROUPS: readonly MenuGroup[] = [
     showSubHeadings: true,
   },
   {
-    slug: "sweets",
-    label: "SWEETS",
+    slug: "desserts",
+    label: "DESSERTS",
     sectionSlugs: ["churros", "nyc-cookies"],
     showSubHeadings: true,
   },
   {
-    slug: "kids",
-    label: "KIDS",
+    slug: "little-wings",
+    label: "LITTLE WINGS",
     sectionSlugs: ["kids"],
     showSubHeadings: false,
   },
+  // MEAL DEALS — Northampton only. Pill sits LAST (after LITTLE WINGS).
+  // When the sheet adds a "meal-deals" section, every deal must carry
+  // unavailableAt: "MK" so this group is dropped entirely on Milton Keynes
+  // (no pill, no banner) — enforced by MenuShell's group-level availability
+  // filter. Each deal shape: a normal MenuItem with its own priceMK/priceNN
+  // plus a display-only `components` list; the cart lives on
+  // Deliverect/Toast so components are never recomposed in-app (ADR).
+  // {
+  //   slug: "meal-deals",
+  //   label: "MEAL DEALS",
+  //   sectionSlugs: ["meal-deals"],
+  //   showSubHeadings: false,
+  // },
 ] as const;
 
 export const MENU_GROUP_IDS = Object.freeze(

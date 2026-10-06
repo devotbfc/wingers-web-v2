@@ -155,8 +155,12 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
       s.size.replace(/^(wings|boneless|tenders)\s+/i, "")
     ) ?? [];
 
+  const missingPrice =
+    priceLabel == null && priceValue == null && item.fromPrice == null;
+
   return (
     <article
+      data-todo={missingPrice ? "price" : undefined}
       className={cn(
         "flex h-full flex-col bg-brand-white",
         isPast && "opacity-60 grayscale"

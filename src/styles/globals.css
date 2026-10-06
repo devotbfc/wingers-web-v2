@@ -159,6 +159,13 @@
     animation: lab-flicker 4s ease-in-out infinite;
   }
 
+  /* Flavour wheel: gentle 2s ease-in-out breathing on the LE and heat-5
+     slice paths. Pulses the path's own opacity only; sibling <text> labels
+     keep opacity 1 so names stay legible throughout. */
+  .animate-slice-pulse {
+    animation: slice-pulse 2s ease-in-out infinite;
+  }
+
   /* Sauce shimmer — soft diagonal pink → red sheen drifting across a card
      background on a slow loop. Behind the content (negative z-index on a
      pseudo-element that inherits the parent's border-radius). Low opacity
@@ -211,6 +218,11 @@
   97% { opacity: 1; }
 }
 
+@keyframes slice-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
 @keyframes sauce-shimmer-drift {
   0% { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }
@@ -221,7 +233,8 @@
     animation-play-state: paused;
   }
   .animate-glow-ring,
-  .animate-flicker {
+  .animate-flicker,
+  .animate-slice-pulse {
     animation: none;
   }
   .sauce-shimmer::before {

@@ -2,9 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import { BackToTopButton } from "@/components/common/BackToTopButton";
+import { BeefNorthamptonTeaser } from "@/components/menu/BeefNorthamptonTeaser";
 import { CategoryBar } from "@/components/menu/CategoryBar";
 import { FlavourLabLinkCard } from "@/components/menu/FlavourLabLinkCard";
+import { LimitedEditionSpotlight } from "@/components/menu/LimitedEditionSpotlight";
+import { LocationExclusiveBadge } from "@/components/menu/LocationExclusiveBadge";
 import { LocationPicker } from "@/components/menu/LocationPicker";
+import type { Flavour } from "@/lib/flavours/flavour-lab-data";
 import { LOCATIONS } from "@/lib/locations";
 import {
   MENU_ITEMS,
@@ -42,10 +47,12 @@ function writeStoredLocation(slug: string): void {
 
 interface MenuShellProps {
   defaultLocationSlug?: string;
+  currentLE?: Flavour | null;
 }
 
 export function MenuShell({
   defaultLocationSlug = "milton-keynes",
+  currentLE = null,
 }: MenuShellProps) {
   const [locationSlug, setLocationSlug] = useState<string>(defaultLocationSlug);
 
@@ -145,16 +152,37 @@ export function MenuShell({
           subSections.length > 0 &&
           subSections.every((s) => s.allUnavailableHere),
       };
-    }).filter((g) => g.hasAny);
+    })
+      // Drop groups that have no items at all, OR groups whose entire set of
+      // items is unavailable at the active location (so e.g. MEAL DEALS, once
+      // Northampton-only data lands, disappears entirely on Milton Keynes —
+      // no pill, no banner).
+      .filter((g) => g.hasAny && !g.allUnavailableHere);
   }, [currentItems, code]);
 
   const barItems = useMemo(
-    () => groups.map((g) => ({ slug: g.slug, label: g.label, id: g.id })),
+    () =>
+      groups.map((g) => ({
+        slug: g.slug,
+        label: g.label,
+        id: g.id,
+        icon:
+          g.slug === "little-wings"
+            ? {
+                src: "/brand/logo/wingers-mark.png",
+                // Native asset is a near-square pink mark on transparent.
+                widthPx: 56,
+                heightPx: 56,
+              }
+            : undefined,
+      })),
     [groups]
   );
 
   return (
     <>
+      <LimitedEditionSpotlight flavour={currentLE} />
+
       <div className="mt-4 flex justify-center px-4">
         <LocationPicker value={locationSlug} onChange={handleLocationChange} />
       </div>
@@ -188,11 +216,29 @@ export function MenuShell({
             }}
             className="pt-10 first:pt-0 md:pt-16"
           >
+            {/* Legacy anchor: /menu#sweets still works after the rename. */}
+            {group.slug === "desserts" && (
+              <span
+                id="sweets"
+                aria-hidden="true"
+                style={{ scrollMarginTop: "calc(var(--nav-h) + 4rem)" }}
+              />
+            )}
+            {/* Legacy anchor: /menu#kids still works after the rename. */}
+            {group.slug === "little-wings" && (
+              <span
+                id="kids"
+                aria-hidden="true"
+                style={{ scrollMarginTop: "calc(var(--nav-h) + 4rem)" }}
+              />
+            )}
             <h2
               id={`${group.id}-heading`}
               className="font-display font-extrabold text-3xl uppercase leading-[0.95] tracking-tight text-brand-black md:text-5xl"
             >
-              {group.label}
+              {group.slug === "little-wings"
+                ? "Little Wings Meals"
+                : group.label}
             </h2>
 
             {group.allUnavailableHere ? (
@@ -212,14 +258,23 @@ export function MenuShell({
                   {group.showSubHeadings && (
                     <h3 className="font-display font-extrabold text-xl uppercase tracking-tight text-brand-black/85 md:text-2xl">
                       {sub.name}
+                      {sub.slug === "beef-burgers" && code === "NN" && (
+                        <LocationExclusiveBadge />
+                      )}
                     </h3>
                   )}
                   {sub.allUnavailableHere ? (
-                    <div className="mt-4 border-l-4 border-brand-red bg-brand-pink/15 p-5 text-brand-black">
-                      <p className="font-body text-sm leading-relaxed text-brand-black/80">
-                        {sub.name} is at {otherLocationName} only right now.
-                      </p>
-                    </div>
+                    sub.slug === "beef-burgers" && code === "MK" ? (
+                      <BeefNorthamptonTeaser
+                        onSwitchToNN={() => handleLocationChange("northampton")}
+                      />
+                    ) : (
+                      <div className="mt-4 border-l-4 border-brand-red bg-brand-pink/15 p-5 text-brand-black">
+                        <p className="font-body text-sm leading-relaxed text-brand-black/80">
+                          {sub.name} is at {otherLocationName} only right now.
+                        </p>
+                      </div>
+                    )
                   ) : (
                     <ItemGrid items={sub.items} locationSlug={locationSlug} />
                   )}
@@ -265,6 +320,8 @@ export function MenuShell({
           </section>
         )}
       </div>
+
+      <BackToTopButton anchor="right" appearAfter={400} />
     </>
   );
 }

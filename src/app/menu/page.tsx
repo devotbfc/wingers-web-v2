@@ -3,6 +3,7 @@ import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
 import { OrderPanelProvider } from "@/components/sections/order-panel/order-panel-context";
+import { getCurrentLimitedEdition } from "@/lib/flavours/current-le";
 import { LOCATIONS } from "@/lib/locations";
 import {
   MENU_ITEMS,
@@ -98,6 +99,8 @@ function buildMenuJsonLd() {
 
 export default function MenuPage() {
   const jsonLd = buildMenuJsonLd();
+  // Computed in the Server Component so FLAVOURS stays out of the client bundle.
+  const currentLE = getCurrentLimitedEdition();
 
   return (
     <OrderPanelProvider>
@@ -119,7 +122,7 @@ export default function MenuPage() {
           </div>
         </section>
 
-        <MenuShell />
+        <MenuShell currentLE={currentLE} />
       </main>
       <Footer />
       <OrderPanel />

@@ -4,7 +4,6 @@ import { motion, useReducedMotion } from "motion/react";
 import type { Flavour } from "@/lib/flavours";
 import {
   WHEEL_FLAME_GRADIENT_ID,
-  WHEEL_FLAME_PATH,
   pickSliceStyles,
   type SliceStyle,
 } from "./wheel-palette";
@@ -154,6 +153,7 @@ export function Wheel({
             const flip = norm > 90 && norm < 270;
             const rot = flip ? mid + 180 : mid;
             const pathD = `M ${CX} ${CY} L ${p1.x} ${p1.y} A ${R} ${R} 0 0 1 ${p2.x} ${p2.y} Z`;
+            const pulsing = style.kind === "le" || style.kind === "hot";
             return (
               <g key={seg.slug}>
                 <path
@@ -166,6 +166,7 @@ export function Wheel({
                   }
                   strokeWidth={style.kind === "le" ? 1.2 : 0.5}
                   filter={style.kind === "le" ? "url(#wheel-le-glow)" : undefined}
+                  className={pulsing ? "animate-slice-pulse" : undefined}
                 />
                 <WheelLabel
                   lines={labelLinesFor(seg.wheelLabel ?? seg.name)}
@@ -175,25 +176,6 @@ export function Wheel({
                   fill={style.text}
                   fontSize={6}
                 />
-                {style.kind === "le" && (
-                  <SliceTag
-                    label="LE"
-                    pos={polar(mid, R * 0.86)}
-                    rot={rot}
-                    fill={style.text}
-                    fontSize={4.5}
-                    flicker
-                  />
-                )}
-                {style.kind === "hot" && (
-                  <SliceFlame
-                    pos={polar(mid, R * 0.86)}
-                    rot={rot}
-                    size={7}
-                    fill={style.text}
-                    flicker
-                  />
-                )}
               </g>
             );
           })}
@@ -273,70 +255,6 @@ function WheelLabel({
         ))
       )}
     </text>
-  );
-}
-
-function SliceTag({
-  label,
-  pos,
-  rot,
-  fill,
-  fontSize,
-  flicker,
-}: {
-  label: string;
-  pos: { x: number; y: number };
-  rot: number;
-  fill: string;
-  fontSize: number;
-  flicker?: boolean;
-}) {
-  return (
-    <text
-      x={pos.x}
-      y={pos.y}
-      fill={fill}
-      fontSize={fontSize}
-      fontWeight="800"
-      letterSpacing="0.1em"
-      textAnchor="middle"
-      dominantBaseline="middle"
-      transform={`rotate(${rot} ${pos.x} ${pos.y})`}
-      className={`font-display uppercase ${flicker ? "animate-flicker" : ""}`}
-      style={{ textShadow: "0 0 4px rgba(139,44,255,0.9)" }}
-    >
-      {label}
-    </text>
-  );
-}
-
-function SliceFlame({
-  pos,
-  rot,
-  size,
-  fill,
-  flicker,
-}: {
-  pos: { x: number; y: number };
-  rot: number;
-  size: number;
-  fill: string;
-  flicker?: boolean;
-}) {
-  const scale = size / 24;
-  const half = size / 2;
-  return (
-    <g
-      transform={`rotate(${rot} ${pos.x} ${pos.y}) translate(${pos.x - half} ${pos.y - half}) scale(${scale})`}
-      className={flicker ? "animate-flicker" : undefined}
-      aria-hidden="true"
-    >
-      <path
-        d={WHEEL_FLAME_PATH}
-        fill={fill}
-        style={{ filter: "drop-shadow(0 0 2px rgba(255,45,45,0.8))" }}
-      />
-    </g>
   );
 }
 
