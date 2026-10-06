@@ -161,7 +161,21 @@ export function MenuShell({
   }, [currentItems, code]);
 
   const barItems = useMemo(
-    () => groups.map((g) => ({ slug: g.slug, label: g.label, id: g.id })),
+    () =>
+      groups.map((g) => ({
+        slug: g.slug,
+        label: g.label,
+        id: g.id,
+        icon:
+          g.slug === "little-wings"
+            ? {
+                src: "/brand/logo/wingers-mark.png",
+                // Native asset is a near-square pink mark on transparent.
+                widthPx: 56,
+                heightPx: 56,
+              }
+            : undefined,
+      })),
     [groups]
   );
 
@@ -210,11 +224,21 @@ export function MenuShell({
                 style={{ scrollMarginTop: "calc(var(--nav-h) + 4rem)" }}
               />
             )}
+            {/* Legacy anchor: /menu#kids still works after the rename. */}
+            {group.slug === "little-wings" && (
+              <span
+                id="kids"
+                aria-hidden="true"
+                style={{ scrollMarginTop: "calc(var(--nav-h) + 4rem)" }}
+              />
+            )}
             <h2
               id={`${group.id}-heading`}
               className="font-display font-extrabold text-3xl uppercase leading-[0.95] tracking-tight text-brand-black md:text-5xl"
             >
-              {group.label}
+              {group.slug === "little-wings"
+                ? "Little Wings Meals"
+                : group.label}
             </h2>
 
             {group.allUnavailableHere ? (

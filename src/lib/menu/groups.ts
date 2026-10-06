@@ -78,12 +78,12 @@ export const MENU_GROUPS: readonly MenuGroup[] = [
     showSubHeadings: true,
   },
   {
-    slug: "kids",
-    label: "KIDS",
+    slug: "little-wings",
+    label: "LITTLE WINGS",
     sectionSlugs: ["kids"],
     showSubHeadings: false,
   },
-  // MEAL DEALS — Northampton only. Pill sits LAST (after DESSERTS/KIDS).
+  // MEAL DEALS — Northampton only. Pill sits LAST (after LITTLE WINGS).
   // When the sheet adds a "meal-deals" section, every deal must carry
   // unavailableAt: "MK" so this group is dropped entirely on Milton Keynes
   // (no pill, no banner) — enforced by MenuShell's group-level availability

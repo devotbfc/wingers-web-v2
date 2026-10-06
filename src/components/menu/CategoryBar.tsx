@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -8,6 +9,14 @@ interface CategoryBarItem {
   slug: string;
   label: string;
   id: string; // DOM id of the group section
+  // Optional leading icon. Rendered before the label, aria-hidden; `filter`
+  // flips the icon to black when the pill is active so a pink mark stays
+  // visible on the pink active fill.
+  icon?: {
+    src: string;
+    widthPx: number;
+    heightPx: number;
+  };
 }
 
 interface CategoryBarProps {
@@ -173,12 +182,25 @@ export function CategoryBar({ items }: CategoryBarProps) {
               onClick={() => handlePillClick(item)}
               aria-current={active ? "true" : undefined}
               className={cn(
-                "inline-flex h-11 shrink-0 snap-start items-center whitespace-nowrap rounded-full px-4 font-display font-extrabold text-[13px] uppercase tracking-[0.02em] transition-colors",
+                "inline-flex h-11 shrink-0 snap-start items-center gap-1.5 whitespace-nowrap rounded-full px-4 font-display font-extrabold text-[13px] uppercase tracking-[0.02em] transition-colors",
                 active
                   ? "bg-brand-pink text-brand-black"
                   : "bg-brand-warm-grey text-brand-black/85 hover:brightness-95"
               )}
             >
+              {item.icon && (
+                <Image
+                  src={item.icon.src}
+                  alt=""
+                  aria-hidden
+                  width={item.icon.widthPx}
+                  height={item.icon.heightPx}
+                  className={cn(
+                    "h-3.5 w-auto",
+                    active && "[filter:brightness(0)]"
+                  )}
+                />
+              )}
               {item.label}
             </button>
           );
