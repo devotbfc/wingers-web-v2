@@ -4,7 +4,6 @@ import { BrandButton } from "@/components/brand/BrandButton";
 import { SPINNABLE_FLAVOURS } from "@/lib/flavours";
 import {
   WHEEL_FLAME_GRADIENT_ID,
-  WHEEL_FLAME_PATH,
   pickSliceStyles,
   type SliceStyle,
 } from "@/components/sections/flavour-lab/wheel-palette";
@@ -137,6 +136,7 @@ export function FlavourLabTeaser() {
             const flip = norm > 90 && norm < 270;
             const rot = flip ? mid + 180 : mid;
             const pathD = `M ${CX} ${CY} L ${p1.x} ${p1.y} A ${R} ${R} 0 0 1 ${p2.x} ${p2.y} Z`;
+            const pulsing = seg.style.kind === "le" || seg.style.kind === "hot";
             return (
               <g key={seg.label}>
                 <path
@@ -145,6 +145,7 @@ export function FlavourLabTeaser() {
                   stroke={seg.style.kind === "le" ? "var(--color-le-purple)" : undefined}
                   strokeWidth={seg.style.kind === "le" ? 1.2 : undefined}
                   filter={seg.style.kind === "le" ? "url(#wheel-le-glow)" : undefined}
+                  className={pulsing ? "animate-slice-pulse" : undefined}
                 />
                 {(() => {
                   const lines = labelLinesFor(seg.label);
@@ -173,36 +174,6 @@ export function FlavourLabTeaser() {
                     </text>
                   );
                 })()}
-                {seg.style.kind === "le" && (
-                  <text
-                    x={tagPos.x}
-                    y={tagPos.y}
-                    fill={seg.style.text}
-                    fontSize="4"
-                    fontWeight="800"
-                    letterSpacing="0.1em"
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    transform={`rotate(${rot} ${tagPos.x} ${tagPos.y})`}
-                    className="font-display uppercase animate-flicker"
-                    style={{ textShadow: "0 0 4px rgba(139,44,255,0.9)" }}
-                  >
-                    LE
-                  </text>
-                )}
-                {seg.style.kind === "hot" && (
-                  <g
-                    transform={`rotate(${rot} ${tagPos.x} ${tagPos.y}) translate(${tagPos.x - 3.25} ${tagPos.y - 3.25}) scale(${6.5 / 24})`}
-                    className="animate-flicker"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d={WHEEL_FLAME_PATH}
-                      fill={seg.style.text}
-                      style={{ filter: "drop-shadow(0 0 2px rgba(255,45,45,0.8))" }}
-                    />
-                  </g>
-                )}
               </g>
             );
           })}
