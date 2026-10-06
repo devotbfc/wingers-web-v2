@@ -89,14 +89,16 @@ On GitHub.com:
 Supabase dashboard → SQL Editor → New query:
 
 ```sql
--- Loyalty signups (ADR-010)
+-- Loyalty signups (ADR-010, as it exists in production after the
+-- 2026-10-06 slide-in-source fix in supabase/migrations/)
 create table loyalty_signups (
   id uuid primary key default gen_random_uuid(),
   email text unique not null,
   first_name text,
-  preferred_location text check (preferred_location in ('milton-keynes', 'northampton') or preferred_location is null),
-  marketing_consent boolean not null default true,
-  source text default 'website',
+  location_pref text check (location_pref in ('milton-keynes', 'northampton') or location_pref is null),
+  source text check (source in ('homepage', 'loyalty_page', 'signup_slidein')),
+  marketing_consent_at timestamptz,
+  consent_text_version text,
   mailchimp_synced_at timestamptz,
   pph_synced_at timestamptz,
   created_at timestamptz default now()
@@ -112,8 +114,13 @@ create table contact_submissions (
   created_at timestamptz default now()
 );
 
--- RLS enabled, no public policies — service role only
+-- RLS on. Loyalty is INSERT-only for anon (the server action uses the anon
+-- key); every other right is revoked. Contact submissions are service-role
+-- only.
 alter table loyalty_signups enable row level security;
+create policy "loyalty_signups_anon_insert" on loyalty_signups for insert to anon with check (true);
+revoke select, update, delete, truncate, references, trigger on loyalty_signups from anon, authenticated;
+
 alter table contact_submissions enable row level security;
 ```
 
