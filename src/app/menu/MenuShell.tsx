@@ -4,7 +4,9 @@ import { useEffect, useMemo, useState } from "react";
 
 import { CategoryBar } from "@/components/menu/CategoryBar";
 import { FlavourLabLinkCard } from "@/components/menu/FlavourLabLinkCard";
+import { LimitedEditionSpotlight } from "@/components/menu/LimitedEditionSpotlight";
 import { LocationPicker } from "@/components/menu/LocationPicker";
+import type { Flavour } from "@/lib/flavours/flavour-lab-data";
 import { LOCATIONS } from "@/lib/locations";
 import {
   MENU_ITEMS,
@@ -42,10 +44,12 @@ function writeStoredLocation(slug: string): void {
 
 interface MenuShellProps {
   defaultLocationSlug?: string;
+  currentLE?: Flavour | null;
 }
 
 export function MenuShell({
   defaultLocationSlug = "milton-keynes",
+  currentLE = null,
 }: MenuShellProps) {
   const [locationSlug, setLocationSlug] = useState<string>(defaultLocationSlug);
 
@@ -155,6 +159,8 @@ export function MenuShell({
 
   return (
     <>
+      <LimitedEditionSpotlight flavour={currentLE} />
+
       <div className="mt-4 flex justify-center px-4">
         <LocationPicker value={locationSlug} onChange={handleLocationChange} />
       </div>
