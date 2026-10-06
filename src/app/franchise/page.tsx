@@ -131,7 +131,7 @@ export default function FranchisePage() {
 
         <section
           aria-labelledby="who-we-are-heading"
-          className="bg-brand-white px-4 py-16 md:px-8 md:py-24"
+          className="bg-brand-white px-4 py-12 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-3xl">
             <h2
@@ -157,7 +157,7 @@ export default function FranchisePage() {
 
         <section
           aria-labelledby="what-we-do-heading"
-          className="px-4 py-16 md:px-8 md:py-24"
+          className="px-4 py-12 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-6xl">
             <h2
@@ -171,7 +171,7 @@ export default function FranchisePage() {
               lamp-warmers, halal throughout.
             </p>
             <ul
-              className="mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:grid md:snap-none md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0"
+              className="mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:grid md:snap-none md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0"
               data-todo="content"
               data-todo-note="Benson to confirm the sister brand uses the same brine/dredge/fry process before publish."
             >
@@ -202,7 +202,7 @@ export default function FranchisePage() {
 
         <section
           aria-labelledby="who-looking-heading"
-          className="bg-brand-white px-4 py-16 md:px-8 md:py-24"
+          className="bg-brand-white px-4 py-12 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-3xl">
             <h2
@@ -221,7 +221,7 @@ export default function FranchisePage() {
 
         <section
           aria-labelledby="what-we-provide-heading"
-          className="px-4 py-16 md:px-8 md:py-24"
+          className="px-4 py-12 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-3xl">
             <h2
@@ -240,7 +240,7 @@ export default function FranchisePage() {
 
         <section
           aria-labelledby="how-it-works-heading"
-          className="bg-brand-white px-4 py-16 md:px-8 md:py-24"
+          className="bg-brand-white px-4 py-12 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-6xl">
             <h2
@@ -249,7 +249,7 @@ export default function FranchisePage() {
             >
               HOW IT WORKS.
             </h2>
-            <ol className="mt-10 grid gap-4 md:grid-cols-5">
+            <ol className="mt-8 grid gap-4 md:grid-cols-5">
               {STEPS.map((s) => (
                 <li
                   key={s.n}
@@ -275,7 +275,7 @@ export default function FranchisePage() {
 
         <section
           aria-labelledby="investment-heading"
-          className="px-4 py-16 md:px-8 md:py-24"
+          className="px-4 py-12 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-3xl">
             <h2
@@ -294,7 +294,7 @@ export default function FranchisePage() {
 
         <section
           aria-labelledby="faq-heading"
-          className="bg-brand-white px-4 py-16 md:px-8 md:py-24"
+          className="bg-brand-white px-4 py-12 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-3xl">
             <h2
@@ -303,7 +303,7 @@ export default function FranchisePage() {
             >
               FAQ.
             </h2>
-            <ul className="mt-10 space-y-3">
+            <ul className="mt-8 space-y-3">
               {FRANCHISE_FAQS.map((f) => (
                 <li key={f.q}>
                   <details
@@ -338,7 +338,7 @@ export default function FranchisePage() {
         <section
           id="enquiry"
           aria-labelledby="enquiry-heading"
-          className="scroll-mt-24 px-4 py-16 md:px-8 md:py-24"
+          className="scroll-mt-24 px-4 py-12 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-3xl">
             <h2
@@ -350,7 +350,7 @@ export default function FranchisePage() {
             <p className="mt-6 font-body text-base md:text-lg leading-relaxed text-brand-black/80">
               Send us a few details and the team will be in touch.
             </p>
-            <div className="mt-10">
+            <div className="mt-8">
               <FranchiseEnquiryForm />
             </div>
           </div>
