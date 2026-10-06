@@ -130,6 +130,40 @@ export default function PrivacyPage() {
               advert; we do not receive your order details from that link.
             </p>
 
+            <h3 className={H3}>Franchise enquiries</h3>
+            <p className={P}>
+              If you submit the franchise enquiry form on{" "}
+              <a href="/franchise" className={LINK}>
+                /franchise
+              </a>
+              , we collect the details you give us: your full name, email,
+              phone, the area or town you have in mind, your investment budget
+              band, your food-and-beverage experience level, your timeframe,
+              an optional message, and an optional note on how you heard
+              about us.
+            </p>
+            <p className={P}>
+              We use these to respond to your enquiry and to evaluate whether
+              a franchise conversation is a fit. The lawful basis is UK GDPR
+              Article 6(1)(b) &mdash; steps taken at your request before
+              entering into a contract &mdash; and Article 6(1)(f) legitimate
+              interest in operating and growing the franchise programme.
+            </p>
+            <p className={P}>
+              The form also offers an optional, unticked marketing opt-in. If
+              you tick it, we record the time you ticked it and the version
+              of the consent text you were shown, and the lawful basis for
+              that additional use is Article 6(1)(a) consent. You can
+              unsubscribe at any time by replying to any email from us or by
+              contacting <a href="mailto:hi@wingers.co" className={LINK}>hi@wingers.co</a>.
+            </p>
+            <p className={P}>
+              We keep franchise enquiry details for 24 months from your last
+              contact with us, after which they are deleted or anonymised. We
+              do not share franchise enquiry details with any third party;
+              they are stored in Supabase as described below.
+            </p>
+
             <h2 className={H2}>Cookies and similar technologies</h2>
 
             <div className="mt-6 overflow-x-auto">
@@ -223,7 +257,8 @@ export default function PrivacyPage() {
                 the cookieless analytics.
               </li>
               <li>
-                <strong>Supabase</strong> — securely stores the loyalty list.
+                <strong>Supabase</strong> — securely stores the loyalty list
+                and franchise enquiries (EU — Stockholm region).
               </li>
               <li>
                 <strong>Deliverect and Toast</strong> — take your order, as

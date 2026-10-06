@@ -49,3 +49,20 @@ export function track(
   fbq("track", event, params, { eventID: eventId });
   return eventId;
 }
+
+// trackCustom is used for events that must NOT fold into the standard-event
+// optimisation pools. Franchise enquiries go through here as
+// "FranchiseEnquiry" so they stay separate from the loyalty Lead signal that
+// drives ad optimisation.
+export function trackCustom(
+  name: string,
+  params: Record<string, unknown> = {},
+  options: TrackOptions = {}
+): string | null {
+  if (typeof window === "undefined") return null;
+  const fbq = window.fbq;
+  if (typeof fbq !== "function") return null;
+  const eventId = options.eventId ?? generateEventId();
+  fbq("trackCustom", name, params, { eventID: eventId });
+  return eventId;
+}

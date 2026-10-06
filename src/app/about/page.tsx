@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
@@ -282,6 +283,16 @@ export default function AboutPage() {
             <OrderTriggerButton variant="primary" size="lg">
               Get Stuck In
             </OrderTriggerButton>
+            <p className="font-body text-sm text-brand-black/70">
+              Interested in franchising?{" "}
+              <Link
+                href="/franchise"
+                className="underline transition-colors hover:text-brand-red"
+              >
+                See opportunities
+              </Link>
+              .
+            </p>
           </div>
         </section>
       </main>
