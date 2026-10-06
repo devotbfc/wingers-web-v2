@@ -106,9 +106,9 @@ export default function FranchisePage() {
     <OrderPanelProvider>
       <NavBar />
       <main>
-        <section className="flex min-h-[88svh] items-center px-4 md:px-8">
+        <section className="px-4 pt-28 pb-10 md:px-8 md:pt-40 md:pb-20">
           <div className="mx-auto w-full max-w-6xl">
-            <h1 className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,14vw,10rem)] text-brand-red">
+            <h1 className="font-display font-extrabold uppercase leading-[0.85] tracking-tight break-words text-[clamp(2.25rem,11vw,6rem)] md:text-[clamp(3rem,10vw,8rem)] text-brand-red">
               FRANCHISE OPPORTUNITIES.
             </h1>
             <p className="mt-8 max-w-2xl font-body text-lg md:text-xl leading-relaxed text-brand-black">
@@ -131,7 +131,7 @@ export default function FranchisePage() {
 
         <section
           aria-labelledby="who-we-are-heading"
-          className="bg-brand-white px-4 py-12 md:px-8 md:py-20"
+          className="bg-brand-white px-4 py-10 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-3xl">
             <h2
@@ -157,7 +157,7 @@ export default function FranchisePage() {
 
         <section
           aria-labelledby="what-we-do-heading"
-          className="px-4 py-12 md:px-8 md:py-20"
+          className="px-4 py-10 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-6xl">
             <h2
@@ -202,7 +202,7 @@ export default function FranchisePage() {
 
         <section
           aria-labelledby="who-looking-heading"
-          className="bg-brand-white px-4 py-12 md:px-8 md:py-20"
+          className="bg-brand-white px-4 py-10 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-3xl">
             <h2
@@ -221,7 +221,7 @@ export default function FranchisePage() {
 
         <section
           aria-labelledby="what-we-provide-heading"
-          className="px-4 py-12 md:px-8 md:py-20"
+          className="px-4 py-10 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-3xl">
             <h2
@@ -240,7 +240,7 @@ export default function FranchisePage() {
 
         <section
           aria-labelledby="how-it-works-heading"
-          className="bg-brand-white px-4 py-12 md:px-8 md:py-20"
+          className="bg-brand-white px-4 py-10 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-6xl">
             <h2
@@ -275,7 +275,7 @@ export default function FranchisePage() {
 
         <section
           aria-labelledby="investment-heading"
-          className="px-4 py-12 md:px-8 md:py-20"
+          className="px-4 py-10 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-3xl">
             <h2
@@ -294,7 +294,7 @@ export default function FranchisePage() {
 
         <section
           aria-labelledby="faq-heading"
-          className="bg-brand-white px-4 py-12 md:px-8 md:py-20"
+          className="bg-brand-white px-4 py-10 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-3xl">
             <h2
@@ -338,7 +338,7 @@ export default function FranchisePage() {
         <section
           id="enquiry"
           aria-labelledby="enquiry-heading"
-          className="scroll-mt-24 px-4 py-12 md:px-8 md:py-20"
+          className="scroll-mt-24 px-4 py-10 md:px-8 md:py-20"
         >
           <div className="mx-auto max-w-3xl">
             <h2
