@@ -151,7 +151,12 @@ export function MenuShell({
           subSections.length > 0 &&
           subSections.every((s) => s.allUnavailableHere),
       };
-    }).filter((g) => g.hasAny);
+    })
+      // Drop groups that have no items at all, OR groups whose entire set of
+      // items is unavailable at the active location (so e.g. MEAL DEALS, once
+      // Northampton-only data lands, disappears entirely on Milton Keynes —
+      // no pill, no banner).
+      .filter((g) => g.hasAny && !g.allUnavailableHere);
   }, [currentItems, code]);
 
   const barItems = useMemo(
