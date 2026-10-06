@@ -131,7 +131,6 @@ export function FlavourLabTeaser() {
             const p2 = polar(end, R);
             const mid = start + step / 2;
             const labelPos = polar(mid, R * 0.58);
-            const tagPos = polar(mid, R * 0.86);
             const norm = ((mid % 360) + 360) % 360;
             const flip = norm > 90 && norm < 270;
             const rot = flip ? mid + 180 : mid;
