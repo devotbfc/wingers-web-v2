@@ -258,7 +258,7 @@ export default function PrivacyPage() {
               </li>
               <li>
                 <strong>Supabase</strong> — securely stores the loyalty list
-                and franchise enquiries (UK — London region).
+                and franchise enquiries (EU — Stockholm region).
               </li>
               <li>
                 <strong>Deliverect and Toast</strong> — take your order, as
