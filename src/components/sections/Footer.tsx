@@ -8,6 +8,7 @@ const EXPLORE_LINKS = [
   { label: "Menu", href: "/menu" },
   { label: "Locations", href: "/locations" },
   { label: "About", href: "/about" },
+  { label: "Franchise", href: "/franchise" },
   { label: "Contact", href: "/locations" },
   { label: "Allergies", href: "/allergies" },
   { label: "FAQ", href: "/about#faq" },
