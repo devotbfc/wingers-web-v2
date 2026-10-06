@@ -72,8 +72,8 @@ export const MENU_GROUPS: readonly MenuGroup[] = [
     showSubHeadings: true,
   },
   {
-    slug: "sweets",
-    label: "SWEETS",
+    slug: "desserts",
+    label: "DESSERTS",
     sectionSlugs: ["churros", "nyc-cookies"],
     showSubHeadings: true,
   },

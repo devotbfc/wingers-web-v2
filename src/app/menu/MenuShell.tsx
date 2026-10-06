@@ -196,6 +196,14 @@ export function MenuShell({
             }}
             className="pt-10 first:pt-0 md:pt-16"
           >
+            {/* Legacy anchor: /menu#sweets still works after the rename. */}
+            {group.slug === "desserts" && (
+              <span
+                id="sweets"
+                aria-hidden="true"
+                style={{ scrollMarginTop: "calc(var(--nav-h) + 4rem)" }}
+              />
+            )}
             <h2
               id={`${group.id}-heading`}
               className="font-display font-extrabold text-3xl uppercase leading-[0.95] tracking-tight text-brand-black md:text-5xl"
