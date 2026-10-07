@@ -2,6 +2,8 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import type { Flavour } from "@/lib/flavours";
+import { cn } from "@/lib/utils";
+import { useAnimateInView } from "@/components/common/useAnimateInView";
 import {
   WHEEL_FLAME_GRADIENT_ID,
   pickSliceStyles,
@@ -63,9 +65,16 @@ export function Wheel({
   const reduce = useReducedMotion();
   const step = 360 / segments.length;
   const sliceStyles = pickSliceStyles(segments, PALETTE);
+  const [ref, inView] = useAnimateInView<HTMLDivElement>();
 
   return (
-    <div className="relative aspect-square w-[min(82vw,340px)] md:w-[520px]">
+    <div
+      ref={ref}
+      className={cn(
+        "relative aspect-square w-[min(82vw,340px)] md:w-[520px]",
+        !inView && "paused-anims"
+      )}
+    >
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-10 blur-3xl"
@@ -136,7 +145,7 @@ export function Wheel({
           transition={
             reduce
               ? { duration: 0 }
-              : { duration: 4.5, ease: [0.22, 1, 0.36, 1] }
+              : { duration: 2.6, ease: [0.22, 1, 0.36, 1] }
           }
           onAnimationComplete={onSpinComplete}
           style={{ transformOrigin: `${CX}px ${CY}px` }}

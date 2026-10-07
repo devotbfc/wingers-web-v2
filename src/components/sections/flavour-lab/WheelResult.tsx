@@ -3,6 +3,8 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { BrandButton } from "@/components/brand/BrandButton";
 import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTriggerButton";
+import { useAnimateInView } from "@/components/common/useAnimateInView";
+import { cn } from "@/lib/utils";
 import { suggestDipsFor, type Dip, type Flavour } from "@/lib/flavours";
 import { HeatFlames } from "./FlameIcon";
 
@@ -148,9 +150,17 @@ export function WheelResult({ winner, onSpinAgain }: WheelResultProps) {
   const reduce = useReducedMotion();
   const reduceBool = reduce ?? false;
   const dips = winner ? suggestDipsFor(winner, 2) : [];
+  const [ref, inView] = useAnimateInView<HTMLDivElement>();
 
   return (
-    <div className="mt-8 w-full max-w-lg" aria-live="polite">
+    <div
+      ref={ref}
+      className={cn(
+        "mt-8 w-full max-w-lg",
+        !inView && "paused-anims"
+      )}
+      aria-live="polite"
+    >
       <AnimatePresence mode="wait">
         {winner && (
           <motion.div
@@ -159,15 +169,34 @@ export function WheelResult({ winner, onSpinAgain }: WheelResultProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={reduce ? undefined : { opacity: 0, y: -8 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="sauce-shimmer animate-glow-ring relative overflow-hidden rounded-2xl border border-brand-pink/40 bg-brand-pink/[0.06] p-6 text-center backdrop-blur-sm md:p-8"
+            className="sauce-shimmer relative overflow-hidden rounded-2xl border border-brand-pink/40 bg-brand-pink/[0.06] p-6 text-center backdrop-blur-sm md:p-8"
           >
-            <p className="font-display text-xs font-bold uppercase tracking-[0.35em] text-brand-pink/80">
+            {/* Pulsing pink↔red glow ring — in its own layer so sauce-shimmer
+                owns ::before on the parent without conflict. */}
+            <div
+              aria-hidden="true"
+              className="animate-glow-ring pointer-events-none absolute inset-0 rounded-2xl"
+            />
+            {/* Winner-reveal flash — one-shot pink wash on each new winner,
+                keyed on winner.slug via the parent AnimatePresence remount. */}
+            <motion.div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 rounded-2xl bg-brand-pink"
+              initial={{ opacity: 0 }}
+              animate={reduce ? { opacity: 0 } : { opacity: [0, 0.2, 0] }}
+              transition={
+                reduce
+                  ? { duration: 0 }
+                  : { duration: 0.42, ease: "easeInOut", delay: 0.06 }
+              }
+            />
+            <p className="relative font-display text-xs font-bold uppercase tracking-[0.35em] text-brand-pink/80">
               The Lab picked
             </p>
-            <h3 className="neon-pink mt-2 font-display text-3xl font-extrabold uppercase leading-[0.95] tracking-tight text-brand-pink md:text-5xl">
+            <h3 className="neon-pink relative mt-2 font-display text-3xl font-extrabold uppercase leading-[0.95] tracking-tight text-brand-pink md:text-5xl">
               {winner.name}
             </h3>
-            <div className="mt-3 flex items-center justify-center gap-3">
+            <div className="relative mt-3 flex items-center justify-center gap-3">
               <HeatFlames heat={winner.heat} size="md" />
               {winner.limitedEdition && (
                 <span className="rounded-full border border-brand-pink/60 px-2 py-0.5 font-display text-[10px] font-bold uppercase tracking-[0.2em] text-brand-pink">
@@ -176,12 +205,12 @@ export function WheelResult({ winner, onSpinAgain }: WheelResultProps) {
               )}
             </div>
             {winner.shortDescription && (
-              <p className="mx-auto mt-4 max-w-md font-body text-base leading-relaxed text-brand-white/80">
+              <p className="relative mx-auto mt-4 max-w-md font-body text-base leading-relaxed text-brand-white/80">
                 {winner.shortDescription}
               </p>
             )}
             {dips.length > 0 && (
-              <div className="mt-5">
+              <div className="relative mt-5">
                 <p className="font-display text-[11px] font-bold uppercase tracking-[0.3em] text-brand-pink/70">
                   Dip it in…
                 </p>
@@ -197,13 +226,26 @@ export function WheelResult({ winner, onSpinAgain }: WheelResultProps) {
                 </div>
               </div>
             )}
-            <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <div className="relative mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <OrderTriggerButton size="lg">
                 Get these wings
               </OrderTriggerButton>
-              <BrandButton variant="outline" onClick={onSpinAgain}>
-                Spin again
-              </BrandButton>
+              {/* One-shot "pop" on each new winner — keyed via the parent
+                  AnimatePresence remount, so a scale cycle fires once per spin. */}
+              <motion.span
+                initial={reduce ? false : { scale: 1 }}
+                animate={reduce ? undefined : { scale: [1, 1.08, 1] }}
+                transition={
+                  reduce
+                    ? { duration: 0 }
+                    : { duration: 0.32, ease: "easeInOut", delay: 0.1 }
+                }
+                className="inline-flex"
+              >
+                <BrandButton variant="outline" onClick={onSpinAgain}>
+                  Spin again
+                </BrandButton>
+              </motion.span>
             </div>
           </motion.div>
         )}
