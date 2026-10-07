@@ -304,7 +304,7 @@ export default function FranchisePage() {
               FAQ.
             </h2>
             <ul className="mt-8 space-y-3">
-              {FRANCHISE_FAQS.map((f) => (
+              {FRANCHISE_FAQS.filter((f) => !f.hidden).map((f) => (
                 <li key={f.q}>
                   <details
                     className="group rounded-md border border-brand-black/10 bg-brand-white px-5 py-4 open:pb-5"

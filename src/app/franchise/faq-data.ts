@@ -4,6 +4,10 @@ export interface FaqItem {
   // When true, the item is also marked with data-todo="content" in the UI so
   // Benson can grep for unresolved copy before publish.
   readonly todo?: boolean;
+  // When true, the item is dropped from both the rendered list and the
+  // FAQPage JSON-LD. Used alongside `todo` to pull an unconfirmed answer
+  // out of the public site + search index until Benson approves copy.
+  readonly hidden?: boolean;
 }
 
 export const FRANCHISE_FAQS: readonly FaqItem[] = [
@@ -15,6 +19,7 @@ export const FRANCHISE_FAQS: readonly FaqItem[] = [
     q: "Is it halal?",
     a: "Yes \u2014 halal is core to how we cook.",
     todo: true,
+    hidden: true,
   },
   {
     q: "Do I need F&B experience?",
@@ -38,7 +43,7 @@ export function buildFranchiseFaqJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: FRANCHISE_FAQS.map((f) => ({
+    mainEntity: FRANCHISE_FAQS.filter((f) => !f.hidden).map((f) => ({
       "@type": "Question",
       name: f.q,
       acceptedAnswer: {
