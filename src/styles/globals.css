@@ -6,6 +6,13 @@
   --color-brand-black: #000000;
   --color-brand-white: #FFFFFF;
 
+  /* CTA-only red (BrandButton primary fill + hover state, OrderTrigger pulse
+     ring). Darker than brand-red so brand-white on top passes WCAG AA at
+     small-text (ratio 4.71:1 vs brand-red's 3.71:1). brand-red stays
+     #FF2D2D for eyebrows, borders, chips and decorative accents. See
+     docs/decisions.md ADR-019. */
+  --color-brand-red-cta: #E0242A;
+
   /* Warm chrome-neutral used for pill tab inactive fill and the location
      picker sheet shop cards. Scoped to navigation + picker chrome; not a
      general surface token. Matches the wing-app's warm off-white rest state. */
