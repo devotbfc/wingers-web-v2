@@ -31,10 +31,10 @@ export default function TermsPage() {
             <p className="mt-4 font-body text-base leading-relaxed text-brand-black/70">
               For questions in the meantime, email{" "}
               <a
-                href="mailto:hello@wingers.co"
+                href="mailto:hi@wingers.co"
                 className="underline transition-colors hover:text-brand-red"
               >
-                hello@wingers.co
+                hi@wingers.co
               </a>
               .
             </p>
