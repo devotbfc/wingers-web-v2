@@ -42,10 +42,45 @@ export function SignupSlideIn({
     // shared context.
     document.body.dataset.signupOpen = "true";
 
+    const FOCUSABLE =
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+    function focusableElements(): HTMLElement[] {
+      const root = panelRef.current;
+      if (!root) return [];
+      return Array.from(
+        root.querySelectorAll<HTMLElement>(FOCUSABLE),
+      ).filter((el) => !el.hasAttribute("disabled") && el.offsetParent !== null);
+    }
+
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") {
         e.stopPropagation();
         onDismiss();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      // Focus trap: cycle focus within the panel. With a backdrop + body
+      // scroll-lock + aria-modal, Tab must stay inside the dialog.
+      const focusables = focusableElements();
+      if (focusables.length === 0) {
+        e.preventDefault();
+        panelRef.current?.focus();
+        return;
+      }
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      if (e.shiftKey) {
+        if (active === first || active === panelRef.current) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (active === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     }
     window.addEventListener("keydown", onKey);
@@ -95,7 +130,7 @@ export function SignupSlideIn({
             ref={panelRef}
             role="dialog"
             aria-labelledby={titleId}
-            aria-modal="false"
+            aria-modal={true}
             tabIndex={-1}
             initial="hidden"
             animate="visible"
