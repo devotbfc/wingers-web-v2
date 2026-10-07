@@ -5,6 +5,7 @@ import type React from "react";
 
 import { BrandButton } from "@/components/brand/BrandButton";
 import { useAnimateInView } from "@/components/common/useAnimateInView";
+import { cn } from "@/lib/utils";
 
 import { useOrderPanel } from "./order-panel-context";
 import { ORDER_PULSE_ENABLED } from "./motion-flags";
@@ -70,7 +71,7 @@ export function OrderTriggerButton({
         variant={variant}
         size={size}
         onClick={() => openPanel(preferredLocationSlug)}
-        className={className}
+        className={cn("grow", className)}
       >
         {children}
       </BrandButton>

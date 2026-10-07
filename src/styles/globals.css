@@ -291,10 +291,9 @@
     inset: 0;
     border-radius: inherit;
     pointer-events: none;
-    box-shadow: 0 0 0 2px var(--color-brand-red-cta);
+    box-shadow: 0 0 0 0 var(--color-brand-red-cta);
     opacity: 0.9;
     animation: order-pulse 3200ms ease-out infinite;
-    transform-origin: center;
   }
   .order-pulse-ring[data-paused="true"] {
     animation-play-state: paused;
@@ -331,8 +330,8 @@
 }
 
 @keyframes order-pulse {
-  0% { opacity: 0.9; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.35); }
+  0%   { opacity: 0.9; box-shadow: 0 0 0 0 var(--color-brand-red-cta); }
+  100% { opacity: 0;   box-shadow: 0 0 0 10px var(--color-brand-red-cta); }
 }
 
 @media (prefers-reduced-motion: reduce) {
