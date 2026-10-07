@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
@@ -49,15 +50,22 @@ export function CategoryBar({ items }: CategoryBarProps) {
   const [activeSlug, setActiveSlug] = useState<string>(items[0]?.slug ?? "");
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
+  const reduced = useReducedMotion();
 
   // Scroll-spy. One IO observing every group section; the topmost visible
   // one wins. rootMargin's top = NavBar + sticky bar height so a section
   // only counts as active once it clears the chrome.
+  //
+  // Fast scroll fires IO entries in bursts — coalesce the setter via rAF so
+  // the layoutId pill animates once per frame, not per entry batch.
   useEffect(() => {
     if (typeof window === "undefined") return;
     const navH = readNavHeightPx();
     const barH = barWrapperRef.current?.offsetHeight ?? 56;
     const topMargin = navH + barH;
+
+    let pendingSlug: string | null = null;
+    let rafId: number | null = null;
 
     const io = new IntersectionObserver(
       (entries) => {
@@ -66,10 +74,16 @@ export function CategoryBar({ items }: CategoryBarProps) {
           .sort(
             (a, b) => a.boundingClientRect.top - b.boundingClientRect.top
           );
-        if (visible[0]) {
-          const match = items.find((i) => i.id === visible[0].target.id);
-          if (match) setActiveSlug(match.slug);
-        }
+        if (!visible[0]) return;
+        const match = items.find((i) => i.id === visible[0].target.id);
+        if (!match) return;
+        pendingSlug = match.slug;
+        if (rafId !== null) return;
+        rafId = window.requestAnimationFrame(() => {
+          rafId = null;
+          if (pendingSlug) setActiveSlug(pendingSlug);
+          pendingSlug = null;
+        });
       },
       { rootMargin: `-${topMargin}px 0px -55% 0px`, threshold: 0 }
     );
@@ -78,7 +92,10 @@ export function CategoryBar({ items }: CategoryBarProps) {
       const el = document.getElementById(item.id);
       if (el) io.observe(el);
     }
-    return () => io.disconnect();
+    return () => {
+      io.disconnect();
+      if (rafId !== null) window.cancelAnimationFrame(rafId);
+    };
   }, [items]);
 
   // Auto-centre the active pill when it changes.
@@ -182,12 +199,34 @@ export function CategoryBar({ items }: CategoryBarProps) {
               onClick={() => handlePillClick(item)}
               aria-current={active ? "true" : undefined}
               className={cn(
-                "inline-flex h-11 shrink-0 snap-start items-center gap-1.5 whitespace-nowrap rounded-full px-4 font-display font-extrabold text-[13px] uppercase tracking-[0.02em] transition-colors",
+                "relative inline-flex h-11 shrink-0 snap-start items-center gap-1.5 whitespace-nowrap rounded-full px-4 font-display font-extrabold text-[13px] uppercase tracking-[0.02em] transition-colors",
                 active
-                  ? "bg-brand-pink text-brand-black"
+                  ? "text-brand-black"
                   : "bg-brand-warm-grey text-brand-black/85 hover:brightness-95"
               )}
             >
+              {/* Sliding pill background: single motion.span animates between
+                  pills via layoutId. On reduced-motion we skip the layout
+                  animation and fall back to the plain bg-colour on the
+                  button so the active state still reads clearly. */}
+              {active &&
+                (reduced ? (
+                  <span
+                    aria-hidden
+                    className="absolute inset-0 rounded-full bg-brand-pink"
+                  />
+                ) : (
+                  <motion.span
+                    aria-hidden
+                    layoutId="menu-active-pill"
+                    className="absolute inset-0 rounded-full bg-brand-pink"
+                    transition={{
+                      type: "spring",
+                      stiffness: 520,
+                      damping: 36,
+                    }}
+                  />
+                ))}
               {item.icon && (
                 <Image
                   src={item.icon.src}
@@ -196,12 +235,12 @@ export function CategoryBar({ items }: CategoryBarProps) {
                   width={item.icon.widthPx}
                   height={item.icon.heightPx}
                   className={cn(
-                    "h-3.5 w-auto",
+                    "relative h-3.5 w-auto",
                     active && "[filter:brightness(0)]"
                   )}
                 />
               )}
-              {item.label}
+              <span className="relative">{item.label}</span>
             </button>
           );
         })}

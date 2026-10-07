@@ -118,19 +118,58 @@ export function SignupSlideIn({
               </svg>
             </button>
 
-            {step === "le" && currentLE && (
-              <LeStep
-                titleId={titleId}
-                flavourName={currentLE.name}
-                shortDescription={currentLE.shortDescription}
-                onOrder={handleOrder}
-                onNext={() => setStep("email")}
-              />
-            )}
-            {step === "email" && (
-              <SignupSlideInForm titleId={titleId} onSuccess={handleSuccess} />
-            )}
-            {step === "success" && <SuccessStep titleId={titleId} />}
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={step}
+                initial={reduced ? { opacity: 0 } : { opacity: 0, y: 8 }}
+                animate={
+                  reduced
+                    ? { opacity: 1, transition: { duration: 0 } }
+                    : {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          duration: 0.22,
+                          ease: [0.22, 1, 0.36, 1] as [
+                            number,
+                            number,
+                            number,
+                            number,
+                          ],
+                        },
+                      }
+                }
+                exit={
+                  reduced
+                    ? { opacity: 0, transition: { duration: 0 } }
+                    : {
+                        opacity: 0,
+                        y: -8,
+                        transition: {
+                          duration: 0.16,
+                          ease: "easeIn" as const,
+                        },
+                      }
+                }
+              >
+                {step === "le" && currentLE && (
+                  <LeStep
+                    titleId={titleId}
+                    flavourName={currentLE.name}
+                    shortDescription={currentLE.shortDescription}
+                    onOrder={handleOrder}
+                    onNext={() => setStep("email")}
+                  />
+                )}
+                {step === "email" && (
+                  <SignupSlideInForm
+                    titleId={titleId}
+                    onSuccess={handleSuccess}
+                  />
+                )}
+                {step === "success" && <SuccessStep titleId={titleId} />}
+              </motion.div>
+            </AnimatePresence>
           </motion.div>
         </>
       )}
