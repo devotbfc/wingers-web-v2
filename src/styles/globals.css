@@ -291,7 +291,7 @@
     inset: 0;
     border-radius: inherit;
     pointer-events: none;
-    box-shadow: 0 0 0 2px var(--color-brand-red);
+    box-shadow: 0 0 0 2px var(--color-brand-red-cta);
     opacity: 0.9;
     animation: order-pulse 3200ms ease-out infinite;
     transform-origin: center;
