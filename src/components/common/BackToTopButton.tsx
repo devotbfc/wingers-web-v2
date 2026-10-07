@@ -126,6 +126,15 @@ export function BackToTopButton({
           left: "calc(1rem + env(safe-area-inset-left, 0px))",
         };
 
+  // Scale-in on appear, slightly faster snap on disappear. Reduced-motion
+  // collapses to a short opacity-only fade. Separate duration + translate +
+  // scale per direction via explicit classes so Tailwind JIT keeps each.
+  const transitionClass = shouldReduce
+    ? "transition-opacity duration-[120ms] ease-linear"
+    : show
+      ? "transition-[opacity,transform] duration-[220ms] ease-out"
+      : "transition-[opacity,transform] duration-[160ms] ease-in";
+
   return (
     <button
       type="button"
@@ -135,10 +144,10 @@ export function BackToTopButton({
       className={cn(
         "fixed z-40 inline-flex h-11 w-11 items-center justify-center rounded-full bg-brand-pink text-brand-black",
         "focus-visible:outline-2 focus-visible:outline-brand-black focus-visible:outline-offset-2",
-        !shouldReduce && "transition-[opacity,transform] duration-200",
+        transitionClass,
         show
-          ? "opacity-100 translate-y-0 pointer-events-auto"
-          : "opacity-0 translate-y-2 pointer-events-none"
+          ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
+          : "opacity-0 translate-y-[6px] scale-90 pointer-events-none"
       )}
     >
       <svg

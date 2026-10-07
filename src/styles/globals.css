@@ -272,6 +272,27 @@
     );
     animation: sauce-shimmer-drift 6s linear infinite;
   }
+
+  /* OrderTrigger idle pulse ring — red-only outward ping behind the ORDER
+     pill. Sibling absolute-positioned element, host wrapper must be
+     relative and pill-shaped. Paused via data-paused="true" when the
+     OrderPanel is open, the user has reduced-motion on, or the trigger is
+     off-screen (useAnimateInView). Gated behind ORDER_PULSE_ENABLED
+     (src/components/sections/order-panel/motion-flags.ts). */
+  .order-pulse-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow: 0 0 0 2px var(--color-brand-red);
+    opacity: 0.9;
+    animation: order-pulse 3200ms ease-out infinite;
+    transform-origin: center;
+  }
+  .order-pulse-ring[data-paused="true"] {
+    animation-play-state: paused;
+    opacity: 0;
+  }
 }
 
 @keyframes lab-pulse-ring-a {
@@ -302,6 +323,11 @@
   to { transform: translate3d(-50%, 0, 0); }
 }
 
+@keyframes order-pulse {
+  0% { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.35); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee-track {
     animation-play-state: paused;
@@ -316,5 +342,9 @@
   .animate-glow-ring::after { opacity: 0; }
   .sauce-shimmer::before {
     animation: none;
+  }
+  .order-pulse-ring {
+    animation: none;
+    opacity: 0;
   }
 }
