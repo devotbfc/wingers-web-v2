@@ -1,13 +1,10 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Dialog } from "radix-ui";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { XIcon } from "lucide-react";
+
 import { BrandButton } from "@/components/brand/BrandButton";
 import { useConsent } from "@/components/consent/ConsentProvider";
 import { LOCATIONS } from "@/lib/locations";
@@ -21,9 +18,18 @@ import {
 import { useOrderPanel } from "./order-panel-context";
 import { OPEN_ORDER_EVENT } from "./events";
 
+// Radix Dialog powers focus-trap, Escape handling, aria wiring and body
+// scroll lock. Motion drives the visible open/close so the handoff feels
+// physical — spring up, ease-out backdrop leading by 40ms, 55ms stagger
+// across the two location cards. forceMount keeps Radix's DOM alive for the
+// duration of the exit animation; AnimatePresence unmounts after.
+//
+// Local to OrderPanel. The shared Sheet (src/components/ui/sheet.tsx) still
+// drives LocationPicker and other consumers — not touched.
 export function OrderPanel() {
   const { open, setOpen, preferredLocationSlug, openPanel } = useOrderPanel();
   const { status: consentStatus } = useConsent();
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     function handler(event: Event) {
@@ -38,77 +44,203 @@ export function OrderPanel() {
   // fbclid gate on consent (PECR — click identifier is non-essential tracking).
   // useMemo keyed on consentStatus: recomputes on the "unknown" → "accepted"
   // flip (which is the point at which the read becomes valid), then caches for
-  // the lifetime of this OrderPanel instance. OrderPanel is per-page, so a nav
-  // to a new page remounts and re-reads. The read is SSR-safe via guards inside
-  // readFbclidFromUrl / readFbcCookie.
+  // the lifetime of this OrderPanel instance.
   const fbclid = useMemo<string | null>(() => {
     if (consentStatus !== "accepted") return null;
     return readFbclidFromUrl() ?? readFbcCookie();
   }, [consentStatus]);
 
+  const overlayVariants: import("motion/react").Variants = reduced
+    ? {
+        initial: { opacity: 0 },
+        animate: {
+          opacity: 1,
+          transition: { duration: 0.16, ease: "linear" as const },
+        },
+        exit: {
+          opacity: 0,
+          transition: { duration: 0.16, ease: "linear" as const },
+        },
+      }
+    : {
+        initial: { opacity: 0 },
+        animate: {
+          opacity: 1,
+          transition: { duration: 0.22, ease: "easeOut" as const },
+        },
+        exit: {
+          opacity: 0,
+          transition: { duration: 0.2, ease: "easeOut" as const },
+        },
+      };
+
+  const panelVariants: import("motion/react").Variants = reduced
+    ? {
+        initial: { opacity: 0 },
+        animate: {
+          opacity: 1,
+          transition: { duration: 0.16, ease: "linear" as const },
+        },
+        exit: {
+          opacity: 0,
+          transition: { duration: 0.16, ease: "linear" as const },
+        },
+      }
+    : {
+        initial: { y: "100%" },
+        animate: {
+          y: 0,
+          transition: {
+            type: "spring" as const,
+            stiffness: 480,
+            damping: 36,
+            mass: 0.9,
+            // Panel trails backdrop by 40ms so the dark scrim lands first.
+            delay: 0.04,
+          },
+        },
+        exit: {
+          y: "100%",
+          transition: {
+            duration: 0.24,
+            ease: [0.4, 0, 1, 1] as [number, number, number, number],
+          },
+        },
+      };
+
+  // Stagger container: the cards' <ul> starts its stagger 120ms after the
+  // panel begins to open so children don't race the backdrop.
+  const listVariants: import("motion/react").Variants = reduced
+    ? { initial: {}, animate: {}, exit: {} }
+    : {
+        initial: {},
+        animate: {
+          transition: { delayChildren: 0.12, staggerChildren: 0.055 },
+        },
+        exit: {},
+      };
+
+  const cardVariants: import("motion/react").Variants = reduced
+    ? {
+        initial: { opacity: 0 },
+        animate: { opacity: 1, transition: { duration: 0.16 } },
+      }
+    : {
+        initial: { opacity: 0, y: 10 },
+        animate: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.22, ease: "easeOut" as const },
+        },
+      };
+
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent
-        side="bottom"
-        className="h-auto max-h-[85vh] bg-brand-white text-brand-black"
-      >
-        <SheetHeader className="px-6 pt-6 pb-2">
-          <SheetTitle className="font-display text-2xl md:text-3xl font-extrabold uppercase tracking-tight text-brand-black">
-            Order from your nearest Wingers
-          </SheetTitle>
-          <SheetDescription className="font-body text-base text-brand-black/70">
-            Pick a location — we&rsquo;ll hand you off to its ordering platform.
-          </SheetDescription>
-        </SheetHeader>
-        <ul className="grid gap-4 px-6 pb-8 md:grid-cols-2">
-          {LOCATIONS.map((loc) => {
-            const provider = getProviderForLocation(loc);
-            const rawHref = provider.getOrderUrl(loc);
-            const href = appendFbclidToUrl(rawHref, fbclid);
-            const site = loc.slug === "milton-keynes" ? "mk" : "nth";
-            const isPreferred = loc.slug === preferredLocationSlug;
-            return (
-              <li
-                key={loc.slug}
-                className="flex flex-col gap-4 bg-brand-pink p-5 text-brand-black"
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <AnimatePresence>
+        {open && (
+          <Dialog.Portal forceMount>
+            <Dialog.Overlay asChild forceMount>
+              <motion.div
+                key="order-panel-overlay"
+                variants={overlayVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="fixed inset-0 z-50 bg-black/50"
+              />
+            </Dialog.Overlay>
+            <Dialog.Content asChild forceMount>
+              <motion.div
+                key="order-panel-content"
+                variants={panelVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="fixed inset-x-0 bottom-0 z-50 flex max-h-[85vh] flex-col gap-4 bg-brand-white text-brand-black outline-none"
               >
-                {isPreferred && (
-                  <span className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-black/70">
-                    Your shop
-                  </span>
-                )}
-                <div className="flex flex-col gap-1">
-                  <h3 className="font-display text-xl font-extrabold uppercase tracking-tight text-brand-black">
-                    {loc.name}
-                  </h3>
-                  <p className="font-body text-sm leading-snug text-brand-black/80">
-                    {loc.address.street}
-                    <br />
-                    {loc.address.city}, {loc.address.postcode}
-                  </p>
-                </div>
-                <BrandButton
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="primary"
-                  size="lg"
-                  className="w-full justify-center"
-                  aria-label={`Order from ${loc.name}`}
-                  onClick={() =>
-                    track("InitiateCheckout", {
-                      content_category: site,
-                      destination: href,
-                    })
-                  }
+                <header className="flex flex-col gap-1.5 px-6 pt-6 pb-2">
+                  <Dialog.Title asChild>
+                    <h2 className="font-display text-2xl md:text-3xl font-extrabold uppercase tracking-tight text-brand-black">
+                      Order from your nearest Wingers
+                    </h2>
+                  </Dialog.Title>
+                  <Dialog.Description asChild>
+                    <p className="font-body text-base text-brand-black/70">
+                      Pick a location — we&rsquo;ll hand you off to its ordering
+                      platform.
+                    </p>
+                  </Dialog.Description>
+                </header>
+
+                <motion.ul
+                  variants={listVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="grid gap-4 px-6 pb-8 md:grid-cols-2 overscroll-contain overflow-y-auto"
                 >
-                  Order
-                </BrandButton>
-              </li>
-            );
-          })}
-        </ul>
-      </SheetContent>
-    </Sheet>
+                  {LOCATIONS.map((loc) => {
+                    const provider = getProviderForLocation(loc);
+                    const rawHref = provider.getOrderUrl(loc);
+                    const href = appendFbclidToUrl(rawHref, fbclid);
+                    const site =
+                      loc.slug === "milton-keynes" ? "mk" : "nth";
+                    const isPreferred =
+                      loc.slug === preferredLocationSlug;
+                    return (
+                      <motion.li
+                        key={loc.slug}
+                        variants={cardVariants}
+                        className="flex flex-col gap-4 bg-brand-pink p-5 text-brand-black"
+                      >
+                        {isPreferred && (
+                          <span className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-black/70">
+                            Your shop
+                          </span>
+                        )}
+                        <div className="flex flex-col gap-1">
+                          <h3 className="font-display text-xl font-extrabold uppercase tracking-tight text-brand-black">
+                            {loc.name}
+                          </h3>
+                          <p className="font-body text-sm leading-snug text-brand-black/80">
+                            {loc.address.street}
+                            <br />
+                            {loc.address.city}, {loc.address.postcode}
+                          </p>
+                        </div>
+                        <BrandButton
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          variant="primary"
+                          size="lg"
+                          className="w-full justify-center"
+                          aria-label={`Order from ${loc.name}`}
+                          onClick={() =>
+                            track("InitiateCheckout", {
+                              content_category: site,
+                              destination: href,
+                            })
+                          }
+                        >
+                          Order
+                        </BrandButton>
+                      </motion.li>
+                    );
+                  })}
+                </motion.ul>
+
+                <Dialog.Close
+                  className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center rounded-full text-brand-black/70 opacity-70 ring-offset-brand-white transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink focus-visible:ring-offset-2"
+                  aria-label="Close"
+                >
+                  <XIcon className="size-5" />
+                </Dialog.Close>
+              </motion.div>
+            </Dialog.Content>
+          </Dialog.Portal>
+        )}
+      </AnimatePresence>
+    </Dialog.Root>
   );
 }
