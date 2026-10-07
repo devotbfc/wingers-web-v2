@@ -3,7 +3,7 @@ const HEADLINE_LINES = ["BEST WINGS", "IN THE GAME."] as const;
 export function StatementPanel() {
   return (
     <section className="flex min-h-[100svh] w-full flex-col items-center justify-center bg-brand-pink px-5 py-20 text-brand-black sm:px-8">
-      <p className="mb-6 font-body text-sm font-bold uppercase tracking-[0.2em] text-brand-red">
+      <p className="mb-6 font-body text-sm font-bold uppercase tracking-[0.2em] text-brand-black">
         Future of Flavours
       </p>
 
