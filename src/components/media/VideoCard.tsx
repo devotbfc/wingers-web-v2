@@ -46,7 +46,7 @@ export function VideoCard({
         src={imageSrc}
         alt={imageAlt}
         fill
-        className="object-cover transition-opacity duration-300 group-hover:opacity-0"
+        className="object-cover motion-safe:transition-opacity motion-safe:duration-300 group-hover:opacity-0"
       />
       <video
         ref={videoRef}
@@ -54,7 +54,7 @@ export function VideoCard({
         muted
         loop
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        className="absolute inset-0 w-full h-full object-cover opacity-0 motion-safe:transition-opacity motion-safe:duration-300 group-hover:opacity-100"
       />
       {children && <div className="relative z-10">{children}</div>}
     </div>

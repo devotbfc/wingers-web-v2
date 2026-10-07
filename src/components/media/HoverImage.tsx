@@ -25,7 +25,7 @@ export function HoverImage({
         alt={alt}
         width={width}
         height={height}
-        className="transition-opacity duration-300 group-hover:opacity-0"
+        className="motion-safe:transition-opacity motion-safe:duration-300 group-hover:opacity-0"
       />
       <Image
         src={hoverSrc}
@@ -33,7 +33,7 @@ export function HoverImage({
         width={width}
         height={height}
         aria-hidden
-        className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        className="absolute inset-0 opacity-0 motion-safe:transition-opacity motion-safe:duration-300 group-hover:opacity-100"
       />
     </div>
   );

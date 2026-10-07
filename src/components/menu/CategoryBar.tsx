@@ -137,7 +137,7 @@ export function CategoryBar({ items }: CategoryBarProps) {
         aria-disabled={atStart}
         tabIndex={atStart ? -1 : 0}
         className={cn(
-          "pointer-events-auto absolute left-1 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-brand-white text-brand-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-opacity md:flex",
+          "pointer-events-auto absolute left-1 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-brand-white text-brand-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-opacity md:flex",
           atStart && "pointer-events-none opacity-0"
         )}
       >
@@ -215,7 +215,7 @@ export function CategoryBar({ items }: CategoryBarProps) {
         aria-disabled={atEnd}
         tabIndex={atEnd ? -1 : 0}
         className={cn(
-          "pointer-events-auto absolute right-1 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-brand-white text-brand-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-opacity md:flex",
+          "pointer-events-auto absolute right-1 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-brand-white text-brand-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-opacity md:flex",
           atEnd && "pointer-events-none opacity-0"
         )}
       >
