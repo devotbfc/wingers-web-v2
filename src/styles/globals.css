@@ -193,10 +193,9 @@
      keyframed box-shadow which repainted every frame on mid-range Android.
      Requires the host element to leave both ::before and ::after free —
      i.e. apply to a dedicated empty div, not a card that already uses a
-     pseudo (sauce-shimmer, decorative overlays etc.). */
-  .animate-glow-ring {
-    position: relative;
-  }
+     pseudo (sauce-shimmer, decorative overlays etc.). The host sets its
+     OWN positioning (absolute/relative) — this rule intentionally does
+     not, so Tailwind `absolute inset-0` on the host isn't fought. */
   .animate-glow-ring::before,
   .animate-glow-ring::after {
     content: "";

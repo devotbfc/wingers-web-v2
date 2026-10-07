@@ -169,83 +169,88 @@ export function WheelResult({ winner, onSpinAgain }: WheelResultProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={reduce ? undefined : { opacity: 0, y: -8 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="sauce-shimmer relative overflow-hidden rounded-2xl border border-brand-pink/40 bg-brand-pink/[0.06] p-6 text-center backdrop-blur-sm md:p-8"
+            className="relative"
           >
-            {/* Pulsing pink↔red glow ring — in its own layer so sauce-shimmer
-                owns ::before on the parent without conflict. */}
+            {/* Pulsing pink↔red glow ring — rendered as a SIBLING of the
+                card, not a child, so its box-shadow is not clipped by the
+                card's own overflow-hidden (which is required for the
+                sauce-shimmer and winner-flash overlays). Matches main's
+                outer wheel-glow visual. */}
             <div
               aria-hidden="true"
               className="animate-glow-ring pointer-events-none absolute inset-0 rounded-2xl"
             />
-            {/* Winner-reveal flash — one-shot pink wash on each new winner,
-                keyed on winner.slug via the parent AnimatePresence remount. */}
-            <motion.div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 rounded-2xl bg-brand-pink"
-              initial={{ opacity: 0 }}
-              animate={reduce ? { opacity: 0 } : { opacity: [0, 0.2, 0] }}
-              transition={
-                reduce
-                  ? { duration: 0 }
-                  : { duration: 0.42, ease: "easeInOut", delay: 0.06 }
-              }
-            />
-            <p className="relative font-display text-xs font-bold uppercase tracking-[0.35em] text-brand-pink/80">
-              The Lab picked
-            </p>
-            <h3 className="neon-pink relative mt-2 font-display text-3xl font-extrabold uppercase leading-[0.95] tracking-tight text-brand-pink md:text-5xl">
-              {winner.name}
-            </h3>
-            <div className="relative mt-3 flex items-center justify-center gap-3">
-              <HeatFlames heat={winner.heat} size="md" />
-              {winner.limitedEdition && (
-                <span className="rounded-full border border-brand-pink/60 px-2 py-0.5 font-display text-[10px] font-bold uppercase tracking-[0.2em] text-brand-pink">
-                  Limited Edition
-                </span>
-              )}
-            </div>
-            {winner.shortDescription && (
-              <p className="relative mx-auto mt-4 max-w-md font-body text-base leading-relaxed text-brand-white/80">
-                {winner.shortDescription}
-              </p>
-            )}
-            {dips.length > 0 && (
-              <div className="relative mt-5">
-                <p className="font-display text-[11px] font-bold uppercase tracking-[0.3em] text-brand-pink/70">
-                  Dip it in…
-                </p>
-                <div className="mt-3 flex items-start justify-center gap-6">
-                  {dips.map((dip, i) => (
-                    <DipPot
-                      key={dip.slug}
-                      dip={dip}
-                      index={i}
-                      reduce={reduceBool}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-            <div className="relative mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <OrderTriggerButton size="lg">
-                Get these wings
-              </OrderTriggerButton>
-              {/* One-shot "pop" on each new winner — keyed via the parent
-                  AnimatePresence remount, so a scale cycle fires once per spin. */}
-              <motion.span
-                initial={reduce ? false : { scale: 1 }}
-                animate={reduce ? undefined : { scale: [1, 1.08, 1] }}
+            <div className="sauce-shimmer relative overflow-hidden rounded-2xl border border-brand-pink/40 bg-brand-pink/[0.06] p-6 text-center backdrop-blur-sm md:p-8">
+              {/* Winner-reveal flash — one-shot pink wash on each new winner,
+                  keyed on winner.slug via the parent AnimatePresence remount. */}
+              <motion.div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 rounded-2xl bg-brand-pink"
+                initial={{ opacity: 0 }}
+                animate={reduce ? { opacity: 0 } : { opacity: [0, 0.2, 0] }}
                 transition={
                   reduce
                     ? { duration: 0 }
-                    : { duration: 0.32, ease: "easeInOut", delay: 0.1 }
+                    : { duration: 0.42, ease: "easeInOut", delay: 0.06 }
                 }
-                className="inline-flex"
-              >
-                <BrandButton variant="outline" onClick={onSpinAgain}>
-                  Spin again
-                </BrandButton>
-              </motion.span>
+              />
+              <p className="relative font-display text-xs font-bold uppercase tracking-[0.35em] text-brand-pink/80">
+                The Lab picked
+              </p>
+              <h3 className="neon-pink relative mt-2 font-display text-3xl font-extrabold uppercase leading-[0.95] tracking-tight text-brand-pink md:text-5xl">
+                {winner.name}
+              </h3>
+              <div className="relative mt-3 flex items-center justify-center gap-3">
+                <HeatFlames heat={winner.heat} size="md" />
+                {winner.limitedEdition && (
+                  <span className="rounded-full border border-brand-pink/60 px-2 py-0.5 font-display text-[10px] font-bold uppercase tracking-[0.2em] text-brand-pink">
+                    Limited Edition
+                  </span>
+                )}
+              </div>
+              {winner.shortDescription && (
+                <p className="relative mx-auto mt-4 max-w-md font-body text-base leading-relaxed text-brand-white/80">
+                  {winner.shortDescription}
+                </p>
+              )}
+              {dips.length > 0 && (
+                <div className="relative mt-5">
+                  <p className="font-display text-[11px] font-bold uppercase tracking-[0.3em] text-brand-pink/70">
+                    Dip it in…
+                  </p>
+                  <div className="mt-3 flex items-start justify-center gap-6">
+                    {dips.map((dip, i) => (
+                      <DipPot
+                        key={dip.slug}
+                        dip={dip}
+                        index={i}
+                        reduce={reduceBool}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div className="relative mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <OrderTriggerButton size="lg">
+                  Get these wings
+                </OrderTriggerButton>
+                {/* One-shot "pop" on each new winner — keyed via the parent
+                    AnimatePresence remount, so a scale cycle fires once per spin. */}
+                <motion.span
+                  initial={reduce ? false : { scale: 1 }}
+                  animate={reduce ? undefined : { scale: [1, 1.08, 1] }}
+                  transition={
+                    reduce
+                      ? { duration: 0 }
+                      : { duration: 0.32, ease: "easeInOut", delay: 0.1 }
+                  }
+                  className="inline-flex"
+                >
+                  <BrandButton variant="outline" onClick={onSpinAgain}>
+                    Spin again
+                  </BrandButton>
+                </motion.span>
+              </div>
             </div>
           </motion.div>
         )}
