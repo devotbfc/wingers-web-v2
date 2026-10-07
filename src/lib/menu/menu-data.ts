@@ -4,6 +4,12 @@
 // priced by size (fromPrice + sizes[]). Other items priced directly (priceMK/priceNN).
 // Limited editions carry limitedEdition + availableUntil (ISO date | null).
 // When availableUntil is in the past, treat the item as a Past Drop (see isCurrentLE).
+//
+// REGEN NOTE: `hideUntilPriced: true` is a hand-set override that MUST survive
+// regeneration. Grep for it before overwriting this file, or carry the column
+// through the master spreadsheet. Items currently flagged (see docs/TODO-content.md):
+//   - double-og-bacon-smash-burger
+//   - triple-og-bacon-smash-burger
 
 import type { Allergen } from "./allergen-data";
 
@@ -28,6 +34,13 @@ export interface MenuItem {
   limitedEdition: boolean;
   availableUntil: string | null; // ISO date; null = no end set
   unavailableAt: string | null;  // 'MK' | 'NN' | null
+  // Hand-set override: when true the item is dropped from the rendered menu
+  // at BOTH shops regardless of price/unavailability data, pending Benson
+  // supplying a price. Used for items the shops serve but which have no
+  // price in the master spreadsheet yet — showing them without a price
+  // reads as broken, hiding them is cleaner than a "TBC" placeholder.
+  // See docs/TODO-content.md "Missing prices — Benson to supply".
+  hideUntilPriced?: true;
   photo: string | null;
   contains: Allergen[];
   traces: Allergen[];
@@ -3493,6 +3506,7 @@ export const MENU_ITEMS: MenuItem[] = [
     "limitedEdition": false,
     "availableUntil": null,
     "unavailableAt": "MK",
+    "hideUntilPriced": true,
     "photo": null,
     "contains": [
       "celery",
@@ -3567,6 +3581,7 @@ export const MENU_ITEMS: MenuItem[] = [
     "limitedEdition": false,
     "availableUntil": null,
     "unavailableAt": "MK",
+    "hideUntilPriced": true,
     "photo": null,
     "contains": [],
     "traces": []

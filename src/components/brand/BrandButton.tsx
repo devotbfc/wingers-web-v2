@@ -31,7 +31,7 @@ interface BrandButtonProps {
 // rounded-md rule. Status badges + chips keep their own radii.
 const variantClasses: Record<BrandButtonVariant, string> = {
   primary:
-    "bg-brand-red text-brand-white hover:brightness-90 border-0 rounded-full shadow-none",
+    "bg-brand-red-cta text-brand-white hover:brightness-90 border-0 rounded-full shadow-none",
   secondary:
     "bg-brand-pink text-brand-black hover:brightness-95 border-0 rounded-full shadow-none",
   ghost:
@@ -39,7 +39,7 @@ const variantClasses: Record<BrandButtonVariant, string> = {
   inverse:
     "bg-brand-white text-brand-red hover:brightness-95 border-0 rounded-full shadow-none",
   outline:
-    "bg-brand-white text-brand-black border-2 border-brand-black hover:bg-brand-red hover:text-brand-white hover:border-brand-red focus-visible:bg-brand-red focus-visible:text-brand-white focus-visible:border-brand-red rounded-full shadow-none",
+    "bg-brand-white text-brand-black border-2 border-brand-black hover:bg-brand-red-cta hover:text-brand-white hover:border-brand-red-cta focus-visible:bg-brand-red-cta focus-visible:text-brand-white focus-visible:border-brand-red-cta rounded-full shadow-none",
 };
 
 const sizeClasses: Record<BrandButtonSize, string> = {

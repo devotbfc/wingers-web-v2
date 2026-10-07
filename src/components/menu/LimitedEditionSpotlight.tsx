@@ -55,7 +55,7 @@ export function LimitedEditionSpotlight({ flavour }: LimitedEditionSpotlightProp
           boxShadow: "inset 0 0 80px rgba(255,255,255,0.08)",
         }}
       >
-        <div className="md:grid md:grid-cols-[1fr_200px] md:gap-8">
+        <div className="md:block">
           <div>
             <span className="inline-flex items-center gap-2 font-display text-[11px] font-extrabold uppercase tracking-[0.2em]">
               <span className="animate-flicker">LE</span>
@@ -103,12 +103,12 @@ export function LimitedEditionSpotlight({ flavour }: LimitedEditionSpotlightProp
             </div>
           </div>
 
-          {/* Placeholder graphic — hidden below md until a real photo lands.
-              See data-todo for grepping when assets arrive. */}
+          {/* Placeholder graphic — hidden at ALL breakpoints until a real
+              photo lands. See data-todo for grepping when assets arrive. */}
           <div
             data-todo="assets"
             aria-hidden="true"
-            className="hidden md:flex md:items-center md:justify-center"
+            className="hidden"
           >
             <div className="relative aspect-square w-full max-w-[200px]">
               <div

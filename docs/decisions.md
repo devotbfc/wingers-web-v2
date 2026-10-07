@@ -412,3 +412,25 @@ Separately, both brand-red and brand-pink were being used as filled primary butt
 - **Amendment (2026-10-05, app-parity batch) — SUPERSEDES the rounded-md rule for buttons:** every `BrandButton` variant now renders at `rounded-full` (pill), matching the native wing-app's button system. Hand-rolled CTA buttons (NavBar hamburger/mobile-close, FlavourFilters type pills + heat chips, SignupSlideIn close button) also move to `rounded-full`. Icon-only buttons at `h-10 w-10` or `h-9 w-9` become circles under this rule — intentional. Status badges, product chips, allergen chips and heat tags keep their existing radii — they're not buttons. The `MenuCard` Allergens disclosure, inputs, textareas and card-shaped tap targets (shop picker cards, FlavourLabLinkCard) stay `rounded-md` since they're not buttons.
 - **Amendment (2026-10-05, UI font revert):** site runs on **two font families** — Bricolage Grotesque (display) + Inter (body). The short-lived `--font-ui` layer (first Anton, then Oswald variable) is dropped; every UI chrome surface (BrandButton labels, `/menu` CategoryBar pills, LocationPicker PICK UP label + trigger, MenuCard price, `/menu` section headings + sub-headings, MenuCard item names) is back on Bricolage at **weight 800** (`font-extrabold`). Letter-spacing: `0.02em` on buttons/pills/eyebrows/prices (uppercase chrome); `tracking-tight` kept on headings and item names. The BrandButton size-notch bump that landed with the Anton swap (md `text-base`→`text-lg`, lg `text-lg`→`text-xl`) is reverted; 44px min height preserved via `h-10` / `h-12`, and all `BrandButton` variants stay `rounded-full`. Rationale: Anton was too thin for CTA readability and Oswald never shipped; a second UI family wasn't earning its weight (literally).
 - **Amendment (2026-10-05, lab-wheel-polish):** adds `--color-le-purple: #8B2CFF` for the Flavour Lab wheels' active-LE slice indicator only — not part of the white-primary palette, not for use outside the LE wheel slice (purple fill + glow + "LE" flicker tag).
+
+---
+
+## ADR-019 — Liquid-glass direction retired; refine white-primary; CTA red token
+
+**Date**: 2026-10-07
+**Status**: Accepted (extends ADR-015 and ADR-018)
+
+### Context
+Batch I audit (`.tmp-ui-audit.md`, 2026-10-07) weighed refining the current white-primary system against adopting a translucent "liquid glass" direction over food photography. Measured contrast ratios used to inform the call: `brand-red` on `brand-pink` = 1.45:1, `brand-white` on `brand-pink` = 2.56:1, `brand-white` on `#FF2D2D` = 3.71:1, `brand-white` on `#E0242A` = 4.71:1, `brand-black` on `brand-pink` = 7.72:1.
+
+The CTA failure was systemic rather than one-off: `BrandButton variant="primary"` sits at `bg-brand-red (#FF2D2D) + text-brand-white`, a 3.71:1 pair that passes WCAG AA for large bold text but fails the 4.5:1 small-text threshold that applies to the `size="sm"` and `size="md"` pill labels in use across the site.
+
+### Decision
+1. **Retire liquid glass permanently.** Backdrop-blur over fried-chicken photography is contrast-fragile, janks on mid-range Android, pushes layouts toward image-first (hostile to the AI-search plain-text requirement in CLAUDE.md), and the vocabulary belongs to OS chrome, not UK street food. Any future proposal to introduce translucency / glass panels must open a new ADR superseding this one.
+2. **Refine the existing white-primary system.** No new palette, no new motion vocabulary. Fixes land as targeted contrast/forms/a11y corrections (Batch I).
+3. **Introduce `--color-brand-red-cta: #E0242A`** as the sole fill token for `BrandButton variant="primary"` (base + hover) and the `BrandButton variant="outline"` hover/focus-visible fill-and-border state. `brand-white` on this red is 4.71:1 — AA small-text pass. `--color-brand-red` (`#FF2D2D`) remains the universal accent / ink / eyebrow / border / chip / decorative colour. The `.order-pulse-ring` border also moves to `brand-red-cta` so the ring and the pill it surrounds are the same shade.
+
+### Consequences
+- `src/styles/globals.css` carries both red tokens; CLAUDE.md's "brand tokens only, no raw hex" rule is unchanged.
+- `BrandButton.tsx` + `src/app/not-found.tsx` are the only call sites currently moved to `brand-red-cta`. Non-CTA red uses (LocationOpenBadge dot, LocationCard panel, TwoSpots photo fallback, SaucePanel photo fallback, MenuCard tile rotation + Limited chip, FlavourCard tile rotation + Limited badge, loyalty benefit tile, flavour-lab FlavourCard ghost border, FlavourFilters pill tint, locations/[slug] photo panel, about stage tile, dev page swatch) deliberately stay on `brand-red`.
+- Two-red split is visible side-by-side at desktop (a red eyebrow 15px above a red CTA pill reads as "same family, slightly deeper button"). If Benson rejects the split at preview, the fallback is a one-token swap — redefine `--color-brand-red` to `#E0242A` globally, delete `--color-brand-red-cta`, revert BrandButton + not-found + globals pulse-ring edits. No component rewrites.

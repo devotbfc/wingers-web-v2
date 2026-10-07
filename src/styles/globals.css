@@ -6,6 +6,13 @@
   --color-brand-black: #000000;
   --color-brand-white: #FFFFFF;
 
+  /* CTA-only red (BrandButton primary fill + hover state, OrderTrigger pulse
+     ring). Darker than brand-red so brand-white on top passes WCAG AA at
+     small-text (ratio 4.71:1 vs brand-red's 3.71:1). brand-red stays
+     #FF2D2D for eyebrows, borders, chips and decorative accents. See
+     docs/decisions.md ADR-019. */
+  --color-brand-red-cta: #E0242A;
+
   /* Warm chrome-neutral used for pill tab inactive fill and the location
      picker sheet shop cards. Scoped to navigation + picker chrome; not a
      general surface token. Matches the wing-app's warm off-white rest state. */
@@ -284,10 +291,9 @@
     inset: 0;
     border-radius: inherit;
     pointer-events: none;
-    box-shadow: 0 0 0 2px var(--color-brand-red);
+    box-shadow: 0 0 0 0 var(--color-brand-red-cta);
     opacity: 0.9;
     animation: order-pulse 3200ms ease-out infinite;
-    transform-origin: center;
   }
   .order-pulse-ring[data-paused="true"] {
     animation-play-state: paused;
@@ -324,8 +330,8 @@
 }
 
 @keyframes order-pulse {
-  0% { opacity: 0.9; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.35); }
+  0%   { opacity: 0.9; box-shadow: 0 0 0 0 var(--color-brand-red-cta); }
+  100% { opacity: 0;   box-shadow: 0 0 0 10px var(--color-brand-red-cta); }
 }
 
 @media (prefers-reduced-motion: reduce) {

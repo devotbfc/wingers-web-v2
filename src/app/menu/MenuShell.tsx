@@ -78,8 +78,12 @@ export function MenuShell({
   const currentLocationName =
     LOCATIONS.find((l) => l.slug === locationSlug)?.name ?? "Wingers";
 
+  // hideUntilPriced is a per-item hand-set override (menu-data.ts) that
+  // drops the card at both shops regardless of availability data, pending
+  // a price being supplied. Applied to the current-items list only — past
+  // drops stay archival regardless.
   const currentItems = useMemo(
-    () => MENU_ITEMS.filter((i) => isCurrentLE(i)),
+    () => MENU_ITEMS.filter((i) => isCurrentLE(i) && !i.hideUntilPriced),
     []
   );
   const pastDrops = useMemo(

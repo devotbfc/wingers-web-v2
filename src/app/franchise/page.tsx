@@ -37,7 +37,12 @@ interface Pillar {
 
 // data-todo="content" lives on the tiles in the JSX below. These three
 // paragraphs describe the Wingers process; the sister brand may use the same
-// one, but Benson needs to confirm before publish.
+// one, but Benson needs to confirm before publish. While unconfirmed, flip
+// SHOW_PILLARS to false so the tiles render as nothing (the data stays here
+// and the data-todo attribute stays in the JSX for grep). Flip to true on
+// confirmation. See docs/TODO-content.md.
+const SHOW_PILLARS = false;
+
 const PILLARS: readonly Pillar[] = [
   {
     n: "01",
@@ -170,33 +175,35 @@ export default function FranchisePage() {
               Buttermilk fried chicken, done properly. No shortcuts, no
               lamp-warmers, halal throughout.
             </p>
-            <ul
-              className="mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:grid md:snap-none md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0"
-              data-todo="content"
-              data-todo-note="Benson to confirm the sister brand uses the same brine/dredge/fry process before publish."
-            >
-              {PILLARS.map((p) => (
-                <li
-                  key={p.n}
-                  className="min-w-[75%] snap-start rounded-md border border-brand-black/10 bg-brand-white p-6 md:min-w-0"
-                >
-                  <div className="flex items-baseline gap-3">
-                    <span
-                      aria-hidden="true"
-                      className="font-display text-4xl font-extrabold text-brand-red md:text-5xl"
-                    >
-                      {p.n}
-                    </span>
-                    <h3 className="font-display text-xl font-bold uppercase tracking-tight text-brand-black md:text-2xl">
-                      {p.label}
-                    </h3>
-                  </div>
-                  <p className="mt-4 font-body text-base leading-relaxed text-brand-black/80">
-                    {p.copy}
-                  </p>
-                </li>
-              ))}
-            </ul>
+            {SHOW_PILLARS && (
+              <ul
+                className="mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:grid md:snap-none md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0"
+                data-todo="content"
+                data-todo-note="Benson to confirm the sister brand uses the same brine/dredge/fry process before publish."
+              >
+                {PILLARS.map((p) => (
+                  <li
+                    key={p.n}
+                    className="min-w-[75%] snap-start rounded-md border border-brand-black/10 bg-brand-white p-6 md:min-w-0"
+                  >
+                    <div className="flex items-baseline gap-3">
+                      <span
+                        aria-hidden="true"
+                        className="font-display text-4xl font-extrabold text-brand-red md:text-5xl"
+                      >
+                        {p.n}
+                      </span>
+                      <h3 className="font-display text-xl font-bold uppercase tracking-tight text-brand-black md:text-2xl">
+                        {p.label}
+                      </h3>
+                    </div>
+                    <p className="mt-4 font-body text-base leading-relaxed text-brand-black/80">
+                      {p.copy}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </section>
 
@@ -304,7 +311,7 @@ export default function FranchisePage() {
               FAQ.
             </h2>
             <ul className="mt-8 space-y-3">
-              {FRANCHISE_FAQS.map((f) => (
+              {FRANCHISE_FAQS.filter((f) => !f.hidden).map((f) => (
                 <li key={f.q}>
                   <details
                     className="group rounded-md border border-brand-black/10 bg-brand-white px-5 py-4 open:pb-5"

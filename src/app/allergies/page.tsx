@@ -58,13 +58,17 @@ const SECTIONS: readonly SectionGroup[] = ALLERGEN_ITEMS.reduce<SectionGroup[]>(
 const STICKY_COL =
   "sticky left-0 z-10 bg-brand-white border-r border-brand-black/10";
 
+// Cells use shape (filled square / outline square / dash) rather than
+// colour alone, so colourblind readers and greyscale printouts can still
+// distinguish Contains from May-contain from Free-from without relying on
+// the red/muted/faded palette.
 function ContainsMark({ allergen }: { allergen: string }) {
   return (
     <span
       aria-label={`Contains ${allergen}`}
       className="font-display text-lg leading-none text-brand-red"
     >
-      ●
+      ■
     </span>
   );
 }
@@ -75,7 +79,7 @@ function TracesMark({ allergen }: { allergen: string }) {
       aria-label={`May contain traces of ${allergen}`}
       className="font-display text-lg leading-none text-brand-black/70"
     >
-      ◌
+      □
     </span>
   );
 }
@@ -134,7 +138,7 @@ export default function AllergiesPage() {
             <div
               role="note"
               aria-label="Legend"
-              className="flex flex-wrap items-center gap-x-6 gap-y-2 border border-brand-black/15 p-4 md:p-5 font-body text-sm text-brand-black"
+              className="flex flex-wrap items-center gap-x-6 gap-y-2 border border-brand-black/15 p-4 md:p-5 text-brand-black"
             >
               <span className="font-display text-xs font-bold uppercase tracking-widest text-brand-black/60">
                 Key
@@ -142,26 +146,32 @@ export default function AllergiesPage() {
               <span className="inline-flex items-center gap-2">
                 <span
                   aria-hidden="true"
-                  className="font-display text-lg leading-none text-brand-red"
+                  className="font-display text-base leading-none text-brand-red"
                 >
-                  ●
+                  ■
                 </span>
-                Contains
+                <span className="font-display text-sm font-bold uppercase tracking-wider">
+                  Contains
+                </span>
               </span>
               <span className="inline-flex items-center gap-2">
                 <span
                   aria-hidden="true"
-                  className="font-display text-lg leading-none text-brand-black/70"
+                  className="font-display text-base leading-none text-brand-black/70"
                 >
-                  ◌
+                  □
                 </span>
-                May contain traces
+                <span className="font-display text-sm font-bold uppercase tracking-wider">
+                  May contain traces
+                </span>
               </span>
               <span className="inline-flex items-center gap-2">
                 <span aria-hidden="true" className="text-brand-black/40">
                   —
                 </span>
-                Free from
+                <span className="font-display text-sm font-bold uppercase tracking-wider">
+                  Free from
+                </span>
               </span>
             </div>
           </div>
@@ -180,6 +190,15 @@ export default function AllergiesPage() {
               >
                 {group.section}
               </h2>
+              <p
+                aria-hidden="true"
+                className="mt-2 font-display text-xs font-bold uppercase tracking-widest text-brand-black/60"
+              >
+                <span className="text-brand-red">■</span> Contains ·{" "}
+                <span className="text-brand-black/70">□</span> May contain
+                traces · <span className="text-brand-black/40">—</span> Free
+                from
+              </p>
               <div className="mt-6 overflow-x-auto">
                 <table className="w-full min-w-[900px] border-collapse text-left font-body text-sm">
                   <caption className="sr-only">

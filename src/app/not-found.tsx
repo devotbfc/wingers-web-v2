@@ -31,7 +31,7 @@ export default function NotFound() {
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/"
-                className="inline-flex min-h-12 items-center justify-center bg-brand-red px-8 font-display text-lg font-bold uppercase tracking-wide text-brand-white transition-colors hover:bg-brand-pink hover:text-brand-black"
+                className="inline-flex min-h-12 items-center justify-center bg-brand-red-cta px-8 font-display text-lg font-bold uppercase tracking-wide text-brand-white transition-colors hover:bg-brand-pink hover:text-brand-black"
               >
                 Back Home
               </Link>

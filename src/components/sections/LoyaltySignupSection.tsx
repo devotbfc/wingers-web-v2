@@ -31,7 +31,7 @@ export function LoyaltySignupSection({
               Friends with Benefits
             </p>
             <div className="mt-4">
-              <h2 className="font-display font-extrabold uppercase leading-[0.9] tracking-tight text-[clamp(3rem,9vw,6.5rem)] text-brand-white">
+              <h2 className="font-display font-extrabold uppercase leading-[0.9] tracking-tight text-[clamp(3rem,9vw,6.5rem)] text-brand-black">
                 BECOME A WINGER.
               </h2>
             </div>
