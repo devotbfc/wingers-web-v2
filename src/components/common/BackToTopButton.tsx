@@ -6,7 +6,6 @@ import { useConsent } from "@/components/consent/ConsentProvider";
 import { cn } from "@/lib/utils";
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-const MOBILE_QUERY = "(max-width: 767px)";
 
 function subscribeReducedMotion(callback: () => void): () => void {
   const mq = window.matchMedia(REDUCED_MOTION_QUERY);
@@ -44,7 +43,7 @@ export function BackToTopButton({
 }: BackToTopButtonProps = {}) {
   const [visible, setVisible] = useState(false);
   const [footerVisible, setFooterVisible] = useState(false);
-  const [signupOpenMobile, setSignupOpenMobile] = useState(false);
+  const [signupOpen, setSignupOpen] = useState(false);
   const shouldReduce = usePrefersReducedMotion();
   const { status, pixelId } = useConsent();
 
@@ -92,11 +91,13 @@ export function BackToTopButton({
     return () => observer.disconnect();
   }, []);
 
+  // Hide while the SignupSlideIn is open on ANY viewport. On mobile the
+  // slide-in is full-width at bottom; on desktop it anchors bottom-left,
+  // same corner as the homepage BackToTopButton. Either way, don't stack
+  // a pink circle behind it.
   useEffect(() => {
-    const mql = window.matchMedia(MOBILE_QUERY);
     const read = () => {
-      const open = document.body.dataset.signupOpen === "true";
-      setSignupOpenMobile(open && mql.matches);
+      setSignupOpen(document.body.dataset.signupOpen === "true");
     };
     read();
     const observer = new MutationObserver(read);
@@ -104,11 +105,7 @@ export function BackToTopButton({
       attributes: true,
       attributeFilter: ["data-signup-open"],
     });
-    mql.addEventListener("change", read);
-    return () => {
-      observer.disconnect();
-      mql.removeEventListener("change", read);
-    };
+    return () => observer.disconnect();
   }, []);
 
   const handleClick = () => {
@@ -116,7 +113,7 @@ export function BackToTopButton({
   };
 
   const show =
-    visible && !footerVisible && !consentBannerVisible && !signupOpenMobile;
+    visible && !footerVisible && !consentBannerVisible && !signupOpen;
 
   const positionStyle =
     anchor === "right"

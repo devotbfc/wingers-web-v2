@@ -25,14 +25,17 @@ export function SignupSlideIn({
   onCompleted,
 }: SignupSlideInProps) {
   const [step, setStep] = useState<Step>(currentLE ? "le" : "email");
-  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const titleId = useId();
 
   useEffect(() => {
     if (!open) return;
     const previousFocus = document.activeElement as HTMLElement | null;
-    closeBtnRef.current?.focus();
+    // Focus the panel itself (tabIndex={-1}, outline-none) rather than the
+    // close X. Screen readers still land inside the dialog; Tab reaches
+    // the X first; and mouse/touch opens don't show a focus ring on X.
+    panelRef.current?.focus();
 
     // Advertise open state to peer floating UI (e.g. BackToTopButton) via a
     // body dataset flag so it can step aside on mobile without pulling in a
@@ -89,22 +92,23 @@ export function SignupSlideIn({
           />
           <motion.div
             key="panel"
+            ref={panelRef}
             role="dialog"
             aria-labelledby={titleId}
             aria-modal="false"
+            tabIndex={-1}
             initial="hidden"
             animate="visible"
             exit="hidden"
             variants={panelVariants}
             transition={{ duration: reduced ? 0.2 : 0.32, ease: "easeOut" }}
-            className="fixed inset-x-0 bottom-0 z-40 w-full rounded-t-xl border-t border-brand-pink/60 bg-brand-white px-6 pt-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-[0_-8px_28px_rgba(0,0,0,0.1)] md:inset-auto md:bottom-6 md:left-6 md:w-[380px] md:max-w-[calc(100vw-3rem)] md:rounded-md md:border md:border-brand-pink/40 md:px-5 md:pb-5 md:pt-4 md:shadow-[0_12px_32px_rgba(0,0,0,0.14)]"
+            className="fixed inset-x-0 bottom-0 z-40 w-full rounded-t-xl border-t border-brand-pink/60 bg-brand-white px-6 pt-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-[0_-8px_28px_rgba(0,0,0,0.1)] outline-none md:inset-auto md:bottom-6 md:left-6 md:w-[380px] md:max-w-[calc(100vw-3rem)] md:rounded-md md:border md:border-brand-pink/40 md:px-5 md:pb-5 md:pt-4 md:shadow-[0_12px_32px_rgba(0,0,0,0.14)]"
           >
             <button
-              ref={closeBtnRef}
               type="button"
               onClick={onDismiss}
               aria-label="Dismiss sign-up"
-              className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center rounded-full text-brand-black/70 hover:text-brand-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-pink"
+              className="absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full text-brand-black/70 hover:text-brand-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-pink"
             >
               <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5">
                 <path
