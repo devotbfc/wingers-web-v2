@@ -88,7 +88,7 @@ const labelClasses =
 const optionalLabel =
   "font-normal normal-case text-brand-black/60";
 const errorText =
-  "font-body text-sm text-brand-black";
+  "font-body text-sm font-bold text-brand-red";
 
 export function FranchiseEnquiryForm() {
   const [isPending, startTransition] = useTransition();
