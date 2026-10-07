@@ -163,6 +163,11 @@ export function MenuCard({ item, locationSlug, variant = "standard" }: MenuCardP
       data-todo={missingPrice ? "price" : undefined}
       className={cn(
         "flex h-full flex-col bg-brand-white",
+        // Press feedback (mobile, via :active on an ancestor) + desktop
+        // hover lift. Tailwind v4 compiles hover:* behind (hover: hover) so
+        // the lift and shadow never stick on touch.
+        !isPast &&
+          "motion-safe:transition-[transform,box-shadow] motion-safe:duration-200 motion-safe:ease-out motion-safe:active:scale-[0.98] motion-safe:active:duration-[90ms] motion-safe:hover:-translate-y-[3px] motion-safe:hover:shadow-[0_14px_28px_rgba(0,0,0,0.14)]",
         isPast && "opacity-60 grayscale"
       )}
     >

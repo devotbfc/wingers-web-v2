@@ -1,5 +1,8 @@
+"use client";
+
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { useAnimateInView } from "@/components/common/useAnimateInView";
 
 type MarqueeItem = string | ReactNode;
 
@@ -26,12 +29,20 @@ export function MarqueeLockup({
   itemClassName = "text-brand-pink",
 }: MarqueeLockupProps) {
   const doubled = [...items, ...items];
+  const [ref, inView] = useAnimateInView<HTMLDivElement>();
 
   return (
-    <div className={cn("overflow-hidden w-full", className)} aria-hidden>
+    <div
+      ref={ref}
+      className={cn("overflow-hidden w-full", className)}
+      aria-hidden
+    >
       <div
         className="marquee-track flex gap-12 w-max items-center py-3"
-        style={{ animationDuration: `${speed}s` }}
+        style={{
+          animationDuration: `${speed}s`,
+          animationPlayState: inView ? "running" : "paused",
+        }}
       >
         {doubled.map((item, i) =>
           typeof item === "string" ? (

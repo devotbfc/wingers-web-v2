@@ -111,6 +111,7 @@ export function LoyaltySignupForm({
                 <FormControl>
                   <Input
                     type="email"
+                    inputMode="email"
                     autoComplete="email"
                     placeholder="you@wingers.co"
                     className={inputClasses}

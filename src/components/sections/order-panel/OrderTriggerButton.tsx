@@ -1,8 +1,13 @@
 "use client";
 
-import { BrandButton } from "@/components/brand/BrandButton";
-import { useOrderPanel } from "./order-panel-context";
+import { useSyncExternalStore } from "react";
 import type React from "react";
+
+import { BrandButton } from "@/components/brand/BrandButton";
+import { useAnimateInView } from "@/components/common/useAnimateInView";
+
+import { useOrderPanel } from "./order-panel-context";
+import { ORDER_PULSE_ENABLED } from "./motion-flags";
 
 interface OrderTriggerButtonProps {
   children: React.ReactNode;
@@ -12,6 +17,30 @@ interface OrderTriggerButtonProps {
   preferredLocationSlug?: string;
 }
 
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+function subscribeReducedMotion(callback: () => void): () => void {
+  const mq = window.matchMedia(REDUCED_MOTION_QUERY);
+  mq.addEventListener("change", callback);
+  return () => mq.removeEventListener("change", callback);
+}
+
+function getReducedMotionSnapshot(): boolean {
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+}
+
+function getReducedMotionServerSnapshot(): boolean {
+  return false;
+}
+
+function usePrefersReducedMotion(): boolean {
+  return useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotionSnapshot,
+    getReducedMotionServerSnapshot
+  );
+}
+
 export function OrderTriggerButton({
   children,
   variant = "primary",
@@ -19,15 +48,32 @@ export function OrderTriggerButton({
   className,
   preferredLocationSlug,
 }: OrderTriggerButtonProps) {
-  const { openPanel } = useOrderPanel();
+  const { openPanel, open } = useOrderPanel();
+  const reduced = usePrefersReducedMotion();
+  const [wrapperRef, inView] = useAnimateInView<HTMLSpanElement>();
+
+  const pulsePaused = open || reduced || !inView;
+
   return (
-    <BrandButton
-      variant={variant}
-      size={size}
-      onClick={() => openPanel(preferredLocationSlug)}
-      className={className}
+    <span
+      ref={wrapperRef}
+      className="relative inline-flex rounded-full"
     >
-      {children}
-    </BrandButton>
+      {ORDER_PULSE_ENABLED && (
+        <span
+          aria-hidden="true"
+          data-paused={pulsePaused ? "true" : undefined}
+          className="order-pulse-ring"
+        />
+      )}
+      <BrandButton
+        variant={variant}
+        size={size}
+        onClick={() => openPanel(preferredLocationSlug)}
+        className={className}
+      >
+        {children}
+      </BrandButton>
+    </span>
   );
 }

@@ -94,6 +94,7 @@ export function SignupSlideInForm({
           Email
           <input
             type="email"
+            inputMode="email"
             autoComplete="email"
             placeholder="you@wingers.co"
             {...form.register("email")}

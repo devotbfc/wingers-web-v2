@@ -45,7 +45,7 @@ export function FlavourFilters({
                 role="radio"
                 aria-checked={active}
                 onClick={() => onTypeChange(opt.value)}
-                className={`min-h-11 rounded-full px-5 py-2 font-display text-sm font-bold uppercase tracking-wide transition-all ${
+                className={`min-h-11 rounded-full px-5 py-2 font-display text-sm font-bold uppercase tracking-wide transition-[color,background-color,border-color] duration-150 ${
                   active
                     ? "glow-edge-pink bg-brand-pink text-brand-black"
                     : "border border-brand-white/15 bg-transparent text-brand-white/60 hover:border-brand-pink/40 hover:text-brand-white"
@@ -76,7 +76,7 @@ export function FlavourFilters({
                 aria-checked={selected}
                 aria-label={`Heat up to ${level}`}
                 onClick={() => onHeatChange(level)}
-                className={`flex h-10 w-10 items-center justify-center rounded-full border transition-all ${
+                className={`flex h-11 w-11 items-center justify-center rounded-full border transition-[color,background-color,border-color] duration-150 ${
                   active
                     ? "border-brand-red/50 bg-brand-red/10"
                     : "border-brand-white/10 bg-brand-white/[0.02] hover:border-brand-white/25"

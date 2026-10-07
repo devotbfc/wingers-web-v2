@@ -52,9 +52,22 @@
     overflow-x: clip;
   }
 
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
     background-color: var(--color-brand-white);
     color: var(--color-brand-black);
+  }
+
+  /* Scroll lock while SignupSlideIn is open — set by SignupSlideIn.tsx via
+     document.body.dataset.signupOpen. Note: overflow:hidden alone can leak
+     on iOS Safari. If scroll-through is observed on a real iPhone, upgrade
+     to a position:fixed + scrollY-restore pattern. */
+  body[data-signup-open="true"] {
+    overflow: hidden;
+    overscroll-behavior: contain;
   }
 }
 
@@ -82,6 +95,28 @@
 
   .marquee-track {
     animation: marquee-scroll 60s linear infinite;
+  }
+
+  /* Pause-on-hover is a MarqueeLockup ADR requirement, but gated behind
+     (hover: hover) so touch devices (no persistent hover) don't accidentally
+     freeze the track on first tap. */
+  @media (hover: hover) {
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+  }
+
+  /* Toggleable pause for descendants of an element the component marks as
+     off-screen (via IntersectionObserver). Opt-in: set the class, don't
+     affect the whole page. Battery win on long scrolling. */
+  .paused-anims .marquee-track,
+  .paused-anims .animate-glow-ring,
+  .paused-anims .animate-glow-ring::before,
+  .paused-anims .animate-glow-ring::after,
+  .paused-anims .animate-slice-pulse,
+  .paused-anims .animate-flicker,
+  .paused-anims .sauce-shimmer::before {
+    animation-play-state: paused;
   }
 
   /* ADR-015 + ADR-018: reserved for the four permitted dark surfaces only —
@@ -151,8 +186,40 @@
       inset 0 0 18px rgba(255, 45, 45, 0.08);
   }
 
-  .animate-glow-ring {
-    animation: lab-pulse-ring 3s ease-in-out infinite;
+  /* Lab glow ring — two cross-fading pseudo layers (pink-dominant /
+     red-dominant) animate opacity only. The box-shadows themselves are
+     static per pseudo so the compositor paints each layer once and only
+     the opacity composite animates = GPU-cheap. Replaces the single
+     keyframed box-shadow which repainted every frame on mid-range Android.
+     Requires the host element to leave both ::before and ::after free —
+     i.e. apply to a dedicated empty div, not a card that already uses a
+     pseudo (sauce-shimmer, decorative overlays etc.). The host sets its
+     OWN positioning (absolute/relative) — this rule intentionally does
+     not, so Tailwind `absolute inset-0` on the host isn't fought. */
+  .animate-glow-ring::before,
+  .animate-glow-ring::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    animation-duration: 3s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+  .animate-glow-ring::before {
+    box-shadow:
+      0 0 0 2px rgba(255, 111, 181, 0.6),
+      0 0 30px rgba(255, 111, 181, 0.4),
+      0 0 60px rgba(255, 45, 45, 0.25);
+    animation-name: lab-pulse-ring-a;
+  }
+  .animate-glow-ring::after {
+    box-shadow:
+      0 0 0 2px rgba(255, 45, 45, 0.7),
+      0 0 45px rgba(255, 45, 45, 0.5),
+      0 0 90px rgba(255, 111, 181, 0.35);
+    animation-name: lab-pulse-ring-b;
   }
 
   .animate-flicker {
@@ -171,43 +238,71 @@
      pseudo-element that inherits the parent's border-radius). Low opacity
      via the gradient alpha so text contrast is unaffected. Reuses the same
      135° pink→red colour palette as SauceEdgeAccent. */
+  /* Sauce shimmer — soft diagonal pink → red sheen drifting across the
+     parent's background on a slow loop. Rewritten to animate transform
+     (GPU-cheap) instead of background-position (per-frame repaint).
+     The ::before layer is 200% wide, holds two mirrored peaks in the
+     gradient, and translateX(-50%) over 6s so the second peak lands
+     where the first was — seamless loop with no visible snap.
+     overflow:hidden is required on the parent to clip the oversized pseudo. */
   .sauce-shimmer {
     position: relative;
     isolation: isolate;
+    overflow: hidden;
   }
 
   .sauce-shimmer::before {
     content: "";
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
     z-index: -1;
     pointer-events: none;
-    border-radius: inherit;
     background: linear-gradient(
       135deg,
       transparent 0%,
-      rgba(255, 111, 181, 0.16) 35%,
-      rgba(255, 45, 45, 0.16) 65%,
+      rgba(255, 111, 181, 0.16) 17.5%,
+      rgba(255, 45, 45, 0.16) 32.5%,
+      transparent 50%,
+      rgba(255, 111, 181, 0.16) 67.5%,
+      rgba(255, 45, 45, 0.16) 82.5%,
       transparent 100%
     );
-    background-size: 220% 220%;
     animation: sauce-shimmer-drift 6s linear infinite;
+  }
+
+  /* OrderTrigger idle pulse ring — red-only outward ping behind the ORDER
+     pill. Sibling absolute-positioned element, host wrapper must be
+     relative and pill-shaped. Paused via data-paused="true" when the
+     OrderPanel is open, the user has reduced-motion on, or the trigger is
+     off-screen (useAnimateInView). Gated behind ORDER_PULSE_ENABLED
+     (src/components/sections/order-panel/motion-flags.ts). */
+  .order-pulse-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow: 0 0 0 2px var(--color-brand-red);
+    opacity: 0.9;
+    animation: order-pulse 3200ms ease-out infinite;
+    transform-origin: center;
+  }
+  .order-pulse-ring[data-paused="true"] {
+    animation-play-state: paused;
+    opacity: 0;
   }
 }
 
-@keyframes lab-pulse-ring {
-  0%, 100% {
-    box-shadow:
-      0 0 0 2px rgba(255, 111, 181, 0.6),
-      0 0 30px rgba(255, 111, 181, 0.4),
-      0 0 60px rgba(255, 45, 45, 0.25);
-  }
-  50% {
-    box-shadow:
-      0 0 0 2px rgba(255, 45, 45, 0.7),
-      0 0 45px rgba(255, 45, 45, 0.5),
-      0 0 90px rgba(255, 111, 181, 0.35);
-  }
+@keyframes lab-pulse-ring-a {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes lab-pulse-ring-b {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }
 
 @keyframes lab-flicker {
@@ -224,20 +319,32 @@
 }
 
 @keyframes sauce-shimmer-drift {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes order-pulse {
+  0% { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.35); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .marquee-track {
     animation-play-state: paused;
   }
-  .animate-glow-ring,
+  .animate-glow-ring::before,
+  .animate-glow-ring::after,
   .animate-flicker,
   .animate-slice-pulse {
     animation: none;
   }
+  .animate-glow-ring::before { opacity: 1; }
+  .animate-glow-ring::after { opacity: 0; }
   .sauce-shimmer::before {
     animation: none;
+  }
+  .order-pulse-ring {
+    animation: none;
+    opacity: 0;
   }
 }

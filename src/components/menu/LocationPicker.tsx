@@ -68,7 +68,12 @@ export function LocationPicker({ value, onChange }: LocationPickerProps) {
         >
           <MapPin className="h-5 w-5" />
           <span>{current.name}</span>
-          <Chevron className="h-4 w-4" />
+          <Chevron
+            className={cn(
+              "h-4 w-4 transition-transform duration-[220ms] ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none",
+              open && "rotate-180"
+            )}
+          />
         </button>
       </div>
 

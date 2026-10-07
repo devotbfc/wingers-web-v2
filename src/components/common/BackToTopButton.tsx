@@ -6,7 +6,6 @@ import { useConsent } from "@/components/consent/ConsentProvider";
 import { cn } from "@/lib/utils";
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-const MOBILE_QUERY = "(max-width: 767px)";
 
 function subscribeReducedMotion(callback: () => void): () => void {
   const mq = window.matchMedia(REDUCED_MOTION_QUERY);
@@ -44,7 +43,7 @@ export function BackToTopButton({
 }: BackToTopButtonProps = {}) {
   const [visible, setVisible] = useState(false);
   const [footerVisible, setFooterVisible] = useState(false);
-  const [signupOpenMobile, setSignupOpenMobile] = useState(false);
+  const [signupOpen, setSignupOpen] = useState(false);
   const shouldReduce = usePrefersReducedMotion();
   const { status, pixelId } = useConsent();
 
@@ -92,11 +91,13 @@ export function BackToTopButton({
     return () => observer.disconnect();
   }, []);
 
+  // Hide while the SignupSlideIn is open on ANY viewport. On mobile the
+  // slide-in is full-width at bottom; on desktop it anchors bottom-left,
+  // same corner as the homepage BackToTopButton. Either way, don't stack
+  // a pink circle behind it.
   useEffect(() => {
-    const mql = window.matchMedia(MOBILE_QUERY);
     const read = () => {
-      const open = document.body.dataset.signupOpen === "true";
-      setSignupOpenMobile(open && mql.matches);
+      setSignupOpen(document.body.dataset.signupOpen === "true");
     };
     read();
     const observer = new MutationObserver(read);
@@ -104,11 +105,7 @@ export function BackToTopButton({
       attributes: true,
       attributeFilter: ["data-signup-open"],
     });
-    mql.addEventListener("change", read);
-    return () => {
-      observer.disconnect();
-      mql.removeEventListener("change", read);
-    };
+    return () => observer.disconnect();
   }, []);
 
   const handleClick = () => {
@@ -116,7 +113,7 @@ export function BackToTopButton({
   };
 
   const show =
-    visible && !footerVisible && !consentBannerVisible && !signupOpenMobile;
+    visible && !footerVisible && !consentBannerVisible && !signupOpen;
 
   const positionStyle =
     anchor === "right"
@@ -129,6 +126,15 @@ export function BackToTopButton({
           left: "calc(1rem + env(safe-area-inset-left, 0px))",
         };
 
+  // Scale-in on appear, slightly faster snap on disappear. Reduced-motion
+  // collapses to a short opacity-only fade. Separate duration + translate +
+  // scale per direction via explicit classes so Tailwind JIT keeps each.
+  const transitionClass = shouldReduce
+    ? "transition-opacity duration-[120ms] ease-linear"
+    : show
+      ? "transition-[opacity,transform] duration-[220ms] ease-out"
+      : "transition-[opacity,transform] duration-[160ms] ease-in";
+
   return (
     <button
       type="button"
@@ -138,10 +144,10 @@ export function BackToTopButton({
       className={cn(
         "fixed z-40 inline-flex h-11 w-11 items-center justify-center rounded-full bg-brand-pink text-brand-black",
         "focus-visible:outline-2 focus-visible:outline-brand-black focus-visible:outline-offset-2",
-        !shouldReduce && "transition-[opacity,transform] duration-200",
+        transitionClass,
         show
-          ? "opacity-100 translate-y-0 pointer-events-auto"
-          : "opacity-0 translate-y-2 pointer-events-none"
+          ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
+          : "opacity-0 translate-y-[6px] scale-90 pointer-events-none"
       )}
     >
       <svg
