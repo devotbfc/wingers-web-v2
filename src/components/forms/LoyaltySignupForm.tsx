@@ -77,7 +77,7 @@ export function LoyaltySignupForm({
   const consentField = form.register("consent");
 
   const inputClasses =
-    "h-12 w-full rounded-none border-0 bg-brand-white px-4 font-body text-base text-brand-black placeholder:text-brand-black/40 focus-visible:ring-0 shadow-none";
+    "h-12 w-full rounded-none border border-brand-black/20 bg-brand-white px-4 font-body text-base text-brand-black placeholder:text-brand-black/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-pink shadow-none";
 
   const consentError = form.formState.errors.consent?.message;
 
