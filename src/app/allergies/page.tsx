@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import { AllergenMatrix } from "@/components/allergens/AllergenMatrix";
+import { AllergenMatrixFallback } from "@/components/allergens/AllergenMatrixFallback";
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
 import { OrderPanelProvider } from "@/components/sections/order-panel/order-panel-context";
-import {
-  ALLERGEN_ITEMS,
-  ALLERGEN_LABELS,
-  ALLERGENS_ORDERED,
-  type AllergenItem,
-} from "@/lib/menu";
 
 export const metadata: Metadata = {
   title: "Allergens — Wingers Buttermilk Halal Fried Chicken Menu",
@@ -31,66 +28,6 @@ export const metadata: Metadata = {
     ],
   },
 };
-
-type SectionGroup = {
-  section: string;
-  sectionSlug: string;
-  items: AllergenItem[];
-};
-
-const SECTIONS: readonly SectionGroup[] = ALLERGEN_ITEMS.reduce<SectionGroup[]>(
-  (acc, item) => {
-    const last = acc[acc.length - 1];
-    if (last && last.sectionSlug === item.sectionSlug) {
-      last.items.push(item);
-    } else {
-      acc.push({
-        section: item.section,
-        sectionSlug: item.sectionSlug,
-        items: [item],
-      });
-    }
-    return acc;
-  },
-  []
-);
-
-const STICKY_COL =
-  "sticky left-0 z-10 bg-brand-white border-r border-brand-black/10";
-
-// Cells use shape (filled square / outline square / dash) rather than
-// colour alone, so colourblind readers and greyscale printouts can still
-// distinguish Contains from May-contain from Free-from without relying on
-// the red/muted/faded palette.
-function ContainsMark({ allergen }: { allergen: string }) {
-  return (
-    <span
-      aria-label={`Contains ${allergen}`}
-      className="font-display text-lg leading-none text-brand-red"
-    >
-      ■
-    </span>
-  );
-}
-
-function TracesMark({ allergen }: { allergen: string }) {
-  return (
-    <span
-      aria-label={`May contain traces of ${allergen}`}
-      className="font-display text-lg leading-none text-brand-black/70"
-    >
-      □
-    </span>
-  );
-}
-
-function FreeFromMark({ allergen }: { allergen: string }) {
-  return (
-    <span aria-label={`Free from ${allergen}`} className="text-brand-black/25">
-      —
-    </span>
-  );
-}
 
 export default function AllergiesPage() {
   return (
@@ -178,93 +115,14 @@ export default function AllergiesPage() {
         </section>
 
         <div className="mx-auto max-w-6xl px-4 md:px-8 pb-24">
-          {SECTIONS.map((group) => (
-            <section
-              key={group.sectionSlug}
-              aria-labelledby={`allergen-section-${group.sectionSlug}`}
-              className="mt-12"
-            >
-              <h2
-                id={`allergen-section-${group.sectionSlug}`}
-                className="font-display font-extrabold uppercase leading-tight tracking-tight text-2xl md:text-4xl text-brand-black"
-              >
-                {group.section}
-              </h2>
-              <p
-                aria-hidden="true"
-                className="mt-2 font-display text-xs font-bold uppercase tracking-widest text-brand-black/60"
-              >
-                <span className="text-brand-red">■</span> Contains ·{" "}
-                <span className="text-brand-black/70">□</span> May contain
-                traces · <span className="text-brand-black/40">—</span> Free
-                from
-              </p>
-              <div className="mt-6 overflow-x-auto">
-                <table className="w-full min-w-[900px] border-collapse text-left font-body text-sm">
-                  <caption className="sr-only">
-                    Allergens contained in — and traces present in — each{" "}
-                    {group.section} item. Columns list all 14 UK statutory
-                    allergens.
-                  </caption>
-                  <thead>
-                    <tr className="border-b-2 border-brand-black">
-                      <th
-                        scope="col"
-                        className={`${STICKY_COL} py-3 pr-4 pl-0 font-body text-xs font-semibold uppercase tracking-widest text-brand-black align-bottom text-left min-w-[180px]`}
-                      >
-                        Item
-                      </th>
-                      {ALLERGENS_ORDERED.map((a) => (
-                        <th
-                          key={a}
-                          scope="col"
-                          className="py-3 px-2 font-body text-[10px] md:text-xs font-semibold uppercase tracking-wider text-brand-black align-bottom text-center whitespace-nowrap"
-                        >
-                          {ALLERGEN_LABELS[a]}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {group.items.map((item) => {
-                      const containsSet = new Set(item.contains);
-                      const tracesSet = new Set(item.traces);
-                      return (
-                        <tr
-                          key={item.slug}
-                          className="border-b border-brand-black/10"
-                        >
-                          <th
-                            scope="row"
-                            className={`${STICKY_COL} py-3 pr-4 pl-0 font-body text-sm md:text-base font-semibold text-brand-black text-left min-w-[180px]`}
-                          >
-                            {item.name}
-                          </th>
-                          {ALLERGENS_ORDERED.map((a) => {
-                            const label = ALLERGEN_LABELS[a];
-                            return (
-                              <td
-                                key={a}
-                                className="py-3 px-2 text-center align-middle"
-                              >
-                                {containsSet.has(a) ? (
-                                  <ContainsMark allergen={label} />
-                                ) : tracesSet.has(a) ? (
-                                  <TracesMark allergen={label} />
-                                ) : (
-                                  <FreeFromMark allergen={label} />
-                                )}
-                              </td>
-                            );
-                          })}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          ))}
+          {/* Chips + matrix. useSearchParams in AllergenMatrix forces a
+              dynamic bailout for just this subtree; Suspense keeps the
+              rest of /allergies statically prerenderable. The fallback
+              renders the full matrix in its default unfiltered state so
+              there's no empty flash on hydration. */}
+          <Suspense fallback={<AllergenMatrixFallback />}>
+            <AllergenMatrix />
+          </Suspense>
         </div>
       </main>
       <Footer />
