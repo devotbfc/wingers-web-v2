@@ -1,4 +1,4 @@
-// Hand-edited 2026-10-08 (Ghost Buffalo rename; Katsu LE row added — matches Korea Town per spec sheet; four chicken-loaded-fries rows added — union of Flavour Loaded Fries + House Fries + Naked Wings + sauce row(s)). Mirror changes in the master spreadsheet before regenerating.
+// Hand-merged additively from the master sheet 2026-10-08. Site keeps rows not in the sheet (Flamin' Cajun, Honey Mustard chicken loaded fries). Ghost Buffalo HOT = sheet's "Buffalo XL Hot".
 
 export const UK_ALLERGENS = [
   "celery","gluten","crustaceans","eggs","fish","lupin","milk",
@@ -277,20 +277,19 @@ export const ALLERGEN_ITEMS: AllergenItem[] = [
   },
   {
     "slug": "katsu",
-    "name": "Katsu (Limited Edition)",
+    "name": "Katsu Curry (Limited Edition)",
     "section": "Wings + Tenders",
     "sectionSlug": "wings-tenders",
     "contains": [
       "celery",
       "gluten",
       "eggs",
-      "milk",
+      "mustard",
       "peanuts",
       "soya"
     ],
     "traces": [
       "fish",
-      "mustard",
       "sesame",
       "sulphites"
     ]
@@ -837,8 +836,8 @@ export const ALLERGEN_ITEMS: AllergenItem[] = [
   {
     "slug": "cajun-chicken-loaded-fries",
     "name": "Cajun Chicken Loaded Fries",
-    "section": "Fries + Loaded",
-    "sectionSlug": "fries-loaded",
+    "section": "Chicken Topped Fries",
+    "sectionSlug": "chicken-topped-fries",
     "contains": [
       "celery",
       "gluten",
@@ -858,8 +857,8 @@ export const ALLERGEN_ITEMS: AllergenItem[] = [
   {
     "slug": "honey-mustard-chicken-loaded-fries",
     "name": "Honey Mustard Chicken Loaded Fries",
-    "section": "Fries + Loaded",
-    "sectionSlug": "fries-loaded",
+    "section": "Chicken Topped Fries",
+    "sectionSlug": "chicken-topped-fries",
     "contains": [
       "celery",
       "gluten",
@@ -879,8 +878,8 @@ export const ALLERGEN_ITEMS: AllergenItem[] = [
   {
     "slug": "lemon-pepper-chicken-loaded-fries",
     "name": "Lemon Pepper Chicken Loaded Fries",
-    "section": "Fries + Loaded",
-    "sectionSlug": "fries-loaded",
+    "section": "Chicken Topped Fries",
+    "sectionSlug": "chicken-topped-fries",
     "contains": [
       "celery",
       "gluten",
@@ -900,8 +899,8 @@ export const ALLERGEN_ITEMS: AllergenItem[] = [
   {
     "slug": "mango-habanero-chicken-loaded-fries",
     "name": "Mango Habanero Chicken Loaded Fries",
-    "section": "Fries + Loaded",
-    "sectionSlug": "fries-loaded",
+    "section": "Chicken Topped Fries",
+    "sectionSlug": "chicken-topped-fries",
     "contains": [
       "celery",
       "gluten",
@@ -915,6 +914,48 @@ export const ALLERGEN_ITEMS: AllergenItem[] = [
     "traces": [
       "fish",
       "mustard",
+      "sulphites"
+    ]
+  },
+  {
+    "slug": "bbq-chicken-loaded-fries",
+    "name": "Chicken BBQ Fries Loaded",
+    "section": "Chicken Topped Fries",
+    "sectionSlug": "chicken-topped-fries",
+    "contains": [
+      "celery",
+      "gluten",
+      "eggs",
+      "milk",
+      "tree-nuts",
+      "peanuts",
+      "sesame",
+      "soya"
+    ],
+    "traces": [
+      "fish",
+      "mustard",
+      "sulphites"
+    ]
+  },
+  {
+    "slug": "katsu-curry-chicken-loaded-fries",
+    "name": "Chicken Katsu Curry Fries Loaded (LE)",
+    "section": "Chicken Topped Fries",
+    "sectionSlug": "chicken-topped-fries",
+    "contains": [
+      "celery",
+      "gluten",
+      "eggs",
+      "milk",
+      "mustard",
+      "tree-nuts",
+      "peanuts",
+      "sesame",
+      "soya"
+    ],
+    "traces": [
+      "fish",
       "sulphites"
     ]
   },
