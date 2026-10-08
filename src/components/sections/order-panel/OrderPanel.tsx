@@ -3,11 +3,16 @@
 import { useEffect, useMemo } from "react";
 import { Dialog } from "radix-ui";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { XIcon } from "lucide-react";
+import { ArrowUpRight, XIcon } from "lucide-react";
 
 import { BrandButton } from "@/components/brand/BrandButton";
 import { useConsent } from "@/components/consent/ConsentProvider";
-import { LOCATIONS } from "@/lib/locations";
+import {
+  LOCATIONS,
+  getTodayHours,
+  isOpenNow,
+  type Location,
+} from "@/lib/locations";
 import { getProviderForLocation } from "@/lib/order/providers";
 import { track } from "@/lib/analytics/meta-pixel";
 import {
@@ -17,6 +22,21 @@ import {
 } from "@/lib/analytics/fbclid";
 import { useOrderPanel } from "./order-panel-context";
 import { OPEN_ORDER_EVENT } from "./events";
+
+// Status pill per PopupOrder.dc.html — "Open · till HH:MM" when currently
+// open; "Opens HH:MM" when today has hours still to come; "Closed" otherwise.
+function statusFor(loc: Location): { label: string; open: boolean } {
+  if (isOpenNow(loc)) {
+    return { label: `Open · till ${getTodayHours(loc).close}`, open: true };
+  }
+  const today = getTodayHours(loc);
+  if (!today.closed) {
+    // Treat "already closed for the day" as closed too — the pre-open window
+    // is the only case where "Opens HH:MM" is useful.
+    return { label: `Opens ${today.open}`, open: false };
+  }
+  return { label: "Closed", open: false };
+}
 
 // Radix Dialog powers focus-trap, Escape handling, aria wiring and body
 // scroll lock. Motion drives the visible open/close so the handoff feels
@@ -156,9 +176,14 @@ export function OrderPanel() {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                className="fixed inset-x-0 bottom-0 z-50 flex max-h-[85vh] flex-col gap-4 bg-brand-white text-brand-black outline-none"
+                className="fixed inset-x-0 bottom-0 z-50 flex max-h-[85vh] flex-col gap-4 bg-brand-white text-brand-black outline-none md:inset-auto md:left-1/2 md:top-1/2 md:w-[760px] md:max-w-[calc(100vw-3rem)] md:max-h-[90vh] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-[32px]"
               >
-                <header className="flex flex-col gap-1.5 px-6 pt-6 pb-2">
+                <header className="flex flex-col gap-1.5 px-6 pt-6 pb-2 md:pt-8">
+                  {/* Mobile-only drag handle (board detail). */}
+                  <div
+                    aria-hidden="true"
+                    className="mx-auto mb-2 h-[5px] w-11 rounded-full bg-brand-warm-grey md:hidden"
+                  />
                   <Dialog.Title asChild>
                     <h2 className="font-display text-2xl md:text-3xl font-extrabold uppercase tracking-tight text-brand-black">
                       Order from your nearest Wingers
@@ -187,35 +212,53 @@ export function OrderPanel() {
                       loc.slug === "milton-keynes" ? "mk" : "nth";
                     const isPreferred =
                       loc.slug === preferredLocationSlug;
+                    const status = statusFor(loc);
                     return (
                       <motion.li
                         key={loc.slug}
                         variants={cardVariants}
-                        className="flex flex-col gap-4 bg-brand-pink p-5 text-brand-black"
+                        className={`flex flex-col gap-3 rounded-[26px] border-2 bg-brand-pink p-4 text-brand-black ${isPreferred ? "border-brand-black" : "border-transparent"}`}
                       >
-                        {isPreferred && (
-                          <span className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-black/70">
-                            Your shop
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex flex-col gap-1">
+                            {isPreferred && (
+                              <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.25em] text-brand-black">
+                                Your shop
+                              </span>
+                            )}
+                            <h3 className="font-display text-xl font-extrabold uppercase leading-none tracking-tight text-brand-black md:text-2xl">
+                              {loc.name}
+                            </h3>
+                          </div>
+                          <span
+                            aria-label={status.label}
+                            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-brand-white px-2.5 py-1 font-body text-[12px] font-semibold text-brand-black"
+                          >
+                            <span
+                              aria-hidden="true"
+                              className="inline-block h-[7px] w-[7px] rounded-full"
+                              style={{
+                                backgroundColor: status.open
+                                  ? "#2BB673"
+                                  : "#8A857E",
+                              }}
+                            />
+                            {status.label}
                           </span>
-                        )}
-                        <div className="flex flex-col gap-1">
-                          <h3 className="font-display text-xl font-extrabold uppercase tracking-tight text-brand-black">
-                            {loc.name}
-                          </h3>
-                          <p className="font-body text-sm leading-snug text-brand-black/80">
-                            {loc.address.street}
-                            <br />
-                            {loc.address.city}, {loc.address.postcode}
-                          </p>
                         </div>
+                        <p className="font-body text-sm leading-snug text-brand-black">
+                          {loc.address.street}
+                          <br />
+                          {loc.address.city}, {loc.address.postcode}
+                        </p>
                         <BrandButton
                           href={href}
                           target="_blank"
                           rel="noopener noreferrer"
                           variant="primary"
                           size="lg"
-                          className="w-full justify-center"
-                          aria-label={`Order from ${loc.name}`}
+                          className="w-full justify-center gap-2"
+                          aria-label={`Order from ${loc.name} (opens in new tab)`}
                           onClick={() =>
                             track("InitiateCheckout", {
                               content_category: site,
@@ -224,6 +267,10 @@ export function OrderPanel() {
                           }
                         >
                           Order
+                          <ArrowUpRight
+                            className="h-4 w-4 stroke-[2.6]"
+                            aria-hidden="true"
+                          />
                         </BrandButton>
                       </motion.li>
                     );
