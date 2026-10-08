@@ -141,11 +141,11 @@ export function MobileNavDrawer({ open, onOpenChange }: MobileNavDrawerProps) {
                   Order Now
                 </BrandButton>
 
-                <div className="mt-5 grid grid-cols-2 gap-2.5 font-body text-xs text-brand-white/60">
+                <div className="mt-5 grid grid-cols-2 gap-2.5 text-center font-body text-xs text-brand-white/60">
                   {LOCATIONS.map((loc) => {
                     const today = getTodayHours(loc);
                     return (
-                      <span key={loc.slug}>
+                      <span key={loc.slug} className="text-center">
                         <b className="text-brand-white">{loc.name.replace(/^Wingers\s+/, "")}</b>
                         <br />
                         {today.closed ? "Closed today" : `Today ${formatRange(today)}`}

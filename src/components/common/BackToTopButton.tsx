@@ -43,6 +43,7 @@ export function BackToTopButton({
 }: BackToTopButtonProps = {}) {
   const [visible, setVisible] = useState(false);
   const [footerVisible, setFooterVisible] = useState(false);
+  const [flavourClubVisible, setFlavourClubVisible] = useState(false);
   const [signupOpen, setSignupOpen] = useState(false);
   const shouldReduce = usePrefersReducedMotion();
   const { status, pixelId } = useConsent();
@@ -91,6 +92,23 @@ export function BackToTopButton({
     return () => observer.disconnect();
   }, []);
 
+  // Hide while the Flavour Club sign-up strip is in view — the floating
+  // pink circle was covering the EMAIL label on mobile. Observed via
+  // IntersectionObserver, no scroll listener. The home page's section
+  // mounts the id; routes without it (menu, about, etc) silently skip.
+  useEffect(() => {
+    const strip = document.getElementById("flavour-club-strip");
+    if (!strip) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setFlavourClubVisible(entries[0]?.isIntersecting ?? false);
+      },
+      { rootMargin: "0px" },
+    );
+    observer.observe(strip);
+    return () => observer.disconnect();
+  }, []);
+
   // Hide while the SignupSlideIn is open on ANY viewport. On mobile the
   // slide-in is full-width at bottom; on desktop it anchors bottom-left,
   // same corner as the homepage BackToTopButton. Either way, don't stack
@@ -113,7 +131,11 @@ export function BackToTopButton({
   };
 
   const show =
-    visible && !footerVisible && !consentBannerVisible && !signupOpen;
+    visible &&
+    !footerVisible &&
+    !flavourClubVisible &&
+    !consentBannerVisible &&
+    !signupOpen;
 
   const positionStyle =
     anchor === "right"

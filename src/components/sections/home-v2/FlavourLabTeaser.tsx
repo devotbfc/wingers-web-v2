@@ -1,4 +1,4 @@
-import { BrandButton } from "@/components/brand/BrandButton";
+import Link from "next/link";
 import { FlaskGlyph } from "@/components/ui/FlaskGlyph";
 import { WheelSpinner } from "@/components/sections/flavour-lab/WheelSpinner";
 
@@ -33,18 +33,22 @@ export function FlavourLabTeaser() {
 
           <WheelSpinner className="mt-4 flex w-full flex-col items-center md:mt-6" />
 
-          <BrandButton
-            variant="inverse"
-            size="lg"
+          {/* Quiet outline pill — pink border + pink label (and flask) by
+              default; fills pink with black label on hover-capable devices
+              only. Size md (44px hit target), auto width, centred by the
+              parent's items-center. Not a BrandButton variant — rebuilt
+              inline because none of the existing variants match this
+              transparent-on-dark colourway. */}
+          <Link
             href="/flavour-lab"
-            className="mt-2 w-full min-h-12 justify-center gap-2 md:w-auto"
+            className="mx-auto mt-2 inline-flex h-11 min-h-11 items-center gap-2 rounded-full border-2 border-brand-pink bg-transparent px-6 font-display text-[15px] font-extrabold uppercase tracking-[0.02em] text-brand-pink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink [@media(hover:hover)]:transition-colors [@media(hover:hover)]:duration-200 [@media(hover:hover)]:hover:bg-brand-pink [@media(hover:hover)]:hover:text-brand-black"
           >
             Visit the Flavour Lab
             <FlaskGlyph
               strokeWidth={2.5}
               className="h-[1.15em] w-[1.15em] shrink-0"
             />
-          </BrandButton>
+          </Link>
         </div>
       </div>
     </section>

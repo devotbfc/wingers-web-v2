@@ -14,6 +14,7 @@ const LoyaltySignupForm = dynamic(() =>
 export function FlavourClubStrip() {
   return (
     <section
+      id="flavour-club-strip"
       aria-labelledby="flavour-club-heading"
       className="wingers-wrap pb-20 md:pb-28"
     >
