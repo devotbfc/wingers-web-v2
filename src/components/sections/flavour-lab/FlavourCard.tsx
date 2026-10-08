@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ChevronDown, Lock } from "lucide-react";
 import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTriggerButton";
@@ -34,6 +35,7 @@ export function FlavourCard({ flavour, index }: FlavourCardProps) {
   const cardSurface = ghost
     ? "border-brand-red/40 bg-brand-red/[0.05] hover:border-brand-red/60"
     : "border-brand-white/10 bg-brand-white/[0.03] hover:border-brand-white/25";
+  const hasCardImage = Boolean(flavour.cardImage);
 
   return (
     <motion.article
@@ -43,6 +45,27 @@ export function FlavourCard({ flavour, index }: FlavourCardProps) {
         expanded ? "col-span-2" : ""
       }`}
     >
+      {hasCardImage && (
+        <>
+          <Image
+            src={flavour.cardImage as string}
+            alt=""
+            fill
+            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+            aria-hidden="true"
+            className="pointer-events-none select-none object-cover opacity-60"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(10,10,10,0.96) 38%, rgba(10,10,10,0.45) 75%, rgba(10,10,10,0.2))",
+            }}
+          />
+        </>
+      )}
+
       {comingSoon && (
         <div
           aria-hidden="true"
