@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { BrandButton } from "@/components/brand/BrandButton";
 import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTriggerButton";
 import { getCurrentLimitedEdition } from "@/lib/flavours";
 
@@ -66,14 +65,13 @@ export function KatsuDrop() {
               {flavour.shortDescription}
             </p>
           )}
-          <div className="grid grid-cols-2 gap-2.5 md:flex md:flex-wrap md:gap-3">
-            <OrderTriggerButton variant="primary" size="lg">
-              Order
-            </OrderTriggerButton>
-            <BrandButton variant="inverse" size="lg" href="/flavour-lab">
-              Spin the Lab
-            </BrandButton>
-          </div>
+          <OrderTriggerButton
+            variant="primary"
+            size="lg"
+            wrapperClassName="w-full md:w-auto"
+          >
+            Order
+          </OrderTriggerButton>
         </div>
       </div>
     </section>
