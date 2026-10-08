@@ -29,14 +29,10 @@ export const metadata: Metadata = {
   },
 };
 
-type StageAlign = "start" | "end";
-
 interface Stage {
   n: string;
   label: string;
   copy: string;
-  tile: string;
-  align: StageAlign;
   photoSlot: string;
 }
 
@@ -57,24 +53,18 @@ const STAGES: readonly Stage[] = [
     n: "01",
     label: "BRINE",
     copy: "Every bird sits in buttermilk for a full 24 hours. Tender the whole way through, seasoned to the bone.",
-    tile: "bg-brand-pink",
-    align: "start",
     photoSlot: "P04",
   },
   {
     n: "02",
     label: "DREDGE",
     copy: "Hand-tossed in seasoned flour until the crust turns craggy. No machines, no shortcuts.",
-    tile: "bg-brand-red",
-    align: "end",
     photoSlot: "P05",
   },
   {
     n: "03",
     label: "FRY",
     copy: "Dropped in fresh oil and fried to order. Golden, loud, crunchy — never sitting under a lamp.",
-    tile: "bg-brand-pink/20",
-    align: "start",
     photoSlot: "P06",
   },
 ];
@@ -119,180 +109,169 @@ export default function AboutPage() {
   return (
     <OrderPanelProvider>
       <NavBar />
-      <main>
-        <section className="flex min-h-[88svh] items-center px-4 md:px-8">
-          <div className="mx-auto w-full max-w-6xl">
-            <h1 className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,14vw,10rem)] text-brand-red">
-              WE ONLY DO ONE THING. PROPERLY.
-            </h1>
-            <p className="mt-8 max-w-2xl font-body text-lg md:text-xl leading-relaxed text-brand-black">
-              Wingers is a buttermilk fried chicken shop in Milton Keynes and
-              Northampton. Every bird brined for 24 hours, hand-dredged, and
-              fried to order. That is the whole story.
-            </p>
+      <main className="bg-brand-white">
+        <section className="wingers-wrap pt-24 pb-10 md:pt-32 md:pb-16">
+          <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-14">
+            <div className="flex flex-col gap-6">
+              <h1 className="font-display font-extrabold uppercase leading-[0.86] tracking-tight text-[clamp(3rem,10vw,7rem)] text-brand-black">
+                We only do one thing.{" "}
+                <span className="inline-block rounded-[14px] bg-brand-pink px-2 py-0.5 text-brand-black">
+                  Properly.
+                </span>
+              </h1>
+              <p className="max-w-xl font-body text-lg leading-relaxed text-brand-black/80 md:text-xl">
+                Wingers is a buttermilk fried chicken shop in Milton Keynes
+                and Northampton. Every bird brined for 24 hours, hand-dredged,
+                and fried to order. That is the whole story.
+              </p>
+            </div>
+            <video
+              src="/brand/videos/hero-loop.mp4"
+              poster="/brand/photos/hero/hero-poster.webp"
+              autoPlay
+              muted
+              loop
+              playsInline
+              aria-label="Wings being tossed in sauce"
+              className="h-[clamp(360px,55vw,620px)] w-full rounded-[999px_999px_32px_32px] bg-brand-black object-cover md:rounded-[999px_999px_40px_40px]"
+            />
           </div>
         </section>
 
-        <section aria-labelledby="process-heading">
-          <h2 id="process-heading" className="sr-only">
+        <section
+          aria-labelledby="process-heading"
+          className="wingers-wrap pb-16 md:pb-24"
+        >
+          <h2
+            id="process-heading"
+            className="font-display font-bold uppercase leading-[0.95] tracking-tight text-[clamp(2.25rem,6vw,4rem)] text-brand-black"
+          >
             How we make it
           </h2>
-          {STAGES.map((stage) => {
-            const alignEnd = stage.align === "end";
-            return (
-              <article
-                key={stage.n}
-                className="border-t border-brand-black/10 first:border-t-0"
-              >
-                <div className="px-4 md:px-8 pt-12 md:pt-20">
-                  <div
-                    className={
-                      alignEnd
-                        ? "mx-auto max-w-6xl md:flex md:justify-end"
-                        : "mx-auto max-w-6xl"
-                    }
-                  >
-                    <div
-                      className={
-                        alignEnd
-                          ? "max-w-3xl md:text-right"
-                          : "max-w-3xl"
-                      }
-                    >
-                      <div
-                        className={
-                          alignEnd
-                            ? "flex items-baseline gap-4 md:justify-end"
-                            : "flex items-baseline gap-4"
-                        }
-                      >
-                        <span
-                          aria-hidden="true"
-                          className="font-display font-extrabold text-brand-red leading-none tracking-tight"
-                          style={{ fontSize: "clamp(4rem, 22vw, 10rem)" }}
-                        >
-                          {stage.n}
-                        </span>
-                        <h3 className="font-display font-extrabold uppercase leading-none tracking-tight text-[clamp(2rem,7vw,5rem)] text-brand-black">
-                          {stage.label}
-                        </h3>
-                      </div>
-                      <p
-                        className={
-                          alignEnd
-                            ? "mt-6 max-w-xl md:ml-auto font-body text-lg md:text-xl leading-relaxed text-brand-black/80"
-                            : "mt-6 max-w-xl font-body text-lg md:text-xl leading-relaxed text-brand-black/80"
-                        }
-                      >
-                        {stage.copy}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  role="img"
-                  aria-label={`${stage.label.toLowerCase()} stage`}
-                  className={`relative mt-8 md:mt-12 w-full aspect-[4/3] md:aspect-[21/9] ${stage.tile}`}
+          <ul className="mt-8 grid gap-5 md:mt-10 md:grid-cols-3 md:gap-5">
+            {STAGES.map((stage) => {
+              const src = REAL_STAGE_SRC[stage.photoSlot];
+              const alt = REAL_STAGE_ALT[stage.photoSlot] ?? "";
+              return (
+                <li
+                  key={stage.n}
+                  className="flex flex-col gap-4 rounded-[28px] bg-brand-white p-3 pb-6 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06)] md:rounded-[32px]"
                 >
-                  <Image
-                    src={
-                      REAL_STAGE_SRC[stage.photoSlot] ??
-                      `/brand/photos/placeholders/${stage.photoSlot}.png`
-                    }
-                    alt={REAL_STAGE_ALT[stage.photoSlot] ?? ""}
-                    fill
-                    sizes="100vw"
-                    className="object-cover"
-                    data-photo-slot={stage.photoSlot}
-                  />
-                </div>
-              </article>
-            );
-          })}
+                  <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[999px_999px_18px_18px] bg-brand-pink/15 md:aspect-[4/5] md:rounded-[999px_999px_24px_24px]">
+                    {src ? (
+                      <Image
+                        src={src}
+                        alt={alt}
+                        fill
+                        sizes="(min-width: 768px) 33vw, 90vw"
+                        className="object-cover"
+                        data-photo-slot={stage.photoSlot}
+                      />
+                    ) : null}
+                  </div>
+                  <div className="flex flex-col gap-2 px-3">
+                    <span className="font-display text-sm font-extrabold uppercase tracking-widest text-brand-red-cta">
+                      {stage.n}
+                    </span>
+                    <h3 className="font-display font-extrabold uppercase leading-[0.95] tracking-tight text-[clamp(1.75rem,4vw,2.25rem)] text-brand-black">
+                      {stage.label}
+                    </h3>
+                    <p className="font-body text-base leading-relaxed text-brand-black/80 md:text-[17px]">
+                      {stage.copy}
+                    </p>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         </section>
 
-        <section
-          aria-labelledby="halal-heading"
-          className="bg-brand-white py-16 md:py-24"
-        >
-          <div className="mx-auto max-w-2xl px-4 md:px-8">
-            <h2
-              id="halal-heading"
-              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
+        <section className="wingers-wrap pb-16 md:pb-24">
+          <div className="grid gap-6 md:grid-cols-2 md:items-start md:gap-8">
+            <aside
+              aria-labelledby="halal-heading"
+              className="flex flex-col gap-4 rounded-[32px] bg-brand-pink p-7 md:rounded-[40px] md:p-10"
             >
-              HALAL. FACTUAL.
-            </h2>
-            <div
-              className="mt-6 space-y-4 font-body text-base md:text-lg leading-relaxed text-brand-black/80"
-            >
-              <p>
-                All chicken served at Wingers is halal. Certificates are held at
-                both shops.
+              <h2
+                id="halal-heading"
+                className="font-display font-extrabold uppercase leading-[0.9] tracking-tight text-[clamp(2.5rem,6vw,4rem)] text-brand-black"
+              >
+                Halal. <br />
+                Factual.
+              </h2>
+              <p className="font-body text-base leading-relaxed text-brand-black md:text-lg">
+                All chicken served at Wingers is halal. Certificates are held
+                at both shops.
               </p>
-              <p>No pork on the menu. No alcohol in any product.</p>
+              <p className="font-body text-base font-semibold leading-relaxed text-brand-black md:text-lg">
+                No pork on the menu. No alcohol in any product.
+              </p>
+            </aside>
+
+            <div
+              id="faq"
+              aria-labelledby="faq-heading"
+              className="flex flex-col gap-3 scroll-mt-24"
+            >
+              <h2
+                id="faq-heading"
+                className="font-display font-bold uppercase leading-[0.95] tracking-tight text-[clamp(1.75rem,4.5vw,2.75rem)] text-brand-black"
+              >
+                Frequently asked
+              </h2>
+              <ul className="flex flex-col gap-3">
+                {FAQS.map((f) => (
+                  <li key={f.q}>
+                    <details className="group overflow-hidden rounded-[22px] bg-brand-white shadow-[0_1px_2px_rgba(0,0,0,0.04),0_6px_18px_rgba(0,0,0,0.05)]">
+                      <summary className="flex min-h-[60px] cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 font-body text-base font-semibold text-brand-black">
+                        <span>{f.q}</span>
+                        <span
+                          aria-hidden="true"
+                          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-warm-grey text-brand-black transition-transform duration-200 group-open:rotate-45 group-open:bg-brand-pink"
+                        >
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.8"
+                            strokeLinecap="round"
+                          >
+                            <path d="M12 5v14M5 12h14" />
+                          </svg>
+                        </span>
+                      </summary>
+                      <p className="px-5 pb-5 font-body text-base leading-relaxed text-brand-black/80">
+                        {f.a}
+                      </p>
+                    </details>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>
 
-        <section
-          id="faq"
-          aria-labelledby="faq-heading"
-          className="scroll-mt-24 bg-brand-white px-4 py-16 md:px-8 md:py-24"
-        >
-          <div className="mx-auto max-w-3xl">
-            <h2
-              id="faq-heading"
-              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
+        <section className="wingers-wrap pb-20 md:pb-32">
+          <div className="flex flex-col items-start gap-5 rounded-[32px] bg-brand-black p-8 text-brand-white md:flex-row md:items-center md:justify-between md:rounded-[40px] md:p-14">
+            <p
+              aria-hidden="true"
+              className="font-display font-extrabold uppercase leading-[0.86] tracking-tight text-[clamp(3rem,10vw,7rem)] text-brand-pink"
             >
-              FREQUENTLY ASKED.
-            </h2>
-            <ul className="mt-10 space-y-3">
-              {FAQS.map((f) => (
-                <li key={f.q}>
-                  <details className="group border-t border-brand-black/10 py-5 first:border-t-0 open:pb-6">
-                    <summary className="flex cursor-pointer list-none items-start justify-between gap-6 font-display text-lg md:text-xl font-bold uppercase tracking-tight text-brand-black transition-colors group-hover:text-brand-red">
-                      <span>{f.q}</span>
-                      <span
-                        aria-hidden="true"
-                        className="mt-1 shrink-0 text-brand-red transition-transform group-open:rotate-45"
-                      >
-                        +
-                      </span>
-                    </summary>
-                    <p className="mt-4 font-body text-base md:text-lg leading-relaxed text-brand-black/80">
-                      {f.a}
-                    </p>
-                  </details>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        <section
-          aria-labelledby="close-heading"
-          className="px-4 py-24 md:px-8 md:py-32"
-        >
-          <h2 id="close-heading" className="sr-only">
-            Get stuck in
-          </h2>
-          <div className="mx-auto flex max-w-6xl flex-col items-start gap-8">
-            <p className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-brand-pink text-[clamp(3rem,12vw,8rem)]">
-              THAT&rsquo;S IT<span className="text-brand-red">.</span>
+              That&rsquo;s it<span className="text-brand-red">.</span>
             </p>
-            <OrderTriggerButton variant="primary" size="lg">
-              Get Stuck In
-            </OrderTriggerButton>
-            <p className="font-body text-sm text-brand-black/70">
-              Interested in franchising?{" "}
+            <div className="flex flex-wrap gap-3">
+              <OrderTriggerButton variant="primary" size="lg">
+                Get Stuck In
+              </OrderTriggerButton>
               <Link
                 href="/franchise"
-                className="underline transition-colors hover:text-brand-red"
+                className="inline-flex min-h-12 items-center rounded-full border-2 border-brand-white px-6 font-display text-base font-extrabold uppercase tracking-tight text-brand-white transition-colors hover:bg-brand-white hover:text-brand-black md:text-[17px]"
               >
-                See opportunities
+                See Opportunities
               </Link>
-              .
-            </p>
+            </div>
           </div>
         </section>
       </main>
