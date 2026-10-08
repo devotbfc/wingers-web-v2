@@ -20,9 +20,10 @@ export function FlavourGrid() {
   const filtered = useMemo(
     () =>
       SPINNABLE_FLAVOURS.filter((f) => {
-        // Heat picker now matches the exact level so chip selection
-        // correlates with the cards. heat === 0 means cleared → show all.
-        if (heat >= 1 && f.heat !== heat) return false;
+        // "Heat up to N": keep flavours with heat <= selected. heat === 0
+        // means cleared → show all. Zero-heat flavours stay visible at
+        // every level since 0 <= every N.
+        if (heat >= 1 && f.heat > heat) return false;
         if (typeFilter === "all") return true;
         return f.type === typeFilter;
       }),
@@ -66,7 +67,7 @@ export function FlavourGrid() {
 
           {filtered.length === 0 && (
             <p className="mt-6 text-center font-body text-base text-brand-white/60">
-              No flavours at this heat — try another.
+              No flavours match — try a higher heat or a different type.
             </p>
           )}
         </div>

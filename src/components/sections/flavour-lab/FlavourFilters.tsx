@@ -28,7 +28,7 @@ export function FlavourFilters({
   resultCount,
   totalCount,
 }: FlavourFiltersProps) {
-  const heatLabel = heat >= 1 ? `Heat ${heat}` : "Heat";
+  const heatLabel = heat >= 1 ? `Heat up to ${heat}` : "Heat";
 
   return (
     <div className="mb-8 flex flex-col gap-6 border-y border-brand-white/10 py-6">
@@ -61,7 +61,7 @@ export function FlavourFilters({
 
         <div
           role="radiogroup"
-          aria-label="Heat level"
+          aria-label="Maximum heat level"
           className="flex items-center gap-2"
         >
           <span
@@ -71,10 +71,10 @@ export function FlavourFilters({
             {heatLabel}
           </span>
           {HEAT_LEVELS.map((level) => {
-            // Exact-match filter: tapping level N shows only flavours whose
-            // heat is exactly N. Tap the active chip to clear (back to
-            // every flavour). Flames read as a left-to-right gauge: tapping
-            // N lights flames 1..N so selection direction matches the
+            // "Heat up to N" filter: tapping level N shows flavours with
+            // heat <= N. Tap the active chip to clear (back to every
+            // flavour). Flames read as a left-to-right gauge: tapping N
+            // lights flames 1..N so selection direction matches the
             // natural intensity reading.
             const selected = heat === level;
             const lit = heat >= 1 && level <= heat;
@@ -84,7 +84,7 @@ export function FlavourFilters({
                 type="button"
                 role="radio"
                 aria-checked={selected}
-                aria-label={`Heat ${level}`}
+                aria-label={`Heat up to ${level}`}
                 onClick={() => onHeatChange(selected ? 0 : level)}
                 className={`flex h-11 w-11 items-center justify-center rounded-full border transition-[color,background-color,border-color] duration-150 ${
                   lit
