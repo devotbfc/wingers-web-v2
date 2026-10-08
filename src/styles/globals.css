@@ -53,6 +53,21 @@
   --motion-fast: 220ms;
   --motion-med: 300ms;
   --motion-slow: 420ms;
+
+  /* Mobile bottom-sheet clearance. Mobile browsers (Samsung Internet
+     in particular) float their own back-to-top chrome bottom-centre
+     that overlaps the last tap target in sheets. Applied as
+     pb-[var(--sheet-safe-bottom)] on every bottom-anchored surface
+     (SignupSlideIn, OrderPanel mobile, MobileNavDrawer, ConsentBanner).
+     Desktop softens to 1.5rem since no overlay chrome exists there;
+     surfaces that want their old desktop padding use `md:pb-*` to
+     override. */
+  --sheet-safe-bottom: calc(env(safe-area-inset-bottom) + 4.5rem);
+}
+@media (min-width: 768px) {
+  :root {
+    --sheet-safe-bottom: calc(env(safe-area-inset-bottom) + 1.5rem);
+  }
 }
 
 /* White-primary base: white page, black text by default.

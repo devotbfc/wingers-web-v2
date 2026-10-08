@@ -155,7 +155,7 @@ export function SignupSlideIn({
             exit="hidden"
             variants={panelVariants}
             transition={{ duration: reduced ? 0.2 : 0.28, ease: PANEL_EASE }}
-            className={`fixed inset-x-0 bottom-0 z-40 w-full overflow-hidden rounded-t-[28px] border-t px-6 pt-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] outline-none transition-colors duration-200 md:inset-auto md:bottom-6 md:left-6 md:w-[380px] md:max-w-[calc(100vw-3rem)] md:rounded-[28px] md:border md:px-5 md:pb-5 md:pt-4 ${panelSurface}`}
+            className={`fixed inset-x-0 bottom-0 z-40 w-full overflow-hidden rounded-t-[28px] border-t px-6 pt-5 pb-[var(--sheet-safe-bottom)] outline-none transition-colors duration-200 md:inset-auto md:bottom-6 md:left-6 md:w-[380px] md:max-w-[calc(100vw-3rem)] md:rounded-[28px] md:border md:px-5 md:pb-5 md:pt-4 ${panelSurface}`}
           >
             <button
               type="button"

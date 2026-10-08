@@ -68,7 +68,7 @@ export function MobileNavDrawer({ open, onOpenChange }: MobileNavDrawerProps) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-                className="fixed inset-0 z-50 flex flex-col bg-lab-black px-4 pb-[calc(1.5rem+env(safe-area-inset-bottom))] text-brand-white outline-none"
+                className="fixed inset-0 z-50 flex flex-col bg-lab-black px-4 pb-[var(--sheet-safe-bottom)] text-brand-white outline-none"
               >
                 <Dialog.Title className="sr-only">Site menu</Dialog.Title>
                 <Dialog.Description className="sr-only">
