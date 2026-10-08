@@ -1,4 +1,4 @@
-// Hand-edited 2026-10-08 (Ghost Buffalo rename). Mirror changes in the master spreadsheet before regenerating.
+// Hand-edited 2026-10-08 (Ghost Buffalo rename; Katsu LE row added — matches Korea Town per spec sheet). Mirror changes in the master spreadsheet before regenerating.
 
 export const UK_ALLERGENS = [
   "celery","gluten","crustaceans","eggs","fish","lupin","milk",
@@ -258,6 +258,26 @@ export const ALLERGEN_ITEMS: AllergenItem[] = [
   {
     "slug": "mild-buffalo",
     "name": "Mild Buffalo",
+    "section": "Wings + Tenders",
+    "sectionSlug": "wings-tenders",
+    "contains": [
+      "celery",
+      "gluten",
+      "eggs",
+      "milk",
+      "peanuts",
+      "soya"
+    ],
+    "traces": [
+      "fish",
+      "mustard",
+      "sesame",
+      "sulphites"
+    ]
+  },
+  {
+    "slug": "katsu",
+    "name": "Katsu (Limited Edition)",
     "section": "Wings + Tenders",
     "sectionSlug": "wings-tenders",
     "contains": [
