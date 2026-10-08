@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -62,17 +63,25 @@ export function SignupSlideInForm({
 
   return (
     <div className="pr-9">
-      <p className="font-display text-[11px] font-bold uppercase tracking-[0.25em] text-brand-red">
-        First dibs on every drop
+      <Image
+        src="/brand/logo/wingers-mark.png"
+        alt=""
+        width={48}
+        height={48}
+        aria-hidden
+        className="h-10 w-10 brightness-0"
+      />
+      <p className="mt-3 font-display text-[11px] font-bold uppercase tracking-[0.25em] text-brand-black">
+        The Flavour Club
       </p>
       <h2
         id={titleId}
-        className="mt-1 font-display text-2xl font-extrabold uppercase leading-tight tracking-tight text-brand-black"
+        className="mt-1 font-display text-[1.75rem] font-extrabold uppercase leading-[0.95] tracking-tight text-brand-black md:text-[2rem]"
       >
-        New flavours, before anyone else.
+        First dibs on every drop.
       </h2>
-      <p className="mt-1 font-body text-sm text-brand-black/70">
-        No spam. Unsubscribe any time.
+      <p className="mt-2 font-body text-sm leading-snug text-brand-black/80">
+        New flavours, before anyone else.
       </p>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
@@ -98,18 +107,18 @@ export function SignupSlideInForm({
             autoComplete="email"
             placeholder="you@wingers.co"
             {...form.register("email")}
-            className="mt-1 block h-11 w-full rounded-md border border-brand-black/20 bg-brand-white px-3 font-body text-base text-brand-black placeholder:text-brand-black/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-pink"
+            className="mt-1 block h-12 w-full rounded-full border-2 border-brand-black bg-brand-white px-5 font-body text-base text-brand-black placeholder:text-brand-black/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-black"
           />
         </label>
         {emailError && (
-          <p className="font-body text-xs text-brand-red">{emailError}</p>
+          <p className="font-body text-xs text-brand-black/90">{emailError}</p>
         )}
 
         <label className="flex items-start gap-2 font-body text-sm text-brand-black">
           <input
             type="checkbox"
             {...form.register("consent")}
-            className="mt-1 h-4 w-4 flex-none rounded border-brand-black/40 accent-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-pink"
+            className="mt-1 h-4 w-4 flex-none rounded border-brand-black/40 accent-brand-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-black"
           />
           <span>{CONSENT_TEXT}</span>
         </label>
@@ -123,6 +132,9 @@ export function SignupSlideInForm({
         >
           {isPending ? "Signing you up…" : "Sign me up"}
         </BrandButton>
+        <p className="mt-1 text-center font-body text-xs text-brand-black/70">
+          No spam. Unsubscribe any time.
+        </p>
       </form>
     </div>
   );
