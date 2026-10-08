@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { BackToTopButton } from "@/components/common/BackToTopButton";
 import { BeefNorthamptonTeaser } from "@/components/menu/BeefNorthamptonTeaser";
 import { CategoryBar } from "@/components/menu/CategoryBar";
 import { FlavourLabLinkCard } from "@/components/menu/FlavourLabLinkCard";
 import { LocationExclusiveBadge } from "@/components/menu/LocationExclusiveBadge";
+import { MenuItemCard } from "@/components/menu/MenuItemCard";
 import { MenuKatsuHero } from "@/components/menu/MenuKatsuHero";
 import type { Flavour } from "@/lib/flavours/flavour-lab-data";
 import { LOCATIONS } from "@/lib/locations";
@@ -16,10 +17,10 @@ import {
   isCurrentLE,
   toMenuLocationCode,
   type MenuItem,
+  type MenuLocationCode,
 } from "@/lib/menu";
 import { MENU_GROUPS } from "@/lib/menu/groups";
 import { cn } from "@/lib/utils";
-import { MenuCard } from "./MenuCard";
 
 const PAST_DROPS_ID = "past-drops";
 const LOCATION_STORAGE_KEY = "wingers_menu_location";
@@ -54,6 +55,14 @@ export function MenuShell({
   currentLE = null,
 }: MenuShellProps) {
   const [locationSlug, setLocationSlug] = useState<string>(defaultLocationSlug);
+  // One-open-at-a-time: tapping another card closes the previous. Tapping
+  // the open card closes it. Lives at MenuShell level so cards across
+  // different groups/sections share the same toggle set.
+  const [openSlug, setOpenSlug] = useState<string | null>(null);
+
+  const handleToggleOpen = useCallback((slug: string) => {
+    setOpenSlug((prev) => (prev === slug ? null : slug));
+  }, []);
 
   // Rehydrate from localStorage post-mount so SSR output matches initial
   // client render (then updates to the stored choice). Deferred via rAF so
@@ -308,7 +317,13 @@ export function MenuShell({
                       </div>
                     )
                   ) : (
-                    <ItemGrid items={sub.items} locationSlug={locationSlug} />
+                    <ItemGrid
+                      items={sub.items}
+                      locationSlug={locationSlug}
+                      code={code}
+                      openSlug={openSlug}
+                      onToggle={handleToggleOpen}
+                    />
                   )}
                 </div>
               ))
@@ -335,16 +350,21 @@ export function MenuShell({
               Limited-edition items we&rsquo;ve retired. Kept here so you can
               remember what you loved.
             </p>
-            <ul className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
-              {pastDrops.map((item, i) => (
+            <ul className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
+              {pastDrops.map((item) => (
                 <li
                   key={item.slug}
-                  className={cn(i % 2 === 0 ? "mr-3 md:mr-0" : "ml-3 md:ml-0")}
+                  className={cn(
+                    openSlug === item.slug && "md:col-span-2 xl:col-span-3",
+                  )}
                 >
-                  <MenuCard
+                  <MenuItemCard
                     item={item}
                     locationSlug={locationSlug}
-                    variant="past"
+                    code={code}
+                    isOpen={openSlug === item.slug}
+                    onToggle={handleToggleOpen}
+                    isPast
                   />
                 </li>
               ))}
@@ -358,21 +378,37 @@ export function MenuShell({
   );
 }
 
+interface ItemGridProps {
+  items: MenuItem[];
+  locationSlug: string;
+  code: MenuLocationCode;
+  openSlug: string | null;
+  onToggle: (slug: string) => void;
+}
+
 function ItemGrid({
   items,
   locationSlug,
-}: {
-  items: MenuItem[];
-  locationSlug: string;
-}) {
+  code,
+  openSlug,
+  onToggle,
+}: ItemGridProps) {
   return (
-    <ul className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
-      {items.map((item, i) => (
+    <ul className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
+      {items.map((item) => (
         <li
           key={item.slug}
-          className={cn(i % 2 === 0 ? "mr-3 md:mr-0" : "ml-3 md:ml-0")}
+          className={cn(
+            openSlug === item.slug && "md:col-span-2 xl:col-span-3",
+          )}
         >
-          <MenuCard item={item} locationSlug={locationSlug} />
+          <MenuItemCard
+            item={item}
+            locationSlug={locationSlug}
+            code={code}
+            isOpen={openSlug === item.slug}
+            onToggle={onToggle}
+          />
         </li>
       ))}
     </ul>
