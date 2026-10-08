@@ -69,7 +69,12 @@ function SpotBlock({ spot }: { spot: Location }) {
         <div className="flex h-full flex-col justify-center gap-6">
           <LocationOpenBadge location={spot} size="sm" />
 
-          <h3 className="block font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(2.75rem,13vw,6rem)]">
+          {/* "NORTHAMPTON" (11 chars) was clipping at 390px; drop the vw
+              scale from 13 → 11 and the min from 2.75rem → 2rem so the
+              longest name fits inside px-6 padding at 360px. The 5rem
+              desktop ceiling keeps it bold at lg without overrunning
+              the half-width card. */}
+          <h3 className="block font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(2rem,11vw,5rem)]">
             {headlineText}
           </h3>
 

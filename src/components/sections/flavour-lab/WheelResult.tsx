@@ -180,7 +180,7 @@ export function WheelResult({ winner, onSpinAgain }: WheelResultProps) {
               aria-hidden="true"
               className="animate-glow-ring pointer-events-none absolute inset-0 rounded-2xl"
             />
-            <div className="sauce-shimmer relative overflow-hidden rounded-2xl border border-brand-pink/40 bg-brand-pink/[0.06] p-6 text-center backdrop-blur-sm md:p-8">
+            <div className="sauce-shimmer relative overflow-hidden rounded-2xl border border-brand-pink/40 bg-lab-black/85 p-6 text-center md:p-8">
               {/* Winner-reveal flash — one-shot pink wash on each new winner,
                   keyed on winner.slug via the parent AnimatePresence remount. */}
               <motion.div

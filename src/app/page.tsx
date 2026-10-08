@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Footer } from "@/components/sections/Footer";
-import { LoyaltySignupSection } from "@/components/sections/LoyaltySignupSection";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanelProvider } from "@/components/sections/order-panel/order-panel-context";
 
@@ -11,12 +10,15 @@ const OrderPanel = dynamic(() =>
   ),
 );
 import { BackToTopButton } from "@/components/common/BackToTopButton";
+import { CrewBlock } from "@/components/sections/home-v2/CrewBlock";
+import { FlavourClubStrip } from "@/components/sections/home-v2/FlavourClubStrip";
 import { FlavourLabTeaser } from "@/components/sections/home-v2/FlavourLabTeaser";
 import { Hero } from "@/components/sections/home-v2/Hero";
-import { SaucePanel } from "@/components/sections/home-v2/SaucePanel";
-import { StatementPanel } from "@/components/sections/home-v2/StatementPanel";
+import { KatsuDrop } from "@/components/sections/home-v2/KatsuDrop";
+import { Marquee } from "@/components/sections/home-v2/Marquee";
 import { TheGoods } from "@/components/sections/home-v2/TheGoods";
 import { TwoSpots } from "@/components/sections/home-v2/TwoSpots";
+import { getCurrentLimitedEdition } from "@/lib/flavours";
 
 export const metadata: Metadata = {
   title:
@@ -46,17 +48,26 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  const le = getCurrentLimitedEdition();
+  const marqueeText = le
+    ? `${le.name.toUpperCase()} IS HERE / LIMITED DROP / ${le.name.toUpperCase()} IS HERE / LIMITED DROP / `
+    : null;
+
   return (
     <OrderPanelProvider>
-      <NavBar onDark />
-      <main>
+      <NavBar />
+      {/* Nav is fixed; push main down by its height + 12px so the hero's
+          "Milton Keynes & Northampton" pill clears the logo row cleanly.
+          --nav-h is defined in globals.css and switches at md. */}
+      <main className="bg-brand-warm-grey pt-[calc(var(--nav-h)+0.75rem)]">
         <Hero />
-        <StatementPanel />
+        {marqueeText && <Marquee text={marqueeText} />}
+        <KatsuDrop />
         <TheGoods />
-        <SaucePanel />
-        <TwoSpots />
         <FlavourLabTeaser />
-        <LoyaltySignupSection source="homepage" />
+        <CrewBlock />
+        <TwoSpots />
+        <FlavourClubStrip />
       </main>
       <Footer />
       <OrderPanel />
