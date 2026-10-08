@@ -73,9 +73,11 @@ export function FlavourFilters({
           {HEAT_LEVELS.map((level) => {
             // "Hot N+" filter: tapping level N keeps only flavours whose heat
             // is N or above. Tap the active chip to clear (back to showing
-            // every heat).
+            // every heat). Flames read as a left-to-right gauge: tapping N
+            // lights flames 1..N (not N..5) so the selection direction
+            // matches natural intensity reading. Filter semantics unchanged.
             const selected = heatMin === level;
-            const lit = heatMin >= 1 && level >= heatMin;
+            const lit = heatMin >= 1 && level <= heatMin;
             return (
               <button
                 key={level}
