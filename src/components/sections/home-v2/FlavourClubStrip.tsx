@@ -16,7 +16,7 @@ export function FlavourClubStrip() {
     <section
       id="flavour-club-strip"
       aria-labelledby="flavour-club-heading"
-      className="wingers-wrap pb-20 md:pb-28"
+      className="wingers-wrap pt-10 pb-20 md:pt-16 md:pb-28"
     >
       <div className="rounded-[32px] bg-brand-pink p-7 pb-9 text-brand-black md:rounded-[40px] md:p-12 md:pb-14">
         <div className="flex flex-col gap-3.5">

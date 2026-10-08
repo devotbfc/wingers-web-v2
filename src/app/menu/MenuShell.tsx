@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { BackToTopButton } from "@/components/common/BackToTopButton";
 import { BeefNorthamptonTeaser } from "@/components/menu/BeefNorthamptonTeaser";
 import { CategoryBar } from "@/components/menu/CategoryBar";
 import { FlavourLabLinkCard } from "@/components/menu/FlavourLabLinkCard";
-import { LimitedEditionSpotlight } from "@/components/menu/LimitedEditionSpotlight";
 import { LocationExclusiveBadge } from "@/components/menu/LocationExclusiveBadge";
-import { LocationPicker } from "@/components/menu/LocationPicker";
+import { MenuItemCard } from "@/components/menu/MenuItemCard";
+import { MenuKatsuHero } from "@/components/menu/MenuKatsuHero";
 import type { Flavour } from "@/lib/flavours/flavour-lab-data";
 import { LOCATIONS } from "@/lib/locations";
 import {
@@ -17,10 +17,10 @@ import {
   isCurrentLE,
   toMenuLocationCode,
   type MenuItem,
+  type MenuLocationCode,
 } from "@/lib/menu";
 import { MENU_GROUPS } from "@/lib/menu/groups";
 import { cn } from "@/lib/utils";
-import { MenuCard } from "./MenuCard";
 
 const PAST_DROPS_ID = "past-drops";
 const LOCATION_STORAGE_KEY = "wingers_menu_location";
@@ -55,6 +55,14 @@ export function MenuShell({
   currentLE = null,
 }: MenuShellProps) {
   const [locationSlug, setLocationSlug] = useState<string>(defaultLocationSlug);
+  // One-open-at-a-time: tapping another card closes the previous. Tapping
+  // the open card closes it. Lives at MenuShell level so cards across
+  // different groups/sections share the same toggle set.
+  const [openSlug, setOpenSlug] = useState<string | null>(null);
+
+  const handleToggleOpen = useCallback((slug: string) => {
+    setOpenSlug((prev) => (prev === slug ? null : slug));
+  }, []);
 
   // Rehydrate from localStorage post-mount so SSR output matches initial
   // client render (then updates to the stored choice). Deferred via rAF so
@@ -185,16 +193,48 @@ export function MenuShell({
 
   return (
     <>
-      <LimitedEditionSpotlight flavour={currentLE} />
-
-      <div className="mt-4 flex justify-center px-4">
-        <LocationPicker value={locationSlug} onChange={handleLocationChange} />
+      {/* Shop toggle — Batch J board replaces the LocationPicker sheet with
+          an inline pill-pair (role="radiogroup"). The storage + default-to-NN
+          logic lives above; only the markup changed. */}
+      <div className="mx-auto mt-2 w-full max-w-sm px-4 md:mt-4">
+        <div
+          role="radiogroup"
+          aria-label="Pick your shop"
+          className="grid grid-cols-2 gap-1 rounded-full bg-brand-warm-grey p-1"
+        >
+          {LOCATIONS.map((loc) => {
+            const active = loc.slug === locationSlug;
+            const shortName = loc.name.replace(/^Wingers\s+/, "");
+            return (
+              <button
+                key={loc.slug}
+                type="button"
+                role="radio"
+                aria-checked={active}
+                onClick={() => handleLocationChange(loc.slug)}
+                className={cn(
+                  "inline-flex h-11 items-center justify-center rounded-full font-display text-sm font-extrabold uppercase tracking-[0.02em] transition-colors",
+                  active
+                    ? "bg-brand-black text-brand-white"
+                    : "bg-transparent text-brand-black hover:bg-brand-white/60",
+                )}
+              >
+                {shortName}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
+      <MenuKatsuHero flavour={currentLE} />
+
       {/* Sticky chrome — seats flush under the fixed NavBar via --nav-h.
-          See globals.css. */}
+          See globals.css. The border-b divider is gone (J2.5): the white
+          strip against the warm-grey ground reads as its own band, so a
+          black 1px line underneath was redundant and showed as a divider
+          between chrome and items. */}
       <div
-        className="sticky z-20 mt-6 border-b border-brand-black/10 bg-brand-white"
+        className="sticky z-20 mt-6 bg-brand-white"
         style={{ top: "var(--nav-h)" }}
       >
         <div className="mx-auto max-w-6xl">
@@ -280,7 +320,13 @@ export function MenuShell({
                       </div>
                     )
                   ) : (
-                    <ItemGrid items={sub.items} locationSlug={locationSlug} />
+                    <ItemGrid
+                      items={sub.items}
+                      locationSlug={locationSlug}
+                      code={code}
+                      openSlug={openSlug}
+                      onToggle={handleToggleOpen}
+                    />
                   )}
                 </div>
               ))
@@ -307,16 +353,21 @@ export function MenuShell({
               Limited-edition items we&rsquo;ve retired. Kept here so you can
               remember what you loved.
             </p>
-            <ul className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
-              {pastDrops.map((item, i) => (
+            <ul className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
+              {pastDrops.map((item) => (
                 <li
                   key={item.slug}
-                  className={cn(i % 2 === 0 ? "mr-3 md:mr-0" : "ml-3 md:ml-0")}
+                  className={cn(
+                    openSlug === item.slug && "md:col-span-2 xl:col-span-3",
+                  )}
                 >
-                  <MenuCard
+                  <MenuItemCard
                     item={item}
                     locationSlug={locationSlug}
-                    variant="past"
+                    code={code}
+                    isOpen={openSlug === item.slug}
+                    onToggle={handleToggleOpen}
+                    isPast
                   />
                 </li>
               ))}
@@ -330,21 +381,37 @@ export function MenuShell({
   );
 }
 
+interface ItemGridProps {
+  items: MenuItem[];
+  locationSlug: string;
+  code: MenuLocationCode;
+  openSlug: string | null;
+  onToggle: (slug: string) => void;
+}
+
 function ItemGrid({
   items,
   locationSlug,
-}: {
-  items: MenuItem[];
-  locationSlug: string;
-}) {
+  code,
+  openSlug,
+  onToggle,
+}: ItemGridProps) {
   return (
-    <ul className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
-      {items.map((item, i) => (
+    <ul className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
+      {items.map((item) => (
         <li
           key={item.slug}
-          className={cn(i % 2 === 0 ? "mr-3 md:mr-0" : "ml-3 md:ml-0")}
+          className={cn(
+            openSlug === item.slug && "md:col-span-2 xl:col-span-3",
+          )}
         >
-          <MenuCard item={item} locationSlug={locationSlug} />
+          <MenuItemCard
+            item={item}
+            locationSlug={locationSlug}
+            code={code}
+            isOpen={openSlug === item.slug}
+            onToggle={onToggle}
+          />
         </li>
       ))}
     </ul>
