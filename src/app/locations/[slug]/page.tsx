@@ -122,129 +122,73 @@ export default async function LocationDetailPage({ params }: RouteProps) {
   const directionsUrl = getDirectionsUrl(location);
   const shortName = location.name.replace(/^Wingers\s+/i, "");
   const jsonLd = buildLocationJsonLd(location);
-  const heroBg =
-    location.slug === "milton-keynes" ? "bg-brand-red" : "bg-brand-pink";
 
   return (
     <OrderPanelProvider>
       <NavBar />
-      <main>
-        <section
-          className="relative isolate flex min-h-[78dvh] flex-col justify-end overflow-hidden"
-        >
-          {location.shopfront ? (
-            <div className="absolute inset-0 -z-20" aria-hidden="true">
-              <Image
-                src={location.shopfront.src}
-                alt={location.shopfront.alt}
-                fill
-                sizes="100vw"
-                priority
-                className={`object-cover ${location.shopfront.heroPosition}`}
-              />
-            </div>
-          ) : (
-            <div
-              className={`absolute inset-0 -z-20 ${heroBg}`}
-              aria-hidden="true"
-            >
-              <div className="absolute inset-0 flex items-center justify-center opacity-15">
-                <BrandLogo
-                  variant="black"
-                  type="mark"
-                  width={640}
-                  height={640}
-                  className="h-80 w-80 md:h-[32rem] md:w-[32rem]"
+      <main className="bg-brand-white">
+        <section className="wingers-wrap pt-24 pb-10 md:pt-32 md:pb-16">
+          <Link
+            href="/locations"
+            className="inline-flex min-h-11 items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-black transition-colors hover:text-brand-red"
+          >
+            <span aria-hidden="true">←</span> All Shops
+          </Link>
+
+          <div className="mt-6 grid gap-8 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-end md:gap-12">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[999px_999px_32px_32px] md:aspect-[5/4] md:rounded-[999px_999px_40px_40px]">
+              {location.shopfront ? (
+                <Image
+                  src={location.shopfront.src}
+                  alt={location.shopfront.alt}
+                  fill
+                  priority
+                  sizes="(min-width: 768px) 55vw, 100vw"
+                  className={`object-cover ${location.shopfront.heroPosition}`}
                 />
-              </div>
+              ) : (
+                <div
+                  className="absolute inset-0 flex items-center justify-center bg-brand-black"
+                  aria-hidden="true"
+                >
+                  <BrandLogo
+                    variant="white"
+                    type="mark"
+                    width={320}
+                    height={320}
+                    className="h-28 w-28 md:h-40 md:w-40"
+                  />
+                </div>
+              )}
             </div>
-          )}
-          <div
-            aria-hidden="true"
-            className={
-              location.shopfront
-                ? "absolute inset-0 -z-10 bg-gradient-to-t from-brand-black/70 via-brand-black/30 to-transparent"
-                : "absolute inset-0 -z-10 bg-brand-white/85"
-            }
-          />
 
-          <div className="mx-auto w-full max-w-6xl px-4 pb-10 pt-24 md:pb-16 md:pt-32">
-            <Link
-              href="/locations"
-              className={
-                location.shopfront
-                  ? "inline-flex min-h-11 items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-white/85 transition-colors hover:text-brand-pink"
-                  : "inline-flex min-h-11 items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-black/85 transition-colors hover:text-brand-red"
-              }
-            >
-              <span aria-hidden="true">←</span> All Shops
-            </Link>
+            <div className="flex flex-col gap-5">
+              <div className="flex flex-wrap items-center gap-2">
+                <LocationOpenBadge location={location} size="sm" />
+                <span className="inline-flex h-7 items-center rounded-full bg-brand-pink/15 px-3 font-body text-xs font-semibold text-brand-black">
+                  Halal certified
+                </span>
+              </div>
 
-            <div className="mt-6 flex flex-col gap-6">
-              <LocationOpenBadge location={location} size="lg" />
-              <h1
-                className={
-                  location.shopfront
-                    ? "font-display text-[clamp(3rem,11vw,7rem)] font-extrabold uppercase leading-[0.85] tracking-tight text-brand-white"
-                    : "font-display text-[clamp(3rem,11vw,7rem)] font-extrabold uppercase leading-[0.85] tracking-tight text-brand-black"
-                }
-              >
+              <h1 className="font-display text-[clamp(3rem,11vw,6rem)] font-extrabold uppercase leading-[0.86] tracking-tight text-brand-black">
                 {shortName.toUpperCase()}
               </h1>
-              <address
-                className={
-                  location.shopfront
-                    ? "font-body not-italic text-base leading-relaxed text-brand-white/90 md:text-lg"
-                    : "font-body not-italic text-base leading-relaxed text-brand-black/85 md:text-lg"
-                }
-              >
-                <span className="block">{location.address.street}</span>
-                <span className="block">{location.address.city}</span>
-                <span className="block">{location.address.postcode}</span>
+
+              <address className="font-body not-italic text-base leading-relaxed text-brand-black/80 md:text-lg">
+                {location.address.street}, {location.address.city}{" "}
+                {location.address.postcode}
               </address>
 
-              <div className="pt-2">
-                <OrderTriggerButton
-                  preferredLocationSlug={location.slug}
-                  variant="primary"
-                  size="lg"
-                  className="min-h-12 px-8"
-                >
-                  Get Stuck In →
-                </OrderTriggerButton>
-              </div>
-            </div>
-          </div>
-        </section>
+              <OrderTriggerButton
+                preferredLocationSlug={location.slug}
+                variant="primary"
+                size="lg"
+                className="min-h-12 w-full justify-center px-8 md:w-fit"
+              >
+                Get Stuck In →
+              </OrderTriggerButton>
 
-        <section
-          aria-label="Opening hours and contact"
-          className="bg-brand-white py-16 md:py-24"
-        >
-          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-16 md:px-8">
-            <div>
-              <h2 className="font-display text-[clamp(2rem,6vw,4rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-red">
-                OPENING HOURS
-              </h2>
-              <div className="mt-8">
-                <OpeningHoursTable location={location} />
-                <OpeningHoursTodayMarker locationSlug={location.slug} />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-6">
-              <div>
-                <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
-                  Address
-                </p>
-                <address className="mt-3 font-body not-italic text-base leading-relaxed text-brand-black md:text-lg">
-                  <span className="block">{location.address.street}</span>
-                  <span className="block">{location.address.city}</span>
-                  <span className="block">{location.address.postcode}</span>
-                </address>
-              </div>
-
-              <div className="flex flex-col gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 <BrandButton
                   href={directionsUrl}
                   target="_blank"
@@ -257,18 +201,71 @@ export default async function LocationDetailPage({ params }: RouteProps) {
                 </BrandButton>
                 {location.phone ? (
                   <BrandButton
-                    href={`tel:${location.phone.replace(/\s/g, "")}`}
-                    variant="ghost"
+                    href={`tel:${location.phone.replace(/\s+/g, "")}`}
+                    variant="outline"
                     size="lg"
                     className="min-h-11 w-full justify-center"
                   >
-                    Call {location.phone}
+                    Call
                   </BrandButton>
                 ) : null}
               </div>
             </div>
           </div>
         </section>
+
+        <section
+          aria-label="Opening hours"
+          className="wingers-wrap pb-16 md:pb-24"
+        >
+          <div className="rounded-[32px] bg-brand-white p-6 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06)] md:rounded-[40px] md:p-10">
+            <h2 className="font-display text-[clamp(1.75rem,5vw,2.75rem)] font-bold uppercase leading-[0.95] tracking-tight text-brand-black">
+              Opening hours
+            </h2>
+            <div className="mt-6">
+              <OpeningHoursTable location={location} />
+              <OpeningHoursTodayMarker locationSlug={location.slug} />
+            </div>
+          </div>
+        </section>
+
+        {(location.mapImage || location.parking) && (
+          <section
+            aria-label="Getting here"
+            className="wingers-wrap pb-16 md:pb-24"
+          >
+            <h2 className="font-display text-[clamp(1.75rem,5vw,2.75rem)] font-bold uppercase leading-[0.95] tracking-tight text-brand-black">
+              Getting here
+            </h2>
+            <div className="mt-6 flex flex-col gap-4">
+              {location.mapImage ? (
+                <a
+                  href={directionsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Map to ${location.name} (opens in a new tab)`}
+                  className="block overflow-hidden rounded-[28px] md:rounded-[36px]"
+                >
+                  <Image
+                    src={location.mapImage}
+                    alt={`Map to ${location.name}`}
+                    width={1600}
+                    height={960}
+                    loading="lazy"
+                    sizes="(min-width: 768px) 70vw, 100vw"
+                    className="h-auto w-full"
+                  />
+                </a>
+              ) : null}
+              {location.parking ? (
+                <p className="rounded-[22px] bg-brand-white p-5 font-body text-base leading-relaxed text-brand-black shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06)] md:text-lg">
+                  <span className="font-semibold">Parking:</span>{" "}
+                  {location.parking}
+                </p>
+              ) : null}
+            </div>
+          </section>
+        )}
       </main>
       <Footer />
       <OrderPanel />

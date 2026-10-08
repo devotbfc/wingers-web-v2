@@ -50,4 +50,9 @@ export interface Location {
   paymentMethods?: string[];
   dietaryOptions?: string[];
   shopfront?: LocationShopfront;
+  // Optional static map screenshot per location, rendered as a lazy image
+  // link to the Google Maps directions URL on /locations/[slug]. When
+  // undefined, no map renders — the existing Directions link covers wayfinding.
+  // See LocationDetail board for arch radius + alt text pattern.
+  mapImage?: string;
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Cake, Gift, Mail, Sparkles } from "lucide-react";
 
 import { Footer } from "@/components/sections/Footer";
 import { LoyaltySignupSection } from "@/components/sections/LoyaltySignupSection";
@@ -7,14 +8,14 @@ import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
 import { OrderPanelProvider } from "@/components/sections/order-panel/order-panel-context";
 
 export const metadata: Metadata = {
-  title: "Become a Winger — Wingers Buttermilk Halal Fried Chicken",
+  title: "Flavour Club — Wingers Buttermilk Halal Fried Chicken",
   description:
-    "Join the Winger Club — the Wingers loyalty programme for buttermilk halal fried chicken fans in Milton Keynes & Northampton.",
+    "Join the Flavour Club — the Wingers loyalty programme for buttermilk halal fried chicken fans in Milton Keynes & Northampton.",
   alternates: { canonical: "/loyalty" },
   openGraph: {
-    title: "Become a Winger — Wingers Buttermilk Halal Fried Chicken",
+    title: "Flavour Club — Wingers Buttermilk Halal Fried Chicken",
     description:
-      "Free wings on your birthday, first dibs on new sauces, member-only drops. Buttermilk halal fried chicken in Milton Keynes & Northampton.",
+      "First dibs on new flavours, birthday wings and member drops. Buttermilk halal fried chicken in Milton Keynes & Northampton.",
     url: "/loyalty",
     type: "website",
     images: [
@@ -28,42 +29,41 @@ export const metadata: Metadata = {
   },
 };
 
-interface Benefit {
-  n: string;
-  label: string;
-  copy: string;
-  tile: string;
-  align: "start" | "end";
+interface Perk {
+  title: string;
+  body: string;
+  live: boolean;
+  Icon: typeof Mail;
 }
 
-const BENEFITS: readonly Benefit[] = [
+// Perks the Flavour Club offers. Any perk with live=false renders a
+// "Coming soon" pill — do not frame it as available. Flip to true once
+// the backing feature ships. "No spam" is a statement, not a perk;
+// kept outside this list as a plain card below the grid.
+const PERKS: readonly Perk[] = [
   {
-    n: "01",
-    label: "BIRTHDAY WINGS",
-    copy: "A free box of wings in your birthday week. On us. Every year.",
-    tile: "bg-brand-pink",
-    align: "start",
+    title: "First dibs",
+    body: "New flavours in your inbox before anyone else tastes them.",
+    live: true,
+    Icon: Mail,
   },
   {
-    n: "02",
-    label: "SAUCE DROPS",
-    copy: "First dibs on new sauces before they hit the counter. Taste it before anyone else does.",
-    tile: "bg-brand-red",
-    align: "end",
+    title: "Birthday wings",
+    body: "A free box of wings in your birthday week. On us.",
+    live: false,
+    Icon: Cake,
   },
   {
-    n: "03",
-    label: "MEMBER-ONLY OFFERS",
-    copy: "Quiet Tuesday deals, secret combos, and the odd free box when you least expect it.",
-    tile: "bg-brand-pink/20",
-    align: "start",
+    title: "Member drops",
+    body: "Quiet Tuesday deals, secret combos, and the odd free box.",
+    live: false,
+    Icon: Gift,
   },
   {
-    n: "04",
-    label: "NO SPAM. EVER.",
-    copy: "One email when there's something worth telling you. Never more.",
-    tile: "bg-brand-pink",
-    align: "end",
+    title: "Points & rewards",
+    body: "Earn on every order. Spend on anything on the menu.",
+    live: false,
+    Icon: Sparkles,
   },
 ];
 
@@ -71,86 +71,72 @@ export default function LoyaltyPage() {
   return (
     <OrderPanelProvider>
       <NavBar />
-      <main>
-        <section className="flex min-h-[70svh] items-center px-4 md:px-8">
-          <div className="mx-auto w-full max-w-6xl">
-            <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
-              Friends with Benefits
-            </p>
-            <h1 className="mt-4 font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,13vw,9rem)] text-brand-red">
-              THE WINGER CLUB.
-            </h1>
-            <p className="mt-8 max-w-2xl font-body text-lg md:text-xl leading-relaxed text-brand-black/80">
-              The Winger Club is Wingers&apos; loyalty programme for halal
-              buttermilk fried chicken fans in Milton Keynes and Northampton.
-              Members get free wings on their birthday, first dibs on new
-              sauces, and member-only drops. Launching soon — sign up now and
-              you&apos;re in from day one.
-            </p>
-          </div>
+      <main className="bg-brand-white">
+        <section className="wingers-wrap pt-24 pb-10 md:pt-32 md:pb-16">
+          <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
+            Friends with Benefits
+          </p>
+          <h1 className="mt-3 font-display font-extrabold uppercase leading-[0.84] tracking-tight text-[clamp(3rem,12vw,8rem)] text-brand-black">
+            THE FLAVOUR CLUB.
+          </h1>
+          <p className="mt-6 max-w-2xl font-body text-lg leading-relaxed text-brand-black/80 md:text-xl">
+            First dibs on new flavours, member drops, and the little
+            everyday perks that come with being a regular. Sign up now and
+            you&rsquo;re in from day one.
+          </p>
         </section>
 
-        <section aria-labelledby="benefits-heading">
-          <h2 id="benefits-heading" className="sr-only">
+        <section
+          aria-labelledby="perks-heading"
+          className="wingers-wrap pb-10 md:pb-16"
+        >
+          <h2 id="perks-heading" className="sr-only">
             What you get
           </h2>
-          {BENEFITS.map((b) => {
-            const alignEnd = b.align === "end";
-            return (
-              <article
-                key={b.n}
-                className="border-t border-brand-black/10 first:border-t-0"
+          <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+            {PERKS.map(({ title, body, live, Icon }) => (
+              <li
+                key={title}
+                className="flex min-h-[180px] flex-col gap-3 rounded-[24px] bg-brand-pink p-5 text-brand-black md:min-h-[220px]"
               >
-                <div className="px-4 md:px-8 pt-12 md:pt-20">
-                  <div
-                    className={
-                      alignEnd
-                        ? "mx-auto max-w-6xl md:flex md:justify-end"
-                        : "mx-auto max-w-6xl"
-                    }
-                  >
-                    <div
-                      className={
-                        alignEnd ? "max-w-3xl md:text-right" : "max-w-3xl"
-                      }
-                    >
-                      <div
-                        className={
-                          alignEnd
-                            ? "flex items-baseline gap-4 md:justify-end"
-                            : "flex items-baseline gap-4"
-                        }
-                      >
-                        <span
-                          aria-hidden="true"
-                          className="font-display font-extrabold text-brand-red leading-none tracking-tight"
-                          style={{ fontSize: "clamp(3.5rem, 18vw, 8rem)" }}
-                        >
-                          {b.n}
-                        </span>
-                        <h3 className="font-display font-extrabold uppercase leading-none tracking-tight text-[clamp(1.75rem,6vw,4rem)] text-brand-black">
-                          {b.label}
-                        </h3>
-                      </div>
-                      <p
-                        className={
-                          alignEnd
-                            ? "mt-6 max-w-xl md:ml-auto font-body text-lg md:text-xl leading-relaxed text-brand-black/80"
-                            : "mt-6 max-w-xl font-body text-lg md:text-xl leading-relaxed text-brand-black/80"
-                        }
-                      >
-                        {b.copy}
-                      </p>
-                    </div>
-                  </div>
+                <div className="flex items-start justify-between gap-3">
+                  <Icon
+                    aria-hidden="true"
+                    className="h-7 w-7 stroke-[2]"
+                  />
+                  {live ? null : (
+                    <span className="inline-flex h-6 items-center rounded-full border border-brand-black/40 bg-brand-white/60 px-2.5 font-display text-[10px] font-extrabold uppercase tracking-[0.2em] text-brand-black">
+                      Coming soon
+                    </span>
+                  )}
                 </div>
-                <div
-                  aria-hidden="true"
-                  className={`mt-8 md:mt-12 w-full aspect-[4/2] md:aspect-[21/6] ${b.tile}`}
-                />
-              </article>
-            );
-          })}
+                <h3 className="font-display text-xl font-extrabold uppercase leading-[0.95] tracking-tight text-brand-black md:text-2xl">
+                  {title}
+                </h3>
+                <p className="font-body text-sm leading-snug text-brand-black/80 md:text-[15px]">
+                  {body}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="wingers-wrap pb-10 md:pb-16">
+          <aside
+            aria-labelledby="no-spam-heading"
+            className="flex flex-col gap-2 rounded-[24px] bg-brand-black p-6 text-brand-white md:p-8"
+          >
+            <h3
+              id="no-spam-heading"
+              className="font-display text-xl font-extrabold uppercase leading-[0.95] tracking-tight md:text-2xl"
+            >
+              No spam. Ever.
+            </h3>
+            <p className="font-body text-base leading-relaxed text-brand-white/80 md:text-lg">
+              One email when there&rsquo;s something worth telling you. Never
+              more.
+            </p>
+          </aside>
         </section>
 
         <LoyaltySignupSection source="loyalty_page" />

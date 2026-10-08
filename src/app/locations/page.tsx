@@ -32,19 +32,20 @@ export default function LocationsPage() {
   return (
     <OrderPanelProvider>
       <NavBar />
-      <main>
-        <section className="bg-brand-white pt-24 pb-6 md:pt-32 md:pb-10">
-          <div className="mx-auto max-w-6xl px-4 md:px-8">
-            <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
-              Halal Buttermilk Fried Chicken
-            </p>
-            <h1 className="mt-2 font-display text-[clamp(3rem,10vw,7rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-black">
-              FIND US.
-            </h1>
-            <p className="mt-6 max-w-2xl font-body text-base leading-relaxed text-brand-black/80 md:text-lg">
-              Wingers has two buttermilk halal fried chicken shops: Milton
-              Keynes and Northampton — both fully certified. Order online
-              for collection, delivery through the apps, or drop in and get
+      <main className="bg-brand-white">
+        <section className="wingers-wrap pt-24 pb-6 md:pt-32 md:pb-10">
+          <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end md:gap-10">
+            <div>
+              <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
+                Halal Buttermilk Fried Chicken
+              </p>
+              <h1 className="mt-3 font-display text-[clamp(3rem,10vw,9rem)] font-extrabold uppercase leading-[0.86] tracking-tight text-brand-black">
+                FIND US.
+              </h1>
+            </div>
+            <p className="max-w-xl font-body text-base leading-relaxed text-brand-black/80 md:text-lg">
+              Two shops, both fully certified halal. Order online for
+              collection, get delivery through the apps, or drop in and get
               stuck in.
             </p>
           </div>
@@ -52,20 +53,18 @@ export default function LocationsPage() {
 
         <section
           aria-label="Wingers shops"
-          className="bg-brand-white pb-16 md:pb-24"
+          className="wingers-wrap pb-16 md:pb-24"
         >
-          <div className="mx-auto max-w-6xl px-4 md:px-8">
-            <ul className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-6">
-              {LOCATIONS.map((loc, i) => (
-                <li
-                  key={loc.slug}
-                  className={i === 0 ? "mr-4 md:mr-0" : "ml-4 md:ml-0"}
-                >
-                  <LocationCard location={loc} mediaAspect="3/2" />
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-6">
+            {LOCATIONS.map((loc, i) => (
+              <li
+                key={loc.slug}
+                className={i === 0 ? "mr-6 md:mr-0" : "ml-6 md:ml-0 md:mt-16"}
+              >
+                <LocationCard location={loc} mediaAspect="3/2" />
+              </li>
+            ))}
+          </ul>
         </section>
       </main>
       <Footer />

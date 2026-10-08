@@ -202,7 +202,7 @@ export function OrderPanel() {
                   initial="initial"
                   animate="animate"
                   exit="exit"
-                  className="grid gap-4 px-6 pb-8 md:grid-cols-2 overscroll-contain overflow-y-auto"
+                  className="grid gap-4 px-6 pb-[var(--sheet-safe-bottom)] md:pb-8 md:grid-cols-2 overscroll-contain overflow-y-auto"
                 >
                   {LOCATIONS.map((loc) => {
                     const provider = getProviderForLocation(loc);
