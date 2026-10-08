@@ -56,7 +56,10 @@ export default function Home() {
   return (
     <OrderPanelProvider>
       <NavBar />
-      <main className="bg-brand-warm-grey">
+      {/* Nav is fixed; push main down by its height + 12px so the hero's
+          "Milton Keynes & Northampton" pill clears the logo row cleanly.
+          --nav-h is defined in globals.css and switches at md. */}
+      <main className="bg-brand-warm-grey pt-[calc(var(--nav-h)+0.75rem)]">
         <Hero />
         {marqueeText && <Marquee text={marqueeText} />}
         <KatsuDrop />

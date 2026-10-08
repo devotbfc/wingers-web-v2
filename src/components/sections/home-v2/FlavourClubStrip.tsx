@@ -15,9 +15,9 @@ export function FlavourClubStrip() {
   return (
     <section
       aria-labelledby="flavour-club-heading"
-      className="wingers-wrap pb-16 md:pb-24"
+      className="wingers-wrap pb-20 md:pb-28"
     >
-      <div className="rounded-[32px] bg-brand-pink p-7 text-brand-black md:rounded-[40px] md:p-12">
+      <div className="rounded-[32px] bg-brand-pink p-7 pb-9 text-brand-black md:rounded-[40px] md:p-12 md:pb-14">
         <div className="flex flex-col gap-3.5">
           <Image
             src="/brand/logo/wingers-mark.png"

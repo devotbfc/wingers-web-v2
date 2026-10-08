@@ -57,20 +57,22 @@ export function TheGoods() {
         </Link>
       </div>
 
-      {/* Mobile: horizontal scroll-snap rail. Desktop: 4-col grid inside wrap. */}
+      {/* Mobile: horizontal scroll-snap rail with every tile pinned to
+          220px (width on the <li>, not the inner <Link>, so flex layout
+          can't inflate the first item). Desktop: 4-col grid inside wrap. */}
       <ul
         aria-label="Menu categories"
-        className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-[var(--wrap-gutter,1rem)] pb-4 md:mx-auto md:max-w-[var(--wrap-max,80rem)] md:grid md:grid-cols-4 md:gap-5 md:overflow-visible md:px-[var(--wrap-gutter,1rem)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-[var(--wrap-gutter,1rem)] pb-4 scroll-pl-[var(--wrap-gutter,1rem)] md:mx-auto md:max-w-[var(--wrap-max,80rem)] md:grid md:grid-cols-4 md:gap-5 md:overflow-visible md:px-[var(--wrap-gutter,1rem)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {TILES.map((tile) => (
           <li
             key={tile.name}
-            className="shrink-0 snap-start md:shrink"
+            className="w-[220px] shrink-0 snap-start md:w-auto"
           >
             <Link
               href="/menu"
               aria-label={`${tile.name.toUpperCase()}, ${tile.line}`}
-              className="group flex w-[220px] flex-col gap-3 rounded-[28px] bg-brand-white p-2.5 pb-4 md:w-auto md:gap-3.5 md:rounded-[32px] md:p-3 md:pb-5 md:transition-transform md:duration-200 md:motion-safe:hover:-translate-y-1.5"
+              className="group flex w-full flex-col gap-3 rounded-[28px] bg-brand-white p-2.5 pb-4 md:gap-3.5 md:rounded-[32px] md:p-3 md:pb-5 md:transition-transform md:duration-200 md:motion-safe:hover:-translate-y-1.5"
             >
               <div className="relative aspect-square w-full overflow-hidden [border-radius:999px_999px_20px_20px] md:[border-radius:999px_999px_24px_24px]">
                 <Image

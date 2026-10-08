@@ -15,7 +15,7 @@ export function KatsuDrop() {
   return (
     <section
       aria-labelledby="le-drop-heading"
-      className="wingers-wrap pb-10 md:pb-16"
+      className="wingers-wrap pt-6 pb-10 md:pt-8 md:pb-16"
     >
       <div className="rounded-[32px] bg-lab-black p-6 text-brand-white md:grid md:grid-cols-2 md:gap-10 md:items-center md:rounded-[40px] md:p-[clamp(1.5rem,4vw,3.5rem)]">
         {/* W-masked drop image. The mask is the Wingers W; the photo is a

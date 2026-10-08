@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { BrandButton } from "@/components/brand/BrandButton";
+import { FlaskGlyph } from "@/components/ui/FlaskGlyph";
 import { WheelSpinner } from "@/components/sections/flavour-lab/WheelSpinner";
 
 /**
@@ -32,12 +33,18 @@ export function FlavourLabTeaser() {
 
           <WheelSpinner className="mt-4 flex w-full flex-col items-center md:mt-6" />
 
-          <Link
+          <BrandButton
+            variant="inverse"
+            size="lg"
             href="/flavour-lab"
-            className="mt-2 font-body text-sm font-semibold text-brand-white underline underline-offset-4 hover:text-brand-pink"
+            className="mt-2 w-full min-h-12 justify-center gap-2 md:w-auto"
           >
-            See every flavour, drop and dip →
-          </Link>
+            Visit the Flavour Lab
+            <FlaskGlyph
+              strokeWidth={2.5}
+              className="h-[1.15em] w-[1.15em] shrink-0"
+            />
+          </BrandButton>
         </div>
       </div>
     </section>

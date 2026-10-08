@@ -11,7 +11,7 @@ export function Hero() {
   return (
     <section
       aria-label="Hero"
-      className="wingers-wrap pt-2 pb-8 md:pt-12 md:pb-16"
+      className="wingers-wrap pb-8 md:pb-16"
     >
       <div className="grid gap-6 md:grid-cols-2 md:items-center md:gap-x-12 md:gap-y-7">
         {/* Status chip — grid row 1 both breakpoints */}
@@ -59,12 +59,27 @@ export function Hero() {
           Fresh, never frozen. Hand-breaded halal buttermilk fried chicken.
         </p>
 
-        {/* CTA pair — mobile row 5, desktop row 4 col 1 */}
+        {/* CTA pair — mobile row 5, desktop row 4 col 1. 2-col grid on
+            mobile with both pills w-full in their cell (no grow — the
+            wrapper spans fix width explicitly so GET STUCK IN can't spill
+            into FIND US). On md the grid collapses to inline flex-wrap
+            and buttons go back to content width. */}
         <div className="grid grid-cols-2 gap-3 md:col-start-1 md:row-start-4 md:flex md:flex-wrap md:gap-3.5">
-          <OrderTriggerButton variant="primary" size="lg">
+          <OrderTriggerButton
+            variant="primary"
+            size="lg"
+            pulse={false}
+            wrapperClassName="block w-full md:inline-flex md:w-auto"
+            className="w-full md:w-auto justify-center"
+          >
             Get Stuck In
           </OrderTriggerButton>
-          <BrandButton variant="outline" size="lg" href="/locations">
+          <BrandButton
+            variant="outline"
+            size="lg"
+            href="/locations"
+            className="w-full md:w-auto justify-center"
+          >
             Find Us
           </BrandButton>
         </div>

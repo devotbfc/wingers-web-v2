@@ -15,7 +15,14 @@ interface OrderTriggerButtonProps {
   variant?: "primary" | "secondary" | "ghost";
   size?: "sm" | "md" | "lg";
   className?: string;
+  /** Extra classes merged onto the outer <span> wrapper. Use when the
+   *  button needs to fill a grid/flex cell (e.g. the hero's 2-col CTA
+   *  row). Defaults to the inline-flex pill shape. */
+  wrapperClassName?: string;
   preferredLocationSlug?: string;
+  /** Set `false` to disable the red idle pulse ring. Defaults to true so
+   *  existing consumers (TwoSpots, menu cards, flavour lab) are unchanged. */
+  pulse?: boolean;
 }
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
@@ -47,20 +54,23 @@ export function OrderTriggerButton({
   variant = "primary",
   size = "md",
   className,
+  wrapperClassName,
   preferredLocationSlug,
+  pulse = true,
 }: OrderTriggerButtonProps) {
   const { openPanel, open } = useOrderPanel();
   const reduced = usePrefersReducedMotion();
   const [wrapperRef, inView] = useAnimateInView<HTMLSpanElement>();
 
   const pulsePaused = open || reduced || !inView;
+  const showPulse = pulse && ORDER_PULSE_ENABLED;
 
   return (
     <span
       ref={wrapperRef}
-      className="relative inline-flex rounded-full"
+      className={cn("relative inline-flex rounded-full", wrapperClassName)}
     >
-      {ORDER_PULSE_ENABLED && (
+      {showPulse && (
         <span
           aria-hidden="true"
           data-paused={pulsePaused ? "true" : undefined}
