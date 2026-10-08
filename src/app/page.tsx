@@ -13,10 +13,13 @@ const OrderPanel = dynamic(() =>
 import { BackToTopButton } from "@/components/common/BackToTopButton";
 import { FlavourLabTeaser } from "@/components/sections/home-v2/FlavourLabTeaser";
 import { Hero } from "@/components/sections/home-v2/Hero";
+import { KatsuDrop } from "@/components/sections/home-v2/KatsuDrop";
+import { Marquee } from "@/components/sections/home-v2/Marquee";
 import { SaucePanel } from "@/components/sections/home-v2/SaucePanel";
 import { StatementPanel } from "@/components/sections/home-v2/StatementPanel";
 import { TheGoods } from "@/components/sections/home-v2/TheGoods";
 import { TwoSpots } from "@/components/sections/home-v2/TwoSpots";
+import { getCurrentLimitedEdition } from "@/lib/flavours";
 
 export const metadata: Metadata = {
   title:
@@ -46,11 +49,17 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  const hasLE = getCurrentLimitedEdition() !== null;
+
   return (
     <OrderPanelProvider>
-      <NavBar onDark />
-      <main>
+      <NavBar />
+      <main className="bg-brand-warm-grey">
         <Hero />
+        {hasLE && (
+          <Marquee text="KATSU IS HERE / LIMITED DROP / KATSU IS HERE / LIMITED DROP / " />
+        )}
+        <KatsuDrop />
         <StatementPanel />
         <TheGoods />
         <SaucePanel />

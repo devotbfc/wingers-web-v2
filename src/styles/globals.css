@@ -33,6 +33,13 @@
   --font-body: "Inter", system-ui, sans-serif;
 
   --tracking-display: -0.03em;
+
+  /* Batch J animation utilities. Generates `.animate-w-spin`, `.animate-w-marq`,
+     `.animate-w-pop` consuming the keyframes defined further down. Instances
+     that need a non-default duration override via inline style. */
+  --animate-w-spin: w-spin 14s linear infinite;
+  --animate-w-marq: w-marq 18s linear infinite;
+  --animate-w-pop: w-pop 260ms cubic-bezier(0.23, 1, 0.32, 1) both;
 }
 
 /* Site chrome + motion curve shared across sections. Batch J introduces a
