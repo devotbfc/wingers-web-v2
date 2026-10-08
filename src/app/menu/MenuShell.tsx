@@ -6,9 +6,8 @@ import { BackToTopButton } from "@/components/common/BackToTopButton";
 import { BeefNorthamptonTeaser } from "@/components/menu/BeefNorthamptonTeaser";
 import { CategoryBar } from "@/components/menu/CategoryBar";
 import { FlavourLabLinkCard } from "@/components/menu/FlavourLabLinkCard";
-import { LimitedEditionSpotlight } from "@/components/menu/LimitedEditionSpotlight";
 import { LocationExclusiveBadge } from "@/components/menu/LocationExclusiveBadge";
-import { LocationPicker } from "@/components/menu/LocationPicker";
+import { MenuKatsuHero } from "@/components/menu/MenuKatsuHero";
 import type { Flavour } from "@/lib/flavours/flavour-lab-data";
 import { LOCATIONS } from "@/lib/locations";
 import {
@@ -185,11 +184,40 @@ export function MenuShell({
 
   return (
     <>
-      <LimitedEditionSpotlight flavour={currentLE} />
-
-      <div className="mt-4 flex justify-center px-4">
-        <LocationPicker value={locationSlug} onChange={handleLocationChange} />
+      {/* Shop toggle — Batch J board replaces the LocationPicker sheet with
+          an inline pill-pair (role="radiogroup"). The storage + default-to-NN
+          logic lives above; only the markup changed. */}
+      <div className="mx-auto mt-2 w-full max-w-sm px-4 md:mt-4">
+        <div
+          role="radiogroup"
+          aria-label="Pick your shop"
+          className="grid grid-cols-2 gap-1 rounded-full bg-brand-warm-grey p-1"
+        >
+          {LOCATIONS.map((loc) => {
+            const active = loc.slug === locationSlug;
+            const shortName = loc.name.replace(/^Wingers\s+/, "");
+            return (
+              <button
+                key={loc.slug}
+                type="button"
+                role="radio"
+                aria-checked={active}
+                onClick={() => handleLocationChange(loc.slug)}
+                className={cn(
+                  "inline-flex h-11 items-center justify-center rounded-full font-display text-sm font-extrabold uppercase tracking-[0.02em] transition-colors",
+                  active
+                    ? "bg-brand-black text-brand-white"
+                    : "bg-transparent text-brand-black hover:bg-brand-white/60",
+                )}
+              >
+                {shortName}
+              </button>
+            );
+          })}
+        </div>
       </div>
+
+      <MenuKatsuHero flavour={currentLE} />
 
       {/* Sticky chrome — seats flush under the fixed NavBar via --nav-h.
           See globals.css. */}

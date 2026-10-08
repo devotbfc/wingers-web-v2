@@ -106,7 +106,7 @@ export default function MenuPage() {
     <OrderPanelProvider>
       <NavBar />
       <main>
-        <section className="bg-brand-white pt-28 pb-2 md:pt-32 md:pb-4">
+        <section className="bg-brand-white pt-28 pb-8 md:pt-32 md:pb-12">
           <div className="mx-auto max-w-6xl px-4 md:px-8">
             <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
               Fresh · Hand-Breaded · Halal
