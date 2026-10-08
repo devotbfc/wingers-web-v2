@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Check } from "lucide-react";
+
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
@@ -8,14 +10,14 @@ import { FranchiseEnquiryForm } from "./FranchiseEnquiryForm";
 import { FRANCHISE_FAQS, buildFranchiseFaqJsonLd } from "./faq-data";
 
 export const metadata: Metadata = {
-  title: "Franchise Opportunities — The Big Flavour Co",
+  title: "Franchise Opportunities — Wingers",
   description:
-    "Franchise opportunities from The Big Flavour Co — the team behind Wingers, serving buttermilk halal fried chicken in Milton Keynes and Northampton.",
+    "Franchise opportunities from the team behind Wingers — buttermilk halal fried chicken in Milton Keynes and Northampton.",
   alternates: { canonical: "/franchise" },
   openGraph: {
-    title: "Franchise Opportunities — The Big Flavour Co",
+    title: "Franchise Opportunities — Wingers",
     description:
-      "Franchise opportunities from The Big Flavour Co — the team behind Wingers.",
+      "Franchise opportunities from the team behind Wingers.",
     url: "/franchise",
     type: "website",
     images: [
@@ -23,43 +25,11 @@ export const metadata: Metadata = {
         url: "/og/default.png",
         width: 1200,
         height: 630,
-        alt: "The Big Flavour Co",
+        alt: "Wingers",
       },
     ],
   },
 };
-
-interface Pillar {
-  readonly n: string;
-  readonly label: string;
-  readonly copy: string;
-}
-
-// data-todo="content" lives on the tiles in the JSX below. These three
-// paragraphs describe the Wingers process; the sister brand may use the same
-// one, but Benson needs to confirm before publish. While unconfirmed, flip
-// SHOW_PILLARS to false so the tiles render as nothing (the data stays here
-// and the data-todo attribute stays in the JSX for grep). Flip to true on
-// confirmation. See docs/TODO-content.md.
-const SHOW_PILLARS = false;
-
-const PILLARS: readonly Pillar[] = [
-  {
-    n: "01",
-    label: "BRINE",
-    copy: "A 24-hour buttermilk brine. Tender the whole way through, seasoned to the bone.",
-  },
-  {
-    n: "02",
-    label: "DREDGE",
-    copy: "Hand-tossed in seasoned flour until the crust turns craggy. No machines.",
-  },
-  {
-    n: "03",
-    label: "FRY",
-    copy: "Dropped in fresh oil and fried to order. Golden, loud, crunchy \u2014 never sitting under a lamp.",
-  },
-];
 
 const WHO_TRAITS: readonly string[] = [
   "An operator mindset \u2014 you want to run the shop, not just own it.",
@@ -106,192 +76,166 @@ const STEPS: readonly { n: string; label: string; copy: string }[] = [
 
 export default function FranchisePage() {
   const faqJsonLd = buildFranchiseFaqJsonLd();
+  const visibleFaqs = FRANCHISE_FAQS.filter((f) => !f.hidden);
 
   return (
     <OrderPanelProvider>
       <NavBar />
-      <main>
-        <section className="px-4 pt-28 pb-10 md:px-8 md:pt-40 md:pb-20">
-          <div className="mx-auto w-full max-w-6xl">
-            <h1 className="font-display font-extrabold uppercase leading-[0.85] tracking-tight break-words text-[clamp(2.25rem,11vw,6rem)] md:text-[clamp(3rem,10vw,8rem)] text-brand-red">
-              FRANCHISE OPPORTUNITIES.
-            </h1>
-            <p className="mt-8 max-w-2xl font-body text-lg md:text-xl leading-relaxed text-brand-black">
-              From The Big Flavour Co &mdash; the team behind Wingers.
-              Buttermilk halal fried chicken, built properly. We are opening up
-              franchise opportunities for a sister brand to the right
-              operators.
-            </p>
-            <div className="mt-10">
-              <BrandButton
-                href="#enquiry"
-                variant="secondary"
-                size="lg"
-              >
-                Start the conversation
-              </BrandButton>
-            </div>
+      <main className="bg-brand-black text-brand-white">
+        <section className="wingers-wrap pt-28 pb-14 md:pt-40 md:pb-20">
+          <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-white/60">
+            From the team behind Wingers
+          </p>
+          <h1 className="mt-4 font-display font-extrabold uppercase leading-[0.86] tracking-tight text-[clamp(3rem,11vw,7rem)]">
+            FRANCHISE{" "}
+            <span className="text-brand-pink">OPPORTUNITIES.</span>
+          </h1>
+          <p className="mt-6 max-w-2xl font-body text-lg leading-relaxed text-brand-white/80 md:text-xl">
+            Buttermilk fried chicken, built properly. We are opening up
+            franchise opportunities for a sister brand to the right
+            operators.
+          </p>
+          <div className="mt-8">
+            <BrandButton href="#enquiry" variant="primary" size="lg">
+              Start the conversation
+            </BrandButton>
           </div>
         </section>
 
         <section
           aria-labelledby="who-we-are-heading"
-          className="bg-brand-white px-4 py-10 md:px-8 md:py-20"
+          className="wingers-wrap pb-10 md:pb-16"
         >
-          <div className="mx-auto max-w-3xl">
-            <h2
-              id="who-we-are-heading"
-              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
-            >
-              WHO WE ARE.
-            </h2>
-            <div className="mt-6 space-y-4 font-body text-base md:text-lg leading-relaxed text-brand-black/80">
-              <p>
-                The Big Flavour Co is the team behind Wingers. We built and
-                run two shops ourselves, in Milton Keynes and Northampton, and
-                we know what it takes to open the doors and keep them open.
+          <div className="grid gap-4 md:grid-cols-2 md:gap-6">
+            <div className="rounded-[32px] bg-brand-warm-grey p-7 text-brand-black md:rounded-[40px] md:p-10">
+              <h2
+                id="who-we-are-heading"
+                className="font-display font-extrabold uppercase leading-[0.95] tracking-tight text-[clamp(2rem,5vw,2.75rem)]"
+              >
+                Who we are.
+              </h2>
+              <p className="mt-4 font-body text-base leading-relaxed md:text-lg">
+                We are the team behind Wingers. We built and run two shops
+                ourselves, in Milton Keynes and Northampton, and we know what
+                it takes to open the doors and keep them open.
               </p>
-              <p>
+              <p className="mt-3 font-body text-base leading-relaxed md:text-lg">
                 The franchise brand is a sister concept from the same team.
                 Different name, same standard. Full details are shared on the
                 intro call.
+              </p>
+            </div>
+            <div className="rounded-[32px] border border-brand-white/15 bg-brand-white/[0.04] p-7 md:rounded-[40px] md:p-10">
+              <h2 className="font-display font-extrabold uppercase leading-[0.95] tracking-tight text-[clamp(2rem,5vw,2.75rem)]">
+                What we do.
+              </h2>
+              <p className="mt-4 font-body text-base leading-relaxed text-brand-white/80 md:text-lg">
+                Buttermilk fried chicken, done properly. No shortcuts, no
+                lamp-warmers, halal throughout.
               </p>
             </div>
           </div>
         </section>
 
         <section
-          aria-labelledby="what-we-do-heading"
-          className="px-4 py-10 md:px-8 md:py-20"
-        >
-          <div className="mx-auto max-w-6xl">
-            <h2
-              id="what-we-do-heading"
-              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
-            >
-              WHAT WE DO.
-            </h2>
-            <p className="mt-6 max-w-2xl font-body text-base md:text-lg leading-relaxed text-brand-black/80">
-              Buttermilk fried chicken, done properly. No shortcuts, no
-              lamp-warmers, halal throughout.
-            </p>
-            {SHOW_PILLARS && (
-              <ul
-                className="mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:grid md:snap-none md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0"
-                data-todo="content"
-                data-todo-note="Benson to confirm the sister brand uses the same brine/dredge/fry process before publish."
-              >
-                {PILLARS.map((p) => (
-                  <li
-                    key={p.n}
-                    className="min-w-[75%] snap-start rounded-md border border-brand-black/10 bg-brand-white p-6 md:min-w-0"
-                  >
-                    <div className="flex items-baseline gap-3">
-                      <span
-                        aria-hidden="true"
-                        className="font-display text-4xl font-extrabold text-brand-red md:text-5xl"
-                      >
-                        {p.n}
-                      </span>
-                      <h3 className="font-display text-xl font-bold uppercase tracking-tight text-brand-black md:text-2xl">
-                        {p.label}
-                      </h3>
-                    </div>
-                    <p className="mt-4 font-body text-base leading-relaxed text-brand-black/80">
-                      {p.copy}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </section>
-
-        <section
           aria-labelledby="who-looking-heading"
-          className="bg-brand-white px-4 py-10 md:px-8 md:py-20"
+          className="wingers-wrap pb-10 md:pb-16"
         >
-          <div className="mx-auto max-w-3xl">
-            <h2
-              id="who-looking-heading"
-              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
-            >
-              WHO WE&rsquo;RE LOOKING FOR.
-            </h2>
-            <ul className="mt-6 list-disc space-y-3 pl-6 font-body text-base md:text-lg leading-relaxed text-brand-black/80">
-              {WHO_TRAITS.map((t) => (
-                <li key={t}>{t}</li>
-              ))}
-            </ul>
-          </div>
+          <h2
+            id="who-looking-heading"
+            className="font-display font-extrabold uppercase leading-[0.95] tracking-tight text-[clamp(2rem,5vw,2.75rem)]"
+          >
+            Who we&rsquo;re looking for.
+          </h2>
+          <ul className="mt-6 flex flex-col gap-3">
+            {WHO_TRAITS.map((t) => (
+              <li
+                key={t}
+                className="flex items-start gap-3 font-body text-base leading-relaxed text-brand-white/85 md:text-lg"
+              >
+                <span
+                  aria-hidden="true"
+                  className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-pink text-brand-black"
+                >
+                  <Check className="h-3.5 w-3.5 stroke-[3]" />
+                </span>
+                {t}
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section
           aria-labelledby="what-we-provide-heading"
-          className="px-4 py-10 md:px-8 md:py-20"
+          className="wingers-wrap pb-10 md:pb-16"
         >
-          <div className="mx-auto max-w-3xl">
-            <h2
-              id="what-we-provide-heading"
-              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
-            >
-              WHAT WE PROVIDE.
-            </h2>
-            <ul className="mt-6 list-disc space-y-3 pl-6 font-body text-base md:text-lg leading-relaxed text-brand-black/80">
-              {PROVIDE.map((p) => (
-                <li key={p}>{p}</li>
-              ))}
-            </ul>
-          </div>
+          <h2
+            id="what-we-provide-heading"
+            className="font-display font-extrabold uppercase leading-[0.95] tracking-tight text-[clamp(2rem,5vw,2.75rem)]"
+          >
+            What we provide.
+          </h2>
+          <ul className="mt-6 flex flex-col gap-3">
+            {PROVIDE.map((p) => (
+              <li
+                key={p}
+                className="rounded-[20px] border border-brand-white/15 bg-brand-white/[0.04] px-5 py-4 font-body text-base leading-relaxed text-brand-white/85 md:text-lg"
+              >
+                {p}
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section
           aria-labelledby="how-it-works-heading"
-          className="bg-brand-white px-4 py-10 md:px-8 md:py-20"
+          className="wingers-wrap pb-10 md:pb-16"
         >
-          <div className="mx-auto max-w-6xl">
-            <h2
-              id="how-it-works-heading"
-              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
-            >
-              HOW IT WORKS.
-            </h2>
-            <ol className="mt-8 grid gap-4 md:grid-cols-5">
-              {STEPS.map((s) => (
-                <li
-                  key={s.n}
-                  className="rounded-md border border-brand-black/10 bg-brand-white p-5"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="font-display text-2xl font-extrabold text-brand-red"
-                  >
+          <h2
+            id="how-it-works-heading"
+            className="font-display font-extrabold uppercase leading-[0.95] tracking-tight text-[clamp(2rem,5vw,2.75rem)]"
+          >
+            How it works.
+          </h2>
+          <ol className="mt-6 flex flex-col">
+            {STEPS.map((s, i) => (
+              <li key={s.n} className="flex gap-4">
+                <div className="flex flex-col items-center">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-pink font-display text-sm font-extrabold text-brand-black">
                     {s.n}
                   </span>
-                  <h3 className="mt-2 font-display text-lg font-bold uppercase tracking-tight text-brand-black">
+                  {i < STEPS.length - 1 ? (
+                    <span
+                      aria-hidden="true"
+                      className="w-0.5 flex-grow bg-brand-white/20"
+                    />
+                  ) : null}
+                </div>
+                <div className="flex flex-col gap-1 pb-5 pt-2 last:pb-0">
+                  <h3 className="font-display text-xl font-extrabold uppercase leading-[0.95] tracking-tight md:text-2xl">
                     {s.label}
                   </h3>
-                  <p className="mt-2 font-body text-sm leading-relaxed text-brand-black/80">
+                  <p className="font-body text-sm leading-relaxed text-brand-white/80 md:text-base">
                     {s.copy}
                   </p>
-                </li>
-              ))}
-            </ol>
-          </div>
+                </div>
+              </li>
+            ))}
+          </ol>
         </section>
 
         <section
           aria-labelledby="investment-heading"
-          className="px-4 py-10 md:px-8 md:py-20"
+          className="wingers-wrap pb-10 md:pb-16"
         >
-          <div className="mx-auto max-w-3xl">
+          <div className="rounded-[32px] bg-brand-pink p-7 text-brand-black md:rounded-[40px] md:p-10">
             <h2
               id="investment-heading"
-              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
+              className="font-display font-extrabold uppercase leading-[0.95] tracking-tight text-[clamp(2rem,5vw,2.75rem)]"
             >
-              INVESTMENT.
+              Investment.
             </h2>
-            <p className="mt-6 font-body text-base md:text-lg leading-relaxed text-brand-black/80">
+            <p className="mt-4 font-body text-base leading-relaxed md:text-lg">
               Full investment details &mdash; including fees and build-out
               costs &mdash; are shared after an initial call, so the
               conversation fits the site and the operator.
@@ -301,63 +245,71 @@ export default function FranchisePage() {
 
         <section
           aria-labelledby="faq-heading"
-          className="bg-brand-white px-4 py-10 md:px-8 md:py-20"
+          className="wingers-wrap pb-10 md:pb-16"
         >
-          <div className="mx-auto max-w-3xl">
-            <h2
-              id="faq-heading"
-              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
-            >
-              FAQ.
-            </h2>
-            <ul className="mt-8 space-y-3">
-              {FRANCHISE_FAQS.filter((f) => !f.hidden).map((f) => (
-                <li key={f.q}>
-                  <details
-                    className="group rounded-md border border-brand-black/10 bg-brand-white px-5 py-4 open:pb-5"
-                    {...(f.todo
-                      ? {
-                          "data-todo": "content",
-                          "data-todo-note":
-                            "Benson to confirm the sister brand is halal before publish.",
-                        }
-                      : {})}
-                  >
-                    <summary className="flex cursor-pointer list-none items-start justify-between gap-6 font-display text-lg md:text-xl font-bold uppercase tracking-tight text-brand-black transition-colors group-hover:text-brand-red">
-                      <span>{f.q}</span>
-                      <span
-                        aria-hidden="true"
-                        className="mt-1 shrink-0 text-brand-red transition-transform group-open:rotate-45"
+          <h2
+            id="faq-heading"
+            className="font-display font-extrabold uppercase leading-[0.95] tracking-tight text-[clamp(2rem,5vw,2.75rem)]"
+          >
+            FAQ.
+          </h2>
+          <ul className="mt-6 flex flex-col gap-3">
+            {visibleFaqs.map((f) => (
+              <li key={f.q}>
+                <details
+                  className="group overflow-hidden rounded-[20px] border border-brand-white/15 bg-brand-white/[0.04]"
+                  {...(f.todo
+                    ? {
+                        "data-todo": "content",
+                        "data-todo-note":
+                          "Benson to confirm the sister brand is halal before publish.",
+                      }
+                    : {})}
+                >
+                  <summary className="flex min-h-[56px] cursor-pointer list-none items-center justify-between gap-3 px-5 py-3 font-body text-base font-semibold text-brand-white">
+                    <span>{f.q}</span>
+                    <span
+                      aria-hidden="true"
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-white/15 text-brand-white transition-transform duration-200 group-open:rotate-45 group-open:bg-brand-pink group-open:text-brand-black"
+                    >
+                      <svg
+                        width="13"
+                        height="13"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.8"
+                        strokeLinecap="round"
                       >
-                        +
-                      </span>
-                    </summary>
-                    <p className="mt-4 font-body text-base md:text-lg leading-relaxed text-brand-black/80">
-                      {f.a}
-                    </p>
-                  </details>
-                </li>
-              ))}
-            </ul>
-          </div>
+                        <path d="M12 5v14M5 12h14" />
+                      </svg>
+                    </span>
+                  </summary>
+                  <p className="px-5 pb-5 font-body text-sm leading-relaxed text-brand-white/75 md:text-base">
+                    {f.a}
+                  </p>
+                </details>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section
           id="enquiry"
           aria-labelledby="enquiry-heading"
-          className="scroll-mt-24 px-4 py-10 md:px-8 md:py-20"
+          className="wingers-wrap scroll-mt-24 pb-20 md:pb-32"
         >
-          <div className="mx-auto max-w-3xl">
+          <div className="rounded-[32px] bg-brand-white p-6 text-brand-black md:rounded-[40px] md:p-10">
             <h2
               id="enquiry-heading"
-              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
+              className="font-display font-extrabold uppercase leading-[0.95] tracking-tight text-[clamp(2rem,5vw,2.75rem)]"
             >
-              ENQUIRE.
+              Enquire.
             </h2>
-            <p className="mt-6 font-body text-base md:text-lg leading-relaxed text-brand-black/80">
+            <p className="mt-3 font-body text-base leading-relaxed text-brand-black/80 md:text-lg">
               Send us a few details and the team will be in touch.
             </p>
-            <div className="mt-8">
+            <div className="mt-6">
               <FranchiseEnquiryForm />
             </div>
           </div>
