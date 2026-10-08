@@ -14,17 +14,20 @@ function capitaliseFirst(s: string) {
 }
 
 export function FlavourGrid() {
-  const [heatMin, setHeatMin] = useState(0);
+  const [heat, setHeat] = useState(0);
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("all");
 
   const filtered = useMemo(
     () =>
       SPINNABLE_FLAVOURS.filter((f) => {
-        if (f.heat < heatMin) return false;
+        // "Heat up to N": keep flavours with heat <= selected. heat === 0
+        // means cleared → show all. Zero-heat flavours stay visible at
+        // every level since 0 <= every N.
+        if (heat >= 1 && f.heat > heat) return false;
         if (typeFilter === "all") return true;
         return f.type === typeFilter;
       }),
-    [heatMin, typeFilter]
+    [heat, typeFilter]
   );
 
   return (
@@ -46,8 +49,8 @@ export function FlavourGrid() {
 
         <div className="mt-10">
           <FlavourFilters
-            heatMin={heatMin}
-            onHeatChange={setHeatMin}
+            heat={heat}
+            onHeatChange={setHeat}
             typeFilter={typeFilter}
             onTypeChange={setTypeFilter}
             resultCount={filtered.length}
@@ -64,7 +67,7 @@ export function FlavourGrid() {
 
           {filtered.length === 0 && (
             <p className="mt-6 text-center font-body text-base text-brand-white/60">
-              No flavours match. Turn the heat down or switch type.
+              No flavours match — try a higher heat or a different type.
             </p>
           )}
         </div>
