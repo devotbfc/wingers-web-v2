@@ -226,6 +226,12 @@
       0 0 28px rgba(255, 45, 45, 0.5);
   }
 
+  .neon-purple {
+    text-shadow:
+      0 0 10px color-mix(in oklab, var(--color-le-purple) 60%, transparent),
+      0 0 24px color-mix(in oklab, var(--color-le-purple) 35%, transparent);
+  }
+
   .glow-edge-pink {
     box-shadow:
       0 0 0 1px rgba(255, 111, 181, 0.5),
