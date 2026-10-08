@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Mail, Phone } from "lucide-react";
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
@@ -33,113 +34,106 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
+  const phoneHref = `tel:${CONTACT_PHONE.replace(/\s+/g, "")}`;
   return (
     <OrderPanelProvider>
       <NavBar />
-      <main>
-        <section className="pt-32 md:pt-40 px-4 md:px-8 pb-12 md:pb-16">
-          <div className="mx-auto max-w-6xl">
-            <h1 className="font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,10vw,7rem)] text-brand-red">
-              SAY HELLO.
-            </h1>
-            <p className="mt-6 max-w-2xl font-body text-lg md:text-xl leading-relaxed text-brand-black">
-              Feedback, press, or partnerships — give us a ring, drop us an
-              email, or come find us. For orders, use the Order button up top.
-            </p>
-          </div>
+      <main className="bg-brand-white">
+        <section className="wingers-wrap pt-24 pb-10 md:pt-32 md:pb-16">
+          <h1 className="font-display font-extrabold uppercase leading-[0.84] tracking-tight text-[clamp(3rem,13vw,9rem)] text-brand-black">
+            Say <br />
+            hello.
+          </h1>
+          <p className="mt-6 max-w-2xl font-body text-lg leading-relaxed text-brand-black/80 md:text-xl">
+            Feedback, press, or partnerships: give us a ring, drop us an
+            email, or come find us. For orders, use the Order button up top.
+          </p>
         </section>
 
         <section
           aria-labelledby="reach-us-heading"
-          className="bg-brand-white py-16 md:py-24"
+          className="wingers-wrap pb-10 md:pb-16"
         >
-          <div className="mx-auto max-w-6xl px-4 md:px-8">
-            <h2
-              id="reach-us-heading"
-              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
+          <h2 id="reach-us-heading" className="sr-only">
+            How to reach us
+          </h2>
+          <div className="grid gap-4 md:grid-cols-2 md:gap-5">
+            <a
+              href={phoneHref}
+              className="flex items-center gap-4 rounded-[28px] bg-brand-black p-5 text-brand-white transition-opacity hover:opacity-90 md:p-7"
             >
-              How to reach us.
-            </h2>
-            <dl className="mt-10 grid gap-10 md:grid-cols-2">
-              <div className="border-t-2 border-brand-black pt-6">
-                <dt className="font-body text-sm font-semibold uppercase tracking-widest text-brand-red">
+              <span
+                aria-hidden="true"
+                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand-pink text-brand-black"
+              >
+                <Phone className="h-6 w-6 stroke-[2]" />
+              </span>
+              <span className="flex flex-col gap-0.5">
+                <span className="font-display text-xs font-bold uppercase tracking-[0.2em] text-brand-white/60">
                   Phone
-                </dt>
-                <dd className="mt-3">
-                  <a
-                    href={`tel:${CONTACT_PHONE.replace(/\s+/g, "")}`}
-                    className="font-display text-2xl md:text-3xl font-bold text-brand-black underline underline-offset-4 hover:text-brand-red transition-colors"
-                  >
-                    {CONTACT_PHONE}
-                  </a>
-                </dd>
-              </div>
-              <div className="border-t-2 border-brand-black pt-6">
-                <dt className="font-body text-sm font-semibold uppercase tracking-widest text-brand-red">
+                </span>
+                <span className="font-display text-xl font-extrabold tracking-tight md:text-2xl">
+                  {CONTACT_PHONE}
+                </span>
+              </span>
+            </a>
+
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              className="flex items-center gap-4 rounded-[28px] bg-brand-white p-5 text-brand-black shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06)] transition-opacity hover:opacity-90 md:p-7"
+            >
+              <span
+                aria-hidden="true"
+                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand-pink text-brand-black"
+              >
+                <Mail className="h-6 w-6 stroke-[2]" />
+              </span>
+              <span className="flex flex-col gap-0.5">
+                <span className="font-display text-xs font-bold uppercase tracking-[0.2em] text-brand-black/60">
                   Email
-                </dt>
-                <dd className="mt-3">
-                  <a
-                    href={`mailto:${CONTACT_EMAIL}`}
-                    className="font-display text-2xl md:text-3xl font-bold text-brand-black underline underline-offset-4 hover:text-brand-red transition-colors break-all"
-                  >
-                    {CONTACT_EMAIL}
-                  </a>
-                </dd>
-              </div>
-            </dl>
+                </span>
+                <span className="font-display text-xl font-extrabold tracking-tight break-all md:text-2xl">
+                  {CONTACT_EMAIL}
+                </span>
+              </span>
+            </a>
           </div>
         </section>
 
         <section
           aria-labelledby="find-us-heading"
-          className="bg-brand-white py-16 md:py-24"
+          className="wingers-wrap pb-20 md:pb-24"
         >
-          <div className="mx-auto max-w-6xl px-4 md:px-8">
-            <h2
-              id="find-us-heading"
-              className="font-display font-extrabold uppercase leading-tight tracking-tight text-3xl md:text-5xl text-brand-black"
+          <h2
+            id="find-us-heading"
+            className="font-display font-bold uppercase leading-[0.95] tracking-tight text-[clamp(1.75rem,5vw,2.75rem)] text-brand-black"
+          >
+            Or find us in person.
+          </h2>
+          <ul className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-2 md:gap-5">
+            {LOCATIONS.map((loc) => (
+              <li
+                key={loc.slug}
+                className="flex flex-col gap-1 rounded-[24px] bg-brand-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_6px_18px_rgba(0,0,0,0.05)] md:p-6"
+              >
+                <h3 className="font-display text-base font-extrabold uppercase leading-tight tracking-tight text-brand-black md:text-xl">
+                  {loc.name.replace(/^Wingers\s+/i, "")}
+                </h3>
+                <p className="font-body text-xs leading-snug text-brand-black/80 md:text-sm">
+                  {loc.address.street}, {loc.address.city}{" "}
+                  {loc.address.postcode}
+                </p>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-5">
+            <Link
+              href="/locations"
+              className="font-body text-base font-semibold text-brand-black underline underline-offset-4 transition-colors hover:text-brand-red"
             >
-              Or find us in person.
-            </h2>
-            <ul className="mt-10 grid gap-10 md:grid-cols-2">
-              {LOCATIONS.map((loc) => (
-                <li
-                  key={loc.slug}
-                  className="border-t-2 border-brand-black pt-6"
-                >
-                  <h3 className="font-display font-extrabold uppercase leading-tight tracking-tight text-2xl md:text-3xl text-brand-black">
-                    {loc.name}
-                  </h3>
-                  <address className="mt-4 not-italic font-body text-base md:text-lg leading-relaxed text-brand-black/80">
-                    {loc.address.street}
-                    <br />
-                    {loc.address.city}
-                    <br />
-                    {loc.address.postcode}
-                  </address>
-                  {loc.phone && (
-                    <p className="mt-3 font-body text-base md:text-lg text-brand-black">
-                      <a
-                        href={`tel:${loc.phone.replace(/\s+/g, "")}`}
-                        className="underline hover:text-brand-red transition-colors"
-                      >
-                        {loc.phone}
-                      </a>
-                    </p>
-                  )}
-                  <p className="mt-4">
-                    <Link
-                      href={`/locations/${loc.slug}`}
-                      className="font-body text-sm font-semibold uppercase tracking-widest text-brand-red hover:text-brand-black transition-colors"
-                    >
-                      See hours &amp; directions →
-                    </Link>
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
+              See hours &amp; directions →
+            </Link>
+          </p>
         </section>
       </main>
       <Footer />

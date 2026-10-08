@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/brand/BrandLogo";
-import { CookieSettingsLink } from "@/components/consent/CookieSettingsLink";
 import { LOCATIONS } from "@/lib/locations";
 import { getProviderForLocation } from "@/lib/order/providers";
 
@@ -125,9 +124,6 @@ export function Footer() {
               >
                 Terms
               </Link>
-            </li>
-            <li>
-              <CookieSettingsLink />
             </li>
           </ul>
         </div>
