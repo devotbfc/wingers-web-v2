@@ -52,6 +52,10 @@ export interface Flavour {
   wheelLabel?: string;
   shortDescription: string | null; howMade: string | null;
   sourcedFrom: string | null; history: string | null; pairsWith: string | null;
+  // Optional per-flavour hero image shown behind the card chrome under a
+  // dark scrim. Left undefined until real per-flavour photography lands;
+  // every card then shows the neon fallback (see FlavourCard).
+  cardImage?: string;
 }
 export interface Dip {
   slug: string; name: string; shortDescription: string | null;

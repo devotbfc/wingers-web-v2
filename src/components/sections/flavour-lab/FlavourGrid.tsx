@@ -14,17 +14,17 @@ function capitaliseFirst(s: string) {
 }
 
 export function FlavourGrid() {
-  const [heatMax, setHeatMax] = useState(5);
+  const [heatMin, setHeatMin] = useState(0);
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("all");
 
   const filtered = useMemo(
     () =>
       SPINNABLE_FLAVOURS.filter((f) => {
-        if (f.heat > heatMax) return false;
+        if (f.heat < heatMin) return false;
         if (typeFilter === "all") return true;
         return f.type === typeFilter;
       }),
-    [heatMax, typeFilter]
+    [heatMin, typeFilter]
   );
 
   return (
@@ -46,8 +46,8 @@ export function FlavourGrid() {
 
         <div className="mt-10">
           <FlavourFilters
-            heatMax={heatMax}
-            onHeatChange={setHeatMax}
+            heatMin={heatMin}
+            onHeatChange={setHeatMin}
             typeFilter={typeFilter}
             onTypeChange={setTypeFilter}
             resultCount={filtered.length}
@@ -64,7 +64,7 @@ export function FlavourGrid() {
 
           {filtered.length === 0 && (
             <p className="mt-6 text-center font-body text-base text-brand-white/60">
-              No flavours match. Turn the heat up or switch type.
+              No flavours match. Turn the heat down or switch type.
             </p>
           )}
         </div>
