@@ -1,5 +1,4 @@
-// AUTO-GENERATED from Wingers-Allergen-Matrix-CORRECTED.xlsx — do not hand-edit.
-// Regenerate from the spreadsheet if the menu changes. Source of truth = the .xlsx.
+// Hand-merged additively from the master sheet 2026-10-08. Site keeps rows not in the sheet (Flamin' Cajun, Honey Mustard chicken loaded fries). Ghost Buffalo HOT = sheet's "Buffalo XL Hot".
 
 export const UK_ALLERGENS = [
   "celery","gluten","crustaceans","eggs","fish","lupin","milk",
@@ -99,8 +98,8 @@ export const ALLERGEN_ITEMS: AllergenItem[] = [
     ]
   },
   {
-    "slug": "buffalo-xl-hot",
-    "name": "Buffalo XL Hot",
+    "slug": "ghost-buffalo-hot",
+    "name": "Ghost Buffalo HOT",
     "section": "Wings + Tenders",
     "sectionSlug": "wings-tenders",
     "contains": [
@@ -272,6 +271,25 @@ export const ALLERGEN_ITEMS: AllergenItem[] = [
     "traces": [
       "fish",
       "mustard",
+      "sesame",
+      "sulphites"
+    ]
+  },
+  {
+    "slug": "katsu",
+    "name": "Katsu Curry (Limited Edition)",
+    "section": "Wings + Tenders",
+    "sectionSlug": "wings-tenders",
+    "contains": [
+      "celery",
+      "gluten",
+      "eggs",
+      "mustard",
+      "peanuts",
+      "soya"
+    ],
+    "traces": [
+      "fish",
       "sesame",
       "sulphites"
     ]
@@ -816,6 +834,132 @@ export const ALLERGEN_ITEMS: AllergenItem[] = [
     ]
   },
   {
+    "slug": "cajun-chicken-loaded-fries",
+    "name": "Cajun Chicken Loaded Fries",
+    "section": "Chicken Topped Fries",
+    "sectionSlug": "chicken-topped-fries",
+    "contains": [
+      "celery",
+      "gluten",
+      "eggs",
+      "milk",
+      "tree-nuts",
+      "peanuts",
+      "sesame",
+      "soya"
+    ],
+    "traces": [
+      "fish",
+      "mustard",
+      "sulphites"
+    ]
+  },
+  {
+    "slug": "honey-mustard-chicken-loaded-fries",
+    "name": "Honey Mustard Chicken Loaded Fries",
+    "section": "Chicken Topped Fries",
+    "sectionSlug": "chicken-topped-fries",
+    "contains": [
+      "celery",
+      "gluten",
+      "eggs",
+      "milk",
+      "mustard",
+      "tree-nuts",
+      "peanuts",
+      "sesame",
+      "soya"
+    ],
+    "traces": [
+      "fish",
+      "sulphites"
+    ]
+  },
+  {
+    "slug": "lemon-pepper-chicken-loaded-fries",
+    "name": "Lemon Pepper Chicken Loaded Fries",
+    "section": "Chicken Topped Fries",
+    "sectionSlug": "chicken-topped-fries",
+    "contains": [
+      "celery",
+      "gluten",
+      "eggs",
+      "milk",
+      "tree-nuts",
+      "peanuts",
+      "sesame",
+      "soya"
+    ],
+    "traces": [
+      "fish",
+      "mustard",
+      "sulphites"
+    ]
+  },
+  {
+    "slug": "mango-habanero-chicken-loaded-fries",
+    "name": "Mango Habanero Chicken Loaded Fries",
+    "section": "Chicken Topped Fries",
+    "sectionSlug": "chicken-topped-fries",
+    "contains": [
+      "celery",
+      "gluten",
+      "eggs",
+      "milk",
+      "tree-nuts",
+      "peanuts",
+      "sesame",
+      "soya"
+    ],
+    "traces": [
+      "fish",
+      "mustard",
+      "sulphites"
+    ]
+  },
+  {
+    "slug": "bbq-chicken-loaded-fries",
+    "name": "Chicken BBQ Fries Loaded",
+    "section": "Chicken Topped Fries",
+    "sectionSlug": "chicken-topped-fries",
+    "contains": [
+      "celery",
+      "gluten",
+      "eggs",
+      "milk",
+      "tree-nuts",
+      "peanuts",
+      "sesame",
+      "soya"
+    ],
+    "traces": [
+      "fish",
+      "mustard",
+      "sulphites"
+    ]
+  },
+  {
+    "slug": "katsu-curry-chicken-loaded-fries",
+    "name": "Chicken Katsu Curry Fries Loaded (LE)",
+    "section": "Chicken Topped Fries",
+    "sectionSlug": "chicken-topped-fries",
+    "contains": [
+      "celery",
+      "gluten",
+      "eggs",
+      "milk",
+      "mustard",
+      "tree-nuts",
+      "peanuts",
+      "sesame",
+      "soya"
+    ],
+    "traces": [
+      "fish",
+      "sulphites"
+    ]
+  },
+  {
     "slug": "tennessee-bbq-2",
     "name": "Tennessee BBQ",
     "section": "Sauces / Dips",
@@ -920,8 +1064,8 @@ export const ALLERGEN_ITEMS: AllergenItem[] = [
     ]
   },
   {
-    "slug": "buffalo-xl-hot-2",
-    "name": "Buffalo XL Hot",
+    "slug": "ghost-buffalo-hot-dip",
+    "name": "Ghost Buffalo HOT",
     "section": "Sauces / Dips",
     "sectionSlug": "sauces-dips",
     "contains": [

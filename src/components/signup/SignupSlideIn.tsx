@@ -268,12 +268,12 @@ function LeStep({
         </div>
       </div>
 
-      <p className="mt-3 font-display text-[11px] font-bold uppercase tracking-[0.25em] text-brand-pink">
+      <p className="mt-3 font-display text-[11px] font-bold uppercase tracking-[0.25em] text-le-purple">
         Limited edition
       </p>
       <h2
         id={titleId}
-        className="neon-pink mt-1 font-display text-[2.25rem] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-pink md:text-[2.5rem]"
+        className="neon-purple mt-1 font-display text-[2.25rem] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-white md:text-[2.5rem]"
       >
         {flavourName}
       </h2>

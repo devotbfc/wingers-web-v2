@@ -16,19 +16,29 @@ import {
 import { track } from "@/lib/analytics/meta-pixel";
 import { cn } from "@/lib/utils";
 
-// Build once at module load. A menu item's slug maps to an allergen row
-// id (#item-{slug}) only when there's a matching record in ALLERGEN_ITEMS.
-// Wings/boneless/tenders flavour variants + combo platters don't carry
-// their own allergen row (sauce doesn't change the base profile), so
-// those fall back to /allergies with no anchor.
+// Build once at module load. The allergen table is keyed per-sauce / per-
+// recipe, so wings/boneless/tenders flavour variants (e.g. "wings-mango-
+// habanero") inherit the allergen profile of their SAUCE row ("mango-
+// habanero"). We strip the base prefix and resolve to the sauce row id.
 const ALLERGEN_ROW_SLUGS: ReadonlySet<string> = new Set(
   ALLERGEN_ITEMS.map((i) => i.slug),
 );
 
+const BASE_PREFIXES = ["wings-", "boneless-", "tenders-"] as const;
+
+function resolveAllergenSlug(slug: string): string | null {
+  if (ALLERGEN_ROW_SLUGS.has(slug)) return slug;
+  for (const prefix of BASE_PREFIXES) {
+    if (!slug.startsWith(prefix)) continue;
+    const flavour = slug.slice(prefix.length);
+    return ALLERGEN_ROW_SLUGS.has(flavour) ? flavour : null;
+  }
+  return null;
+}
+
 function allergenHrefFor(slug: string): string {
-  return ALLERGEN_ROW_SLUGS.has(slug)
-    ? `/allergies#item-${slug}`
-    : "/allergies";
+  const resolved = resolveAllergenSlug(slug);
+  return resolved ? `/allergies#item-${resolved}` : "/allergies";
 }
 
 const W_MARK = "/brand/logo/wingers-mark.png";
