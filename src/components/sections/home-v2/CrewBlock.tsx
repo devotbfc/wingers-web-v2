@@ -5,31 +5,24 @@ interface CrewBlockProps {
   /** Optional crew line (quote or names). Omit — do NOT ship the bracketed
    *  placeholder. When undefined the <p> is not rendered at all. */
   quote?: string;
-  /** Optional override for the crew photo. */
+  /** Crew photo. No default — until a real crew shot lands we don't render
+   *  the block at all (the hero poster is NOT a stand-in for the crew). */
   photo?: {
     src: string;
     alt: string;
   };
 }
 
-const DEFAULT_PHOTO = {
-  // Hero poster stands in until a real crew photo lands. The data-todo marker
-  // on the wrapper makes this greppable when swapping to the owed shot.
-  src: "/brand/photos/hero/hero-poster.webp",
-  alt: "Wingers kitchen crew at work",
-};
+export function CrewBlock({ quote, photo }: CrewBlockProps = {}) {
+  if (!photo) return null;
 
-export function CrewBlock({ quote, photo = DEFAULT_PHOTO }: CrewBlockProps = {}) {
   return (
     <section
       aria-labelledby="crew-heading"
       className="wingers-wrap pb-10 md:pb-20"
     >
       <div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:items-center md:gap-10">
-        <div
-          data-todo={photo === DEFAULT_PHOTO ? "crew-photo" : undefined}
-          className="relative aspect-[4/3] w-full overflow-hidden rounded-[32px] md:aspect-[5/4] md:rounded-[40px]"
-        >
+        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[32px] md:aspect-[5/4] md:rounded-[40px]">
           <Image
             src={photo.src}
             alt={photo.alt}

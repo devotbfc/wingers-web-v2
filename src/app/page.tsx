@@ -48,16 +48,17 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  const hasLE = getCurrentLimitedEdition() !== null;
+  const le = getCurrentLimitedEdition();
+  const marqueeText = le
+    ? `${le.name.toUpperCase()} IS HERE / LIMITED DROP / ${le.name.toUpperCase()} IS HERE / LIMITED DROP / `
+    : null;
 
   return (
     <OrderPanelProvider>
       <NavBar />
       <main className="bg-brand-warm-grey">
         <Hero />
-        {hasLE && (
-          <Marquee text="KATSU IS HERE / LIMITED DROP / KATSU IS HERE / LIMITED DROP / " />
-        )}
+        {marqueeText && <Marquee text={marqueeText} />}
         <KatsuDrop />
         <TheGoods />
         <FlavourLabTeaser />
