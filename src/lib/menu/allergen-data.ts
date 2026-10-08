@@ -1,4 +1,4 @@
-// Hand-edited 2026-10-08 (Ghost Buffalo rename; Katsu LE row added — matches Korea Town per spec sheet). Mirror changes in the master spreadsheet before regenerating.
+// Hand-edited 2026-10-08 (Ghost Buffalo rename; Katsu LE row added — matches Korea Town per spec sheet; four chicken-loaded-fries rows added — union of Flavour Loaded Fries + House Fries + Naked Wings + sauce row(s)). Mirror changes in the master spreadsheet before regenerating.
 
 export const UK_ALLERGENS = [
   "celery","gluten","crustaceans","eggs","fish","lupin","milk",
@@ -832,6 +832,90 @@ export const ALLERGEN_ITEMS: AllergenItem[] = [
       "fish",
       "mustard",
       "sesame"
+    ]
+  },
+  {
+    "slug": "cajun-chicken-loaded-fries",
+    "name": "Cajun Chicken Loaded Fries",
+    "section": "Fries + Loaded",
+    "sectionSlug": "fries-loaded",
+    "contains": [
+      "celery",
+      "gluten",
+      "eggs",
+      "milk",
+      "tree-nuts",
+      "peanuts",
+      "sesame",
+      "soya"
+    ],
+    "traces": [
+      "fish",
+      "mustard",
+      "sulphites"
+    ]
+  },
+  {
+    "slug": "honey-mustard-chicken-loaded-fries",
+    "name": "Honey Mustard Chicken Loaded Fries",
+    "section": "Fries + Loaded",
+    "sectionSlug": "fries-loaded",
+    "contains": [
+      "celery",
+      "gluten",
+      "eggs",
+      "milk",
+      "mustard",
+      "tree-nuts",
+      "peanuts",
+      "sesame",
+      "soya"
+    ],
+    "traces": [
+      "fish",
+      "sulphites"
+    ]
+  },
+  {
+    "slug": "lemon-pepper-chicken-loaded-fries",
+    "name": "Lemon Pepper Chicken Loaded Fries",
+    "section": "Fries + Loaded",
+    "sectionSlug": "fries-loaded",
+    "contains": [
+      "celery",
+      "gluten",
+      "eggs",
+      "milk",
+      "tree-nuts",
+      "peanuts",
+      "sesame",
+      "soya"
+    ],
+    "traces": [
+      "fish",
+      "mustard",
+      "sulphites"
+    ]
+  },
+  {
+    "slug": "mango-habanero-chicken-loaded-fries",
+    "name": "Mango Habanero Chicken Loaded Fries",
+    "section": "Fries + Loaded",
+    "sectionSlug": "fries-loaded",
+    "contains": [
+      "celery",
+      "gluten",
+      "eggs",
+      "milk",
+      "tree-nuts",
+      "peanuts",
+      "sesame",
+      "soya"
+    ],
+    "traces": [
+      "fish",
+      "mustard",
+      "sulphites"
     ]
   },
   {
