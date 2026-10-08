@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { ALLERGEN_SECTIONS } from "@/components/allergens/allergen-sections";
 import { AllergenMatrix } from "@/components/allergens/AllergenMatrix";
 import { AllergenMatrixFallback } from "@/components/allergens/AllergenMatrixFallback";
 import { Footer } from "@/components/sections/Footer";
@@ -115,14 +116,44 @@ export default function AllergiesPage() {
         </section>
 
         <div className="mx-auto max-w-6xl px-4 md:px-8 pb-24">
-          {/* Chips + matrix. useSearchParams in AllergenMatrix forces a
-              dynamic bailout for just this subtree; Suspense keeps the
-              rest of /allergies statically prerenderable. The fallback
-              renders the full matrix in its default unfiltered state so
-              there's no empty flash on hydration. */}
-          <Suspense fallback={<AllergenMatrixFallback />}>
-            <AllergenMatrix />
-          </Suspense>
+          <div className="mt-8 lg:grid lg:grid-cols-[220px_1fr] lg:gap-10">
+            {/* Desktop-only section sidebar. The ids on each table
+                section (#section-{sectionSlug}) + their scroll-margin-top
+                mean these anchors land flush under the fixed nav. */}
+            <aside className="hidden lg:block">
+              <nav aria-label="Allergen sections">
+                <h2 className="font-display text-xs font-bold uppercase tracking-widest text-brand-black/60">
+                  Jump to
+                </h2>
+                <ul
+                  className="sticky mt-3 space-y-1"
+                  style={{ top: "calc(var(--nav-h) + 1rem)" }}
+                >
+                  {ALLERGEN_SECTIONS.map((s) => (
+                    <li key={s.sectionSlug}>
+                      <a
+                        href={`#section-${s.sectionSlug}`}
+                        className="block rounded-md px-3 py-2 font-body text-sm font-semibold text-brand-black transition-colors hover:bg-brand-warm-grey hover:text-brand-red"
+                      >
+                        {s.section}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </aside>
+
+            <div className="min-w-0">
+              {/* Chips + matrix. useSearchParams in AllergenMatrix forces
+                  a dynamic bailout for just this subtree; Suspense keeps
+                  the rest of /allergies statically prerenderable. The
+                  fallback renders the full matrix in its default unfiltered
+                  state so there's no empty flash on hydration. */}
+              <Suspense fallback={<AllergenMatrixFallback />}>
+                <AllergenMatrix />
+              </Suspense>
+            </div>
+          </div>
         </div>
       </main>
       <Footer />
