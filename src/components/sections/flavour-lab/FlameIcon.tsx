@@ -26,11 +26,12 @@ export function FlameIcon({ filled = true, className }: FlameIconProps) {
 interface HeatFlamesProps {
   heat: number;
   className?: string;
-  size?: "sm" | "md";
+  size?: "xs" | "sm" | "md";
 }
 
 export function HeatFlames({ heat, className, size = "sm" }: HeatFlamesProps) {
-  const dim = size === "sm" ? "h-3.5 w-3.5" : "h-5 w-5";
+  const dim =
+    size === "xs" ? "h-2.5 w-2.5" : size === "sm" ? "h-3.5 w-3.5" : "h-5 w-5";
   return (
     <span
       className={`inline-flex items-center gap-0.5 text-brand-red ${className ?? ""}`}

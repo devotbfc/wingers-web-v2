@@ -70,8 +70,8 @@ export default function FlavourLabPage() {
         <SpinTheWheel />
         <FlavourGrid />
         <ComingSoonSection />
-        <DipsSection />
         <PastDropsSection />
+        <DipsSection />
 
         <section className="section-dark py-20 md:py-28">
           <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 text-center md:px-8">
