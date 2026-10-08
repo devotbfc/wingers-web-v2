@@ -1,5 +1,4 @@
-// AUTO-GENERATED from Wingers-Allergen-Matrix-CORRECTED.xlsx — do not hand-edit.
-// Regenerate from the spreadsheet if the menu changes. Source of truth = the .xlsx.
+// Hand-edited 2026-10-08 (Ghost Buffalo rename). Mirror changes in the master spreadsheet before regenerating.
 
 export const UK_ALLERGENS = [
   "celery","gluten","crustaceans","eggs","fish","lupin","milk",
@@ -99,8 +98,8 @@ export const ALLERGEN_ITEMS: AllergenItem[] = [
     ]
   },
   {
-    "slug": "buffalo-xl-hot",
-    "name": "Buffalo XL Hot",
+    "slug": "ghost-buffalo-hot",
+    "name": "Ghost Buffalo HOT",
     "section": "Wings + Tenders",
     "sectionSlug": "wings-tenders",
     "contains": [
@@ -920,8 +919,8 @@ export const ALLERGEN_ITEMS: AllergenItem[] = [
     ]
   },
   {
-    "slug": "buffalo-xl-hot-2",
-    "name": "Buffalo XL Hot",
+    "slug": "ghost-buffalo-hot-dip",
+    "name": "Ghost Buffalo HOT",
     "section": "Sauces / Dips",
     "sectionSlug": "sauces-dips",
     "contains": [

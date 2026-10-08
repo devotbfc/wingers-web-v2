@@ -24,16 +24,6 @@ const ALLERGEN_ROW_SLUGS: ReadonlySet<string> = new Set(
   ALLERGEN_ITEMS.map((i) => i.slug),
 );
 
-// Menu flavour name → allergen sauce row slug. Only added where a menu
-// slug differs from its sauce row by rename only (same product, same
-// recipe). Edit allergen-data.ts is not an option — that file is
-// generated from the spreadsheet.
-const FLAVOUR_ALIASES: Readonly<Record<string, string>> = {
-  // Menu: "Ghost Buffalo HOT"; allergen spreadsheet row: "Buffalo XL Hot".
-  // Same sauce, different internal name.
-  "ghost-buffalo-hot": "buffalo-xl-hot",
-};
-
 const BASE_PREFIXES = ["wings-", "boneless-", "tenders-"] as const;
 
 function resolveAllergenSlug(slug: string): string | null {
@@ -41,9 +31,7 @@ function resolveAllergenSlug(slug: string): string | null {
   for (const prefix of BASE_PREFIXES) {
     if (!slug.startsWith(prefix)) continue;
     const flavour = slug.slice(prefix.length);
-    const resolved = FLAVOUR_ALIASES[flavour] ?? flavour;
-    if (ALLERGEN_ROW_SLUGS.has(resolved)) return resolved;
-    return null;
+    return ALLERGEN_ROW_SLUGS.has(flavour) ? flavour : null;
   }
   return null;
 }
