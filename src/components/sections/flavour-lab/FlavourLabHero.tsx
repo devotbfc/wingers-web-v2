@@ -13,40 +13,28 @@ export function FlavourLabHero() {
         }}
       />
 
-      <div className="mx-auto max-w-6xl px-4 md:px-8">
-        <p className="font-display text-[11px] font-bold uppercase tracking-[0.35em] text-brand-pink/70">
-          Wingers · Halal Fried Chicken
+      <div className="mx-auto flex max-w-6xl flex-col items-center px-4 text-center md:px-8">
+        <p className="neon-red inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.35em] text-brand-red">
+          <span>Flavour Lab</span>
+          <FlaskGlyph className="h-[1.1em] w-[1.1em] shrink-0" strokeWidth={2.75} />
         </p>
 
-        <h1 className="mt-4 font-display font-extrabold uppercase leading-[0.9] tracking-[-0.03em]">
-          <span className="sr-only">Flavour Lab</span>
-          <span
-            aria-hidden="true"
-            className="block text-[clamp(3rem,12vw,9rem)] text-brand-white"
-          >
-            FLAVOUR
-          </span>
-          <span
-            aria-hidden="true"
-            className="glow-edge-pink mt-2 inline-flex items-center gap-3 rounded-2xl bg-brand-pink px-4 py-1 text-[clamp(3rem,12vw,9rem)] text-brand-black md:gap-5 md:px-6"
-          >
-            LAB
-            <FlaskGlyph className="h-[0.8em] w-[0.8em] shrink-0" />
-          </span>
+        <h1 className="neon-pink mt-4 font-display font-extrabold uppercase leading-[0.88] tracking-[-0.02em] text-brand-pink text-[clamp(3rem,13vw,6rem)] md:text-[clamp(4rem,10vw,8rem)]">
+          Can&rsquo;t
+          <br />
+          decide?
         </h1>
 
-        <p className="mt-6 max-w-2xl font-body text-lg leading-relaxed text-brand-white md:text-xl">
+        <p className="mt-6 max-w-xl font-body text-lg leading-relaxed text-brand-white md:text-xl">
           Spin the wheel. Find your flavour. Get stuck in.
         </p>
 
-        <p className="mt-4 max-w-2xl font-body text-base leading-relaxed text-brand-white/60">
-          Where we cook up the loud stuff — {numberToWord(CORE_COUNT)} permanent
-          sauces and rubs plus limited-edition drops rotating through the Lab
-          across Milton Keynes and Northampton. Spin the wheel to pick one, or
-          filter by heat.
+        <p className="mt-4 max-w-xl font-body text-base leading-relaxed text-brand-white/60">
+          {numberToWord(CORE_COUNT)} permanent sauces and rubs plus
+          limited-edition drops rotating through the Lab across Milton Keynes
+          and Northampton.
         </p>
       </div>
     </section>
   );
 }
-
