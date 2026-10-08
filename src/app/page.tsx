@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Footer } from "@/components/sections/Footer";
-import { LoyaltySignupSection } from "@/components/sections/LoyaltySignupSection";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanelProvider } from "@/components/sections/order-panel/order-panel-context";
 
@@ -11,12 +10,12 @@ const OrderPanel = dynamic(() =>
   ),
 );
 import { BackToTopButton } from "@/components/common/BackToTopButton";
+import { CrewBlock } from "@/components/sections/home-v2/CrewBlock";
+import { FlavourClubStrip } from "@/components/sections/home-v2/FlavourClubStrip";
 import { FlavourLabTeaser } from "@/components/sections/home-v2/FlavourLabTeaser";
 import { Hero } from "@/components/sections/home-v2/Hero";
 import { KatsuDrop } from "@/components/sections/home-v2/KatsuDrop";
 import { Marquee } from "@/components/sections/home-v2/Marquee";
-import { SaucePanel } from "@/components/sections/home-v2/SaucePanel";
-import { StatementPanel } from "@/components/sections/home-v2/StatementPanel";
 import { TheGoods } from "@/components/sections/home-v2/TheGoods";
 import { TwoSpots } from "@/components/sections/home-v2/TwoSpots";
 import { getCurrentLimitedEdition } from "@/lib/flavours";
@@ -60,12 +59,11 @@ export default function Home() {
           <Marquee text="KATSU IS HERE / LIMITED DROP / KATSU IS HERE / LIMITED DROP / " />
         )}
         <KatsuDrop />
-        <StatementPanel />
         <TheGoods />
-        <SaucePanel />
-        <TwoSpots />
         <FlavourLabTeaser />
-        <LoyaltySignupSection source="homepage" />
+        <CrewBlock />
+        <TwoSpots />
+        <FlavourClubStrip />
       </main>
       <Footer />
       <OrderPanel />

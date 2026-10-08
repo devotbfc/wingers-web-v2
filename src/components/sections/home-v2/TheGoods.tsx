@@ -1,115 +1,109 @@
 import Image from "next/image";
 import Link from "next/link";
-import { MENU_ITEMS, type MenuItem } from "@/lib/menu";
+import { Plus, ArrowRight } from "lucide-react";
 
-type CategoryTile = {
+interface Tile {
   name: string;
-  image: string;
-  imageAlt: string;
-  price: number;
-};
-
-function minAcross(values: (number | null | undefined)[]): number | null {
-  const valid = values.filter((v): v is number => typeof v === "number" && v > 0);
-  return valid.length ? Math.min(...valid) : null;
+  line: string;
+  img: string;
+  alt: string;
 }
 
-function fromPriceForProduct(product: MenuItem["product"]): number | null {
-  return minAcross(
-    MENU_ITEMS.filter((i) => i.product === product).map((i) => i.fromPrice),
-  );
-}
-
-function fromPriceForSections(sectionSlugs: string[]): number | null {
-  const items = MENU_ITEMS.filter((i) => sectionSlugs.includes(i.sectionSlug));
-  return minAcross(
-    items.flatMap((i) => [i.priceMK, i.priceNN]),
-  );
-}
-
-function formatPrice(price: number | null): string {
-  if (price == null) return "See menu";
-  return `from £${price.toFixed(2)}`;
-}
+const TILES: Tile[] = [
+  {
+    name: "Wings",
+    line: "Sauced or dry-rubbed",
+    img: "/brand/photos/wings/DSC01496ww.png",
+    alt: "Wingers halal buttermilk wings",
+  },
+  {
+    name: "Tenders",
+    line: "Hand-breaded strips",
+    img: "/brand/photos/tenders/DSC00293.JPG",
+    alt: "Chicken tenders",
+  },
+  {
+    name: "Burgers",
+    line: "Smash and chicken",
+    img: "/brand/photos/burgers/ww.png",
+    alt: "Wingers chicken burger",
+  },
+  {
+    name: "Shakes",
+    line: "Thick. Very thick.",
+    img: "/brand/photos/lifestyle/Gemini_Generated_Image_51gnjs51gnjs51gn.jpg",
+    alt: "Wingers thick shakes",
+  },
+];
 
 export function TheGoods() {
-  const tiles: CategoryTile[] = [
-    {
-      name: "WINGS",
-      image: "/brand/photos/wings/DSC01496ww.png",
-      imageAlt: "Wingers halal buttermilk wings",
-      price: fromPriceForProduct("Wings") ?? 0,
-    },
-    {
-      name: "BONELESS",
-      image: "/brand/photos/wings/Gemini_Generated_Image_dtpw2jdtpw2jdtpw.jpg",
-      imageAlt: "Boneless chicken bites",
-      price: fromPriceForProduct("Boneless") ?? 0,
-    },
-    {
-      name: "TENDERS",
-      image: "/brand/photos/tenders/DSC00293.JPG",
-      imageAlt: "Chicken tenders",
-      price: fromPriceForProduct("Tenders") ?? 0,
-    },
-    {
-      name: "BURGERS",
-      image: "/brand/photos/burgers/Gemini_Generated_Image_45kpqz45kpqz45kp-4.jpg",
-      imageAlt: "Wingers chicken burger",
-      price: fromPriceForSections(["chicken-burgers", "beef-burgers"]) ?? 0,
-    },
-    {
-      name: "LOADED FRIES",
-      image: "/brand/photos/sides/BBQ Snack Bowl-3.png",
-      imageAlt: "Loaded fries with sauce",
-      price:
-        fromPriceForSections(["fries-loaded", "chicken-loaded-fries"]) ?? 0,
-    },
-  ];
-
   return (
     <section
       aria-labelledby="the-goods-heading"
-      className="bg-brand-white py-16 md:py-24"
+      className="pb-10 md:pb-20"
     >
-      <h2
-        id="the-goods-heading"
-        className="block px-5 font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(2.5rem,12vw,7rem)] text-brand-red sm:px-8"
-      >
-        FAN FAVOURITES.
-      </h2>
+      <div className="wingers-wrap flex items-end justify-between gap-4 pb-5 md:pb-6">
+        <h2
+          id="the-goods-heading"
+          className="font-display font-bold uppercase leading-[0.95] tracking-tight text-brand-black text-[clamp(2rem,8vw,2.5rem)] md:text-[clamp(2.5rem,4.5vw,4rem)]"
+        >
+          The Goods
+        </h2>
+        <Link
+          href="/menu"
+          className="font-body text-sm font-semibold text-brand-black underline underline-offset-4 hover:text-brand-red md:text-base"
+        >
+          Full menu →
+        </Link>
+      </div>
 
+      {/* Mobile: horizontal scroll-snap rail. Desktop: 4-col grid inside wrap. */}
       <ul
         aria-label="Menu categories"
-        className="mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 sm:px-8 md:mt-14 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-[var(--wrap-gutter,1rem)] pb-4 md:mx-auto md:max-w-[var(--wrap-max,80rem)] md:grid md:grid-cols-4 md:gap-5 md:overflow-visible md:px-[var(--wrap-gutter,1rem)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {tiles.map((tile) => (
-          <li key={tile.name} className="shrink-0 snap-start">
+        {TILES.map((tile) => (
+          <li
+            key={tile.name}
+            className="shrink-0 snap-start md:shrink"
+          >
             <Link
               href="/menu"
-              aria-label={`${tile.name}, ${formatPrice(tile.price > 0 ? tile.price : null)}`}
-              className="group relative block w-[78vw] max-w-[22rem] overflow-hidden bg-brand-white"
+              aria-label={`${tile.name.toUpperCase()}, ${tile.line}`}
+              className="group flex w-[220px] flex-col gap-3 rounded-[28px] bg-brand-white p-2.5 pb-4 md:w-auto md:gap-3.5 md:rounded-[32px] md:p-3 md:pb-5 md:transition-transform md:duration-200 md:motion-safe:hover:-translate-y-1.5"
             >
-              <div className="relative aspect-square w-full">
+              <div className="relative aspect-square w-full overflow-hidden [border-radius:999px_999px_20px_20px] md:[border-radius:999px_999px_24px_24px]">
                 <Image
-                  src={tile.image}
-                  alt={tile.imageAlt}
+                  src={tile.img}
+                  alt={tile.alt}
                   fill
-                  sizes="(min-width: 768px) 22rem, 78vw"
-                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                  sizes="(min-width: 768px) 20rem, 220px"
+                  className="object-cover"
                 />
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-brand-black/80 to-transparent"
-                />
-                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">
-                  <span className="font-display font-extrabold uppercase leading-[0.9] tracking-tight text-brand-white text-[clamp(1.75rem,7vw,2.75rem)]">
+              </div>
+              <div className="flex items-center justify-between gap-2 px-1.5 md:px-2">
+                <div className="min-w-0">
+                  <div className="font-display font-extrabold uppercase leading-none text-brand-black text-[22px] md:text-[26px]">
                     {tile.name}
-                  </span>
-                  <span className="mb-1 shrink-0 font-body text-sm text-brand-white/90">
-                    {formatPrice(tile.price > 0 ? tile.price : null)}
-                  </span>
+                  </div>
+                  <div className="mt-1 font-body text-[13px] text-brand-black/70 md:text-sm">
+                    {tile.line}
+                  </div>
                 </div>
+                {/* Mobile: pink + icon. Desktop: pink arrow circle. */}
+                <span
+                  aria-hidden="true"
+                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-pink text-brand-black md:h-12 md:w-12"
+                >
+                  <Plus
+                    className="h-[18px] w-[18px] stroke-[2.6] md:hidden"
+                    aria-hidden="true"
+                  />
+                  <ArrowRight
+                    className="hidden h-5 w-5 stroke-[2.6] md:block"
+                    aria-hidden="true"
+                  />
+                </span>
               </div>
             </Link>
           </li>

@@ -1,13 +1,10 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import { useReducedMotion } from "motion/react";
-import { SPINNABLE_FLAVOURS, numberToWord, type Flavour } from "@/lib/flavours";
-import { Wheel, computeTargetRotation } from "./Wheel";
-import { WheelResult } from "./WheelResult";
+import { SPINNABLE_FLAVOURS, numberToWord } from "@/lib/flavours";
 import { SauceEdgeAccent } from "./SauceEdgeAccent";
-
-const SEGMENTS = SPINNABLE_FLAVOURS;
+import { WheelSpinner } from "./WheelSpinner";
 
 function capitalise(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);
@@ -15,48 +12,14 @@ function capitalise(s: string) {
 
 export function SpinTheWheel() {
   const reduce = useReducedMotion();
-  const [rotation, setRotation] = useState(0);
-  const [spinning, setSpinning] = useState(false);
-  const [winner, setWinner] = useState<Flavour | null>(null);
-  const pendingWinnerRef = useRef<Flavour | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
-  const spin = useCallback(() => {
-    if (spinning) return;
-    setWinner(null);
-    const winnerIndex = Math.floor(Math.random() * SEGMENTS.length);
-    pendingWinnerRef.current = SEGMENTS[winnerIndex];
-    const fullSpins = reduce ? 0 : 5 + Math.floor(Math.random() * 3);
-    const target = computeTargetRotation(
-      rotation,
-      winnerIndex,
-      SEGMENTS.length,
-      fullSpins
-    );
-    setSpinning(true);
-    setRotation(target);
-    if (reduce) {
-      setSpinning(false);
-      setWinner(pendingWinnerRef.current);
-      pendingWinnerRef.current = null;
-    }
-  }, [rotation, spinning, reduce]);
-
-  const handleAnimationComplete = useCallback(() => {
-    if (pendingWinnerRef.current) {
-      setWinner(pendingWinnerRef.current);
-      pendingWinnerRef.current = null;
-      setSpinning(false);
-    }
-  }, []);
-
-  const spinAgain = useCallback(() => {
+  const scrollBack = useCallback(() => {
     sectionRef.current?.scrollIntoView({
       behavior: reduce ? "auto" : "smooth",
       block: "start",
     });
-    spin();
-  }, [spin, reduce]);
+  }, [reduce]);
 
   return (
     <section
@@ -89,17 +52,10 @@ export function SpinTheWheel() {
           Let the Lab pick your flavour. {capitalise(numberToWord(SPINNABLE_FLAVOURS.length))} sauces and rubs, ready to go.
         </p>
 
-        <div className="mt-10">
-          <Wheel
-            segments={SEGMENTS}
-            rotation={rotation}
-            spinning={spinning}
-            onSpinClick={spin}
-            onSpinComplete={handleAnimationComplete}
-          />
-        </div>
-
-        <WheelResult winner={winner} onSpinAgain={spinAgain} />
+        <WheelSpinner
+          onSpinAgain={scrollBack}
+          className="mt-10 flex w-full flex-col items-center"
+        />
       </div>
     </section>
   );
