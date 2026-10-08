@@ -105,8 +105,11 @@ export default function MenuPage() {
   return (
     <OrderPanelProvider>
       <NavBar />
-      <main>
-        <section className="bg-brand-white pt-28 pb-8 md:pt-32 md:pb-12">
+      {/* Warm-grey ground gives every MenuItemCard (bg-brand-white, rounded)
+          its own visible edge — replaces the implicit "white card on white
+          page" divider lines flagged in the phone review. */}
+      <main className="bg-brand-warm-grey">
+        <section className="pt-28 pb-8 md:pt-32 md:pb-12">
           <div className="mx-auto max-w-6xl px-4 md:px-8">
             <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
               Fresh · Hand-Breaded · Halal

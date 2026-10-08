@@ -229,9 +229,12 @@ export function MenuShell({
       <MenuKatsuHero flavour={currentLE} />
 
       {/* Sticky chrome — seats flush under the fixed NavBar via --nav-h.
-          See globals.css. */}
+          See globals.css. The border-b divider is gone (J2.5): the white
+          strip against the warm-grey ground reads as its own band, so a
+          black 1px line underneath was redundant and showed as a divider
+          between chrome and items. */}
       <div
-        className="sticky z-20 mt-6 border-b border-brand-black/10 bg-brand-white"
+        className="sticky z-20 mt-6 bg-brand-white"
         style={{ top: "var(--nav-h)" }}
       >
         <div className="mx-auto max-w-6xl">
