@@ -35,6 +35,19 @@
   --tracking-display: -0.03em;
 }
 
+/* Site chrome + motion curve shared across sections. Batch J introduces a
+   single wrap width + gutter so sections stop freelancing max-w-7xl, and a
+   named motion ease so UI transitions share one curve (used by the
+   .wingers-wrap utility and by Marquee / StickerRing / Katsu drop in J1). */
+:root {
+  --wrap-max: 80rem;
+  --wrap-gutter: clamp(1rem, 4vw, 2.5rem);
+  --motion-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --motion-fast: 220ms;
+  --motion-med: 300ms;
+  --motion-slow: 420ms;
+}
+
 /* White-primary base: white page, black text by default.
    Dark sections opt in via .section-dark. See docs/decisions.md ADR-015. */
 @layer base {
@@ -122,7 +135,9 @@
   .paused-anims .animate-glow-ring::after,
   .paused-anims .animate-slice-pulse,
   .paused-anims .animate-flicker,
-  .paused-anims .sauce-shimmer::before {
+  .paused-anims .sauce-shimmer::before,
+  .paused-anims .animate-w-spin,
+  .paused-anims .animate-w-marq {
     animation-play-state: paused;
   }
 
@@ -133,6 +148,16 @@
   .section-dark {
     background-color: var(--color-brand-black);
     color: var(--color-brand-white);
+  }
+
+  /* Batch J wrap. Replaces ad-hoc `max-w-7xl mx-auto px-4 md:px-8` so every
+     section honours the same inner column. Width 1280px, gutter clamps
+     16→40px. Use as `<section class="wingers-wrap">` or combine with layout
+     utilities. Does not set vertical padding — that stays per-section. */
+  .wingers-wrap {
+    max-width: var(--wrap-max);
+    margin-inline: auto;
+    padding-inline: var(--wrap-gutter);
   }
 
   /* OpeningHoursTable — today-row highlight driven purely by the
@@ -159,6 +184,21 @@
 @keyframes marquee-scroll {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
+}
+
+/* Batch J home keyframes — StickerRing (w-spin), Marquee (w-marq, pink
+   home strip), Katsu-drop entrance (w-pop). Separate from marquee-scroll
+   so the LockupMarquee animation is untouched. */
+@keyframes w-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes w-marq {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes w-pop {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 /* Flavour Lab neon utilities — scoped to /flavour-lab.
@@ -335,7 +375,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track {
+  .marquee-track,
+  .animate-w-spin,
+  .animate-w-marq {
     animation-play-state: paused;
   }
   .animate-glow-ring::before,
