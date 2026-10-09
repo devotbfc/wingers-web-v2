@@ -53,6 +53,17 @@ export function SignupSlideInHost({ currentLE }: SignupSlideInHostProps) {
 
   const routeExcluded = isRouteExcluded(pathname);
 
+  // Imperative open: dispatched by in-page CTAs ("Tell me when they drop" on
+  // /flavour-lab). Bypasses auto-trigger gates — the user asked for it. Pixel
+  // calls stay inside SignupSlideIn's submit flow, so this adds no new events.
+  useEffect(() => {
+    function handleOpen() {
+      setVisible(true);
+    }
+    window.addEventListener("wingers:open-signup", handleOpen);
+    return () => window.removeEventListener("wingers:open-signup", handleOpen);
+  }, []);
+
   useEffect(() => {
     if (routeExcluded) return;
 
