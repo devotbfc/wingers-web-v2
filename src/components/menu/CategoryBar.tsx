@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
@@ -43,23 +42,127 @@ function readNavHeightPx(): number {
   return Number.isFinite(n) ? n : 80;
 }
 
-export function CategoryBar({ items }: CategoryBarProps) {
+// Schedule work past the LCP measurement window. If the interactive bar
+// mounted synchronously post-hydration, Chrome's LCP picker couldn't settle
+// on a candidate — the bar's post-paint state churn produced NO_LCP for the
+// whole /menu page (verified via /menu Lighthouse bisect). Deferring to
+// idle (with a hard fallback) lets the headline paragraph above paint
+// cleanly as the LCP, then the bar swaps itself in.
+function scheduleEnhancement(fn: () => void): () => void {
+  if (typeof window === "undefined") {
+    return () => {};
+  }
+  if (typeof window.requestIdleCallback === "function") {
+    const id = window.requestIdleCallback(fn, { timeout: 2000 });
+    return () => window.cancelIdleCallback(id);
+  }
+  const t = window.setTimeout(fn, 200);
+  return () => window.clearTimeout(t);
+}
+
+// Shared markup helpers so the static and interactive bars render visually
+// identical pills — only the semantics differ (anchor vs button).
+function pillClassName(active: boolean) {
+  return cn(
+    "relative inline-flex h-11 shrink-0 snap-start items-center gap-1.5 whitespace-nowrap rounded-full px-4 font-display font-extrabold text-[13px] uppercase tracking-[0.02em] transition-colors",
+    active
+      ? "text-brand-black"
+      : "bg-brand-warm-grey text-brand-black/85 hover:brightness-95"
+  );
+}
+
+function PillIcon({
+  icon,
+  active,
+}: {
+  icon: NonNullable<CategoryBarItem["icon"]>;
+  active: boolean;
+}) {
+  return (
+    <Image
+      src={icon.src}
+      alt=""
+      aria-hidden
+      width={icon.widthPx}
+      height={icon.heightPx}
+      className={cn(
+        "relative h-3.5 w-auto",
+        active && "[filter:brightness(0)]"
+      )}
+    />
+  );
+}
+
+// Static markup served during SSR + initial client paint. No hooks, no
+// state, no observers — guarantees Chrome's LCP picker has nothing in the
+// bar to churn against. The first pill is pre-highlighted so the active
+// state reads correctly before enhancement kicks in.
+function StaticCategoryBar({ items }: CategoryBarProps) {
+  return (
+    <div className="relative">
+      <nav
+        aria-label="Menu categories"
+        className="flex gap-2 overflow-x-auto scroll-smooth px-4 py-2 snap-x snap-proximity [scrollbar-width:none] md:gap-3 md:px-10 [&::-webkit-scrollbar]:hidden"
+      >
+        {items.map((item, i) => {
+          const active = i === 0;
+          return (
+            <a key={item.slug} href={`#${item.id}`} className={pillClassName(active)}>
+              {active && (
+                <span
+                  aria-hidden
+                  className="absolute inset-0 rounded-full bg-brand-pink"
+                />
+              )}
+              {item.icon && <PillIcon icon={item.icon} active={active} />}
+              <span className="relative">{item.label}</span>
+            </a>
+          );
+        })}
+      </nav>
+    </div>
+  );
+}
+
+// Interactive bar — scroll-spy, auto-centre, edge-fade arrows, framer-motion
+// pill slide. Only mounts once the LCP window has closed (via
+// scheduleEnhancement in the parent), so none of its hooks or framer-motion
+// internals can interfere with Chrome's LCP picker.
+function InteractiveCategoryBar({ items }: CategoryBarProps) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const barWrapperRef = useRef<HTMLDivElement>(null);
   const pillRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const [activeSlug, setActiveSlug] = useState<string>(items[0]?.slug ?? "");
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
-  const reduced = useReducedMotion();
+  // Reduced-motion preference, resolved locally. Importing
+  // useReducedMotion from motion/react pulled framer-motion's init code
+  // into the client bundle and destabilised Chrome's LCP picker on /menu.
+  // matchMedia gives us the preference without the dependency. The lazy
+  // useState initialiser is safe because InteractiveCategoryBar only
+  // mounts on the client (the parent waits for scheduleEnhancement before
+  // rendering this subtree), so there is no SSR path through here.
+  const [reduced, setReduced] = useState(() =>
+    typeof window === "undefined"
+      ? false
+      : window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = (e: MediaQueryListEvent) => setReduced(e.matches);
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
 
   // Scroll-spy. One IO observing every group section; the topmost visible
   // one wins. rootMargin's top = NavBar + sticky bar height so a section
   // only counts as active once it clears the chrome.
   //
   // Fast scroll fires IO entries in bursts — coalesce the setter via rAF so
-  // the layoutId pill animates once per frame, not per entry batch.
+  // the pill update happens once per frame, not per entry batch.
   useEffect(() => {
-    if (typeof window === "undefined") return;
     const navH = readNavHeightPx();
     const barH = barWrapperRef.current?.offsetHeight ?? 56;
     const topMargin = navH + barH;
@@ -98,22 +201,35 @@ export function CategoryBar({ items }: CategoryBarProps) {
     };
   }, [items]);
 
-  // Auto-centre the active pill when it changes.
+  // Auto-centre the active pill when activeSlug CHANGES. Scrolls only the
+  // pill rail (rail.scrollTo) rather than the pill itself (scrollIntoView),
+  // which previously propagated through the ancestor scroll chain. Skips
+  // the initial mount so the default pill at scrollLeft 0 doesn't trigger
+  // a layout write.
+  const didCentreRef = useRef(false);
   useEffect(() => {
-    const el = pillRefs.current[activeSlug];
-    if (!el) return;
-    el.scrollIntoView({
-      behavior: "smooth",
-      inline: "center",
-      block: "nearest",
-    });
-  }, [activeSlug]);
+    if (!didCentreRef.current) {
+      didCentreRef.current = true;
+      return;
+    }
+    const rail = scrollerRef.current;
+    const pill = pillRefs.current[activeSlug];
+    if (!rail || !pill) return;
+    const target =
+      pill.offsetLeft - (rail.clientWidth - pill.offsetWidth) / 2;
+    const maxScroll = rail.scrollWidth - rail.clientWidth;
+    const clamped = Math.max(0, Math.min(target, maxScroll));
+    if (Math.abs(rail.scrollLeft - clamped) < 2) return;
+    rail.scrollTo({ left: clamped, behavior: reduced ? "auto" : "smooth" });
+  }, [activeSlug, reduced]);
 
   const updateEdges = useCallback(() => {
     const el = scrollerRef.current;
     if (!el) return;
-    setAtStart(el.scrollLeft <= 1);
-    setAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 1);
+    const nextAtStart = el.scrollLeft <= 1;
+    const nextAtEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 1;
+    setAtStart((prev) => (prev === nextAtStart ? prev : nextAtStart));
+    setAtEnd((prev) => (prev === nextAtEnd ? prev : nextAtEnd));
   }, []);
 
   useEffect(() => {
@@ -198,48 +314,21 @@ export function CategoryBar({ items }: CategoryBarProps) {
               type="button"
               onClick={() => handlePillClick(item)}
               aria-current={active ? "true" : undefined}
-              className={cn(
-                "relative inline-flex h-11 shrink-0 snap-start items-center gap-1.5 whitespace-nowrap rounded-full px-4 font-display font-extrabold text-[13px] uppercase tracking-[0.02em] transition-colors",
-                active
-                  ? "text-brand-black"
-                  : "bg-brand-warm-grey text-brand-black/85 hover:brightness-95"
-              )}
+              className={pillClassName(active)}
             >
-              {/* Sliding pill background: single motion.span animates between
-                  pills via layoutId. On reduced-motion we skip the layout
-                  animation and fall back to the plain bg-colour on the
-                  button so the active state still reads clearly. */}
-              {active &&
-                (reduced ? (
-                  <span
-                    aria-hidden
-                    className="absolute inset-0 rounded-full bg-brand-pink"
-                  />
-                ) : (
-                  <motion.span
-                    aria-hidden
-                    layoutId="menu-active-pill"
-                    className="absolute inset-0 rounded-full bg-brand-pink"
-                    transition={{
-                      type: "spring",
-                      stiffness: 520,
-                      damping: 36,
-                    }}
-                  />
-                ))}
-              {item.icon && (
-                <Image
-                  src={item.icon.src}
-                  alt=""
+              {/* Active pill background. Framer-motion layoutId was tried
+                  here (Batch J polish), but it kept destabilising Chrome's
+                  LCP picker across the whole /menu page even when deferred
+                  past the enhancement gate — any layout-animated element
+                  mounted during the Lighthouse LCP window produced NO_LCP.
+                  The transition-colors swap on the button is enough. */}
+              {active && (
+                <span
                   aria-hidden
-                  width={item.icon.widthPx}
-                  height={item.icon.heightPx}
-                  className={cn(
-                    "relative h-3.5 w-auto",
-                    active && "[filter:brightness(0)]"
-                  )}
+                  className="absolute inset-0 rounded-full bg-brand-pink"
                 />
               )}
+              {item.icon && <PillIcon icon={item.icon} active={active} />}
               <span className="relative">{item.label}</span>
             </button>
           );
@@ -266,5 +355,15 @@ export function CategoryBar({ items }: CategoryBarProps) {
         </svg>
       </button>
     </div>
+  );
+}
+
+export function CategoryBar(props: CategoryBarProps) {
+  const [enhanced, setEnhanced] = useState(false);
+  useEffect(() => scheduleEnhancement(() => setEnhanced(true)), []);
+  return enhanced ? (
+    <InteractiveCategoryBar {...props} />
+  ) : (
+    <StaticCategoryBar {...props} />
   );
 }
