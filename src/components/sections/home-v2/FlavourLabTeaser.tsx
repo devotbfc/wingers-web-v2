@@ -43,7 +43,7 @@ export function FlavourLabTeaser() {
             href="/flavour-lab"
             className="mx-auto mt-2 inline-flex h-11 min-h-11 items-center gap-2 rounded-full border-2 border-brand-pink bg-transparent px-6 font-display text-[15px] font-extrabold uppercase tracking-[0.02em] text-brand-pink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink [@media(hover:hover)]:transition-colors [@media(hover:hover)]:duration-200 [@media(hover:hover)]:hover:bg-brand-pink [@media(hover:hover)]:hover:text-brand-black"
           >
-            Visit the Flavour Lab
+            Every flavour
             <FlaskGlyph
               strokeWidth={2.5}
               className="h-[1.15em] w-[1.15em] shrink-0"
