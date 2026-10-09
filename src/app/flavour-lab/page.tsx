@@ -9,7 +9,6 @@ import { FlavourGrid } from "@/components/sections/flavour-lab/FlavourGrid";
 import { FlavourLabHero } from "@/components/sections/flavour-lab/FlavourLabHero";
 import { ComingSoonSection } from "@/components/sections/flavour-lab/ComingSoonSection";
 import { PastDropsSection } from "@/components/sections/flavour-lab/PastDropsSection";
-import { SpinTheWheel } from "@/components/sections/flavour-lab/SpinTheWheel";
 import { TonightLineupCard } from "@/components/sections/flavour-lab/TonightLineupCard";
 import { SPINNABLE_FLAVOURS } from "@/lib/flavours";
 
@@ -67,7 +66,6 @@ export default function FlavourLabPage() {
       <NavBar onDark />
       <main className="bg-lab-black text-brand-white">
         <FlavourLabHero />
-        <SpinTheWheel />
         <TonightLineupCard />
         <FlavourGrid />
         <ComingSoonSection />
