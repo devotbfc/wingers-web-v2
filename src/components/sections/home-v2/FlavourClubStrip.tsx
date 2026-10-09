@@ -1,9 +1,5 @@
-import dynamic from "next/dynamic";
 import Image from "next/image";
-
-const LoyaltySignupForm = dynamic(() =>
-  import("@/components/forms/LoyaltySignupForm").then((m) => m.LoyaltySignupForm),
-);
+import { LoyaltySignupFormClient } from "@/components/forms/LoyaltySignupFormClient";
 
 /**
  * Home Flavour Club strip (Batch J). Pink rounded card with the W-mark,
@@ -40,7 +36,7 @@ export function FlavourClubStrip() {
           <p className="font-body text-[15px] leading-[1.5] text-brand-black md:text-lg">
             New flavours, secret menu nights and the odd freebie, straight to your inbox.
           </p>
-          <LoyaltySignupForm source="homepage" />
+          <LoyaltySignupFormClient source="homepage" />
         </div>
       </div>
     </section>
