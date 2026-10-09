@@ -2,7 +2,7 @@ import Image from "next/image";
 import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTriggerButton";
 import type { Flavour } from "@/lib/flavours";
 
-const W_MARK = "/brand/logo/wingers-mark.png";
+const W_MARK = "/brand/logo/wingers-mark-512.png";
 
 interface MenuKatsuHeroProps {
   flavour: Flavour | null | undefined;

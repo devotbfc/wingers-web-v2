@@ -41,7 +41,7 @@ function allergenHrefFor(slug: string): string {
   return resolved ? `/allergies#item-${resolved}` : "/allergies";
 }
 
-const W_MARK = "/brand/logo/wingers-mark.png";
+const W_MARK = "/brand/logo/wingers-mark-512.png";
 
 function Flame({ className }: { className?: string }) {
   return (

@@ -68,7 +68,7 @@ export function StickerRing({
         </text>
       </svg>
       <Image
-        src="/brand/logo/wingers-mark.png"
+        src="/brand/logo/wingers-mark-512.png"
         alt=""
         width={markSize}
         height={markSize}

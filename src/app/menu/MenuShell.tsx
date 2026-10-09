@@ -181,7 +181,7 @@ export function MenuShell({
         icon:
           g.slug === "little-wings"
             ? {
-                src: "/brand/logo/wingers-mark.png",
+                src: "/brand/logo/wingers-mark-512.png",
                 // Native asset is a near-square pink mark on transparent.
                 widthPx: 56,
                 heightPx: 56,

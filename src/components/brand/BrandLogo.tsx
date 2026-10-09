@@ -31,7 +31,7 @@ export function BrandLogo({
     variant === "pink"
       ? type === "lockup"
         ? "/brand/logo/wingers-lockup-pink.png"
-        : "/brand/logo/wingers-mark.png"
+        : "/brand/logo/wingers-mark-512.png"
       : `/brand/logo/wingers-${type}-${variant}.svg`;
 
   return (
