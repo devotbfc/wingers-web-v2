@@ -44,7 +44,10 @@ export function FlavourGrid() {
           className="font-display text-[clamp(2.5rem,7vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-tight"
         />
         <p className="mt-4 max-w-xl font-body text-base leading-relaxed text-brand-white/60">
-          {capitaliseFirst(numberToWord(CORE_COUNT))} permanent sauces and rubs plus limited-edition drops with a story. See what&rsquo;s coming soon below.
+          {/* Template literal — SWC's capitaliseFirst inlining strips the JSX
+              whitespace between the expression and the following text child,
+              so compose the whole string in one expression. */}
+          {`${capitaliseFirst(numberToWord(CORE_COUNT))} permanent sauces and rubs plus limited-edition drops with a story. See what\u2019s coming soon below.`}
         </p>
 
         <div className="mt-10">
