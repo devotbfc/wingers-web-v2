@@ -21,7 +21,7 @@ export function FlavourClubStrip() {
       <div className="rounded-[32px] bg-brand-pink p-7 pb-9 text-brand-black md:rounded-[40px] md:p-12 md:pb-14">
         <div className="flex flex-col gap-3.5">
           <Image
-            src="/brand/logo/wingers-mark.png"
+            src="/brand/logo/wingers-mark-512.png"
             alt=""
             width={56}
             height={56}

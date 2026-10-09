@@ -83,7 +83,7 @@ export function MobileNavDrawer({ open, onOpenChange }: MobileNavDrawerProps) {
                     className="flex items-center"
                   >
                     <Image
-                      src="/brand/logo/wingers-mark.png"
+                      src="/brand/logo/wingers-mark-512.png"
                       alt=""
                       width={52}
                       height={52}

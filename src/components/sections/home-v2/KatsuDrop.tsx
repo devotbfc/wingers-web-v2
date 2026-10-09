@@ -5,7 +5,7 @@ import { getCurrentLimitedEdition } from "@/lib/flavours";
 // There is no dedicated mask shape SVG in public/brand/logo — the W-mark PNG
 // (transparent background) stands in for the mask. The alpha channel defines
 // the cutout; the content image behind renders only where the W is opaque.
-const W_MASK_URL = "/brand/logo/wingers-mark.png";
+const W_MASK_URL = "/brand/logo/wingers-mark-512.png";
 
 export function KatsuDrop() {
   const flavour = getCurrentLimitedEdition();

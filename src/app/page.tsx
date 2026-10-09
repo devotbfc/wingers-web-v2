@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
+import ReactDOM from "react-dom";
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanelProvider } from "@/components/sections/order-panel/order-panel-context";
@@ -48,6 +49,15 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  // The hero <video> only exposes the poster via its attribute, so the browser
+  // discovers it late. Preload hoists a <link rel="preload"> into <head> so the
+  // poster fetch starts with the HTML response and anchors LCP.
+  ReactDOM.preload("/brand/photos/hero/hero-poster.webp", {
+    as: "image",
+    fetchPriority: "high",
+    type: "image/webp",
+  });
+
   const le = getCurrentLimitedEdition();
   const marqueeText = le
     ? `${le.name.toUpperCase()} IS HERE / LIMITED DROP / ${le.name.toUpperCase()} IS HERE / LIMITED DROP / `

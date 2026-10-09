@@ -15,7 +15,7 @@ type Step = "le" | "email" | "success";
 // Same stand-in used by the home `KatsuDrop` card so we don't fork image
 // paths. When Benson's per-flavour LE photo lands, swap it in one place.
 const LE_PHOTO_SRC = "/brand/photos/hero/hero-poster.webp";
-const LE_MASK_SRC = "/brand/logo/wingers-mark.png";
+const LE_MASK_SRC = "/brand/logo/wingers-mark-512.png";
 
 // Shared cubic-bezier for all slide-in motion. Matches CLAUDE.md spec and
 // the J design brief.

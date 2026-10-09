@@ -64,7 +64,7 @@ export function SignupSlideInForm({
   return (
     <div className="pr-9">
       <Image
-        src="/brand/logo/wingers-mark.png"
+        src="/brand/logo/wingers-mark-512.png"
         alt=""
         width={48}
         height={48}
