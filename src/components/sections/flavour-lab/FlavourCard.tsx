@@ -20,7 +20,7 @@ interface FlavourCardProps {
 
 export function FlavourCard({ flavour, index, featured = false }: FlavourCardProps) {
   const reduce = useReducedMotion();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(featured);
 
   const comingSoon = flavour.status === "coming-soon";
   const isLE = flavour.limitedEdition && !comingSoon;
