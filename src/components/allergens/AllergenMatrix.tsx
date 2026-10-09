@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { ALLERGENS_ORDERED, type Allergen } from "@/lib/menu";
 import { ALLERGEN_SECTIONS } from "./allergen-sections";
+import { AllergenSearch } from "./AllergenSearch";
 import { AvoidChips } from "./AvoidChips";
 import { MatrixTable } from "./MatrixTable";
 
@@ -50,6 +51,9 @@ export function AllergenMatrix() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  // Search is intentionally local state (not URL-synced): it's a client-only
+  // additive filter on top of the existing avoid/hide URL state.
+  const [search, setSearch] = useState("");
 
   const avoid = useMemo(
     () => parseAvoid(searchParams.get("avoid")),
@@ -86,20 +90,23 @@ export function AllergenMatrix() {
 
   return (
     <>
-      <AvoidChips
-        avoid={avoid}
-        onToggle={handleToggle}
-        onClear={handleClear}
-        hide={hide}
-        onHideToggle={handleHideToggle}
-      />
+      <AllergenSearch value={search} onChange={setSearch} />
+      <div className="mt-5">
+        <AvoidChips
+          avoid={avoid}
+          onToggle={handleToggle}
+          onClear={handleClear}
+          hide={hide}
+          onHideToggle={handleHideToggle}
+        />
+      </div>
       <p
         aria-live="polite"
         className="mt-4 font-body text-sm leading-relaxed text-brand-black/75"
       >
         {summary}
       </p>
-      <MatrixTable avoid={avoid} hide={hide} />
+      <MatrixTable avoid={avoid} hide={hide} search={search} />
     </>
   );
 }
