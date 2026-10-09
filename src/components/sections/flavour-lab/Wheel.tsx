@@ -218,7 +218,7 @@ export function Wheel({
         type="button"
         onClick={onSpinClick}
         disabled={spinning}
-        className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-transparent md:h-24 md:w-24"
+        className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-transparent md:h-24 md:w-24 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-pink"
         aria-label={spinning ? "Wheel is spinning" : "Spin the wheel"}
       />
     </div>

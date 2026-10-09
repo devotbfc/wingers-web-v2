@@ -28,7 +28,10 @@ export function FlavourFilters({
   resultCount,
   totalCount,
 }: FlavourFiltersProps) {
-  const heatLabel = heat >= 1 ? `Heat up to ${heat}` : "Heat";
+  // Static label per the board; the N is implied by which flames are lit.
+  // aria-live region at the end of the row keeps SR users informed of the
+  // active level.
+  const heatLabel = "Heat up to";
 
   return (
     <div className="mb-8 flex flex-col gap-6 border-y border-brand-white/10 py-6">
@@ -62,47 +65,49 @@ export function FlavourFilters({
         <div
           role="radiogroup"
           aria-label="Maximum heat level"
-          className="flex items-center gap-2"
+          className="flex flex-wrap items-center gap-x-3 gap-y-2"
         >
-          <span
-            aria-live="polite"
-            className="font-display text-[11px] font-bold uppercase tracking-[0.3em] text-brand-white/50"
-          >
+          <span className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-white/80">
             {heatLabel}
           </span>
-          {HEAT_LEVELS.map((level) => {
-            // "Heat up to N" filter: tapping level N shows flavours with
-            // heat <= N. Tap the active chip to clear (back to every
-            // flavour). Flames read as a left-to-right gauge: tapping N
-            // lights flames 1..N so selection direction matches the
-            // natural intensity reading.
-            const selected = heat === level;
-            const lit = heat >= 1 && level <= heat;
-            return (
-              <button
-                key={level}
-                type="button"
-                role="radio"
-                aria-checked={selected}
-                aria-label={`Heat up to ${level}`}
-                onClick={() => onHeatChange(selected ? 0 : level)}
-                className={`flex h-11 w-11 items-center justify-center rounded-full border transition-[color,background-color,border-color] duration-150 ${
-                  lit
-                    ? "border-brand-red/50 bg-brand-red/10"
-                    : "border-brand-white/10 bg-brand-white/[0.02] hover:border-brand-white/25"
-                }`}
-              >
-                <FlameIcon
-                  filled={lit}
-                  className={
+          <span aria-live="polite" className="sr-only">
+            {heat >= 1 ? `Heat up to ${heat}` : "No heat filter active"}
+          </span>
+          <div className="flex items-center gap-2">
+            {HEAT_LEVELS.map((level) => {
+              // "Heat up to N" filter: tapping level N shows flavours with
+              // heat <= N. Tap the active chip to clear (back to every
+              // flavour). Flames read as a left-to-right gauge: tapping N
+              // lights flames 1..N so selection direction matches the
+              // natural intensity reading.
+              const selected = heat === level;
+              const lit = heat >= 1 && level <= heat;
+              return (
+                <button
+                  key={level}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  aria-label={`Heat up to ${level}`}
+                  onClick={() => onHeatChange(selected ? 0 : level)}
+                  className={`flex h-11 w-11 items-center justify-center rounded-full border-2 transition-[color,background-color,border-color,box-shadow] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink ${
                     lit
-                      ? "h-4 w-4 text-brand-red drop-shadow-[0_0_6px_rgba(255,45,45,0.8)]"
-                      : "h-4 w-4 text-brand-white/25"
-                  }
-                />
-              </button>
-            );
-          })}
+                      ? "border-brand-red bg-brand-red/15 shadow-[0_0_14px_rgba(255,45,45,0.35)]"
+                      : "border-brand-white/15 bg-brand-white/[0.02] hover:border-brand-white/40"
+                  }`}
+                >
+                  <FlameIcon
+                    filled={lit}
+                    className={
+                      lit
+                        ? "h-5 w-5 text-brand-red drop-shadow-[0_0_6px_rgba(255,45,45,0.9)]"
+                        : "h-5 w-5 text-brand-white/35"
+                    }
+                  />
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 

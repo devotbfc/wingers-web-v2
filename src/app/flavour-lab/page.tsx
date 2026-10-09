@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { Footer } from "@/components/sections/Footer";
 import { NavBar } from "@/components/sections/NavBar";
 import { OrderPanel } from "@/components/sections/order-panel/OrderPanel";
@@ -10,7 +9,6 @@ import { FlavourGrid } from "@/components/sections/flavour-lab/FlavourGrid";
 import { FlavourLabHero } from "@/components/sections/flavour-lab/FlavourLabHero";
 import { ComingSoonSection } from "@/components/sections/flavour-lab/ComingSoonSection";
 import { PastDropsSection } from "@/components/sections/flavour-lab/PastDropsSection";
-import { SpinTheWheel } from "@/components/sections/flavour-lab/SpinTheWheel";
 import { TonightLineupCard } from "@/components/sections/flavour-lab/TonightLineupCard";
 import { SPINNABLE_FLAVOURS } from "@/lib/flavours";
 
@@ -68,26 +66,21 @@ export default function FlavourLabPage() {
       <NavBar onDark />
       <main className="bg-lab-black text-brand-white">
         <FlavourLabHero />
-        <SpinTheWheel />
         <TonightLineupCard />
         <FlavourGrid />
         <ComingSoonSection />
         <PastDropsSection />
         <DipsSection />
 
-        <section className="section-dark py-20 md:py-28">
-          <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 text-center md:px-8">
-            <DoubledHeading
-              text="HUNGRY YET?"
-              as="p"
-              fillColor="brand-pink"
-              shadowColor="brand-red"
-              offsetEm="0.06em"
-              className="font-display text-[clamp(2.25rem,7vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-tight"
-            />
-            <div className="mt-4">
-              <OrderTriggerButton size="lg">Get stuck in</OrderTriggerButton>
-            </div>
+        {/* Full-width pink band, text left + ORDER right on both breakpoints
+            (matches the design board). The row never stacks — compact on
+            mobile with the headline sized down, breathes out on desktop. */}
+        <section className="px-4 py-10 md:px-8 md:py-14">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 rounded-[32px] bg-brand-pink px-6 py-6 text-lab-black md:rounded-[40px] md:px-12 md:py-8">
+            <p className="font-display text-[clamp(1.75rem,6vw,2.5rem)] font-extrabold uppercase leading-[0.95] tracking-tight">
+              Hungry yet?
+            </p>
+            <OrderTriggerButton size="lg">Order</OrderTriggerButton>
           </div>
         </section>
       </main>
