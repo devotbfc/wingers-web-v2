@@ -2,6 +2,7 @@ import { Lock } from "lucide-react";
 import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import type { Flavour } from "@/lib/flavours";
 import { HeatFlames } from "./FlameIcon";
+import { TellMeWhenTheyDropButton } from "./TellMeWhenTheyDropButton";
 
 type Variant = "coming-soon" | "past";
 
@@ -12,6 +13,9 @@ interface LockedFlavoursSectionProps {
   badge: string;
   flavours: Flavour[];
   variant: Variant;
+  // When set and variant === "coming-soon", renders a pill below the grid
+  // that dispatches "wingers:open-signup" to open the sign-up slide-in.
+  cta?: { label: string };
 }
 
 export function LockedFlavoursSection({
@@ -21,6 +25,7 @@ export function LockedFlavoursSection({
   badge,
   flavours,
   variant,
+  cta,
 }: LockedFlavoursSectionProps) {
   if (flavours.length === 0) return null;
 
@@ -102,6 +107,11 @@ export function LockedFlavoursSection({
             </article>
           ))}
         </div>
+        {cta && !isPast ? (
+          <div className="mt-8 flex justify-center md:mt-10">
+            <TellMeWhenTheyDropButton label={cta.label} />
+          </div>
+        ) : null}
       </div>
     </section>
   );
