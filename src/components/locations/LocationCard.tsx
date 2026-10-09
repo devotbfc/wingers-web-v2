@@ -12,12 +12,17 @@ interface LocationCardProps {
   location: Location;
   mediaAspect?: "4/3" | "3/4" | "3/2";
   className?: string;
+  // When set, renders a pink pill in the card header (e.g. "Location
+  // exclusive · 100% Angus beef" on Northampton). Leave undefined for shops
+  // without an exclusive line.
+  exclusiveBadge?: string;
 }
 
 export function LocationCard({
   location,
   mediaAspect = "4/3",
   className,
+  exclusiveBadge,
 }: LocationCardProps) {
   const href = `/locations/${location.slug}`;
   const directionsUrl = getDirectionsUrl(location);
@@ -79,6 +84,11 @@ export function LocationCard({
             <LocationOpenBadge location={location} size="sm" />
           </div>
         </div>
+        {exclusiveBadge ? (
+          <span className="w-fit rounded-full bg-brand-pink px-3 py-1 font-display text-[11px] font-bold uppercase tracking-[0.1em] text-brand-black">
+            {exclusiveBadge}
+          </span>
+        ) : null}
 
         <div className="grid gap-4 md:grid-cols-2">
           <address className="font-body not-italic text-sm leading-relaxed text-brand-black/80 md:text-base">

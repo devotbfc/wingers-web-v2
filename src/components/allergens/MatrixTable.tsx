@@ -13,6 +13,8 @@ interface MatrixTableProps {
   avoid: readonly Allergen[];
   /** Hide rows that contain any avoided allergen. */
   hide: boolean;
+  /** Case-insensitive substring filter on item name. Empty = no filter. */
+  search?: string;
 }
 
 const STICKY_COL =
@@ -69,8 +71,9 @@ function HitIndicator() {
   );
 }
 
-export function MatrixTable({ avoid, hide }: MatrixTableProps) {
+export function MatrixTable({ avoid, hide, search = "" }: MatrixTableProps) {
   const avoidSet = new Set(avoid);
+  const query = search.trim().toLowerCase();
 
   // Column order: avoided allergens first (in the user's click order),
   // then every other UK statutory allergen in ALLERGENS_ORDERED order.
@@ -82,12 +85,18 @@ export function MatrixTable({ avoid, hide }: MatrixTableProps) {
   return (
     <>
       {ALLERGEN_SECTIONS.map((group) => {
-        const items =
+        const afterHide =
           hide && avoidSet.size > 0
             ? group.items.filter(
                 (item) => !item.contains.some((a) => avoidSet.has(a)),
               )
             : group.items;
+
+        const items = query
+          ? afterHide.filter((item) =>
+              item.name.toLowerCase().includes(query),
+            )
+          : afterHide;
 
         if (items.length === 0) return null;
 

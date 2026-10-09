@@ -10,9 +10,10 @@ export function ComingSoonSection() {
       id="next-drops"
       title="NEXT DROPS"
       intro="Next up on the drop rotation. Names dropped, cooks dialling them in."
-      badge="Coming Soon"
+      badge="Locked · Coming soon"
       flavours={COMING_SOON_LE}
       variant="coming-soon"
+      cta={{ label: "TELL ME WHEN THEY DROP" }}
     />
   );
 }

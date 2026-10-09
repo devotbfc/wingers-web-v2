@@ -33,11 +33,11 @@ export function FlavourGrid() {
   return (
     <section
       className="py-16 md:py-24"
-      aria-label="All flavours"
+      aria-label="Every flavour"
     >
       <div className="mx-auto max-w-6xl px-4 md:px-8">
         <DoubledHeading
-          text="ALL FLAVOURS"
+          text="EVERY FLAVOUR"
           as="h2"
           fillColor="brand-white"
           shadowColor="brand-pink"

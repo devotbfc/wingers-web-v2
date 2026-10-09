@@ -11,6 +11,7 @@ import { FlavourLabHero } from "@/components/sections/flavour-lab/FlavourLabHero
 import { ComingSoonSection } from "@/components/sections/flavour-lab/ComingSoonSection";
 import { PastDropsSection } from "@/components/sections/flavour-lab/PastDropsSection";
 import { SpinTheWheel } from "@/components/sections/flavour-lab/SpinTheWheel";
+import { TonightLineupCard } from "@/components/sections/flavour-lab/TonightLineupCard";
 import { SPINNABLE_FLAVOURS } from "@/lib/flavours";
 
 // data-todo="assets" — using sitewide /og/home.jpg until per-page Flavour Lab art ships (ADR-014).
@@ -68,6 +69,7 @@ export default function FlavourLabPage() {
       <main className="bg-lab-black text-brand-white">
         <FlavourLabHero />
         <SpinTheWheel />
+        <TonightLineupCard />
         <FlavourGrid />
         <ComingSoonSection />
         <PastDropsSection />
@@ -76,17 +78,9 @@ export default function FlavourLabPage() {
         <section className="section-dark py-20 md:py-28">
           <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 text-center md:px-8">
             <DoubledHeading
-              text="FOUND YOUR FLAVOUR?"
+              text="HUNGRY YET?"
               as="p"
               fillColor="brand-pink"
-              shadowColor="brand-red"
-              offsetEm="0.06em"
-              className="font-display text-[clamp(2.25rem,7vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-tight"
-            />
-            <DoubledHeading
-              text="GET STUCK IN."
-              as="p"
-              fillColor="brand-white"
               shadowColor="brand-red"
               offsetEm="0.06em"
               className="font-display text-[clamp(2.25rem,7vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-tight"
