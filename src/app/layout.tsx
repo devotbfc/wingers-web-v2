@@ -1,13 +1,17 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Inter } from "next/font/google";
 import { Suspense } from "react";
-import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/next";
 import { ConsentProvider } from "@/components/consent/ConsentProvider";
 import { ConsentBanner } from "@/components/consent/ConsentBanner";
 import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { PixelPageView } from "@/components/analytics/PixelPageView";
-import { SignupSlideInHost } from "@/components/signup/SignupSlideInHost";
+// Sonner's <Toaster> only renders toasts that fire from user interactions, and
+// SignupSlideInHost waits 20s/50%-scroll before showing anything. Both go
+// through tiny client-side dynamic wrappers so their deps (sonner, motion,
+// react-hook-form, zod) leave the main-app chunk that ships on every route.
+import { ToasterClient } from "@/components/common/ToasterClient";
+import { SignupSlideInHostClient } from "@/components/signup/SignupSlideInHostClient";
 import { getCurrentLimitedEdition } from "@/lib/flavours/current-le";
 import { getSiteUrl } from "@/lib/site-url";
 import "@/styles/globals.css";
@@ -75,7 +79,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <ConsentProvider pixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID ?? ""}>
           {children}
-          <SignupSlideInHost currentLE={currentLE} />
+          <SignupSlideInHostClient currentLE={currentLE} />
           <ConsentBanner />
           <MetaPixel />
           {/* Suspense is required: useSearchParams inside PixelPageView would
@@ -85,7 +89,7 @@ export default function RootLayout({
           </Suspense>
         </ConsentProvider>
         <Analytics />
-        <Toaster richColors position="bottom-center" />
+        <ToasterClient />
       </body>
     </html>
   );
