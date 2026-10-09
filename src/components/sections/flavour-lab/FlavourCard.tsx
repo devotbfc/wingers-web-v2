@@ -11,9 +11,14 @@ import { HeatFlames } from "./FlameIcon";
 interface FlavourCardProps {
   flavour: Flavour;
   index: number;
+  // Set by FlavourGrid for the one flavour carrying `featured: true`.
+  // Promotes the card to col-span-2 by default on every breakpoint so it
+  // sits as a wider "bento" slot. Expand still bumps to col-span-2 — this
+  // just makes it the baseline.
+  featured?: boolean;
 }
 
-export function FlavourCard({ flavour, index }: FlavourCardProps) {
+export function FlavourCard({ flavour, index, featured = false }: FlavourCardProps) {
   const reduce = useReducedMotion();
   const [expanded, setExpanded] = useState(false);
 
@@ -28,7 +33,8 @@ export function FlavourCard({ flavour, index }: FlavourCardProps) {
   const nameMain = nameMatch ? nameMatch[1] : flavour.name;
   const nameParen = nameMatch ? `(${nameMatch[2]})` : null;
 
-  const verticalPad = index % 2 === 0 ? "py-5" : "py-7";
+  const verticalPad = index % 2 === 0 ? "py-6 md:py-7" : "py-7 md:py-8";
+  const spanClass = featured || expanded ? "col-span-2" : "";
 
   const cardBase =
     "relative flex flex-col overflow-hidden rounded-2xl border transition-colors";
@@ -41,9 +47,7 @@ export function FlavourCard({ flavour, index }: FlavourCardProps) {
     <motion.article
       layout={reduce ? false : true}
       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-      className={`${cardBase} ${cardSurface} px-4 md:px-5 ${verticalPad} ${
-        expanded ? "col-span-2" : ""
-      }`}
+      className={`${cardBase} ${cardSurface} min-h-[220px] md:min-h-[260px] px-4 md:px-5 ${verticalPad} ${spanClass}`}
     >
       {hasCardImage && (
         <>
@@ -162,7 +166,7 @@ export function FlavourCard({ flavour, index }: FlavourCardProps) {
             className="relative overflow-hidden"
           >
             <div
-              className={`mt-5 space-y-4 border-t pt-5 ${
+              className={`mt-5 grid gap-5 border-t pt-5 md:grid-cols-3 md:gap-6 ${
                 ghost ? "border-brand-red/20" : "border-brand-white/10"
               }`}
             >

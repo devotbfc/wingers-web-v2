@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 import { useReducedMotion } from "motion/react";
 import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { DIPS, type Dip } from "@/lib/flavours";
@@ -74,16 +75,29 @@ function DipTile({ dip }: { dip: Dip }) {
       id={`dip-${dip.slug}`}
       className="flex items-start gap-4 rounded-2xl border border-brand-white/10 bg-brand-white/[0.03] p-5 scroll-mt-28"
     >
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 56 56"
-        className="h-11 w-11 shrink-0 drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)] md:h-12 md:w-12"
-      >
-        <circle cx="28" cy="28" r="26" fill="#E8E4DB" />
-        <circle cx="28" cy="28" r="23" fill="#F7F3E8" />
-        <circle cx="28" cy="28" r="21" fill={fill} />
-        <ellipse cx="22" cy="22" rx="5" ry="2.5" fill="#FFFFFF" opacity="0.42" />
-      </svg>
+      {dip.image ? (
+        <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)] md:h-12 md:w-12">
+          <Image
+            src={dip.image}
+            alt=""
+            fill
+            sizes="48px"
+            aria-hidden="true"
+            className="object-cover"
+          />
+        </div>
+      ) : (
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 56 56"
+          className="h-11 w-11 shrink-0 drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)] md:h-12 md:w-12"
+        >
+          <circle cx="28" cy="28" r="26" fill="#E8E4DB" />
+          <circle cx="28" cy="28" r="23" fill="#F7F3E8" />
+          <circle cx="28" cy="28" r="21" fill={fill} />
+          <ellipse cx="22" cy="22" rx="5" ry="2.5" fill="#FFFFFF" opacity="0.42" />
+        </svg>
+      )}
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <h3 className="font-display text-lg font-extrabold uppercase leading-tight tracking-tight text-brand-white">
           {dip.name}

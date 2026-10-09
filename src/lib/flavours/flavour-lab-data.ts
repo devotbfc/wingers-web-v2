@@ -53,8 +53,10 @@ export interface Flavour {
   shortDescription: string | null; howMade: string | null;
   sourcedFrom: string | null; history: string | null; pairsWith: string | null;
   // Optional per-flavour hero image shown behind the card chrome under a
-  // dark scrim. Left undefined until real per-flavour photography lands;
-  // every card then shows the neon fallback (see FlavourCard).
+  // dark scrim. Convention: drop a webp at public/brand/photos/flavours/
+  // <slug>.webp and set this field to that path. Left undefined until
+  // real per-flavour photography lands; every card then shows the neon
+  // fallback (see FlavourCard).
   cardImage?: string;
   // Tonight's line-up tiering (per design board):
   //   • featured: shown on its own line between the current LE (tier 1) and
@@ -69,6 +71,10 @@ export interface Flavour {
 export interface Dip {
   slug: string; name: string; shortDescription: string | null;
   howMade: string | null; pairsWith: string | null; notes: string | null;
+  // Optional per-dip photo for the DipsSection tile. Convention: drop a
+  // webp at public/brand/photos/dips/<slug>.webp and set this field to
+  // that path. Leave undefined → the SVG swatch renders as the fallback.
+  image?: string;
 }
 
 export const FLAVOURS: Flavour[] = [

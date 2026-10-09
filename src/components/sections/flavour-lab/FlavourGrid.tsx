@@ -30,6 +30,18 @@ export function FlavourGrid() {
     [heat, typeFilter]
   );
 
+  // Bento ordering: move the one `featured` flavour (today: ghost-buffalo-
+  // hot) to the front so its col-span-2 doesn't leave a hole in the grid.
+  // If the current filter excludes it, degrade quietly to the natural
+  // filtered order — no featured slot, equal tiles.
+  const ordered = useMemo(() => {
+    const idx = filtered.findIndex((f) => f.featured === true);
+    if (idx < 0) return filtered;
+    const copy = [...filtered];
+    const [feat] = copy.splice(idx, 1);
+    return [feat, ...copy];
+  }, [filtered]);
+
   return (
     <section
       className="py-16 md:py-24"
@@ -62,8 +74,13 @@ export function FlavourGrid() {
 
           <LayoutGroup>
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
-              {filtered.map((flavour, i) => (
-                <FlavourCard key={flavour.slug} flavour={flavour} index={i} />
+              {ordered.map((flavour, i) => (
+                <FlavourCard
+                  key={flavour.slug}
+                  flavour={flavour}
+                  index={i}
+                  featured={flavour.featured === true}
+                />
               ))}
             </div>
           </LayoutGroup>
