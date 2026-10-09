@@ -12,6 +12,7 @@ import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTrigg
 import { LocationOpenBadge } from "@/components/locations/LocationOpenBadge";
 import { OpeningHoursTable } from "@/components/locations/OpeningHoursTable";
 import { OpeningHoursTodayMarker } from "@/components/locations/OpeningHoursTodayMarker";
+import { NorthamptonExclusiveCard } from "@/components/sections/locations/NorthamptonExclusiveCard";
 import {
   dayKeys,
   dayLabels,
@@ -228,6 +229,8 @@ export default async function LocationDetailPage({ params }: RouteProps) {
             </div>
           </div>
         </section>
+
+        {location.slug === "northampton" ? <NorthamptonExclusiveCard /> : null}
 
         {(location.mapImage || location.parking) && (
           <section

@@ -61,7 +61,15 @@ export default function LocationsPage() {
                 key={loc.slug}
                 className={i === 0 ? "mr-6 md:mr-0" : "ml-6 md:ml-0 md:mt-16"}
               >
-                <LocationCard location={loc} mediaAspect="3/2" />
+                <LocationCard
+                  location={loc}
+                  mediaAspect="3/2"
+                  exclusiveBadge={
+                    loc.slug === "northampton"
+                      ? "Location exclusive · 100% Angus beef"
+                      : undefined
+                  }
+                />
               </li>
             ))}
           </ul>

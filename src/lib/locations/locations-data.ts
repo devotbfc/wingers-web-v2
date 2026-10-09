@@ -50,6 +50,7 @@ export const LOCATIONS_DATA: readonly Location[] = [
     geo: { latitude: 52.23725, longitude: -0.897566 },
     openingHours: northamptonHours,
     orderProvider: "Toast",
+    parking: "Town-centre parking within a 30-second walk.",
     shopfront: {
       src: "/brand/photos/locations/northampton/shopfront.jpg",
       alt: "Wingers Northampton shopfront at 2 Drapery",
