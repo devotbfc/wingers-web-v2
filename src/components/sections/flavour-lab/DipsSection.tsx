@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { useReducedMotion } from "motion/react";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { DIPS, type Dip } from "@/lib/flavours";
 
 // Fill colours mirror the WheelResult DipPot (src/components/sections/
@@ -47,13 +46,9 @@ export function DipsSection() {
   return (
     <section id="dips" className="py-16 md:py-24" aria-label="Dips">
       <div className="mx-auto max-w-6xl px-4 md:px-8">
-        <DoubledHeading
-          text="DIPS"
-          as="h2"
-          fillColor="brand-pink"
-          shadowColor="brand-red"
-          className="font-display text-[clamp(2.5rem,7vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-tight"
-        />
+        <h2 className="neon-pink font-display text-[clamp(2.5rem,7vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-pink">
+          Dips
+        </h2>
         <p className="mt-4 max-w-xl font-body text-base leading-relaxed text-brand-white/60">
           Four dips. Pick your partner in crime.
         </p>

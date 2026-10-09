@@ -1,5 +1,4 @@
 import { Lock } from "lucide-react";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import type { Flavour } from "@/lib/flavours";
 import { HeatFlames } from "./FlameIcon";
 import { TellMeWhenTheyDropButton } from "./TellMeWhenTheyDropButton";
@@ -37,18 +36,15 @@ export function LockedFlavoursSection({
       aria-labelledby={`${id}-heading`}
     >
       <div className="mx-auto max-w-6xl px-4 md:px-8">
-        <DoubledHeading
-          text={title}
-          as="h2"
-          fillColor={isPast ? "brand-white" : "brand-pink"}
-          shadowColor={isPast ? "brand-pink" : "brand-red"}
-          offsetEm="0.06em"
+        <h2
           className={
             isPast
-              ? "font-display text-[clamp(2.25rem,6vw,4rem)] font-extrabold uppercase leading-[0.9] tracking-tight opacity-60"
-              : "font-display text-[clamp(2.5rem,7vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-tight"
+              ? "font-display text-[clamp(2.25rem,6vw,4rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-white/60"
+              : "neon-pink font-display text-[clamp(2.5rem,7vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-pink"
           }
-        />
+        >
+          {title}
+        </h2>
         <p
           className={`mt-4 max-w-xl font-body text-base leading-relaxed ${
             isPast ? "text-brand-white/45" : "text-brand-white/60"

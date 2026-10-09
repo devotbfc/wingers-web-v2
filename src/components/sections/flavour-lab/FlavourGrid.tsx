@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import { LayoutGroup } from "motion/react";
-import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { CORE_COUNT, SPINNABLE_FLAVOURS, numberToWord } from "@/lib/flavours";
 import { FlavourFilters } from "./FlavourFilters";
 import { FlavourCard } from "./FlavourCard";
@@ -48,13 +47,9 @@ export function FlavourGrid() {
       aria-label="Every flavour"
     >
       <div className="mx-auto max-w-6xl px-4 md:px-8">
-        <DoubledHeading
-          text="EVERY FLAVOUR"
-          as="h2"
-          fillColor="brand-white"
-          shadowColor="brand-pink"
-          className="font-display text-[clamp(2.5rem,7vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-tight"
-        />
+        <h2 className="neon-pink font-display text-[clamp(2.5rem,7vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-pink">
+          Every flavour
+        </h2>
         <p className="mt-4 max-w-xl font-body text-base leading-relaxed text-brand-white/60">
           {/* Template literal — SWC's capitaliseFirst inlining strips the JSX
               whitespace between the expression and the following text child,
