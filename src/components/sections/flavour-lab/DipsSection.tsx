@@ -1,53 +1,47 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ChevronDown } from "lucide-react";
+import { useEffect } from "react";
+import { useReducedMotion } from "motion/react";
 import { DoubledHeading } from "@/components/typography/DoubledHeading";
 import { DIPS, type Dip } from "@/lib/flavours";
 
+// Fill colours mirror the WheelResult DipPot (src/components/sections/
+// flavour-lab/WheelResult.tsx). Four entries only; if a third consumer
+// shows up, extract to a shared module keyed on dip.slug.
+const DIP_SWATCH_FILL: Record<string, string> = {
+  "blue-cheese": "#FDFBF2",
+  ranch: "#F3EBD2",
+  "california-sauce-mayo": "#F6D1AF",
+  "honey-mustard": "#E6C34C",
+};
+
+const DIP_SWATCH_DEFAULT = "#FDFBF2";
+
 const DIP_HASH_PREFIX = "#dip-";
 
+// Tiles now show swatch + name + description inline (no expand state).
+// WheelResult.DipPot still writes #dip-<slug> via history.replaceState +
+// a synthetic hashchange event; keep that compat by scrolling to the tile
+// here on hashchange. On initial mount we honour an incoming hash too.
 export function DipsSection() {
   const reduce = useReducedMotion();
-  const [openSlugs, setOpenSlugs] = useState<Set<string>>(() => new Set());
 
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash;
       if (!hash.startsWith(DIP_HASH_PREFIX)) return;
       const slug = hash.slice(DIP_HASH_PREFIX.length);
-      const dip = DIPS.find((d) => d.slug === slug);
-      if (!dip) return;
-      if (dip.shortDescription) {
-        setOpenSlugs((prev) => {
-          if (prev.has(slug)) return prev;
-          const next = new Set(prev);
-          next.add(slug);
-          return next;
-        });
-      }
       const el = document.getElementById(`dip-${slug}`);
-      if (el) {
-        el.scrollIntoView({
-          behavior: reduce ? "auto" : "smooth",
-          block: "center",
-        });
-      }
+      if (!el) return;
+      el.scrollIntoView({
+        behavior: reduce ? "auto" : "smooth",
+        block: "center",
+      });
     };
     handleHash();
     window.addEventListener("hashchange", handleHash);
     return () => window.removeEventListener("hashchange", handleHash);
   }, [reduce]);
-
-  const toggle = (slug: string) => {
-    setOpenSlugs((prev) => {
-      const next = new Set(prev);
-      if (next.has(slug)) next.delete(slug);
-      else next.add(slug);
-      return next;
-    });
-  };
 
   return (
     <section id="dips" className="py-16 md:py-24" aria-label="Dips">
@@ -63,15 +57,9 @@ export function DipsSection() {
           Four dips. Pick your partner in crime.
         </p>
 
-        <ul className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4">
+        <ul className="mt-10 grid gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
           {DIPS.map((dip) => (
-            <DipTile
-              key={dip.slug}
-              dip={dip}
-              isOpen={openSlugs.has(dip.slug)}
-              onToggle={() => toggle(dip.slug)}
-              reduce={reduce ?? false}
-            />
+            <DipTile key={dip.slug} dip={dip} />
           ))}
         </ul>
       </div>
@@ -79,69 +67,33 @@ export function DipsSection() {
   );
 }
 
-interface DipTileProps {
-  dip: Dip;
-  isOpen: boolean;
-  onToggle: () => void;
-  reduce: boolean;
-}
-
-function DipTile({ dip, isOpen, onToggle, reduce }: DipTileProps) {
-  const hasBlurb = Boolean(dip.shortDescription);
-  const blurbId = `dip-blurb-${dip.slug}`;
-
-  const tileClass =
-    "group flex flex-col rounded-2xl border border-brand-white/10 bg-brand-white/[0.03] transition-all hover:border-brand-pink/50 hover:bg-brand-pink/[0.06]";
-
-  if (!hasBlurb) {
-    return (
-      <li id={`dip-${dip.slug}`} className={tileClass}>
-        <div className="flex min-h-[132px] w-full flex-col items-center justify-center gap-2 p-6 text-center">
-          <h3 className="font-display text-lg font-extrabold uppercase leading-tight tracking-tight text-brand-white transition-colors group-hover:text-brand-pink md:text-xl">
-            {dip.name}
-          </h3>
-        </div>
-      </li>
-    );
-  }
-
+function DipTile({ dip }: { dip: Dip }) {
+  const fill = DIP_SWATCH_FILL[dip.slug] ?? DIP_SWATCH_DEFAULT;
   return (
     <li
       id={`dip-${dip.slug}`}
-      className={`${tileClass} has-[button[aria-expanded=true]]:border-brand-pink/50 has-[button[aria-expanded=true]]:bg-brand-pink/[0.06]`}
+      className="flex items-start gap-4 rounded-2xl border border-brand-white/10 bg-brand-white/[0.03] p-5 scroll-mt-28"
     >
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-expanded={isOpen}
-        aria-controls={blurbId}
-        className="flex min-h-[132px] w-full flex-col items-center justify-center gap-2 rounded-2xl p-6 text-center"
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 56 56"
+        className="h-11 w-11 shrink-0 drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)] md:h-12 md:w-12"
       >
-        <h3 className="font-display text-lg font-extrabold uppercase leading-tight tracking-tight text-brand-white transition-colors group-hover:text-brand-pink md:text-xl">
+        <circle cx="28" cy="28" r="26" fill="#E8E4DB" />
+        <circle cx="28" cy="28" r="23" fill="#F7F3E8" />
+        <circle cx="28" cy="28" r="21" fill={fill} />
+        <ellipse cx="22" cy="22" rx="5" ry="2.5" fill="#FFFFFF" opacity="0.42" />
+      </svg>
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <h3 className="font-display text-lg font-extrabold uppercase leading-tight tracking-tight text-brand-white">
           {dip.name}
         </h3>
-        <ChevronDown
-          aria-hidden="true"
-          className={`h-4 w-4 text-brand-pink/70 transition-transform ${isOpen ? "rotate-180" : ""}`}
-        />
-      </button>
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            key="blurb"
-            id={blurbId}
-            initial={reduce ? false : { opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={reduce ? undefined : { opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden"
-          >
-            <p className="border-t border-brand-white/10 px-6 pb-6 pt-4 font-body text-sm leading-relaxed text-brand-white/75">
-              {dip.shortDescription}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {dip.shortDescription ? (
+          <p className="font-body text-sm leading-snug text-brand-white/70">
+            {dip.shortDescription}
+          </p>
+        ) : null}
+      </div>
     </li>
   );
 }
