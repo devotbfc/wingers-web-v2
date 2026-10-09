@@ -56,6 +56,15 @@ export interface Flavour {
   // dark scrim. Left undefined until real per-flavour photography lands;
   // every card then shows the neon fallback (see FlavourCard).
   cardImage?: string;
+  // Tonight's line-up tiering (per design board):
+  //   • featured: shown on its own line between the current LE (tier 1) and
+  //     the rest of the core. Set on exactly one flavour at a time (today:
+  //     ghost-buffalo-hot). Left undefined → no "featured" line is rendered.
+  //   • tier: 3 for "flagship core" names (one shared line, medium-small);
+  //     any flavour left as undefined falls into tier 4 (smallest shared
+  //     line). Tier 1 is derived from the current LE, tier 2 from `featured`.
+  featured?: boolean;
+  tier?: 3 | 4;
 }
 export interface Dip {
   slug: string; name: string; shortDescription: string | null;
@@ -74,7 +83,8 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": "\ud83c\uddf2\ud83c\uddfd Mexico \u2013 Habanero peppers. \ud83c\udde7\ud83c\uddf7 Brazil \u2013 Tropical fruits",
     "history": "Habanero peppers originated in the Amazon Basin before becoming famous throughout the Caribbean and Mexico. Pairing tropical fruits like mango with habaneros became popular because the natural sweetness helps balance the pepper's intense heat.",
     "pairsWith": "Blue Cheese, Ranch, Tennessee B.B.Q",
-    "status": "core"
+    "status": "core",
+    "tier": 3
   },
   {
     "slug": "korea-town",
@@ -87,7 +97,8 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": "\ud83c\uddf0\ud83c\uddf7 South Korea \u2013 Gochujang & Korean seasonings. \ud83c\uddf9\ud83c\udded Thailand \u2013 Sweet chili influences",
     "history": "Inspired by Korea's famous Korean Fried Chicken, which became internationally popular for its crispy texture and bold sweet-spicy glaze using fermented chili paste known as gochujang.",
     "pairsWith": "Ranch, Blue Cheese",
-    "status": "core"
+    "status": "core",
+    "tier": 3
   },
   {
     "slug": "tennessee-bbq",
@@ -100,7 +111,8 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": "\ud83c\uddfa\ud83c\uddf8 United States \u2013 BBQ, Cajun traditions",
     "history": "Tennessee barbecue is known for balancing sweet tomato-based sauces with smoky spices and slow-cooked meats, creating one of America's most beloved BBQ traditions.",
     "pairsWith": "Ranch",
-    "status": "core"
+    "status": "core",
+    "tier": 3
   },
   {
     "slug": "lemon-pepper",
@@ -127,7 +139,8 @@ export const FLAVOURS: Flavour[] = [
     "sourcedFrom": "\ud83c\uddee\ud83c\uddf3 India \u2013 Ghost Peppers and aromatic spices. \ud83c\uddfa\ud83c\uddf8 United States \u2013 Buffalo",
     "history": "Ghost Pepper (Bhut Jolokia) originated in Northeast India and once held the title of the world's hottest pepper. Combined with Buffalo sauce, it creates an unforgettable extreme heat experience.",
     "pairsWith": "Blue Cheese, Ranch",
-    "status": "core"
+    "status": "core",
+    "featured": true
   },
   {
     "slug": "buffalo-new-york",
