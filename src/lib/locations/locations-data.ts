@@ -35,6 +35,12 @@ export const LOCATIONS_DATA: readonly Location[] = [
     geo: { latitude: 52.030996, longitude: -0.798502 },
     openingHours: mkHours,
     orderProvider: "Deliverect",
+    shopfront: {
+      src: "/brand/photos/locations/milton-keynes/shopfront.jpg",
+      alt: "Wingers Milton Keynes shopfront at 25 Darin Court",
+      heroPosition: "object-[30%_55%] md:object-[35%_center]",
+      cardPosition: "object-[30%_55%]",
+    },
   },
   {
     slug: "northampton",
