@@ -248,7 +248,16 @@ export function MenuShell({
           shop.
         </p>
 
-        {groups.map((group) => (
+        {groups.map((group) => {
+          const groupItemCount = group.subSections.reduce(
+            (n, s) => (s.allUnavailableHere ? n : n + s.items.length),
+            0,
+          );
+          const label =
+            group.slug === "little-wings"
+              ? "Little Wings Meals"
+              : group.label;
+          return (
           <section
             key={group.slug}
             id={group.id}
@@ -276,14 +285,23 @@ export function MenuShell({
                 style={{ scrollMarginTop: "calc(var(--nav-h) + 4rem)" }}
               />
             )}
-            <h2
-              id={`${group.id}-heading`}
-              className="font-display font-extrabold text-3xl uppercase leading-[0.95] tracking-tight text-brand-black md:text-5xl"
-            >
-              {group.slug === "little-wings"
-                ? "Little Wings Meals"
-                : group.label}
-            </h2>
+            <div className="flex items-baseline justify-between gap-4 border-b border-brand-black/15 pb-3 md:pb-4">
+              <h2
+                id={`${group.id}-heading`}
+                className="font-display font-extrabold text-3xl uppercase leading-[0.95] tracking-tight text-brand-black md:text-5xl"
+              >
+                {label}
+              </h2>
+              {groupItemCount > 0 && (
+                <span
+                  aria-hidden="true"
+                  className="shrink-0 font-display text-sm font-bold uppercase tracking-[0.08em] text-brand-black/50 md:text-base"
+                >
+                  {groupItemCount}{" "}
+                  {groupItemCount === 1 ? "item" : "items"}
+                </span>
+              )}
+            </div>
 
             {group.allUnavailableHere ? (
               <div className="mt-6 border-l-4 border-brand-red bg-brand-pink/15 p-6 text-brand-black md:p-8">
@@ -332,7 +350,8 @@ export function MenuShell({
               ))
             )}
           </section>
-        ))}
+          );
+        })}
 
         <FlavourLabLinkCard />
 
@@ -343,12 +362,23 @@ export function MenuShell({
             style={{ scrollMarginTop: "calc(var(--nav-h) + 4rem)" }}
             className="pt-10 md:pt-16"
           >
-            <h2
-              id={`${PAST_DROPS_ID}-heading`}
-              className="font-display font-extrabold text-3xl uppercase leading-[0.95] tracking-tight text-brand-black/60 md:text-5xl"
-            >
-              Past Drops
-            </h2>
+            <div className="flex items-baseline justify-between gap-4 border-b border-brand-black/15 pb-3 md:pb-4">
+              <h2
+                id={`${PAST_DROPS_ID}-heading`}
+                className="font-display font-extrabold text-3xl uppercase leading-[0.95] tracking-tight text-brand-black/60 md:text-5xl"
+              >
+                Past Drops
+              </h2>
+              {pastDrops.length > 0 && (
+                <span
+                  aria-hidden="true"
+                  className="shrink-0 font-display text-sm font-bold uppercase tracking-[0.08em] text-brand-black/40 md:text-base"
+                >
+                  {pastDrops.length}{" "}
+                  {pastDrops.length === 1 ? "item" : "items"}
+                </span>
+              )}
+            </div>
             <p className="mt-3 max-w-2xl font-body text-sm leading-relaxed text-brand-black/60">
               Limited-edition items we&rsquo;ve retired. Kept here so you can
               remember what you loved.

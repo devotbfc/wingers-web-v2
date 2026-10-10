@@ -32,7 +32,7 @@ export function LoyaltySignupSection({
             </p>
             <div className="mt-4">
               <h2 className="font-display font-extrabold uppercase leading-[0.9] tracking-tight text-[clamp(3rem,9vw,6.5rem)] text-brand-black">
-                BECOME A WINGER.
+                BECOME A WING&apos;ER.
               </h2>
             </div>
             <p className="mt-8 max-w-2xl font-body text-lg md:text-xl leading-relaxed text-brand-black">

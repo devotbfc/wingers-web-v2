@@ -4,10 +4,12 @@ import { BrandButton } from "@/components/brand/BrandButton";
 import { LocationOpenBadge } from "@/components/locations/LocationOpenBadge";
 import { OrderTriggerButton } from "@/components/sections/order-panel/OrderTriggerButton";
 import { LOCATIONS, type Location } from "@/lib/locations";
+import { cn } from "@/lib/utils";
 
 type SpotTheme = {
   panelBg: string;
   bodyText: string;
+  photoFrameBg: string;
   photoFallbackBg: string;
 };
 
@@ -15,19 +17,22 @@ const THEME_BY_SLUG: Record<string, SpotTheme> = {
   "milton-keynes": {
     panelBg: "bg-brand-pink",
     bodyText: "text-brand-black",
-    photoFallbackBg: "bg-brand-red",
+    photoFrameBg: "bg-brand-black",
+    photoFallbackBg: "bg-brand-white",
   },
   northampton: {
     panelBg: "bg-brand-white",
     bodyText: "text-brand-black",
-    photoFallbackBg: "bg-brand-pink",
+    photoFrameBg: "bg-brand-pink",
+    photoFallbackBg: "bg-brand-black",
   },
 };
 
 const DEFAULT_THEME: SpotTheme = {
   panelBg: "bg-brand-white",
   bodyText: "text-brand-black",
-  photoFallbackBg: "bg-brand-pink",
+  photoFrameBg: "bg-brand-pink",
+  photoFallbackBg: "bg-brand-black",
 };
 
 function mapsUrlFor(loc: Location): string {
@@ -44,23 +49,31 @@ function SpotBlock({ spot }: { spot: Location }) {
   const headlineText = spot.name.toUpperCase();
 
   return (
-    <div className="flex flex-col lg:flex-row">
+    <div className="flex flex-col lg:flex-row lg:items-stretch">
       <div
-        className={`relative aspect-[4/3] w-full overflow-hidden lg:aspect-auto lg:h-auto lg:w-1/2 ${
-          spot.shopfront ? "" : theme.photoFallbackBg
-        }`}
+        className={cn(
+          "w-full p-3 md:p-4 lg:w-1/2",
+          theme.photoFrameBg,
+        )}
         {...(spot.shopfront ? {} : { "aria-hidden": true })}
       >
-        {spot.shopfront ? (
-          <Image
-            src={spot.shopfront.src}
-            alt={spot.shopfront.alt}
-            fill
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            loading="lazy"
-            className={`object-cover ${spot.shopfront.cardPosition}`}
-          />
-        ) : null}
+        <div
+          className={cn(
+            "relative aspect-[4/3] w-full overflow-hidden rounded-[999px_999px_24px_24px] md:rounded-[999px_999px_40px_40px] lg:aspect-auto lg:h-full",
+            !spot.shopfront && theme.photoFallbackBg,
+          )}
+        >
+          {spot.shopfront ? (
+            <Image
+              src={spot.shopfront.src}
+              alt={spot.shopfront.alt}
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              loading="lazy"
+              className={cn("object-cover", spot.shopfront.cardPosition)}
+            />
+          ) : null}
+        </div>
       </div>
 
       <div
