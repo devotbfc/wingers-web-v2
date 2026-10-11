@@ -59,6 +59,9 @@ function expandSlashVariants(
 }
 
 const nextConfig: NextConfig = {
+  // Stops `next dev` from writing/updating the AGENTS.md managed block
+  // on every start (Next 16.3+). We keep AGENTS.md hand-authored.
+  agentRules: false,
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 31_536_000,
@@ -84,6 +87,40 @@ const nextConfig: NextConfig = {
     ];
 
     return [...named, ...wildcards.map((r) => ({ ...r, permanent: true }))];
+  },
+  async headers() {
+    // CSP ships as Report-Only in S2 — nothing is actually blocked. The
+    // hostnames allow-listed below map 1:1 to the external-host audit in
+    // the S2 plan (Meta Pixel + Vercel Analytics; no PostHog/Sentry yet).
+    const csp = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' https://connect.facebook.net https://va.vercel-scripts.com",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob: https://www.facebook.com",
+      "font-src 'self' data:",
+      "media-src 'self'",
+      "connect-src 'self' https://www.facebook.com https://vitals.vercel-insights.com https://va.vercel-scripts.com",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join("; ");
+
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          {
+            key: "Permissions-Policy",
+            value:
+              "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+          },
+          { key: "Content-Security-Policy-Report-Only", value: csp },
+        ],
+      },
+    ];
   },
 };
 
