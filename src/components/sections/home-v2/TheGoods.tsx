@@ -13,19 +13,19 @@ const TILES: Tile[] = [
   {
     name: "Wings",
     line: "Sauced or dry-rubbed",
-    img: "/brand/photos/wings/DSC01496ww.png",
+    img: "/brand/photos/wings/wings-hero.webp",
     alt: "Wingers halal buttermilk wings",
   },
   {
     name: "Tenders",
     line: "Hand-breaded strips",
-    img: "/brand/photos/tenders/DSC00293.JPG",
+    img: "/brand/photos/tenders/tenders-hero.webp",
     alt: "Chicken tenders",
   },
   {
     name: "Burgers",
     line: "Smash and chicken",
-    img: "/brand/photos/burgers/ww.png",
+    img: "/brand/photos/burgers/burger-hero.webp",
     alt: "Wingers chicken burger",
   },
   {

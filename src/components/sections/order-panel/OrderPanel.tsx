@@ -43,9 +43,6 @@ function statusFor(loc: Location): { label: string; open: boolean } {
 // physical — spring up, ease-out backdrop leading by 40ms, 55ms stagger
 // across the two location cards. forceMount keeps Radix's DOM alive for the
 // duration of the exit animation; AnimatePresence unmounts after.
-//
-// Local to OrderPanel. The shared Sheet (src/components/ui/sheet.tsx) still
-// drives LocationPicker and other consumers — not touched.
 export function OrderPanel() {
   const { open, setOpen, preferredLocationSlug, openPanel } = useOrderPanel();
   const { status: consentStatus } = useConsent();
