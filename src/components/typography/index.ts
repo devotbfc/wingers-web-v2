@@ -1,1 +1,0 @@
-export { DoubledHeading } from "./DoubledHeading";
