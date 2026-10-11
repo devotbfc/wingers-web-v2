@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { BrandButton } from "@/components/brand/BrandButton";
 import { BrandPattern } from "@/components/brand/BrandPattern";
@@ -25,6 +26,11 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 export default function ComponentsDevPage() {
+  // Vercel sets NODE_ENV=production on both Preview and Production builds;
+  // local `next dev` is "development". This hides the gallery everywhere
+  // except local dev.
+  if (process.env.NODE_ENV === "production") notFound();
+
   return (
     <main className="bg-brand-white min-h-screen">
 
