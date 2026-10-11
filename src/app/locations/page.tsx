@@ -36,7 +36,7 @@ export default function LocationsPage() {
         <section className="wingers-wrap pt-24 pb-6 md:pt-32 md:pb-10">
           <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end md:gap-10">
             <div>
-              <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
+              <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red-cta">
                 Halal Buttermilk Fried Chicken
               </p>
               <h1 className="mt-3 font-display text-[clamp(3rem,10vw,9rem)] font-extrabold uppercase leading-[0.86] tracking-tight text-brand-black">

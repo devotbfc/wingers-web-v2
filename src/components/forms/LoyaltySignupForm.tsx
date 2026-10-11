@@ -130,7 +130,7 @@ export function LoyaltySignupForm({
               <FormItem>
                 <FormLabel className="font-body text-sm font-semibold uppercase tracking-widest text-brand-black">
                   First name{" "}
-                  <span className="font-normal normal-case text-brand-black/60">
+                  <span className="font-normal normal-case text-brand-black/80">
                     (optional)
                   </span>
                 </FormLabel>
@@ -159,7 +159,7 @@ export function LoyaltySignupForm({
           <span>{CONSENT_TEXT}</span>
         </label>
         {consentError && (
-          <p className="font-body text-sm text-brand-red">{consentError}</p>
+          <p className="font-body text-sm text-brand-black">{consentError}</p>
         )}
 
         <div className="md:self-start">

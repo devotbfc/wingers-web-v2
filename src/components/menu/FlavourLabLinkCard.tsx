@@ -14,7 +14,7 @@ export function FlavourLabLinkCard() {
           aria-hidden
           className="pointer-events-none absolute -right-6 -top-6 h-40 w-40 rounded-full bg-[radial-gradient(circle,theme(colors.brand-pink/35),transparent_70%)] blur-2xl"
         />
-        <p className="relative font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
+        <p className="relative font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red-cta">
           Our Flavours
         </p>
         <h2
@@ -27,7 +27,7 @@ export function FlavourLabLinkCard() {
           Every sauce and rub we coat our wings, boneless and tenders in — heat,
           story and what pairs with what.
         </p>
-        <span className="relative mt-5 inline-flex items-center gap-2 font-display text-sm font-bold uppercase tracking-wide text-brand-red">
+        <span className="relative mt-5 inline-flex items-center gap-2 font-display text-sm font-bold uppercase tracking-wide text-brand-red-cta">
           See the lab
           <svg
             aria-hidden

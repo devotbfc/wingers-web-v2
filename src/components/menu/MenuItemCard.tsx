@@ -182,7 +182,7 @@ export function MenuItemCard({
             </span>
           )}
           {!available && !isPast && (
-            <span className="font-display text-[10px] font-bold uppercase tracking-[0.18em] text-brand-red">
+            <span className="font-display text-[10px] font-bold uppercase tracking-[0.18em] text-brand-red-cta">
               Not at this shop
             </span>
           )}

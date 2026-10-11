@@ -111,7 +111,7 @@ export default function MenuPage() {
       <main className="bg-brand-warm-grey">
         <section className="pt-28 pb-8 md:pt-32 md:pb-12">
           <div className="mx-auto max-w-6xl px-4 md:px-8">
-            <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
+            <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-black">
               Fresh · Hand-Breaded · Halal
             </p>
             <h1 className="mt-2 font-display text-[clamp(3rem,10vw,7rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-pink">

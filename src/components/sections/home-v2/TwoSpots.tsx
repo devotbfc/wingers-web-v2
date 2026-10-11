@@ -129,7 +129,7 @@ export function TwoSpots() {
   return (
     <section aria-labelledby="two-spots-heading" className="bg-brand-white">
       <div className="px-6 pb-8 pt-16 lg:px-12 lg:pt-24">
-        <p className="mb-3 font-body text-sm font-bold uppercase tracking-[0.2em] text-brand-red">
+        <p className="mb-3 font-body text-sm font-bold uppercase tracking-[0.2em] text-brand-red-cta">
           Come Say Hi
         </p>
         <h2

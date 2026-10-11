@@ -40,7 +40,7 @@ export function ConsentBanner() {
               href="/privacy"
               className="text-brand-pink underline underline-offset-[3px]"
             >
-              Learn more
+              Learn more about cookies
             </Link>
             .
           </p>

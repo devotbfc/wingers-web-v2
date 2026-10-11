@@ -37,7 +37,7 @@ const variantClasses: Record<BrandButtonVariant, string> = {
   ghost:
     "text-brand-red bg-transparent hover:text-brand-pink hover:bg-transparent underline rounded-full shadow-none",
   inverse:
-    "bg-brand-white text-brand-red hover:brightness-95 border-0 rounded-full shadow-none",
+    "bg-brand-white text-brand-red-cta hover:brightness-95 border-0 rounded-full shadow-none",
   outline:
     "bg-brand-white text-brand-black border-2 border-brand-black hover:bg-brand-red-cta hover:text-brand-white hover:border-brand-red-cta focus-visible:bg-brand-red-cta focus-visible:text-brand-white focus-visible:border-brand-red-cta rounded-full shadow-none",
 };
