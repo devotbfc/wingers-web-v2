@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { z } from "zod";
 
-import { getSupabaseClient } from "@/lib/supabase/client";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { checkRateLimit } from "@/lib/rate-limit";
 
 const sourceEnum = z.enum(["homepage", "loyalty_page", "signup_slidein"]);
@@ -54,7 +54,7 @@ export async function signupLoyalty(input: SignupInput): Promise<SignupResult> {
 
   const { email, first_name, source, location_pref, consent_text_version } =
     parsed.data;
-  const supabase = getSupabaseClient();
+  const supabase = getSupabaseAdmin();
 
   const { error } = await supabase.from("loyalty_signups").insert({
     email: email.toLowerCase().trim(),
