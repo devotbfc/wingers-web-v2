@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { z } from "zod";
 
+import { addLoyaltyContact } from "@/lib/brevo";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { checkRateLimit } from "@/lib/rate-limit";
 
@@ -65,10 +66,23 @@ export async function signupLoyalty(input: SignupInput): Promise<SignupResult> {
     consent_text_version,
   });
 
-  if (error) {
-    if (error.code === "23505") return { ok: true };
+  if (error && error.code !== "23505") {
     console.error("loyalty_signup insert failed", { code: error.code });
     return { ok: false, error: "server" };
+  }
+
+  if (parsed.data.marketing_consent) {
+    try {
+      await addLoyaltyContact({
+        email: email.toLowerCase().trim(),
+        firstName: first_name?.trim() ? first_name.trim() : null,
+        source,
+        locationPref: location_pref ?? null,
+        consentTextVersion: consent_text_version,
+      });
+    } catch {
+      // Brevo failures are non-fatal — Supabase is the source of truth.
+    }
   }
 
   return { ok: true };

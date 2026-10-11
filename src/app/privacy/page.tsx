@@ -33,7 +33,7 @@ export default function PrivacyPage() {
             </h1>
 
             <p className="mt-8 font-body text-sm uppercase tracking-widest text-brand-black/60">
-              Last updated: 23 September 2026
+              Last updated: 12 October 2026
             </p>
 
             <p className="mt-6 font-body text-lg leading-relaxed text-brand-black/80 md:text-xl">
@@ -159,9 +159,11 @@ export default function PrivacyPage() {
             </p>
             <p className={P}>
               We keep franchise enquiry details for 24 months from your last
-              contact with us, after which they are deleted or anonymised. We
-              do not share franchise enquiry details with any third party;
-              they are stored in Supabase as described below.
+              contact with us, after which they are deleted or anonymised. The
+              enquiry is stored in Supabase (see below) and sent to our team
+              inbox as an email alert through Brevo, our email service
+              provider, which handles it on our behalf only to deliver that
+              email.
             </p>
 
             <h2 className={H2}>Cookies and similar technologies</h2>
@@ -259,6 +261,12 @@ export default function PrivacyPage() {
               <li>
                 <strong>Supabase</strong> — securely stores the loyalty list
                 and franchise enquiries (EU — Stockholm region).
+              </li>
+              <li>
+                <strong>Brevo (Sendinblue SAS)</strong> — email service
+                provider; receives your email, first name and marketing
+                consent record to send the Wingers list, and relays franchise
+                enquiry alerts to us.
               </li>
               <li>
                 <strong>Deliverect and Toast</strong> — take your order, as
