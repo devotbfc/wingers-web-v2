@@ -18,7 +18,7 @@ export default function NotFound() {
       <main>
         <section className="flex min-h-[80svh] items-center bg-brand-white px-4 md:px-8">
           <div className="mx-auto w-full max-w-6xl">
-            <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
+            <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red-cta">
               404
             </p>
             <h1 className="mt-4 font-display font-extrabold uppercase leading-[0.85] tracking-tight text-[clamp(3rem,13vw,9rem)] text-brand-red">

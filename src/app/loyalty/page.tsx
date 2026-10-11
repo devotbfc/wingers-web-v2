@@ -73,7 +73,7 @@ export default function LoyaltyPage() {
       <NavBar />
       <main className="bg-brand-white">
         <section className="wingers-wrap pt-24 pb-10 md:pt-32 md:pb-16">
-          <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red">
+          <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-red-cta">
             Friends with Benefits
           </p>
           <h1 className="mt-3 font-display font-extrabold uppercase leading-[0.84] tracking-tight text-[clamp(3rem,12vw,8rem)] text-brand-black">
