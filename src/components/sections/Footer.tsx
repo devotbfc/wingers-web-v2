@@ -4,14 +4,14 @@ import { CookieSettingsLink } from "@/components/consent/CookieSettingsLink";
 import { LOCATIONS } from "@/lib/locations";
 import { getProviderForLocation } from "@/lib/order/providers";
 
-const EXPLORE_LINKS = [
+const EXPLORE_LINKS: Array<{ label: string; href: string; prefetch?: false }> = [
   { label: "Menu", href: "/menu" },
   { label: "Locations", href: "/locations" },
-  { label: "About", href: "/about" },
-  { label: "Franchise", href: "/franchise" },
-  { label: "Contact", href: "/contact" },
-  { label: "Allergies", href: "/allergies" },
-  { label: "FAQ", href: "/about#faq" },
+  { label: "About", href: "/about", prefetch: false },
+  { label: "Franchise", href: "/franchise", prefetch: false },
+  { label: "Contact", href: "/contact", prefetch: false },
+  { label: "Allergies", href: "/allergies", prefetch: false },
+  { label: "FAQ", href: "/about#faq", prefetch: false },
 ];
 
 const SOCIAL_LINKS = [
@@ -61,6 +61,7 @@ export function Footer() {
               <li key={link.label}>
                 <Link
                   href={link.href}
+                  {...(link.prefetch === false ? { prefetch: false } : {})}
                   className="font-body text-sm text-brand-white transition-colors hover:text-brand-pink"
                 >
                   {link.label}
@@ -126,6 +127,7 @@ export function Footer() {
             <li>
               <Link
                 href="/privacy"
+                prefetch={false}
                 className="font-body text-xs text-brand-white/60 transition-colors hover:text-brand-pink"
               >
                 Privacy
@@ -134,6 +136,7 @@ export function Footer() {
             <li>
               <Link
                 href="/terms"
+                prefetch={false}
                 className="font-body text-xs text-brand-white/60 transition-colors hover:text-brand-pink"
               >
                 Terms

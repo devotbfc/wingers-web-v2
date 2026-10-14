@@ -18,7 +18,7 @@ const NAV_LINKS = [
   { label: "Menu", href: "/menu", kind: "plain" },
   { label: "Flavour Lab", href: "/flavour-lab", kind: "lab" },
   { label: "Locations", href: "/locations", kind: "plain" },
-  { label: "About", href: "/about", kind: "plain" },
+  { label: "About", href: "/about", kind: "plain", prefetch: false as const },
   { label: "Flavour Club", href: "/loyalty", kind: "plain" },
 ] as const;
 
@@ -77,6 +77,7 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
               <li key={link.href}>
                 <Link
                   href={link.href}
+                  {...("prefetch" in link ? { prefetch: link.prefetch } : {})}
                   className={cn(
                     "inline-flex items-center gap-1.5 font-display font-bold uppercase tracking-wide text-sm transition-colors",
                     "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red",
