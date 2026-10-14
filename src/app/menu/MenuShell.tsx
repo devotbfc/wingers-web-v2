@@ -295,7 +295,7 @@ export function MenuShell({
               {groupItemCount > 0 && (
                 <span
                   aria-hidden="true"
-                  className="shrink-0 font-display text-sm font-bold uppercase tracking-[0.08em] text-brand-black/50 md:text-base"
+                  className="shrink-0 font-display text-sm font-bold uppercase tracking-[0.08em] text-brand-black/70 md:text-base"
                 >
                   {groupItemCount}{" "}
                   {groupItemCount === 1 ? "item" : "items"}

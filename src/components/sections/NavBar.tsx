@@ -81,7 +81,9 @@ export function NavBar({ onDark = false }: NavBarProps = {}) {
                     "inline-flex items-center gap-1.5 font-display font-bold uppercase tracking-wide text-sm transition-colors",
                     "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red",
                     isLab
-                      ? "text-brand-pink hover:text-brand-red"
+                      ? onLight
+                        ? "text-brand-black hover:text-brand-pink"
+                        : "text-brand-pink hover:text-brand-red"
                       : onLight
                         ? "text-brand-black hover:text-brand-red"
                         : "text-brand-white hover:text-brand-pink",
