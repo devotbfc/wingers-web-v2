@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { Cookie } from "lucide-react";
-import { useConsent } from "./ConsentProvider";
+import { useConsent, type ConsentStatus } from "./ConsentProvider";
 
 // Dark floating card at the bottom of the viewport per PopupConsent.dc.html.
 // Reject and Accept are intentionally identical outlined white-on-black
@@ -12,6 +13,17 @@ import { useConsent } from "./ConsentProvider";
 // anything itself.
 export function ConsentBanner() {
   const { status, accept, reject, pixelId } = useConsent();
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const prevStatusRef = useRef<ConsentStatus>(status);
+
+  useEffect(() => {
+    const prev = prevStatusRef.current;
+    prevStatusRef.current = status;
+    // Only focus on the reset-triggered transition, never on first-visit mount.
+    if (status === "unknown" && (prev === "accepted" || prev === "rejected")) {
+      dialogRef.current?.focus();
+    }
+  }, [status]);
 
   if (pixelId.length === 0) return null;
   if (status !== "unknown") return null;
@@ -21,9 +33,11 @@ export function ConsentBanner() {
 
   return (
     <div
+      ref={dialogRef}
       role="dialog"
       aria-label="Cookie consent"
-      className="fixed inset-x-3 bottom-3 z-50 rounded-[28px] bg-brand-black px-5 pt-5 pb-[var(--sheet-safe-bottom)] text-brand-white shadow-[0_16px_40px_rgba(10,10,10,0.28)] md:inset-x-auto md:left-6 md:right-6 md:bottom-6 md:mx-auto md:max-w-3xl md:px-7"
+      tabIndex={-1}
+      className="fixed inset-x-3 bottom-3 z-50 rounded-[28px] bg-brand-black px-5 pt-5 pb-[var(--sheet-safe-bottom)] text-brand-white shadow-[0_16px_40px_rgba(10,10,10,0.28)] focus:outline-none md:inset-x-auto md:left-6 md:right-6 md:bottom-6 md:mx-auto md:max-w-3xl md:px-7"
     >
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
         <div className="flex items-start gap-3 md:flex-1">

@@ -29,6 +29,24 @@ export function writeFbcCookie(fbclid: string): void {
   document.cookie = `${FBC_COOKIE}=${encodeURIComponent(value)}; Max-Age=${NINETY_DAYS_SECONDS}; Path=/; SameSite=Lax${secure}`;
 }
 
+// Deletes _fbc and _fbp set by Meta Pixel / fbclid writer. Browsers only
+// remove a cookie when the deletion attribute set matches the one used to
+// set it, so we try the three variants that cover how fbevents.js and our
+// own writer actually set them: no explicit domain (host-only), the current
+// hostname, and the eTLD+1 ".wingers.co" dot-domain.
+export function clearMetaCookies(): void {
+  if (typeof document === "undefined") return;
+  const names = ["_fbc", "_fbp"];
+  const host = window.location.hostname;
+  const domains: Array<string | null> = [null, host, ".wingers.co"];
+  for (const name of names) {
+    for (const domain of domains) {
+      const domainAttr = domain ? `; Domain=${domain}` : "";
+      document.cookie = `${name}=; Path=/; Max-Age=0; SameSite=Lax${domainAttr}`;
+    }
+  }
+}
+
 export function appendFbclidToUrl(url: string, fbclid: string | null): string {
   if (!fbclid) return url;
   try {
