@@ -58,7 +58,7 @@ export async function submitFranchiseEnquiry(
   if (!parsed.success) return { ok: false, error: "invalid" };
 
   const ip = await getClientIp();
-  const rl = checkRateLimit(`franchise:${ip}`, 3, 60 * 60_000);
+  const rl = await checkRateLimit("franchise", ip, 3, 60 * 60_000);
   if (!rl.ok) return { ok: false, error: "rate_limited" };
 
   const {
