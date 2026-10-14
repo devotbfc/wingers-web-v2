@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { z } from "zod";
 
+import { sendFranchiseAlert } from "@/lib/brevo";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { checkRateLimit } from "@/lib/rate-limit";
 
@@ -93,6 +94,22 @@ export async function submitFranchiseEnquiry(
   if (error) {
     console.error("franchise_enquiry insert failed", { code: error.code });
     return { ok: false, error: "server" };
+  }
+
+  try {
+    await sendFranchiseAlert({
+      fullName: full_name.trim(),
+      email: email.toLowerCase().trim(),
+      phone: phone.trim(),
+      area: area.trim(),
+      budgetBand: budget_band,
+      experience,
+      timeframe,
+      message: message?.trim() ? message.trim() : null,
+      heardFrom: heard_from?.trim() ? heard_from.trim() : null,
+    });
+  } catch {
+    // Brevo failures are non-fatal — Supabase is the source of truth.
   }
 
   return { ok: true };
