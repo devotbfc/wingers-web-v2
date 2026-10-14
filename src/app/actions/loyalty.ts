@@ -50,7 +50,7 @@ export async function signupLoyalty(input: SignupInput): Promise<SignupResult> {
   }
 
   const ip = await getClientIp();
-  const rl = checkRateLimit(`loyalty:${ip}`, 5, 10 * 60_000);
+  const rl = await checkRateLimit("loyalty", ip, 5, 10 * 60_000);
   if (!rl.ok) return { ok: false, error: "rate_limited" };
 
   const { email, first_name, source, location_pref, consent_text_version } =
