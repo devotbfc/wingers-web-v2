@@ -33,3 +33,9 @@ Thumbs.db
 
 # v0 exports - reference only, never committed
 .v0/
+
+# Scratch / verification artifacts
+.tmp-*/
+.tmp-*.md
+score
+wingers-after-j-*.html

@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // v0 exports are reference-only; not shipped code.
     ".v0/**",
+    // Scratch / verification artifacts — not shipped code.
+    ".tmp-*/**",
   ]),
 ]);
 

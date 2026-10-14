@@ -33,7 +33,7 @@ export default function PrivacyPage() {
             </h1>
 
             <p className="mt-8 font-body text-sm uppercase tracking-widest text-brand-black/60">
-              Last updated: 12 October 2026
+              Last updated: 14 October 2026
             </p>
 
             <p className="mt-6 font-body text-lg leading-relaxed text-brand-black/80 md:text-xl">
@@ -164,6 +164,14 @@ export default function PrivacyPage() {
               inbox as an email alert through Brevo, our email service
               provider, which handles it on our behalf only to deliver that
               email.
+            </p>
+
+            <h3 className={H3}>Abuse prevention</h3>
+            <p className={P}>
+              When you submit the loyalty or franchise form we keep a keyed,
+              one-way code derived from your IP address, together with a
+              timestamp, so we can limit repeated submissions. It isn&apos;t
+              linked to the details you submit and is deleted within 24 hours.
             </p>
 
             <h2 className={H2}>Cookies and similar technologies</h2>

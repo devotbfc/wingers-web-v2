@@ -15,9 +15,21 @@ const EXPLORE_LINKS = [
 ];
 
 const SOCIAL_LINKS = [
-  { label: "Instagram", href: "#" },
-  { label: "TikTok", href: "#" },
-  { label: "Facebook", href: "#" },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/wingersofficial/",
+    ariaLabel: "Wingers on Instagram (opens in new tab)",
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@wingersofficial_",
+    ariaLabel: "Wingers on TikTok (opens in new tab)",
+  },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/wingersofficial/",
+    ariaLabel: "Wingers on Facebook (opens in new tab)",
+  },
 ];
 
 export function Footer() {
@@ -82,6 +94,7 @@ export function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={link.ariaLabel}
                   className="font-body text-sm text-brand-white transition-colors hover:text-brand-pink"
                 >
                   {link.label}
