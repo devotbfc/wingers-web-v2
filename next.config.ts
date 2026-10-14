@@ -35,6 +35,8 @@ const NAMED_REDIRECTS: readonly LegacyRedirect[] = [
   // FAQ: previous footer link + WordPress /faqs → the new in-page anchor
   { source: "/faq", destination: "/about#faq" },
   { source: "/faqs", destination: "/about#faq" },
+  // Short, speakable URL for the cookies table inside Privacy
+  { source: "/cookies", destination: "/privacy#cookies" },
   // Note: WordPress /allergies/ is NOT listed here. The destination route is
   // /allergies — expanding slash variants would create /allergies → /allergies
   // (self-redirect loop). Next.js's default trailingSlash: false already 308s

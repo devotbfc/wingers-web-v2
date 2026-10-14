@@ -174,7 +174,7 @@ export default function PrivacyPage() {
               linked to the details you submit and is deleted within 24 hours.
             </p>
 
-            <h2 className={H2}>Cookies and similar technologies</h2>
+            <h2 id="cookies" className={H2}>Cookies and similar technologies</h2>
 
             <div className="mt-6 overflow-x-auto">
               <table className="min-w-full border-collapse text-left font-body text-sm md:text-base">
