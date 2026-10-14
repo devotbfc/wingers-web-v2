@@ -114,7 +114,7 @@ export default function MenuPage() {
             <p className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-black">
               Fresh · Hand-Breaded · Halal
             </p>
-            <h1 className="mt-2 font-display text-[clamp(3rem,10vw,7rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-pink">
+            <h1 className="mt-2 font-display text-[clamp(3rem,10vw,7rem)] font-extrabold uppercase leading-[0.9] tracking-tight text-brand-black">
               THE MENU
             </h1>
             <p className="mt-4 max-w-2xl font-body text-base leading-relaxed text-brand-black/75 md:text-lg">
