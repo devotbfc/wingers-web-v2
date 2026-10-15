@@ -22,12 +22,13 @@ import { getCurrentLimitedEdition } from "@/lib/flavours";
 
 export const metadata: Metadata = {
   title:
-    "Wingers · Buttermilk Halal Fried Chicken · MK & Northampton",
+    "Wingers · Buttermilk Fried Chicken in Milton Keynes & Northampton · Halal",
   description:
     "Wingers · buttermilk halal fried chicken in Milton Keynes & Northampton. 24-hr brined, hand-dredged. Collection online, delivery via the apps.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Wingers · Buttermilk Halal Fried Chicken",
+    title:
+      "Wingers · Buttermilk Fried Chicken in Milton Keynes & Northampton · Halal",
     description:
       "Buttermilk halal fried chicken in Milton Keynes & Northampton. Dip it. Bite it. Love it.",
     url: "/",
@@ -37,12 +38,14 @@ export const metadata: Metadata = {
         url: "/og/home.jpg",
         width: 1200,
         height: 630,
-        alt: "Wingers mac & cheese",
+        alt: "Wingers fried chicken burger, spicy wings, milkshake and cookie",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
+    title:
+      "Wingers · Buttermilk Fried Chicken in Milton Keynes & Northampton · Halal",
     images: ["/og/home.jpg"],
   },
 };
