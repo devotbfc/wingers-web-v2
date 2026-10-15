@@ -42,55 +42,32 @@ export function SignupSlideIn({
   useEffect(() => {
     if (!open) return;
     const previousFocus = document.activeElement as HTMLElement | null;
-    // Focus the panel itself (tabIndex={-1}, outline-none) rather than the
-    // close X. Screen readers still land inside the dialog; Tab reaches
-    // the X first; and mouse/touch opens don't show a focus ring on X.
-    panelRef.current?.focus();
+    // Non-modal panel: don't steal focus if the user is actively typing in a
+    // form field outside the panel (the auto-open timer can fire while
+    // someone is mid-input on the franchise or contact form). Otherwise
+    // focus the panel with `preventScroll` so the open doesn't jump the
+    // page — the user may already be mid-scroll.
+    const activeOnOpen = previousFocus;
+    const isTypingOutside =
+      !!activeOnOpen &&
+      !panelRef.current?.contains(activeOnOpen) &&
+      (activeOnOpen.tagName === "INPUT" ||
+        activeOnOpen.tagName === "TEXTAREA" ||
+        activeOnOpen.tagName === "SELECT" ||
+        activeOnOpen.isContentEditable);
+    if (!isTypingOutside) {
+      panelRef.current?.focus({ preventScroll: true });
+    }
 
     // Advertise open state to peer floating UI (e.g. BackToTopButton) via a
     // body dataset flag so it can step aside on mobile without pulling in a
     // shared context.
     document.body.dataset.signupOpen = "true";
 
-    const FOCUSABLE =
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-
-    function focusableElements(): HTMLElement[] {
-      const root = panelRef.current;
-      if (!root) return [];
-      return Array.from(
-        root.querySelectorAll<HTMLElement>(FOCUSABLE),
-      ).filter((el) => !el.hasAttribute("disabled") && el.offsetParent !== null);
-    }
-
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") {
         e.stopPropagation();
         onDismiss();
-        return;
-      }
-      if (e.key !== "Tab") return;
-      // Focus trap: cycle focus within the panel. With a backdrop + body
-      // scroll-lock + aria-modal, Tab must stay inside the dialog.
-      const focusables = focusableElements();
-      if (focusables.length === 0) {
-        e.preventDefault();
-        panelRef.current?.focus();
-        return;
-      }
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-      const active = document.activeElement as HTMLElement | null;
-      if (e.shiftKey) {
-        if (active === first || active === panelRef.current) {
-          e.preventDefault();
-          last.focus();
-        }
-      } else {
-        if (active === last) {
-          e.preventDefault();
-          first.focus();
-        }
       }
     }
     window.addEventListener("keydown", onKey);
@@ -98,7 +75,7 @@ export function SignupSlideIn({
       window.removeEventListener("keydown", onKey);
       delete document.body.dataset.signupOpen;
       try {
-        previousFocus?.focus();
+        previousFocus?.focus({ preventScroll: true });
       } catch {}
     };
   }, [open, onDismiss]);
@@ -131,95 +108,82 @@ export function SignupSlideIn({
   return (
     <AnimatePresence>
       {open && (
-        <>
-          {/* Mobile-only backdrop. Desktop is non-modal — no backdrop, no trap. */}
-          <motion.div
-            key="backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-brand-black/40 md:hidden"
+        <motion.div
+          key="panel"
+          ref={panelRef}
+          role="dialog"
+          aria-labelledby={titleId}
+          aria-modal={false}
+          tabIndex={-1}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          variants={panelVariants}
+          transition={{ duration: reduced ? 0.2 : 0.28, ease: PANEL_EASE }}
+          className={`fixed inset-x-0 bottom-0 z-40 w-full overflow-hidden rounded-t-[28px] border-t px-6 pt-5 pb-[var(--sheet-safe-bottom)] outline-none transition-colors duration-200 md:inset-auto md:bottom-6 md:left-6 md:w-[380px] md:max-w-[calc(100vw-3rem)] md:rounded-[28px] md:border md:px-5 md:pb-5 md:pt-4 ${panelSurface}`}
+        >
+          <button
+            type="button"
             onClick={onDismiss}
-            aria-hidden
-          />
-          <motion.div
-            key="panel"
-            ref={panelRef}
-            role="dialog"
-            aria-labelledby={titleId}
-            aria-modal={true}
-            tabIndex={-1}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            variants={panelVariants}
-            transition={{ duration: reduced ? 0.2 : 0.28, ease: PANEL_EASE }}
-            className={`fixed inset-x-0 bottom-0 z-40 w-full overflow-hidden rounded-t-[28px] border-t px-6 pt-5 pb-[var(--sheet-safe-bottom)] outline-none transition-colors duration-200 md:inset-auto md:bottom-6 md:left-6 md:w-[380px] md:max-w-[calc(100vw-3rem)] md:rounded-[28px] md:border md:px-5 md:pb-5 md:pt-4 ${panelSurface}`}
+            aria-label="Dismiss sign-up"
+            className={`absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 ${closeTone}`}
           >
-            <button
-              type="button"
-              onClick={onDismiss}
-              aria-label="Dismiss sign-up"
-              className={`absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 ${closeTone}`}
-            >
-              <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5">
-                <path
-                  fill="currentColor"
-                  d="M18.3 5.71 12 12.01l-6.29-6.3-1.42 1.42 6.3 6.29-6.3 6.29 1.42 1.42 6.29-6.3 6.29 6.3 1.42-1.42-6.3-6.29 6.3-6.29z"
-                />
-              </svg>
-            </button>
+            <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5">
+              <path
+                fill="currentColor"
+                d="M18.3 5.71 12 12.01l-6.29-6.3-1.42 1.42 6.3 6.29-6.3 6.29 1.42 1.42 6.29-6.3 6.29 6.3 1.42-1.42-6.3-6.29 6.3-6.29z"
+              />
+            </svg>
+          </button>
 
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={step}
-                initial={reduced ? { opacity: 0 } : { opacity: 0, y: 8 }}
-                animate={
-                  reduced
-                    ? { opacity: 1, transition: { duration: 0 } }
-                    : {
-                        opacity: 1,
-                        y: 0,
-                        transition: {
-                          duration: 0.22,
-                          ease: PANEL_EASE,
-                        },
-                      }
-                }
-                exit={
-                  reduced
-                    ? { opacity: 0, transition: { duration: 0 } }
-                    : {
-                        opacity: 0,
-                        y: -8,
-                        transition: {
-                          duration: 0.16,
-                          ease: PANEL_EASE,
-                        },
-                      }
-                }
-              >
-                {step === "le" && currentLE && (
-                  <LeStep
-                    titleId={titleId}
-                    flavourName={currentLE.name}
-                    shortDescription={currentLE.shortDescription}
-                    onOrder={handleOrder}
-                    onNext={() => setStep("email")}
-                  />
-                )}
-                {step === "email" && (
-                  <SignupSlideInForm
-                    titleId={titleId}
-                    onSuccess={handleSuccess}
-                  />
-                )}
-                {step === "success" && <SuccessStep titleId={titleId} />}
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-        </>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={step}
+              initial={reduced ? { opacity: 0 } : { opacity: 0, y: 8 }}
+              animate={
+                reduced
+                  ? { opacity: 1, transition: { duration: 0 } }
+                  : {
+                      opacity: 1,
+                      y: 0,
+                      transition: {
+                        duration: 0.22,
+                        ease: PANEL_EASE,
+                      },
+                    }
+              }
+              exit={
+                reduced
+                  ? { opacity: 0, transition: { duration: 0 } }
+                  : {
+                      opacity: 0,
+                      y: -8,
+                      transition: {
+                        duration: 0.16,
+                        ease: PANEL_EASE,
+                      },
+                    }
+              }
+            >
+              {step === "le" && currentLE && (
+                <LeStep
+                  titleId={titleId}
+                  flavourName={currentLE.name}
+                  shortDescription={currentLE.shortDescription}
+                  onOrder={handleOrder}
+                  onNext={() => setStep("email")}
+                />
+              )}
+              {step === "email" && (
+                <SignupSlideInForm
+                  titleId={titleId}
+                  onSuccess={handleSuccess}
+                />
+              )}
+              {step === "success" && <SuccessStep titleId={titleId} />}
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
       )}
     </AnimatePresence>
   );
