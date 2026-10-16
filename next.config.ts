@@ -91,9 +91,11 @@ const nextConfig: NextConfig = {
     return [...named, ...wildcards.map((r) => ({ ...r, permanent: true }))];
   },
   async headers() {
-    // CSP ships as Report-Only in S2 — nothing is actually blocked. The
-    // hostnames allow-listed below map 1:1 to the external-host audit in
-    // the S2 plan (Meta Pixel + Vercel Analytics; no PostHog/Sentry yet).
+    // CSP policy — hostnames map 1:1 to the external-host audit (Meta Pixel +
+    // Vercel Analytics; Supabase is server-only so the browser never connects
+    // to it directly). S5 switches enforcement on in production only. Preview
+    // deployments stay Report-Only so the Vercel toolbar (vercel.live) isn't
+    // blocked; local `next dev` stays Report-Only so HMR's `eval` keeps working.
     const csp = [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' https://connect.facebook.net https://va.vercel-scripts.com",
@@ -107,6 +109,11 @@ const nextConfig: NextConfig = {
       "form-action 'self'",
     ].join("; ");
 
+    const cspHeaderKey =
+      process.env.VERCEL_ENV === "production"
+        ? "Content-Security-Policy"
+        : "Content-Security-Policy-Report-Only";
+
     return [
       {
         source: "/(.*)",
@@ -119,7 +126,7 @@ const nextConfig: NextConfig = {
             value:
               "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
           },
-          { key: "Content-Security-Policy-Report-Only", value: csp },
+          { key: cspHeaderKey, value: csp },
         ],
       },
     ];
